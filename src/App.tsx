@@ -11,11 +11,17 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { PatientData } from "./types/patient";
 import { Dashboard } from "./components/Dashboard";
+import { ScenarioEditor } from "./components/ScenarioEditor";
 import { assemblePatientData } from "./fhir/fhir-parser";
 import {
   listSyntheticPatients,
   loadSyntheticPatient,
 } from "./fhir/standalone-loader";
+import {
+  type Scenario,
+  scenarioToPatient,
+  patientToScenario,
+} from "./standalone/scenario";
 import { initSmartClient } from "./fhir/smart-launch";
 import { fetchPatientData } from "./fhir/fhir-client";
 
@@ -107,52 +113,44 @@ function SmartView() {
 
 /* ---------- Standalone demo mode ---------- */
 
+/** Load preset `index` and seed an editable scenario from it. */
+function presetScenario(index: number): Scenario {
+  return patientToScenario(
+    assemblePatientData(loadSyntheticPatient(index), new Date()),
+  );
+}
+
 function StandaloneView() {
   const roster = useMemo(() => listSyntheticPatients(), []);
-  const [index, setIndex] = useState(0);
-  const patient = useMemo(
-    () => assemblePatientData(loadSyntheticPatient(index), new Date()),
-    [index],
-  );
+  const [scenario, setScenario] = useState<Scenario>(() => presetScenario(0));
+  // The currently-loaded preset, or null once the user diverges ("custom").
+  const [activePreset, setActivePreset] = useState<number | null>(0);
+
+  const patient = useMemo(() => scenarioToPatient(scenario), [scenario]);
+
+  const loadPreset = (index: number) => {
+    setScenario(presetScenario(index));
+    setActivePreset(index);
+  };
+  const change = (patch: Partial<Scenario>) => {
+    setScenario((s) => ({ ...s, ...patch }));
+    setActivePreset(null);
+  };
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[15rem_1fr]">
-      <aside className="lg:sticky lg:top-6 lg:self-start">
-        <div className="card">
-          <div className="card-header">
-            <h2 className="card-title">Synthetic patients</h2>
-          </div>
-          <nav className="p-2">
-            {roster.map((p) => (
-              <button
-                key={p.index}
-                onClick={() => setIndex(p.index)}
-                className={`block w-full rounded-lg px-3 py-2 text-left text-sm transition ${
-                  p.index === index
-                    ? "bg-clinical-brand text-white"
-                    : "hover:bg-slate-100 text-clinical-ink"
-                }`}
-              >
-                <span className="font-medium">{p.name}</span>
-                <span
-                  className={`block text-xs ${
-                    p.index === index ? "text-white/80" : "text-clinical-muted"
-                  }`}
-                >
-                  Case {p.index + 1}
-                </span>
-              </button>
-            ))}
-          </nav>
-        </div>
-        <p className="mt-2 px-1 text-xs text-clinical-muted">
-          Synthetic data — no PHI. For demonstration and evaluation only.
-        </p>
-      </aside>
-
-      <div className="min-w-0">
-        <Dashboard patient={patient} />
-      </div>
+    <div className="space-y-4">
+      <ScenarioEditor
+        scenario={scenario}
+        presets={roster.map((p) => ({ index: p.index, name: p.name }))}
+        activePreset={activePreset}
+        onLoadPreset={loadPreset}
+        onChange={change}
+      />
+      <p className="px-1 text-xs text-clinical-muted">
+        Synthetic data — no PHI. Every edit re-runs the real clinical engine.
+        For demonstration and evaluation only.
+      </p>
+      <Dashboard patient={patient} />
     </div>
   );
 }

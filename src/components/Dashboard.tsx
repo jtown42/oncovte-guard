@@ -19,7 +19,10 @@ export function Dashboard({ patient }: { patient: PatientData }) {
 
       {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
 
-      <RecommendationPanel rec={rec} />
+      {/* Re-key on the verdict so a changed recommendation animates in. */}
+      <div key={rec.overallAction} className="animate-rec">
+        <RecommendationPanel rec={rec} />
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <KhoranaScoreCard khorana={rec.khorana} />

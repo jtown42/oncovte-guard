@@ -1,1 +1,1 @@
-SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 110 tests proving guideline fidelity.
+SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 121 tests proving guideline fidelity.

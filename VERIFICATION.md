@@ -12,7 +12,7 @@ inventory, and the exact commands to reproduce every result below.
 
 - **Verified on:** 2026-06-13
 - **Authoritative contract:** [`plan/errata-contract-reconciliation.md`](plan/errata-contract-reconciliation.md) (overrides `plan/ddi-info.md` on its 10 resolved issues), with one dated clinical-review supersession noted in §5 (risk-tier labels).
-- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **110 / 110 tests passing**
+- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **121 / 121 tests passing**
 
 ---
 
@@ -21,8 +21,8 @@ inventory, and the exact commands to reproduce every result below.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit  → no errors
-npm test              # vitest run    → 9 files, 110 tests, all passing
-npm run build         # tsc && vite build → dist/ (110 modules)
+npm test              # vitest run    → 10 files, 121 tests, all passing
+npm run build         # tsc && vite build → dist/ (112 modules)
 npm run dev           # standalone demo (5 synthetic patients), http://localhost:5173
 npm run cds-server    # CDS Hooks service, http://localhost:3000/cds-services
 ```
@@ -37,13 +37,14 @@ running the cited test (`npx vitest run <path> -t "<test title>"`).
 | Gate | Command | Result |
 | --- | --- | --- |
 | Type safety | `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) | **0 errors** |
-| Unit + integration tests | `vitest run` | **9 files, 110 tests passed** |
-| Production build | `tsc && vite build` | **110 modules transformed, built** |
+| Unit + integration tests | `vitest run` | **10 files, 121 tests passed** |
+| Production build | `tsc && vite build` | **112 modules transformed, built** |
 | Live render (manual) | `vite preview` + browser | Recommend / LMWH-fallback / contraindicated pathways verified visually (see `docs/screenshots/`) |
 
 Test files: `khorana-engine` (27), `ddi-checker` (13), `renal-dosing` (11),
 `contraindications` (11), `stale-lab` (9), `recommendation` (6),
-`rxnorm-codes` (3), `integration/patients` (19), `cds-hooks/cards` (11).
+`rxnorm-codes` (3), `integration/patients` (19), `cds-hooks/cards` (11),
+`standalone/scenario` (11).
 
 ---
 
@@ -78,6 +79,12 @@ Test files: `khorana-engine` (27), `ddi-checker` (13), `renal-dosing` (11),
 `server.ts`, `types.ts`.
 
 **UI** — `src/App.tsx`, `src/main.tsx`, `src/components/*`, `src/ui/format.ts`.
+The standalone demo includes a live "what-if" editor (`src/components/ScenarioEditor.tsx`
++ `src/standalone/scenario.ts`): editing labs, BMI, cancer site, flags, or
+medications rebuilds a real `PatientData` (deriving onAntiplatelet/onIMiD/
+nephrotoxic/ESA flags from the same RxNorm sets the FHIR parser uses) and
+re-runs `generateRecommendation` — no clinical logic is duplicated. Proven by
+`tests/standalone/scenario.test.ts` (11 tests).
 
 **Synthetic data** — `synthetic-patients/patient-1..5-*.json` (FHIR R4
 collection bundles). Generator: `scripts/gen-patients.cjs`.

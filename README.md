@@ -81,6 +81,8 @@ service.
 
 <p align="center"><sub>Five distinct decision states: recommend · LMWH fallback · contraindicated · not indicated · excluded.</sub></p>
 
+> **Try it live:** the [demo](https://oncovte-guard.pages.dev) opens with a **what-if editor** — start from any of the five patients, then drag a lab, switch the cancer type, toggle a flag, or add/remove a chemo agent and watch the Khorana score, DDI matrix, renal dosing, and final recommendation recompute instantly. Every edit runs the real engine.
+
 ---
 
 ## Architecture
@@ -156,7 +158,7 @@ resources inline.
 
 ## Testing
 
-`npm test` runs **110 tests** across the clinical engines, the FHIR parsing
+`npm test` runs **121 tests** across the clinical engines, the FHIR parsing
 layer, the end-to-end synthetic-patient pathways, and the CDS Hooks card
 builder. The engine suites encode the competition's authoritative
 [errata contract](plan/errata-contract-reconciliation.md) (e.g. Khorana max 6,
