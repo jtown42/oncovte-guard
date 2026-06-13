@@ -1,0 +1,231 @@
+VG
+
+OncoVTE Guard
+
+Cancer-associated VTE prophylaxis · DOAC interaction CDS
+
+Standalone demo
+LIVE PATIENT EDITOR
+Edit any input — the recommendation below recomputes instantly.
+Hide controls ▴
+START FROM
+Maria Santos
+James Chen
+Dorothy Williams
+Robert Johnson
+Priya Patel
+Cancer diagnosis (ICD-10)
+Pancreatic — very high (2 pts)
+Gastric — very high (2 pts)
+Lung — high (1 pt)
+Non-Hodgkin lymphoma — high (1 pt)
+Hodgkin lymphoma — high (1 pt)
+Ovarian — high (1 pt)
+Uterine — high (1 pt)
+Bladder — high (1 pt)
+Testicular — high (1 pt)
+Kidney/renal — high* (1 pt)
+Colon — standard (0 pts)
+Breast — standard (0 pts)
+Prostate — standard (0 pts)
+Multiple myeloma — excluded
+Primary brain tumor — excluded
+Acute myeloid leukemia — excluded
+Polycythemia vera / MPN — excluded
+Sex
+Female
+Male
+Age
+58 yr
+
+LABS & VITALS — drive Khorana score & renal dosing
+
+Platelets
+410 10³/µL
+clear
+Hemoglobin
+9.2 g/dL
+clear
+WBC
+8.5 10³/µL
+clear
+BMI
+36.2 kg/m²
+Weight
+95 kg
+Serum creatinine
+0.8 mg/dL
+clear
+On erythropoiesis-stimulating agent (ESA)
+No
+Active medications (drives DDI matrix & flags)
+Gemcitabine
+×
+Paclitaxel protein-bound (nab-paclitaxel)
+×
++ Add a medication…
+Mitotane
+Bendamustine
+Apalutamide
+Enzalutamide
+Abiraterone
+Doxorubicin
+Rituximab
+Ipilimumab
+Pertuzumab
+Trastuzumab
+Nivolumab
+Pembrolizumab
+Atezolizumab
+Durvalumab
+Bevacizumab
+Ramucirumab
+5-Fluorouracil
+Capecitabine
+Methotrexate
+Pemetrexed
+Aspirin
+Clopidogrel
+Prasugrel
+Ticagrelor
+Bleomycin
+Itraconazole
+Ketoconazole
+Posaconazole
+Voriconazole
+Dabrafenib
+Vemurafenib
+Ibrutinib
+Cyclosporine
+Tacrolimus
+Ribociclib
+Dexamethasone
+Epoetin alfa (ESA)
+Lenalidomide
+Pomalidomide
+Thalidomide
+Cabozantinib
+Lenvatinib
+Aprepitant
+Idelalisib
+Carboplatin
+Cisplatin
+Oxaliplatin
+Tamoxifen
+Docetaxel
+Paclitaxel
+Etoposide
+Ceritinib
+Crizotinib
+Imatinib
+Nilotinib
+Neratinib
+Tucatinib
+Vinblastine
+
+Synthetic data — no PHI. Every edit re-runs the real clinical engine. For demonstration and evaluation only.
+
+Maria Santos
+58 y · Female
+
+Pancreatic cancer (C25.1)
+
+WEIGHT
+95 kg
+HEIGHT
+162 cm
+BMI
+36.2 kg/m²
+Prophylaxis recommended
+recommend
+
+Khorana score meets the NCCN threshold and at least one anticoagulant is appropriate.
+
+PREFERRED
+NCCN-supported ambulatory prophylaxis
+Apixaban
+renal: Standard
+
+2.5 mg PO BID
+
+Up to 6 months, longer if VTE risk persists
+
+DDI: Minor
+Rivaroxaban
+renal: Standard
+
+10 mg PO daily
+
+Up to 6 months, longer if VTE risk persists
+
+DDI: Minor
+ALTERNATIVE
+LMWH — NCCN-concordant alternative
+Enoxaparin
+renal: Standard
+
+1 mg/kg SC daily
+
+x3 months, then 40 mg SC daily
+
+DDI: No interaction
+Dalteparin
+renal: Standard
+
+200 units/kg SC daily
+
+x1 month, then 150 units/kg SC daily
+
+DDI: No interaction
+AVOID / NOT AN OPTION
+Dabigatran
+Not an NCCN-supported ambulatory cancer VTE prophylaxis option (DDI reference only).
+Edoxaban
+Not an NCCN-supported ambulatory cancer VTE prophylaxis option (DDI reference only).
+KHORANA VTE RISK SCORE
+High risk
+5
+/ 6
+≥ 2 → prophylaxis indicated
+Pancreatic cancer	Cancer site	+2
+Platelets ≥ 350 ×10⁹/L	410 ×10⁹/L	+1
+Hemoglobin < 10 g/dL	9.2 g/dL	+1
+Leukocytes > 11 ×10⁹/L	8.5 ×10⁹/L	+0
+BMI ≥ 35 kg/m²	36.2 kg/m²	+1
+RENAL FUNCTION
+Normal (≥90)
+115
+mL/min · Cockcroft-Gault
+ANTICOAGULANT	STATUS	DOSE
+Apixaban	Standard	2.5 mg PO BID
+Rivaroxaban	Standard	10 mg PO daily
+Dabigatran	Standard	Not an NCCN-supported ambulatory cancer VTE prophylaxis option
+Edoxaban	Standard	Not an NCCN-supported ambulatory cancer VTE prophylaxis option
+Enoxaparin	Standard	1 mg/kg SC daily x 3 months, then 40 mg SC daily
+Dalteparin	Standard	200 units/kg SC daily x 1 month, then 150 units/kg SC daily
+DOAC ↔ THERAPY INTERACTIONS
+2 medications screened
+MEDICATION	Apixaban	Rivaroxaban	Dabigatran	Edoxaban
+
+▸
+Gemcitabine
+	—	—	—	—
+
+▸
+Paclitaxel Protein-Bound (Nab-Paclitaxel)
+	Minor	Minor	—	—
+Major
+Moderate / Additive bleeding
+Minor
+None
+Unknown
+CONTRAINDICATIONS & CAUTIONS
+None detected
+
+No bleeding, hepatic, thrombocytopenic, or agent-specific contraindications were detected from the available data.
+
+DISCLAIMERS
+
+This tool provides clinical decision support only and does not replace clinical judgment.
+Recommendations are based on NCCN VTE-B guidance and published DOAC drug-interaction literature; verify against the most current guidelines.
+Confirm all medication, laboratory, and diagnosis data against the source record before acting.

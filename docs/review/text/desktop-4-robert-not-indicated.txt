@@ -1,0 +1,205 @@
+VG
+
+OncoVTE Guard
+
+Cancer-associated VTE prophylaxis · DOAC interaction CDS
+
+Standalone demo
+LIVE PATIENT EDITOR
+Edit any input — the recommendation below recomputes instantly.
+Hide controls ▴
+START FROM
+Maria Santos
+James Chen
+Dorothy Williams
+Robert Johnson
+Priya Patel
+Cancer diagnosis (ICD-10)
+Pancreatic — very high (2 pts)
+Gastric — very high (2 pts)
+Lung — high (1 pt)
+Non-Hodgkin lymphoma — high (1 pt)
+Hodgkin lymphoma — high (1 pt)
+Ovarian — high (1 pt)
+Uterine — high (1 pt)
+Bladder — high (1 pt)
+Testicular — high (1 pt)
+Kidney/renal — high* (1 pt)
+Colon — standard (0 pts)
+Breast — standard (0 pts)
+Prostate — standard (0 pts)
+Multiple myeloma — excluded
+Primary brain tumor — excluded
+Acute myeloid leukemia — excluded
+Polycythemia vera / MPN — excluded
+Sex
+Female
+Male
+Age
+65 yr
+
+LABS & VITALS — drive Khorana score & renal dosing
+
+Platelets
+280 10³/µL
+clear
+Hemoglobin
+12.5 g/dL
+clear
+WBC
+7.8 10³/µL
+clear
+BMI
+25.9 kg/m²
+Weight
+82 kg
+Serum creatinine
+1.0 mg/dL
+clear
+On erythropoiesis-stimulating agent (ESA)
+No
+Active medications (drives DDI matrix & flags)
+5-Fluorouracil
+×
+Oxaliplatin
+×
+Bevacizumab
+×
++ Add a medication…
+Mitotane
+Bendamustine
+Apalutamide
+Enzalutamide
+Abiraterone
+Doxorubicin
+Rituximab
+Ipilimumab
+Pertuzumab
+Trastuzumab
+Nivolumab
+Pembrolizumab
+Atezolizumab
+Durvalumab
+Ramucirumab
+Gemcitabine
+Capecitabine
+Methotrexate
+Pemetrexed
+Aspirin
+Clopidogrel
+Prasugrel
+Ticagrelor
+Bleomycin
+Itraconazole
+Ketoconazole
+Posaconazole
+Voriconazole
+Dabrafenib
+Vemurafenib
+Ibrutinib
+Cyclosporine
+Tacrolimus
+Ribociclib
+Dexamethasone
+Epoetin alfa (ESA)
+Lenalidomide
+Pomalidomide
+Thalidomide
+Cabozantinib
+Lenvatinib
+Aprepitant
+Idelalisib
+Carboplatin
+Cisplatin
+Tamoxifen
+Docetaxel
+Paclitaxel
+Paclitaxel protein-bound (nab-paclitaxel)
+Etoposide
+Ceritinib
+Crizotinib
+Imatinib
+Nilotinib
+Neratinib
+Tucatinib
+Vinblastine
+
+Synthetic data — no PHI. Every edit re-runs the real clinical engine. For demonstration and evaluation only.
+
+Robert Johnson
+65 y · Male
+
+Other solid tumor (C18.4)
+
+WEIGHT
+82 kg
+HEIGHT
+178 cm
+BMI
+25.9 kg/m²
+ℹ️
+
+Routine pharmacologic prophylaxis not indicated
+
+Khorana score 0 (low) is below the NCCN threshold (>=2) for routine ambulatory prophylaxis.
+
+NCCN VTE-B
+
+Routine prophylaxis not indicated
+not indicated
+
+Khorana score is below the NCCN threshold for routine ambulatory prophylaxis.
+
+No pharmacologic anticoagulant options are presented for this pathway. Review the alerts and contraindications below.
+
+KHORANA VTE RISK SCORE
+Low risk
+0
+/ 6
+< 2 → below NCCN threshold
+Other solid tumor	Cancer site	+0
+Platelets ≥ 350 ×10⁹/L	280 ×10⁹/L	+0
+Hemoglobin < 10 g/dL	12.5 g/dL	+0
+Leukocytes > 11 ×10⁹/L	7.8 ×10⁹/L	+0
+BMI ≥ 35 kg/m²	25.9 kg/m²	+0
+RENAL FUNCTION
+Mild ↓ (60–89)
+85.4
+mL/min · Cockcroft-Gault
+ANTICOAGULANT	STATUS	DOSE
+Apixaban	Standard	2.5 mg PO BID
+Rivaroxaban	Standard	10 mg PO daily
+Dabigatran	Standard	Not an NCCN-supported ambulatory cancer VTE prophylaxis option
+Edoxaban	Standard	Not an NCCN-supported ambulatory cancer VTE prophylaxis option
+Enoxaparin	Standard	1 mg/kg SC daily x 3 months, then 40 mg SC daily
+Dalteparin	Standard	200 units/kg SC daily x 1 month, then 150 units/kg SC daily
+DOAC ↔ THERAPY INTERACTIONS
+3 medications screened
+MEDICATION	Apixaban	Rivaroxaban	Dabigatran	Edoxaban
+
+▸
+5-Fluorouracil
+	—	—	—	—
+
+▸
+Oxaliplatin
+	—	—	—	—
+
+▸
+Bevacizumab
+	Bleed	Bleed	Bleed	Bleed
+Major
+Moderate / Additive bleeding
+Minor
+None
+Unknown
+CONTRAINDICATIONS & CAUTIONS
+None detected
+
+No bleeding, hepatic, thrombocytopenic, or agent-specific contraindications were detected from the available data.
+
+DISCLAIMERS
+
+This tool provides clinical decision support only and does not replace clinical judgment.
+Recommendations are based on NCCN VTE-B guidance and published DOAC drug-interaction literature; verify against the most current guidelines.
+Confirm all medication, laboratory, and diagnosis data against the source record before acting.
