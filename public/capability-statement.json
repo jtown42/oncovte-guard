@@ -1,0 +1,82 @@
+{
+  "resourceType": "CapabilityStatement",
+  "id": "oncovte-guard-client",
+  "url": "https://oncovte-guard.example.org/fhir/CapabilityStatement/oncovte-guard-client",
+  "version": "1.0.0",
+  "name": "OncoVTEGuardClient",
+  "title": "OncoVTE Guard — SMART-on-FHIR Client Capability Statement",
+  "status": "active",
+  "experimental": true,
+  "date": "2026-06-10",
+  "publisher": "OncoVTE Guard (AMIA/HL7 FHIR App Competition — Student)",
+  "description": "Declares the FHIR R4 resources and search interactions OncoVTE Guard requires from an EHR to compute cancer-associated VTE prophylaxis recommendations. This is a CLIENT capability statement: it describes what the app reads, not a server it offers.",
+  "kind": "requirements",
+  "fhirVersion": "4.0.1",
+  "format": ["json"],
+  "rest": [
+    {
+      "mode": "client",
+      "documentation": "Read-only ambulatory launch. The app reads the in-context Patient plus that patient's active cancer conditions, recent labs and vitals, and active medications.",
+      "security": {
+        "service": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/restful-security-service",
+                "code": "SMART-on-FHIR",
+                "display": "SMART-on-FHIR"
+              }
+            ]
+          }
+        ],
+        "extension": [
+          {
+            "url": "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris",
+            "extension": [
+              { "url": "token", "valueUri": "{set-by-ehr}/token" },
+              { "url": "authorize", "valueUri": "{set-by-ehr}/authorize" }
+            ]
+          }
+        ],
+        "description": "EHR launch with OAuth2. Required scopes: launch, patient/Patient.read, patient/Condition.read, patient/Observation.read, patient/MedicationRequest.read, openid, fhirUser."
+      },
+      "resource": [
+        {
+          "type": "Patient",
+          "interaction": [{ "code": "read" }],
+          "documentation": "In-context patient: demographics, birthDate, sex, US Core race/ethnicity."
+        },
+        {
+          "type": "Condition",
+          "interaction": [{ "code": "search-type" }],
+          "documentation": "Active malignancy diagnoses by ICD-10-CM for Khorana cancer-site scoring and exclusions.",
+          "searchParam": [
+            { "name": "patient", "type": "reference" },
+            { "name": "clinical-status", "type": "token" },
+            { "name": "category", "type": "token" }
+          ]
+        },
+        {
+          "type": "Observation",
+          "interaction": [{ "code": "search-type" }],
+          "documentation": "Laboratory (platelets, hemoglobin, WBC, serum creatinine, ALT, AST, total bilirubin) and vital-signs (body weight, body height) by LOINC.",
+          "searchParam": [
+            { "name": "patient", "type": "reference" },
+            { "name": "category", "type": "token" },
+            { "name": "code", "type": "token" },
+            { "name": "date", "type": "date" }
+          ]
+        },
+        {
+          "type": "MedicationRequest",
+          "interaction": [{ "code": "search-type" }],
+          "documentation": "Active medications by RxNorm for DOAC–chemotherapy interaction, ESA, antiplatelet, IMiD, and nephrotoxic-agent detection.",
+          "searchParam": [
+            { "name": "patient", "type": "reference" },
+            { "name": "status", "type": "token" }
+          ]
+        }
+      ]
+    }
+  ]
+}

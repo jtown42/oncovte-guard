@@ -1,0 +1,23 @@
+SHORT-ANSWER / STRUCTURED FIELDS
+(Bracketed [ ] items must be confirmed/filled by the submitter.)
+
+Title: OncoVTE Guard
+Category: Student
+Letter of support / advisor attestation: REQUIRED for student category - to be uploaded as a signed PDF from the primary advisor, confirming: (a) name and address of the training program; (b) identification of the primary advisor; (c) all co-authors and each author's contribution; (d) attestation of the student's contribution to the development of the application. [TO BE PROVIDED BY ADVISOR]
+
+Does your solution have paying customers?: No
+When was your solution conceived?: June 2026
+When was your solution implemented?: June 2026 (functional prototype completed)
+How many users / patients impacted (time frame)?: 0 to date - pre-deployment prototype; validated against 5 synthetic patients (no PHI). No live clinical use yet.
+Website/URL: [CONFIRM - e.g., source repository or demo URL]
+Agreement to publish in the SMART App Gallery if feasible: Yes
+
+Who is the intended user/audience?: See field 05 (audience).
+
+Does your app use US Core profiles or other implementation guides?: Yes - US Core race and ethnicity extensions are parsed from the Patient resource; otherwise the app uses standard FHIR R4 resources. SMART App Launch is followed for authorization.
+
+What FHIR technologies does your app use?: SMART on FHIR (SMART App Launch / OAuth2) and CDS Hooks (patient-view and order-select services with a discovery endpoint). No Bulk Data or CQL.
+
+FHIR Resources (capability statement): Provided as public/capability-statement.json (FHIR R4 client CapabilityStatement). Resources: Patient, Condition, Observation, MedicationRequest.
+
+Logo / headshot / promotional photo: Promotional screenshots of all five decision states are in docs/screenshots/. [Logo and student headshot TO BE PROVIDED.]

@@ -1,0 +1,1546 @@
+[
+  {
+    "agentName": "Ibrutinib",
+    "brandName": "Imbruvica",
+    "rxnormCode": "1442981",
+    "drugClass": "BTK inhibitor",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "strong_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition increases apixaban AUC ~100%",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition increases rivaroxaban exposure",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases dabigatran exposure (no CYP3A4 component)",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": "edoxaban"
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "P-gp inhibition; edoxaban has lowest CYP3A4 dependence",
+        "recommendation": "Lowest interaction risk among DOACs. Monitor.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": true,
+    "notes": "Ibrutinib itself increases bleeding risk via BTK-mediated platelet inhibition.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Idelalisib",
+    "brandName": "Zydelig",
+    "rxnormCode": "1547523",
+    "drugClass": "PI3K inhibitor",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "strong_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases apixaban exposure (bleeding risk)",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases rivaroxaban exposure (bleeding risk)",
+        "recommendation": "AVOID or dose-reduce. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases dabigatran exposure; no CYP3A4 component",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": "edoxaban"
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "P-gp inhibition modestly increases edoxaban; minimal CYP3A4 dependence",
+        "recommendation": "Lowest interaction risk among DOACs. Monitor.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "P-gp inhibition demonstrated in vitro; treat as strong inhibitor for DOAC safety.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Itraconazole",
+    "brandName": "Sporanox",
+    "rxnormCode": "28031",
+    "drugClass": "Azole antifungal (supportive care)",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "strong_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases apixaban exposure",
+        "recommendation": "AVOID, or reduce apixaban dose by 50% per FDA labeling. Prefer LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases rivaroxaban exposure",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases dabigatran exposure; no CYP3A4 component",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases edoxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Commonly co-prescribed antifungal in oncology; one of the most significant CYP3A4/P-gp inhibitors.",
+    "sources": ["AHA 2022 Scientific Statement", "FDA DOAC labeling"]
+  },
+  {
+    "agentName": "Ketoconazole",
+    "brandName": "Nizoral",
+    "rxnormCode": "6135",
+    "drugClass": "Azole antifungal (supportive care)",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "strong_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases apixaban exposure",
+        "recommendation": "AVOID, or reduce apixaban dose by 50% per FDA labeling. Prefer LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases rivaroxaban exposure",
+        "recommendation": "CONTRAINDICATED with rivaroxaban (FDA labeling). Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases dabigatran exposure; no CYP3A4 component",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases edoxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Rivaroxaban is contraindicated with ketoconazole per FDA labeling.",
+    "sources": ["AHA 2022 Scientific Statement", "FDA DOAC labeling"]
+  },
+  {
+    "agentName": "Posaconazole",
+    "brandName": "Noxafil",
+    "rxnormCode": "282446",
+    "drugClass": "Azole antifungal (supportive care)",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "strong_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases apixaban exposure",
+        "recommendation": "AVOID, or reduce apixaban dose by 50% per FDA labeling. Prefer LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong dual CYP3A4 + P-gp inhibition markedly increases rivaroxaban exposure",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases dabigatran exposure; no CYP3A4 component",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "moderate",
+        "mechanism": "P-gp inhibition increases edoxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Frequently used for antifungal prophylaxis in hematologic malignancy.",
+    "sources": ["AHA 2022 Scientific Statement", "FDA DOAC labeling"]
+  },
+  {
+    "agentName": "Voriconazole",
+    "brandName": "Vfend",
+    "rxnormCode": "121243",
+    "drugClass": "Azole antifungal (supportive care)",
+    "pgpEffect": "moderate_inhibitor",
+    "cyp3a4Effect": "strong_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Strong CYP3A4 inhibition with moderate P-gp inhibition increases apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong CYP3A4 inhibition increases rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "Moderate P-gp inhibition; dabigatran has no CYP3A4 dependence",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Moderate P-gp inhibition; edoxaban minimally CYP3A4 dependent",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Less P-gp effect than itraconazole/ketoconazole, but a strong CYP3A4 inhibitor.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Enzalutamide",
+    "brandName": "Xtandi",
+    "rxnormCode": "1232107",
+    "drugClass": "Androgen receptor inhibitor",
+    "pgpEffect": "moderate_inducer",
+    "cyp3a4Effect": "strong_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong CYP3A4 induction (with P-gp induction) lowers apixaban levels, risking reduced efficacy/thrombosis",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong CYP3A4 induction (with P-gp induction) lowers rivaroxaban levels, risking reduced efficacy/thrombosis",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "P-gp induction may modestly lower dabigatran levels; no CYP3A4 dependence",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minimal CYP3A4 dependence; limited effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Inducer interaction reduces DOAC efficacy (thrombosis risk) — the danger is under-anticoagulation, not bleeding.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Apalutamide",
+    "brandName": "Erleada",
+    "rxnormCode": "2049106",
+    "drugClass": "Androgen receptor inhibitor",
+    "pgpEffect": "moderate_inducer",
+    "cyp3a4Effect": "strong_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong CYP3A4 induction lowers apixaban levels, risking reduced efficacy/thrombosis",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong CYP3A4 induction lowers rivaroxaban levels, risking reduced efficacy/thrombosis",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "P-gp induction may modestly lower dabigatran levels; no CYP3A4 dependence",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minimal CYP3A4 dependence; limited effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Inducer interaction reduces DOAC efficacy (thrombosis risk).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Mitotane",
+    "brandName": "Lysodren",
+    "rxnormCode": "6879",
+    "drugClass": "Adrenocortical agent",
+    "pgpEffect": "unknown",
+    "cyp3a4Effect": "strong_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "major",
+        "mechanism": "Strong CYP3A4 induction lowers apixaban levels, risking reduced efficacy/thrombosis",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "major",
+        "mechanism": "Strong CYP3A4 induction lowers rivaroxaban levels, risking reduced efficacy/thrombosis",
+        "recommendation": "AVOID. Use LMWH instead.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "No CYP3A4 dependence; P-gp effect not characterized",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minimal CYP3A4 dependence; limited effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Potent CYP3A4 inducer; reduces DOAC efficacy (thrombosis risk).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Imatinib",
+    "brandName": "Gleevec",
+    "rxnormCode": "282388",
+    "drugClass": "Tyrosine kinase inhibitor (BCR-ABL)",
+    "pgpEffect": "moderate_inhibitor",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Moderate P-gp inhibition may increase dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor P-gp effect; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Nilotinib",
+    "brandName": "Tasigna",
+    "rxnormCode": "644241",
+    "drugClass": "Tyrosine kinase inhibitor (BCR-ABL)",
+    "pgpEffect": "moderate_inhibitor",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Moderate P-gp inhibition may increase dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor P-gp effect; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Crizotinib",
+    "brandName": "Xalkori",
+    "rxnormCode": "1148494",
+    "drugClass": "Tyrosine kinase inhibitor (ALK)",
+    "pgpEffect": "moderate_inhibitor",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Moderate P-gp inhibition may increase dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor P-gp effect; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Ceritinib",
+    "brandName": "Zykadia",
+    "rxnormCode": "1535457",
+    "drugClass": "Tyrosine kinase inhibitor (ALK)",
+    "pgpEffect": "moderate_inhibitor",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Moderate P-gp inhibition may increase dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor P-gp effect; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Ribociclib",
+    "brandName": "Kisqali",
+    "rxnormCode": "1873983",
+    "drugClass": "CDK4/6 inhibitor",
+    "pgpEffect": "unknown",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "No CYP3A4 dependence; P-gp effect not characterized",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minimal CYP3A4 dependence; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Tucatinib",
+    "brandName": "Tukysa",
+    "rxnormCode": "2361290",
+    "drugClass": "Tyrosine kinase inhibitor (HER2)",
+    "pgpEffect": "unknown",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "No CYP3A4 dependence; P-gp effect not characterized",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minimal CYP3A4 dependence; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Aprepitant",
+    "brandName": "Emend",
+    "rxnormCode": "358255",
+    "drugClass": "NK1 receptor antagonist (antiemetic)",
+    "pgpEffect": "moderate_inhibitor",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; usually short-course with chemotherapy.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; usually short-course with chemotherapy.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Moderate P-gp inhibition may increase dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor P-gp effect; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Antiemetic; interaction is typically transient (short antiemetic course).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Cyclosporine",
+    "brandName": "Sandimmune",
+    "rxnormCode": "3008",
+    "drugClass": "Calcineurin inhibitor (immunosuppressant)",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp + moderate CYP3A4 inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp + moderate CYP3A4 inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition increases dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition increases edoxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Strong P-gp inhibitor affecting all four DOACs.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Tacrolimus",
+    "brandName": "Prograf",
+    "rxnormCode": "42316",
+    "drugClass": "Calcineurin inhibitor (immunosuppressant)",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "minor_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "minor",
+        "mechanism": "Minor CYP3A4 inhibition; modest P-gp effect on rivaroxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition increases dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Modest P-gp effect on edoxaban; minimal CYP3A4 dependence",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Abiraterone",
+    "brandName": "Zytiga",
+    "rxnormCode": "1100072",
+    "drugClass": "Androgen synthesis inhibitor (CYP17)",
+    "pgpEffect": "moderate_inhibitor",
+    "cyp3a4Effect": "moderate_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding; consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Moderate P-gp inhibition may increase dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor P-gp effect; low clinical significance for edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Neratinib",
+    "brandName": "Nerlynx",
+    "rxnormCode": "1927880",
+    "drugClass": "Tyrosine kinase inhibitor (HER2)",
+    "pgpEffect": "strong_inhibitor",
+    "cyp3a4Effect": "unknown",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition may increase apixaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition may increase rivaroxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition increases dabigatran exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp inhibition increases edoxaban exposure",
+        "recommendation": "Use with caution. Monitor for bleeding.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Strong P-gp inhibitor; CYP3A4 effect not well characterized.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Dexamethasone",
+    "brandName": "Decadron",
+    "rxnormCode": "3264",
+    "drugClass": "Corticosteroid",
+    "pgpEffect": "strong_inducer",
+    "cyp3a4Effect": "moderate_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + strong P-gp induction may lower apixaban levels",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (thrombosis).",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + strong P-gp induction may lower rivaroxaban levels",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (thrombosis).",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "P-gp induction may modestly lower dabigatran exposure; no CYP3A4 component",
+        "recommendation": "Low interaction risk. Standard monitoring for efficacy.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor net effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Common in oncology supportive care and myeloma regimens; inducer effect can lower DOAC efficacy.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Dabrafenib",
+    "brandName": "Tafinlar",
+    "rxnormCode": "1425672",
+    "drugClass": "BRAF inhibitor",
+    "pgpEffect": "moderate_inducer",
+    "cyp3a4Effect": "moderate_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp induction may lower apixaban levels",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (thrombosis).",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp induction may lower rivaroxaban levels",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (thrombosis).",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "Moderate P-gp induction may modestly lower dabigatran levels",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor net effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Vemurafenib",
+    "brandName": "Zelboraf",
+    "rxnormCode": "1147220",
+    "drugClass": "BRAF inhibitor",
+    "pgpEffect": "moderate_inducer",
+    "cyp3a4Effect": "moderate_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp induction may lower apixaban levels",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (thrombosis).",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Moderate CYP3A4 + P-gp induction may lower rivaroxaban levels",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (thrombosis).",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "Moderate P-gp induction may modestly lower dabigatran levels",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Minor net effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Bevacizumab",
+    "brandName": "Avastin",
+    "rxnormCode": "253337",
+    "drugClass": "Anti-VEGF monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; impaired wound healing, GI perforation risk, and increased bleeding",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; impaired wound healing, GI perforation risk, and increased bleeding",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; increased bleeding risk",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; increased bleeding risk",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": true,
+    "notes": "Anti-VEGF agents carry intrinsic bleeding and GI perforation risk independent of anticoagulation.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Ramucirumab",
+    "brandName": "Cyramza",
+    "rxnormCode": "1424911",
+    "drugClass": "Anti-VEGFR2 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; increased bleeding risk",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; increased bleeding risk",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; increased bleeding risk",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No PK interaction; increased bleeding risk",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": true,
+    "notes": "Anti-angiogenic; intrinsic bleeding risk.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Lenvatinib",
+    "brandName": "Lenvima",
+    "rxnormCode": "1594772",
+    "drugClass": "Multi-target tyrosine kinase inhibitor (VEGFR)",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": true,
+    "notes": "Anti-angiogenic multi-TKI; intrinsic bleeding risk.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Cabozantinib",
+    "brandName": "Cabometyx",
+    "rxnormCode": "1291270",
+    "drugClass": "Multi-target tyrosine kinase inhibitor (VEGFR)",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "pharmacodynamic",
+        "mechanism": "No significant PK interaction; increased bleeding risk (anti-angiogenic)",
+        "recommendation": "No PK interaction, but increased bleeding risk. Clinical judgment required.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": true,
+    "notes": "Anti-angiogenic multi-TKI; intrinsic bleeding risk.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Paclitaxel",
+    "brandName": "Taxol",
+    "rxnormCode": "56946",
+    "drugClass": "Taxane",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "weak_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "minor",
+        "mechanism": "Weak CYP3A4 induction may modestly lower apixaban levels",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "minor",
+        "mechanism": "Weak CYP3A4 induction may modestly lower rivaroxaban levels",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "none",
+        "mechanism": "No CYP3A4 dependence; no clinically significant interaction",
+        "recommendation": "No known pharmacokinetic interaction.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "none",
+        "mechanism": "Minimal CYP3A4 dependence; no clinically significant interaction",
+        "recommendation": "No known pharmacokinetic interaction.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Weak CYP3A4 inducer (ERRATA Issue 3: corrects prior 'compatible/none' classification).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Paclitaxel protein-bound (nab-paclitaxel)",
+    "brandName": "Abraxane",
+    "rxnormCode": "686924",
+    "drugClass": "Taxane (albumin-bound)",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "weak_inducer",
+    "interactions": {
+      "apixaban": {
+        "severity": "minor",
+        "mechanism": "Weak CYP3A4 induction (albumin-bound formulation); low clinical significance",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "minor",
+        "mechanism": "Weak CYP3A4 induction (albumin-bound formulation); low clinical significance",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "none",
+        "mechanism": "No CYP3A4 dependence; no clinically significant interaction",
+        "recommendation": "No known pharmacokinetic interaction.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "none",
+        "mechanism": "Minimal CYP3A4 dependence; no clinically significant interaction",
+        "recommendation": "No known pharmacokinetic interaction.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "ERRATA Issue 3: distinct entry from plain paclitaxel; RxNorm 686924 (Abraxane).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Carboplatin",
+    "brandName": "Paraplatin",
+    "rxnormCode": "40048",
+    "drugClass": "Platinum agent",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Nephrotoxic — monitor renal function (affects CrCl-based DOAC dosing).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Cisplatin",
+    "brandName": "Platinol",
+    "rxnormCode": "2555",
+    "drugClass": "Platinum agent",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Nephrotoxic — monitor renal function (affects CrCl-based DOAC dosing).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Oxaliplatin",
+    "brandName": "Eloxatin",
+    "rxnormCode": "32592",
+    "drugClass": "Platinum agent",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Pemetrexed",
+    "brandName": "Alimta",
+    "rxnormCode": "258702",
+    "drugClass": "Antimetabolite (antifolate)",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Gemcitabine",
+    "brandName": "Gemzar",
+    "rxnormCode": "12574",
+    "drugClass": "Antimetabolite",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "5-Fluorouracil",
+    "brandName": "Adrucil",
+    "rxnormCode": "4492",
+    "drugClass": "Antimetabolite",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Interacts with warfarin (CYP2C9), but not with DOACs.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Capecitabine",
+    "brandName": "Xeloda",
+    "rxnormCode": "194000",
+    "drugClass": "Antimetabolite (5-FU prodrug)",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No clinically significant PK interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No clinically significant PK interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No clinically significant PK interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No clinically significant PK interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Inhibits CYP2C9 (interacts with warfarin) but NOT clinically significant with DOACs. Can cause thrombocytopenia (pharmacodynamic consideration).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Methotrexate",
+    "brandName": "Trexall",
+    "rxnormCode": "6851",
+    "drugClass": "Antimetabolite (antifolate)",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Nephrotoxic at high dose — monitor renal function (affects CrCl-based DOAC dosing).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Trastuzumab",
+    "brandName": "Herceptin",
+    "rxnormCode": "224905",
+    "drugClass": "Anti-HER2 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Pertuzumab",
+    "brandName": "Perjeta",
+    "rxnormCode": "1298944",
+    "drugClass": "Anti-HER2 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Rituximab",
+    "brandName": "Rituxan",
+    "rxnormCode": "121191",
+    "drugClass": "Anti-CD20 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Pembrolizumab",
+    "brandName": "Keytruda",
+    "rxnormCode": "1547545",
+    "drugClass": "Anti-PD-1 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Nivolumab",
+    "brandName": "Opdivo",
+    "rxnormCode": "1597876",
+    "drugClass": "Anti-PD-1 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Atezolizumab",
+    "brandName": "Tecentriq",
+    "rxnormCode": "1792776",
+    "drugClass": "Anti-PD-L1 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Durvalumab",
+    "brandName": "Imfinzi",
+    "rxnormCode": "1919503",
+    "drugClass": "Anti-PD-L1 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Ipilimumab",
+    "brandName": "Yervoy",
+    "rxnormCode": "1094833",
+    "drugClass": "Anti-CTLA-4 monoclonal antibody",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Docetaxel",
+    "brandName": "Taxotere",
+    "rxnormCode": "72962",
+    "drugClass": "Taxane",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No clinically significant CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No clinically significant CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Bendamustine",
+    "brandName": "Treanda",
+    "rxnormCode": "134547",
+    "drugClass": "Alkylating agent",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Bleomycin",
+    "brandName": "Blenoxane",
+    "rxnormCode": "1550",
+    "drugClass": "Antitumor antibiotic (intercalating agent)",
+    "pgpEffect": "none",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with apixaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "rivaroxaban": { "severity": "none", "mechanism": "No known CYP3A4 or P-gp interaction with rivaroxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "dabigatran": { "severity": "none", "mechanism": "No known P-gp interaction with dabigatran", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null },
+      "edoxaban": { "severity": "none", "mechanism": "No known P-gp interaction with edoxaban", "recommendation": "No known pharmacokinetic interaction.", "alternativeDoac": null }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Doxorubicin",
+    "brandName": "Adriamycin",
+    "rxnormCode": "3639",
+    "drugClass": "Anthracycline (cytotoxic)",
+    "pgpEffect": "strong_inducer",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower apixaban exposure, reducing anticoagulant efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE); consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower rivaroxaban exposure, reducing anticoagulant efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE); consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower dabigatran exposure (P-gp substrate), reducing efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE).",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower edoxaban exposure (P-gp substrate), reducing efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE).",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Strong P-gp inducer (plan Part 3C): may reduce DOAC levels and anticoagulant efficacy across all DOACs.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Vinblastine",
+    "brandName": "Velban",
+    "rxnormCode": "11198",
+    "drugClass": "Vinca alkaloid (cytotoxic)",
+    "pgpEffect": "strong_inducer",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower apixaban exposure, reducing anticoagulant efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE); consider LMWH.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower rivaroxaban exposure, reducing anticoagulant efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE); consider LMWH.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower dabigatran exposure (P-gp substrate), reducing efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE).",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "moderate",
+        "mechanism": "Strong P-gp induction may lower edoxaban exposure (P-gp substrate), reducing efficacy",
+        "recommendation": "Use with caution. Monitor for reduced efficacy (breakthrough VTE).",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Strong P-gp inducer (plan Part 3C): may reduce DOAC levels and anticoagulant efficacy across all DOACs.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Etoposide",
+    "brandName": "Toposar",
+    "rxnormCode": "4179",
+    "drugClass": "Topoisomerase II inhibitor (cytotoxic)",
+    "pgpEffect": "minor_inhibitor",
+    "cyp3a4Effect": "minor_inhibitor",
+    "interactions": {
+      "apixaban": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp and CYP3A4 inhibition may modestly increase apixaban exposure",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp and CYP3A4 inhibition may modestly increase rivaroxaban exposure",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp inhibition may modestly increase dabigatran exposure",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp inhibition; minor net effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Mild dual P-gp/CYP3A4 inhibitor (plan Part 3C); low clinical significance.",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  },
+  {
+    "agentName": "Tamoxifen",
+    "brandName": "Nolvadex",
+    "rxnormCode": "10324",
+    "drugClass": "Selective estrogen receptor modulator (endocrine therapy)",
+    "pgpEffect": "minor_inhibitor",
+    "cyp3a4Effect": "none",
+    "interactions": {
+      "apixaban": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp inhibition may modestly increase apixaban exposure",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "rivaroxaban": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp inhibition may modestly increase rivaroxaban exposure",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "dabigatran": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp inhibition may modestly increase dabigatran exposure",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      },
+      "edoxaban": {
+        "severity": "minor",
+        "mechanism": "Mild P-gp inhibition; minor net effect on edoxaban",
+        "recommendation": "Low interaction risk. Standard monitoring.",
+        "alternativeDoac": null
+      }
+    },
+    "pharmacodynamicBleedingRisk": false,
+    "notes": "Mild P-gp inhibitor (plan Part 3C). Note: tamoxifen itself increases baseline VTE risk, independent of any DOAC interaction. RxNorm 10324 (this code was previously mis-assigned to thalidomide).",
+    "sources": ["AHA 2022 Scientific Statement", "Hellfritzsch et al. 2024"]
+  }
+]
