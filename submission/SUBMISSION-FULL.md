@@ -119,7 +119,7 @@ OncoVTE Guard is decision support, not a substitute for clinical judgment; every
 
 ## Structured / short-answer fields
 
-_1838 characters_
+_1884 characters_
 
 ```text
 SHORT-ANSWER / STRUCTURED FIELDS
@@ -133,7 +133,7 @@ Does your solution have paying customers?: No
 When was your solution conceived?: June 2026
 When was your solution implemented?: June 2026 (functional prototype completed)
 How many users / patients impacted (time frame)?: 0 to date - pre-deployment prototype; validated against 5 synthetic patients (no PHI). No live clinical use yet.
-Website/URL: [CONFIRM - e.g., source repository or demo URL]
+Website/URL: Live demo: https://oncovte-guard.pages.dev | Source: https://github.com/jtown42/oncovte-guard
 Agreement to publish in the SMART App Gallery if feasible: Yes
 
 Who is the intended user/audience?: See field 05 (audience).

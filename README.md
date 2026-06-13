@@ -4,6 +4,8 @@
 
 _AMIA / HL7 FHIR App Competition — Student category._
 
+**🔗 Live demo:** https://oncovte-guard.pages.dev &nbsp;·&nbsp; **SMART launch URL:** https://oncovte-guard.pages.dev/launch
+
 OncoVTE Guard helps oncology clinicians decide whether an ambulatory cancer
 patient warrants pharmacologic venous thromboembolism (VTE) prophylaxis, and —
 when it does — which anticoagulant is appropriate given the patient's renal
