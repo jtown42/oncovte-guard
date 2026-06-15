@@ -82,14 +82,31 @@ function TopBar({
   onTogglePresent: () => void;
 }) {
   return (
-    <div className="border-b border-clinical-border bg-clinical-panel">
+    <header className="relative border-b border-clinical-border bg-clinical-panel/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-clinical-brand text-sm font-bold text-white">
-          VG
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-clinical-brand to-clinical-brandDark text-white shadow-sm ring-1 ring-inset ring-white/15">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 32 32"
+            fill="none"
+            aria-hidden
+          >
+            <path d="M16 5l9 3v6c0 6-4 10-9 13-5-3-9-7-9-13V8z" fill="#fff" />
+            <path
+              d="M11 15l3.5 3.5L21 12"
+              stroke="#0b6e99"
+              strokeWidth="2.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
         <div className="leading-tight">
-          <p className="text-sm font-bold text-clinical-ink">OncoVTE Guard</p>
-          <p className="present-hide text-xs text-clinical-muted">
+          <p className="text-sm font-bold tracking-tight text-clinical-ink">
+            OncoVTE Guard
+          </p>
+          <p className="present-hide hidden text-xs text-clinical-muted sm:block">
             Cancer-associated VTE prophylaxis · DOAC interaction CDS
           </p>
         </div>
@@ -109,7 +126,8 @@ function TopBar({
           {mode === "smart" ? "SMART-on-FHIR" : "Standalone demo"}
         </span>
       </div>
-    </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-clinical-brand/40 to-transparent" />
+    </header>
   );
 }
 

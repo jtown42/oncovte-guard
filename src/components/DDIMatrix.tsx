@@ -23,14 +23,18 @@ import {
 
 /* ---------- compact summary (dashboard) ---------- */
 
-/** Worst-first severity ranking used to pick the headline interaction. */
+/**
+ * Worst-first severity ranking used to pick the headline interaction. Mirrors
+ * the engine's ordering (ERRATA Issue 7, ddi-checker.ts): a known "none" ranks
+ * above an unscreened "unknown".
+ */
 const SEVERITY_RANK: Record<DDISeverity, number> = {
   major: 5,
   moderate: 4,
   pharmacodynamic: 3,
   minor: 2,
-  unknown: 1,
-  none: 0,
+  none: 1,
+  unknown: 0,
 };
 
 const TALLY_ORDER: DDISeverity[] = [

@@ -40,6 +40,16 @@ export const TONE_DOT: Record<Tone, string> = {
   info: "bg-sky-500",
 };
 
+/** Solid fills for icon badges (white glyph on a saturated tone). */
+export const TONE_SOLID: Record<Tone, string> = {
+  danger: "bg-rose-600",
+  warning: "bg-amber-500",
+  caution: "bg-yellow-500",
+  good: "bg-emerald-600",
+  neutral: "bg-slate-500",
+  info: "bg-sky-600",
+};
+
 /* ---------- DDI severity ---------- */
 
 export const SEVERITY_LABEL: Record<DDISeverity, string> = {

@@ -6,18 +6,21 @@ export default {
       colors: {
         // Clinical severity palette (semantic, WCAG-AA contrast on white).
         clinical: {
-          bg: "#f6f8fb",
+          bg: "#eef2f7",
           panel: "#ffffff",
-          border: "#e2e8f0",
-          ink: "#0f172a",
-          muted: "#64748b",
+          border: "#e3e9f2",
+          hairline: "#eef2f7",
+          ink: "#0e1b2a",
+          muted: "#5b6b7a",
           brand: "#0b6e99", // teal-blue — calm, clinical
           brandDark: "#075066",
+          brandSoft: "#e7f1f6",
+          brandTint: "#f2f8fb",
         },
       },
       fontFamily: {
         sans: [
-          "Inter",
+          "IBM Plex Sans",
           "ui-sans-serif",
           "system-ui",
           "-apple-system",
@@ -27,10 +30,19 @@ export default {
           "Arial",
           "sans-serif",
         ],
-        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
+        mono: [
+          "IBM Plex Mono",
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Consolas",
+          "monospace",
+        ],
       },
       boxShadow: {
-        card: "0 1px 2px rgba(15,23,42,0.04), 0 1px 8px rgba(15,23,42,0.06)",
+        card: "0 1px 2px rgba(14,27,42,0.04), 0 6px 20px -12px rgba(14,27,42,0.18)",
+        cardhover: "0 2px 4px rgba(14,27,42,0.05), 0 12px 28px -14px rgba(14,27,42,0.22)",
+        hero: "0 10px 40px -18px rgba(11,110,153,0.45)",
       },
     },
   },

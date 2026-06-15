@@ -7,16 +7,70 @@ import type {
   DOACOption,
   ProphylaxisRecommendation,
 } from "../types/recommendation";
+import type { OverallAction } from "../types/recommendation";
 import { Pill } from "./primitives";
 import { Flash } from "./Flash";
 import {
   ACTION,
   TONE_BANNER,
+  TONE_SOLID,
   renalStatusTone,
   RENAL_STATUS_LABEL,
   severityTone,
   SEVERITY_LABEL,
 } from "../ui/format";
+
+/** Minimal stroke glyph per verdict — a clinical status mark, not an emoji. */
+function VerdictIcon({ action }: { action: OverallAction }) {
+  const common = {
+    width: 22,
+    height: 22,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2.4,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  switch (action) {
+    case "recommend":
+      return (
+        <svg {...common}>
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      );
+    case "caution":
+      return (
+        <svg {...common}>
+          <path d="M12 3 2 20h20L12 3Z" />
+          <path d="M12 10v4" />
+          <path d="M12 17.5v.5" />
+        </svg>
+      );
+    case "contraindicated":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="m6 6 12 12" />
+        </svg>
+      );
+    case "not_indicated":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M8 12h8" />
+        </svg>
+      );
+    case "excluded":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5" />
+          <path d="M12 7.5v.5" />
+        </svg>
+      );
+  }
+}
 
 export function RecommendationPanel({
   rec,
@@ -31,14 +85,17 @@ export function RecommendationPanel({
     <section className="card overflow-hidden">
       {/* Hero banner — flashes on every verdict change so the flip lands on stage. */}
       <Flash watch={rec.overallAction} tone={action.tone}>
-        <div className={`border-l-4 px-5 py-4 ${TONE_BANNER[action.tone]}`}>
-          <div className="flex flex-wrap items-center gap-2">
+        <div className={`flex items-start gap-4 px-5 py-5 ${TONE_BANNER[action.tone]}`}>
+          <span
+            className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-sm ${TONE_SOLID[action.tone]}`}
+            aria-hidden
+          >
+            <VerdictIcon action={rec.overallAction} />
+          </span>
+          <div className="min-w-0">
             <h2 className="verdict-hero font-bold">{action.label}</h2>
-            <Pill tone={action.tone}>
-              {rec.overallAction.replace(/_/g, " ")}
-            </Pill>
+            <p className="mt-1 text-sm opacity-90">{action.summary}</p>
           </div>
-          <p className="mt-1 text-sm opacity-90">{action.summary}</p>
         </div>
       </Flash>
 

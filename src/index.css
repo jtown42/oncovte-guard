@@ -9,19 +9,37 @@
   }
   body {
     @apply bg-clinical-bg text-clinical-ink font-sans;
+    /* Soft brand wash at the top of the page for atmosphere/depth, fading to
+       the calm clinical base — no flat white. */
+    background-image:
+      radial-gradient(
+        58rem 26rem at 50% -12rem,
+        rgba(11, 110, 153, 0.1),
+        transparent 70%
+      ),
+      radial-gradient(
+        40rem 20rem at 100% 0,
+        rgba(11, 110, 153, 0.05),
+        transparent 65%
+      );
+    background-attachment: fixed;
+  }
+  /* Tabular figures everywhere numbers matter. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
 @layer components {
   /* Reusable surface for dashboard cards. */
   .card {
-    @apply rounded-xl border border-clinical-border bg-clinical-panel shadow-card;
+    @apply rounded-2xl border border-clinical-border bg-clinical-panel shadow-card;
   }
   .card-header {
-    @apply flex items-center justify-between gap-3 border-b border-clinical-border px-5 py-3.5;
+    @apply flex items-center justify-between gap-3 border-b border-clinical-hairline px-5 py-3.5;
   }
   .card-title {
-    @apply text-sm font-semibold uppercase tracking-wide text-clinical-muted;
+    @apply text-xs font-semibold uppercase tracking-[0.08em] text-clinical-muted;
   }
   .card-body {
     @apply px-5 py-4;
@@ -121,7 +139,15 @@
  */
 .verdict-hero {
   font-size: 1.5rem; /* text-2xl — larger than baseline even off-stage */
-  line-height: 1.15;
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+}
+/* Big clinical readouts (Khorana score, CrCl) — mono, like a vitals monitor. */
+.metric-hero {
+  font-family:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
 }
 .present .verdict-hero {
   font-size: 2.5rem;
