@@ -8,6 +8,7 @@ import type {
   ProphylaxisRecommendation,
 } from "../types/recommendation";
 import { Pill } from "./primitives";
+import { Flash } from "./Flash";
 import {
   ACTION,
   TONE_BANNER,
@@ -28,14 +29,18 @@ export function RecommendationPanel({
 
   return (
     <section className="card overflow-hidden">
-      {/* Hero banner */}
-      <div className={`border-l-4 px-5 py-4 ${TONE_BANNER[action.tone]}`}>
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-bold">{action.label}</h2>
-          <Pill tone={action.tone}>{rec.overallAction.replace(/_/g, " ")}</Pill>
+      {/* Hero banner — flashes on every verdict change so the flip lands on stage. */}
+      <Flash watch={rec.overallAction} tone={action.tone}>
+        <div className={`border-l-4 px-5 py-4 ${TONE_BANNER[action.tone]}`}>
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="verdict-hero font-bold">{action.label}</h2>
+            <Pill tone={action.tone}>
+              {rec.overallAction.replace(/_/g, " ")}
+            </Pill>
+          </div>
+          <p className="mt-1 text-sm opacity-90">{action.summary}</p>
         </div>
-        <p className="mt-1 text-sm opacity-90">{action.summary}</p>
-      </div>
+      </Flash>
 
       <div className="card-body space-y-5">
         {rec.staleLabWarning && (

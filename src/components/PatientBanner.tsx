@@ -20,7 +20,7 @@ export function PatientBanner({ patient }: { patient: PatientData }) {
       <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <h1 className="truncate text-xl font-bold text-clinical-ink">
+            <h1 className="patient-name truncate text-xl font-bold text-clinical-ink">
               {patient.name}
             </h1>
             <span className="text-sm text-clinical-muted">

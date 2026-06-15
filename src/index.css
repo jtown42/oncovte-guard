@@ -57,18 +57,88 @@
 }
 
 @layer utilities {
-  /* Played when the recommendation verdict changes, so live edits feel alive. */
-  @keyframes rec-rise {
-    from {
-      opacity: 0;
-      transform: translateY(6px) scale(0.995);
+  /*
+   * Recompute flash. When a live edit changes a clinical result (the verdict,
+   * the Khorana number, the CrCl, the worst interaction) the affected module
+   * pulses a high-visibility colored glow for ~0.6s, then settles. Designed to
+   * read clearly on a washed-out conference projector — not a subtle slide.
+   */
+  @keyframes flash-pulse {
+    0% {
+      box-shadow: 0 0 0 4px var(--flash-ring);
+      background-color: var(--flash-bg);
     }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
+    100% {
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+      background-color: transparent;
     }
   }
-  .animate-rec {
-    animation: rec-rise 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  .flash-good,
+  .flash-danger,
+  .flash-warning,
+  .flash-info,
+  .flash-neutral {
+    animation: flash-pulse 0.65s ease-out;
+    border-radius: 0.5rem;
   }
+  .flash-good {
+    --flash-ring: rgba(16, 185, 129, 0.55);
+    --flash-bg: rgba(16, 185, 129, 0.14);
+  }
+  .flash-danger {
+    --flash-ring: rgba(244, 63, 94, 0.55);
+    --flash-bg: rgba(244, 63, 94, 0.14);
+  }
+  .flash-warning {
+    --flash-ring: rgba(245, 158, 11, 0.6);
+    --flash-bg: rgba(245, 158, 11, 0.16);
+  }
+  .flash-info {
+    --flash-ring: rgba(14, 165, 233, 0.5);
+    --flash-bg: rgba(14, 165, 233, 0.12);
+  }
+  .flash-neutral {
+    --flash-ring: rgba(100, 116, 139, 0.5);
+    --flash-bg: rgba(100, 116, 139, 0.12);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flash-good,
+    .flash-danger,
+    .flash-warning,
+    .flash-info,
+    .flash-neutral {
+      animation: none;
+    }
+  }
+}
+
+/*
+ * Presentation mode (?present=true or the on-screen toggle). Enlarges the
+ * critical data milestones — the verdict, the Khorana score, the CrCl, the
+ * patient name — so they read from the back of a conference hall, and hides
+ * chrome that is noise on stage. Two-class descendant selectors outrank the
+ * single-class Tailwind utilities they override.
+ */
+.verdict-hero {
+  font-size: 1.5rem; /* text-2xl — larger than baseline even off-stage */
+  line-height: 1.15;
+}
+.present .verdict-hero {
+  font-size: 2.5rem;
+  line-height: 1.1;
+}
+.present .metric-hero {
+  font-size: 4.5rem;
+  line-height: 1;
+}
+.present .patient-name {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.present .pill {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.75rem;
+}
+.present .present-hide {
+  display: none;
 }

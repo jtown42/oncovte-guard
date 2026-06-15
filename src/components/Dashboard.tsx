@@ -6,7 +6,7 @@ import { PatientBanner } from "./PatientBanner";
 import { RecommendationPanel } from "./RecommendationPanel";
 import { KhoranaScoreCard } from "./KhoranaScoreCard";
 import { RenalPanel } from "./RenalPanel";
-import { DDIMatrix } from "./DDIMatrix";
+import { DDISummary } from "./DDIMatrix";
 import { ContraindicationPanel } from "./ContraindicationPanel";
 import { AlertList } from "./AlertList";
 
@@ -19,28 +19,28 @@ export function Dashboard({ patient }: { patient: PatientData }) {
 
       {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
 
-      {/* Re-key on the verdict so a changed recommendation animates in. */}
-      <div key={rec.overallAction} className="animate-rec">
-        <RecommendationPanel rec={rec} />
-      </div>
+      {/* The verdict itself flashes on change (see RecommendationPanel/Flash). */}
+      <RecommendationPanel rec={rec} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <KhoranaScoreCard khorana={rec.khorana} />
         <RenalPanel renal={rec.renal} />
       </div>
 
-      <DDIMatrix results={rec.ddiResults} />
+      <DDISummary results={rec.ddiResults} />
 
       <ContraindicationPanel contraindications={rec.contraindications} />
 
-      <footer className="card-body rounded-xl border border-clinical-border bg-slate-50 text-xs leading-relaxed text-clinical-muted">
-        <p className="mb-1 font-semibold uppercase tracking-wide">Disclaimers</p>
-        <ul className="list-disc space-y-0.5 pl-4">
+      <details className="present-hide rounded-xl border border-clinical-border bg-slate-50 text-xs leading-relaxed text-clinical-muted">
+        <summary className="cursor-pointer px-5 py-3 font-semibold uppercase tracking-wide">
+          Disclaimers
+        </summary>
+        <ul className="list-disc space-y-0.5 px-5 pb-4 pl-9">
           {rec.disclaimers.map((d, i) => (
             <li key={i}>{d}</li>
           ))}
         </ul>
-      </footer>
+      </details>
     </div>
   );
 }

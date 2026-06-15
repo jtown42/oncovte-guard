@@ -68,21 +68,22 @@ async function run() {
 
   console.log("Desktop (1440×900 @2x):");
   for (const preset of PRESETS) {
-    await page.click(`button:has-text("${preset.name}")`);
+    // Preset chips are labelled by first name in the left control rail.
+    await page.click(`button:has-text("${preset.name.split(" ")[0]}")`);
     await settle(page);
     await snap(page, `desktop-${preset.slug}.png`);
     await dumpText(page, `desktop-${preset.slug}.txt`);
   }
 
-  // Editor collapsed (Maria), to show the dashboard without the control clutter.
-  await page.click(`button:has-text("Maria Santos")`);
+  // Presentation mode (enlarged type, reduced chrome) for stage legibility.
+  await page.click(`button:has-text("Dorothy")`);
   await settle(page);
-  await page.click('button:has-text("Hide controls")').catch(() => {});
+  await page.click('button:has-text("Presentation mode")').catch(() => {});
   await settle(page);
-  await snap(page, "desktop-editor-collapsed.png");
-  await page.click('button:has-text("Show controls")').catch(() => {});
+  await snap(page, "desktop-present-dorothy.png");
+  await page.click('button:has-text("Exit presentation")').catch(() => {});
 
-  // Just the editor region (top of page), normal scroll position.
+  // Just the control rail (top of page), normal scroll position.
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(200);
   await page.screenshot({
@@ -104,7 +105,7 @@ async function run() {
   await settle(mpage);
   console.log("Mobile (390×844 @3x):");
   await snap(mpage, "mobile-1-maria-editor.png");
-  await mpage.click(`button:has-text("Dorothy Williams")`);
+  await mpage.click(`button:has-text("Dorothy")`);
   await settle(mpage);
   await snap(mpage, "mobile-3-dorothy-contraindicated.png");
   await mobile.close();

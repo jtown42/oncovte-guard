@@ -1,6 +1,7 @@
 /** Renal function panel: Cockcroft-Gault CrCl + per-anticoagulant guidance. */
 import type { RenalResult } from "../types/renal";
 import { Card, Pill } from "./primitives";
+import { Flash } from "./Flash";
 import {
   crclTone,
   CRCL_LABEL,
@@ -31,9 +32,11 @@ export function RenalPanel({ renal }: { renal: RenalResult | null }) {
       }
     >
       <div className="flex items-end gap-2">
-        <span className="text-3xl font-bold tabular-nums leading-none">
-          {renal.crclMlMin}
-        </span>
+        <Flash watch={renal.crclMlMin} tone={crclTone(renal.crclCategory)}>
+          <span className="metric-hero text-3xl font-bold tabular-nums leading-none">
+            {renal.crclMlMin}
+          </span>
+        </Flash>
         <span className="pb-0.5 text-sm text-clinical-muted">
           mL/min · Cockcroft-Gault
         </span>

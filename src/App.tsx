@@ -37,32 +37,75 @@ function detectMode(): Mode {
   return "standalone";
 }
 
+/** Presentation mode is opt-in via `?present=true` or the on-screen toggle. */
+function detectPresent(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("present") === "true";
+}
+
 export function App() {
   const mode = useMemo(detectMode, []);
+  const [present, setPresent] = useState(detectPresent);
+
+  const togglePresent = () => {
+    setPresent((v) => {
+      const next = !v;
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        if (next) url.searchParams.set("present", "true");
+        else url.searchParams.delete("present");
+        window.history.replaceState({}, "", url);
+      }
+      return next;
+    });
+  };
+
   return (
-    <div className="min-h-screen">
-      <TopBar mode={mode} />
-      <main className="mx-auto max-w-6xl px-4 py-6">
+    <div className={`min-h-screen ${present ? "present" : ""}`}>
+      <TopBar mode={mode} present={present} onTogglePresent={togglePresent} />
+      <main
+        className={`mx-auto px-4 py-6 ${mode === "standalone" ? "max-w-7xl" : "max-w-6xl"}`}
+      >
         {mode === "smart" ? <SmartView /> : <StandaloneView />}
       </main>
     </div>
   );
 }
 
-function TopBar({ mode }: { mode: Mode }) {
+function TopBar({
+  mode,
+  present,
+  onTogglePresent,
+}: {
+  mode: Mode;
+  present: boolean;
+  onTogglePresent: () => void;
+}) {
   return (
     <div className="border-b border-clinical-border bg-clinical-panel">
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-clinical-brand text-sm font-bold text-white">
           VG
         </div>
         <div className="leading-tight">
           <p className="text-sm font-bold text-clinical-ink">OncoVTE Guard</p>
-          <p className="text-xs text-clinical-muted">
+          <p className="present-hide text-xs text-clinical-muted">
             Cancer-associated VTE prophylaxis · DOAC interaction CDS
           </p>
         </div>
-        <span className="ml-auto rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-clinical-muted">
+        <button
+          onClick={onTogglePresent}
+          className={`ml-auto rounded-full px-3 py-1 text-xs font-medium transition ${
+            present
+              ? "bg-clinical-brand text-white"
+              : "border border-clinical-border text-clinical-muted hover:border-clinical-brand hover:text-clinical-brand"
+          }`}
+          aria-pressed={present}
+          title="Enlarge type and reduce chrome for stage projection"
+        >
+          {present ? "Exit presentation" : "Presentation mode"}
+        </button>
+        <span className="present-hide rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-clinical-muted">
           {mode === "smart" ? "SMART-on-FHIR" : "Standalone demo"}
         </span>
       </div>
@@ -138,19 +181,24 @@ function StandaloneView() {
   };
 
   return (
-    <div className="space-y-4">
-      <ScenarioEditor
-        scenario={scenario}
-        presets={roster.map((p) => ({ index: p.index, name: p.name }))}
-        activePreset={activePreset}
-        onLoadPreset={loadPreset}
-        onChange={change}
-      />
-      <p className="px-1 text-xs text-clinical-muted">
-        Synthetic data — no PHI. Every edit re-runs the real clinical engine.
-        For demonstration and evaluation only.
-      </p>
-      <Dashboard patient={patient} />
+    <div className="lg:grid lg:grid-cols-[21rem_minmax(0,1fr)] lg:items-start lg:gap-6">
+      {/* Sticky control rail — the verdict on the right stays in view while
+          a slider is dragged. Stacks above the dashboard on narrow screens. */}
+      <aside className="mb-4 lg:sticky lg:top-4 lg:mb-0 lg:max-h-[calc(100vh-1.5rem)] lg:overflow-y-auto lg:pr-1">
+        <ScenarioEditor
+          scenario={scenario}
+          presets={roster.map((p) => ({ index: p.index, name: p.name }))}
+          activePreset={activePreset}
+          onLoadPreset={loadPreset}
+          onChange={change}
+        />
+        <p className="present-hide mt-3 px-1 text-xs text-clinical-muted">
+          Synthetic data — no PHI. Every edit re-runs the real clinical engine.
+        </p>
+      </aside>
+      <div className="min-w-0">
+        <Dashboard patient={patient} />
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import type { KhoranaResult } from "../types/khorana";
 import { MAX_KHORANA_SCORE } from "../types/khorana";
 import { Card, Pill } from "./primitives";
+import { Flash } from "./Flash";
 import { riskTone, RISK_LABEL, humanize } from "../ui/format";
 
 export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
@@ -65,9 +66,11 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
       }
     >
       <div className="flex items-end gap-2">
-        <span className="text-4xl font-bold tabular-nums leading-none">
-          {khorana.totalScore}
-        </span>
+        <Flash watch={khorana.totalScore} tone={riskTone(khorana.riskCategory)}>
+          <span className="metric-hero text-4xl font-bold tabular-nums leading-none">
+            {khorana.totalScore}
+          </span>
+        </Flash>
         <span className="pb-1 text-sm text-clinical-muted">
           / {MAX_KHORANA_SCORE}
         </span>
