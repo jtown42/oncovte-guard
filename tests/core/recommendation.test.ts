@@ -61,6 +61,7 @@ function patient(overrides: Partial<PatientData> = {}): PatientData {
     onAntiplatelet: false,
     onIMiD: false,
     hasNephrotoxicChemo: false,
+    hasActiveMajorBleeding: false,
   };
   return { ...base, ...overrides };
 }
@@ -118,6 +119,25 @@ describe("generateRecommendation", () => {
     );
     expect(r.overallAction).toBe("contraindicated");
     expect(r.preferredOptions).toHaveLength(0);
+  });
+
+  it("active major bleeding (clinician flag) on an otherwise-recommend patient -> contraindicated", () => {
+    // Baseline patient() is a high-Khorana pancreatic case that otherwise
+    // recommends apixaban + rivaroxaban (see first test).
+    const recommended = generateRecommendation(patient());
+    expect(recommended.overallAction).toBe("recommend");
+
+    const bleeding = generateRecommendation(
+      patient({ hasActiveMajorBleeding: true }),
+    );
+    expect(bleeding.overallAction).toBe("contraindicated");
+    expect(bleeding.preferredOptions).toHaveLength(0);
+    expect(bleeding.alternativeOptions).toHaveLength(0);
+    expect(
+      bleeding.contraindications.absolute.some(
+        (c) => c.reason === "active_major_bleeding" && c.appliesTo === "all",
+      ),
+    ).toBe(true);
   });
 
   it("ERRATA Issue 4: major DDI on both DOACs -> LMWH fallback, no dabi/edox option", () => {

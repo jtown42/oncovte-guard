@@ -215,6 +215,7 @@ export function generateRecommendation(
     weightKg: patient.weightKg,
     onAntiplatelet: patient.onAntiplatelet,
     onIMiD: patient.onIMiD,
+    hasActiveMajorBleeding: patient.hasActiveMajorBleeding,
     totalBilirubin: patient.labs.totalBilirubin?.value ?? null,
     alt: patient.labs.alt?.value ?? null,
     ast: patient.labs.ast?.value ?? null,

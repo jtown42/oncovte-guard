@@ -1,0 +1,36 @@
+REFERENCES (epidemiology figures used in the abstract and rationale)
+
+Map each claim to its source. Supplied by the submitter's literature search;
+confirm the Lam et al. 2026 volume/pages on final publication.
+
+[1] Farge D, Frere C, Connors JM, et al. 2019 International Clinical Practice
+    Guidelines for the Treatment and Prophylaxis of Venous Thromboembolism in
+    Patients With Cancer (ITAC). Lancet Oncol. 2019;20(10):e566-e581.
+    -> supports: ~4-7-fold increased VTE risk in cancer; cancer accounts for
+       ~20% ("one in five") of all VTE events; VTE as a leading cause of death
+       in patients with cancer.
+
+[2] Siegel RL, Giaquinto AN, Jemal A. Cancer Statistics, 2024.
+    CA Cancer J Clin. 2024;74(1):12-49.
+    -> supports: approximately 2 million new US cancer diagnoses per year
+       (~2,001,140 projected for 2024).
+
+[3] Lam BD, Ryu J, Jafari O, et al. Epidemiology of Cancer-Associated Venous
+    Thromboembolism Across the United States. Am J Hematol. 2026.
+    -> supports: contemporary cancer-associated VTE epidemiology (12-month
+       cumulative incidence ~3.7% overall, ~5.7% with systemic therapy;
+       Epic Cosmos, 911,855 patients). Confirm volume/pages on publication.
+
+Supporting sources named in the narrative (not epidemiology figures):
+[4] Carrier M, et al. Apixaban to Prevent VTE in Patients with Cancer (AVERT).
+    N Engl J Med. 2019;380(8):711-719.
+[5] Khorana AA, et al. Rivaroxaban for Thromboprophylaxis in High-Risk
+    Ambulatory Patients with Cancer (CASSINI). N Engl J Med. 2019;380(8):720-728.
+[6] Khorana AA, Kuderer NM, Culakova E, et al. Development and validation of a
+    predictive model for chemotherapy-associated thrombosis. Blood.
+    2008;111(10):4902-4907.
+[7] NCCN Clinical Practice Guidelines in Oncology (NCCN Guidelines): Cancer-
+    Associated Venous Thromboembolic Disease.
+
+WORDING NOTE: the submission uses "a leading cause of death" (ITAC-supported),
+not "the second leading cause," whose primary source is unconfirmed.

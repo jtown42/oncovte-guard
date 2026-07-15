@@ -40,6 +40,7 @@ export interface Scenario {
   alt: number | null;
   ast: number | null;
   onESA: boolean;
+  hasActiveMajorBleeding: boolean;
   medCodes: string[];
 }
 
@@ -192,6 +193,7 @@ export function scenarioToPatient(s: Scenario): PatientData {
     onAntiplatelet: s.medCodes.some((c) => ANTIPLATELET_RXNORM.has(c)),
     onIMiD: s.medCodes.some((c) => IMID_RXNORM.has(c)),
     hasNephrotoxicChemo: s.medCodes.some((c) => NEPHROTOXIC_CHEMO_RXNORM.has(c)),
+    hasActiveMajorBleeding: s.hasActiveMajorBleeding,
   };
 }
 
@@ -212,6 +214,7 @@ export function patientToScenario(p: PatientData): Scenario {
     alt: p.labs.alt?.value ?? null,
     ast: p.labs.ast?.value ?? null,
     onESA: p.onESA,
+    hasActiveMajorBleeding: p.hasActiveMajorBleeding,
     medCodes: p.activeMedications.map((m) => m.rxnormCode),
   };
 }

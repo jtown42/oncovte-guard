@@ -144,6 +144,23 @@ export function ScenarioEditor({
           />
         </Field>
 
+        {/* Clinician-assessed safety flag — a universal absolute contraindication.
+            Toggling this on flips any otherwise-recommended patient to
+            'contraindicated', demonstrating the safety gate live. */}
+        <Field label="Clinical safety flag">
+          <Toggle
+            on={s.hasActiveMajorBleeding}
+            onClick={() =>
+              onChange({ hasActiveMajorBleeding: !s.hasActiveMajorBleeding })
+            }
+            label={
+              s.hasActiveMajorBleeding
+                ? "Active major bleeding — anticoagulation contraindicated"
+                : "Active major bleeding (clinician-assessed)"
+            }
+          />
+        </Field>
+
         {/* Stable / lower-stakes inputs — out of prime visual space. */}
         <details className="rounded-lg border border-clinical-border bg-slate-50/50">
           <summary className="cursor-pointer px-3 py-2 text-xs font-semibold uppercase tracking-wide text-clinical-muted">

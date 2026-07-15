@@ -25,7 +25,7 @@ so, which anticoagulant is safe — by combining:
 - **contraindication screening** (bleeding, thrombocytopenia, HIT, hepatic, etc.)
 
 The thesis I want the demo to *prove*: **"This is not a dashboard that displays
-data — it is a clinical reasoning engine (121 automated tests prove guideline
+data — it is a clinical reasoning engine (123 automated tests prove guideline
 fidelity), exposed through both a SMART dashboard and a CDS Hooks service."**
 
 The standalone demo now wraps that engine in a **live "what-if" editor**: every

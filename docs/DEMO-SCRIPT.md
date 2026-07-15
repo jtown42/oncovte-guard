@@ -97,7 +97,7 @@ These are the real engine thresholds — `contraindications.ts` and
 ## [6:45–8:00] The architecture & the two surfaces
 
 > "Everything you saw runs on one pure, framework-free reasoning core — the same
-> `generateRecommendation` function, covered by **121 automated tests** that
+> `generateRecommendation` function, covered by **123 automated tests** that
 > encode the guideline rules. That core has no idea whether it's talking to a
 > screen or a machine."
 

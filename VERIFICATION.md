@@ -12,7 +12,7 @@ inventory, and the exact commands to reproduce every result below.
 
 - **Verified on:** 2026-06-15
 - **Authoritative contract:** [`plan/errata-contract-reconciliation.md`](plan/errata-contract-reconciliation.md) (overrides `plan/ddi-info.md` on its 10 resolved issues), with one dated clinical-review supersession noted in §5 (risk-tier labels).
-- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **121 / 121 tests passing**
+- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **123 / 123 tests passing**
 
 ---
 
@@ -21,7 +21,7 @@ inventory, and the exact commands to reproduce every result below.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit  → no errors
-npm test              # vitest run    → 10 files, 121 tests, all passing
+npm test              # vitest run    → 10 files, 123 tests, all passing
 npm run build         # tsc && vite build → dist/ (113 modules)
 npm run dev           # standalone demo (5 synthetic patients), http://localhost:5173
 npm run cds-server    # CDS Hooks service, http://localhost:3000/cds-services
@@ -37,14 +37,14 @@ running the cited test (`npx vitest run <path> -t "<test title>"`).
 | Gate | Command | Result |
 | --- | --- | --- |
 | Type safety | `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) | **0 errors** |
-| Unit + integration tests | `vitest run` | **10 files, 121 tests passed** |
+| Unit + integration tests | `vitest run` | **10 files, 123 tests passed** |
 | Production build | `tsc && vite build` | **113 modules transformed, built** |
 | Live render (manual) | `vite preview` + browser | All five pathways (recommend / LMWH-fallback / contraindicated / not-indicated / excluded) verified visually in the redesigned demo UI, including the live verdict flip and presentation mode (see `docs/screenshots/`) |
 
 Test files: `khorana-engine` (27), `ddi-checker` (13), `renal-dosing` (11),
-`contraindications` (11), `stale-lab` (9), `recommendation` (6),
+`contraindications` (11), `stale-lab` (9), `recommendation` (7),
 `rxnorm-codes` (3), `integration/patients` (19), `cds-hooks/cards` (11),
-`standalone/scenario` (11).
+`standalone/scenario` (12).
 
 ---
 

@@ -29,6 +29,7 @@ const BASE: Scenario = {
   alt: 20,
   ast: 20,
   onESA: false,
+  hasActiveMajorBleeding: false,
   medCodes: [],
 };
 
@@ -72,6 +73,19 @@ describe("scenario edits drive the real recommendation", () => {
   it("selecting myeloma yields the excluded pathway", () => {
     const p = scenarioToPatient({ ...BASE, conditionCode: "C90.00" });
     expect(generateRecommendation(p).overallAction).toBe("excluded");
+  });
+
+  it("the active-major-bleeding toggle flips a recommend patient to contraindicated", () => {
+    // High-risk pancreatic scenario that otherwise recommends prophylaxis.
+    const eligible = { ...BASE, platelets: 400, wbc: 12 };
+    expect(
+      generateRecommendation(scenarioToPatient(eligible)).overallAction,
+    ).toBe("recommend");
+    const bleeding = generateRecommendation(
+      scenarioToPatient({ ...eligible, hasActiveMajorBleeding: true }),
+    );
+    expect(bleeding.overallAction).toBe("contraindicated");
+    expect(bleeding.preferredOptions).toHaveLength(0);
   });
 
   it("ibrutinib on both DOACs forces the LMWH fallback (never dabi/edox)", () => {

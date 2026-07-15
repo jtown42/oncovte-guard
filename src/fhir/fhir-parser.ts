@@ -273,6 +273,9 @@ export function assemblePatientData(
     onAntiplatelet: anyMedIn(medications, ANTIPLATELET_RXNORM),
     onIMiD: anyMedIn(medications, IMID_RXNORM),
     hasNephrotoxicChemo: anyMedIn(medications, NEPHROTOXIC_CHEMO_RXNORM),
+    // No reliable discrete FHIR signal for active major bleeding; it is a
+    // clinician-assessed finding, so it defaults to false from parsed data.
+    hasActiveMajorBleeding: false,
   };
 }
 

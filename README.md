@@ -158,7 +158,7 @@ resources inline.
 
 ## Testing
 
-`npm test` runs **121 tests** across the clinical engines, the FHIR parsing
+`npm test` runs **123 tests** across the clinical engines, the FHIR parsing
 layer, the end-to-end synthetic-patient pathways, and the CDS Hooks card
 builder. The engine suites encode the competition's authoritative
 [errata contract](plan/errata-contract-reconciliation.md) (e.g. Khorana max 6,

@@ -65,4 +65,13 @@ export interface PatientData {
   onAntiplatelet: boolean;
   onIMiD: boolean;
   hasNephrotoxicChemo: boolean;
+
+  /**
+   * Active major bleeding — a universal absolute contraindication to
+   * anticoagulation. FHIR has no single, reliable representation of active
+   * bleeding status, so this is a clinician-assessed boolean (default false
+   * from FHIR data; set via the standalone what-if editor or, in a live
+   * deployment, a clinician confirmation step).
+   */
+  hasActiveMajorBleeding: boolean;
 }
