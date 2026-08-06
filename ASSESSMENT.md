@@ -91,7 +91,7 @@ To prevent over-claiming, here is the honest scope boundary.
 ## 3. The core design claim, and why it matters
 
 > *This is not a dashboard that displays data. It is a clinical reasoning engine,
-> proven by 123 automated tests, exposed through two surfaces.*
+> proven by 173 automated tests, exposed through two surfaces.*
 
 The clinical logic lives in `src/core/` as **pure, framework-free,
 deterministic** functions. The SMART dashboard, the standalone demo, and the CDS
@@ -125,7 +125,7 @@ rubric (adjust weights to the official criteria).
 | **Clinical value / impact** | High — addresses a real, high-mortality, high-volume decision with RCT-backed interventions (AVERT, CASSINI) | §1; `submission/02-rationale.txt` | Impact is *potential*, not measured |
 | **Innovation** | Medium-High — unifies risk scoring **and** DDI checking in one recommendation; `appliesTo`-aware contraindications; dual-surface | §3; `submission/02-rationale.txt` | Each component individually is known art; the *integration* is the novelty |
 | **FHIR usage** | Solid — R4, real resources, US Core extensions, SMART launch, CDS Hooks 1.0, capability statement | `VERIFICATION.md` §7–8; `public/capability-statement.json` | Not yet exercised against a live external EHR |
-| **Technical execution** | High — TS strict, 123 tests, typecheck-clean build, traceability matrix | §8; `VERIFICATION.md` §1–2 | — |
+| **Technical execution** | High — TS strict, 173 tests, typecheck-clean build, traceability matrix | §8; `VERIFICATION.md` §1–2 | — |
 | **Sustainability** | Medium — clean separation makes the KB extensible; but the DDI KB needs ongoing curation | §5; `submission/04-evaluation.txt` | A curated KB is a maintenance liability without a steward |
 
 ---
@@ -159,7 +159,7 @@ reviewer should *look for* — and here is one that was found and fenced.
 
 **Strengths**
 - Genuinely hard, genuinely valuable clinical decision — not a toy.
-- Reasoning engine + 123 tests + rule→source→code→test matrix = unusual rigor.
+- Reasoning engine + 173 tests + rule→source→code→test matrix = unusual rigor.
 - Dual-surface (SMART + CDS Hooks) from one tested core.
 - Safety-conscious by design: apixaban/rivaroxaban-only rule with LMWH (never
   dabigatran/edoxaban) fallback; `contraindicated` only on a *universal*
@@ -192,7 +192,7 @@ Score each 1–5; a strong submission should average ≥4 with no 1s.
 2. **CDS fit** — Is this genuinely a decision-support problem, not a lookup? *(§1, §3)*
 3. **Clinical reasoning correctness** — Sampling the traceability matrix, do the
    encoded rules match the cited guidelines? *(`VERIFICATION.md` §4)*
-4. **Engineering quality** — Do typecheck + 123 tests + build actually pass, and
+4. **Engineering quality** — Do typecheck + 173 tests + build actually pass, and
    is the code clean? *(§8)*
 5. **FHIR/standards execution** — Is the FHIR/SMART/CDS-Hooks usage real and
    conformant? *(`VERIFICATION.md` §7–8)*
@@ -218,7 +218,7 @@ prototype.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit (strict)        → 0 errors
-npm test              # vitest run                    → 10 files, 123 tests pass
+npm test              # vitest run                    → 14 files, 173 tests pass
 npm run build         # tsc && vite build             → dist/ (112 modules)
 npm run dev           # standalone demo, 5 patients   → http://localhost:5173
 npm run cds-server    # CDS Hooks service             → http://localhost:3000/cds-services

@@ -9,6 +9,7 @@ import type { KhoranaResult } from "./khorana";
 import type { RenalResult, RenalRecommendationStatus } from "./renal";
 import type { DDICheckResult, DDISeverity } from "./ddi";
 import type { ContraindicationResult } from "./contraindication";
+import type { BleedingRiskProfile } from "./bleeding-risk";
 
 export type OverallAction =
   | "recommend"
@@ -16,6 +17,14 @@ export type OverallAction =
   | "contraindicated"
   | "not_indicated"
   | "excluded";
+
+/**
+ * F4 (WS-5): a display-oriented refinement of `overallAction`. Adds
+ * `recommend_lmwh` for the case where both DOACs are blocked and LMWH is the
+ * recommendation, so the UI can say "Prophylaxis recommended — LMWH (DOACs
+ * blocked)" without changing the machine-stable `overallAction` API consumers rely on.
+ */
+export type VerdictLabel = OverallAction | "recommend_lmwh";
 
 export interface DOACOption {
   name: string;
@@ -44,11 +53,15 @@ export interface ProphylaxisRecommendation {
   renal: RenalResult | null;
   ddiResults: DDICheckResult[];
   contraindications: ContraindicationResult;
+  /** WS-2: qualitative bleeding-risk panel (present on every pathway). */
+  bleedingRisk: BleedingRiskProfile;
   staleLabWarning: boolean;
   staleLabFields: string[];
 
   // Final synthesized output
   overallAction: OverallAction;
+  /** F4 (WS-5): display refinement of overallAction (adds `recommend_lmwh`). */
+  verdictLabel: VerdictLabel;
   preferredOptions: DOACOption[];
   alternativeOptions: DOACOption[];
   avoidOptions: DOACOption[];

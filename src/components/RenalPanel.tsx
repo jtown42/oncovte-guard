@@ -44,7 +44,7 @@ export function RenalPanel({ renal }: { renal: RenalResult | null }) {
 
       <table className="mt-4 w-full text-sm">
         <thead>
-          <tr className="text-left text-xs uppercase tracking-wide text-clinical-muted">
+          <tr className="text-left text-sm text-clinical-muted">
             <th className="pb-1 font-medium">Anticoagulant</th>
             <th className="pb-1 font-medium">Status</th>
             <th className="pb-1 font-medium">Dose</th>

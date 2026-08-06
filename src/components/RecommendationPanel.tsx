@@ -81,29 +81,39 @@ export function RecommendationPanel({
   const showOptions =
     rec.overallAction === "recommend" || rec.overallAction === "caution";
 
+  // F4 (WS-5): distinct LMWH-fallback label without changing overallAction/tone.
+  const isLmwhVerdict = rec.verdictLabel === "recommend_lmwh";
+  const heroLabel = isLmwhVerdict
+    ? "Prophylaxis recommended — LMWH (DOACs blocked)"
+    : action.label;
+  const heroSummary = isLmwhVerdict
+    ? "Both apixaban and rivaroxaban are blocked; LMWH is the NCCN-concordant choice (never dabigatran/edoxaban)."
+    : action.summary;
+
   return (
     <section className="card overflow-hidden">
       {/* Hero banner — flashes on every verdict change so the flip lands on stage. */}
       <Flash watch={rec.overallAction} tone={action.tone}>
-        <div className={`flex items-start gap-4 px-5 py-5 ${TONE_BANNER[action.tone]}`}>
+        <div className={`flex items-start gap-3 px-4 py-3.5 ${TONE_BANNER[action.tone]}`}>
           <span
-            className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-sm ${TONE_SOLID[action.tone]}`}
+            className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-sm text-white ${TONE_SOLID[action.tone]}`}
             aria-hidden
           >
             <VerdictIcon action={rec.overallAction} />
           </span>
           <div className="min-w-0">
-            <h2 className="verdict-hero font-bold">{action.label}</h2>
-            <p className="mt-1 text-sm opacity-90">{action.summary}</p>
+            <h2 className="verdict-hero font-bold">{heroLabel}</h2>
+            <p className="mt-1 text-sm opacity-90">{heroSummary}</p>
           </div>
         </div>
       </Flash>
 
-      <div className="card-body space-y-5">
+      <div className="card-body space-y-3.5">
         {rec.staleLabWarning && (
-          <p className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-            ⚠️ Decision uses laboratory values older than 30 days (
-            {rec.staleLabFields.join(", ")}). Re-check before acting.
+          <p className="rounded-md border-l-2 border-amber-400 bg-amber-50 px-3 py-2 text-base text-amber-900">
+            <span className="font-semibold">Caution.</span> This decision uses
+            laboratory values older than 30 days ({rec.staleLabFields.join(", ")}
+            ). Please re-check before acting.
           </p>
         )}
 
@@ -157,7 +167,7 @@ function OptionGroup({
   return (
     <div>
       <div className="mb-2 flex items-baseline gap-2">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-clinical-ink">
+        <h3 className="text-base font-semibold text-clinical-ink">
           {heading}
         </h3>
         <span className="text-xs text-clinical-muted">{subheading}</span>
@@ -178,22 +188,28 @@ function OptionGroup({
 function OptionCard({ o, tone }: { o: DOACOption; tone: "good" | "warning" }) {
   const ring = tone === "good" ? "ring-emerald-200" : "ring-amber-200";
   return (
-    <div className={`rounded-lg border border-clinical-border bg-white p-4 ring-1 ${ring}`}>
-      <div className="flex items-center justify-between">
-        <span className="text-base font-semibold capitalize">{o.name}</span>
+    <div className={`rounded-sm border border-clinical-border bg-white p-3 ring-1 ${ring}`}>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xl font-semibold capitalize">{o.name}</span>
+        {/* "renal: Standard" was shorthand for the reader who already knows the
+            data model. Say what it means to the person prescribing. */}
         <Pill tone={renalStatusTone(o.renalStatus)}>
-          renal: {RENAL_STATUS_LABEL[o.renalStatus]}
+          {RENAL_STATUS_LABEL[o.renalStatus] === "Standard"
+            ? "Standard dose for kidney function"
+            : `Kidney function: ${RENAL_STATUS_LABEL[o.renalStatus].toLowerCase()}`}
         </Pill>
       </div>
-      <p className="mt-1 font-mono text-sm text-clinical-ink">
+      <p className="mt-1 text-lg font-semibold tabular-nums text-clinical-ink">
         {[o.dose, o.route, o.frequency].filter(Boolean).join(" ")}
       </p>
       {o.duration && (
-        <p className="text-xs text-clinical-muted">{o.duration}</p>
+        <p className="text-sm text-clinical-muted">{o.duration}</p>
       )}
       <div className="mt-2 flex items-center gap-2">
         <Pill tone={severityTone(o.worstDDI)}>
-          DDI: {SEVERITY_LABEL[o.worstDDI]}
+          {o.worstDDI === "none"
+            ? "No drug interaction"
+            : `${SEVERITY_LABEL[o.worstDDI]} drug interaction`}
         </Pill>
       </div>
     </div>
@@ -204,14 +220,14 @@ function AvoidList({ options }: { options: DOACOption[] }) {
   if (options.length === 0) return null;
   return (
     <div>
-      <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-rose-700">
+      <h3 className="mb-2 text-base font-semibold text-rose-700">
         Avoid / not an option
       </h3>
       <ul className="space-y-1.5">
         {options.map((o) => (
           <li
             key={o.name}
-            className="flex flex-col gap-0.5 rounded-md bg-slate-50 px-3 py-2 text-sm sm:flex-row sm:items-center sm:gap-3"
+            className="flex flex-col gap-0.5 rounded-sm bg-slate-50 px-3 py-1.5 text-sm sm:flex-row sm:items-center sm:gap-3"
           >
             <span className="font-semibold capitalize text-clinical-ink sm:w-28">
               {o.name}

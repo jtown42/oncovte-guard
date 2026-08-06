@@ -97,4 +97,15 @@ export interface KhoranaResult {
   exclusion: KhoranaExclusion;
   /** true when totalScore >= 2 AND not excluded (ERRATA Issue 2). */
   prophylaxisRecommended: boolean;
+  /**
+   * WS-7: calibration-transparency caveat shown beneath the tier. Non-null for
+   * every scored (non-excluded) patient; null when excluded (no score to caveat).
+   * A clinical interpretation caveat, not UI chrome — it states that tier informs
+   * the ≥2 decision but is not a precise individual risk estimate.
+   */
+  calibrationNote: string | null;
 }
+
+/** WS-7: the calibration-transparency line (see KhoranaResult.calibrationNote). */
+export const KHORANA_CALIBRATION_NOTE =
+  "Absolute 6-month VTE risk by tier varies several-fold across validation cohorts, and most VTE events occur outside the high-risk group. Tier informs the prophylaxis decision at the ≥2 threshold; it is not a precise individual risk estimate.";

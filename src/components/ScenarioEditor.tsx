@@ -38,29 +38,31 @@ export function ScenarioEditor({
 }: ScenarioEditorProps) {
   return (
     <section className="card overflow-hidden">
-      <div className="flex items-center gap-2 border-b border-clinical-border px-4 py-3">
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-        </span>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-clinical-ink">
-          Live patient editor
+      {/* No pulsing "live" dot: the page visibly recomputes when you change a
+          value, which communicates liveness better than an animated indicator
+          competing with the contraindication alert for attention. */}
+      <div className="border-b border-clinical-border px-4 py-3">
+        <h2 className="text-base font-semibold text-clinical-ink">
+          Change this patient
         </h2>
+        <p className="mt-0.5 text-sm text-clinical-muted">
+          Edit any value to see the recommendation update.
+        </p>
       </div>
 
       {/* Preset chips — primary navigation between the demo scenarios. */}
       <div className="border-b border-clinical-border bg-slate-50/60 px-4 py-3">
-        <span className="mb-2 block text-xs font-medium uppercase tracking-wide text-clinical-muted">
-          Scenario
+        <span className="mb-2 block text-sm font-medium text-clinical-muted">
+          Example patient
         </span>
         <div className="flex flex-wrap gap-1.5">
           {presets.map((p) => (
             <button
               key={p.index}
               onClick={() => onLoadPreset(p.index)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+              className={`rounded-sm px-3 py-1.5 text-base font-medium transition ${
                 activePreset === p.index
-                  ? "bg-clinical-brand text-white shadow-sm"
+                  ? "bg-clinical-brand text-white"
                   : "border border-clinical-border bg-white text-clinical-ink hover:border-clinical-brand hover:text-clinical-brand"
               }`}
             >
@@ -68,8 +70,8 @@ export function ScenarioEditor({
             </button>
           ))}
           {activePreset === null && (
-            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-              Custom
+            <span className="rounded-sm bg-amber-100 px-3 py-1.5 text-base font-semibold text-amber-800">
+              Edited
             </span>
           )}
         </div>
@@ -80,7 +82,7 @@ export function ScenarioEditor({
           <select
             value={s.conditionCode}
             onChange={(e) => onChange({ conditionCode: e.target.value })}
-            className="w-full rounded-lg border border-clinical-border bg-white px-3 py-2 text-sm font-medium text-clinical-ink focus:border-clinical-brand focus:outline-none focus:ring-1 focus:ring-clinical-brand"
+            className="w-full rounded-md border border-clinical-border bg-white px-3 py-2 text-sm font-medium text-clinical-ink focus:border-clinical-brand focus:outline-none focus:ring-1 focus:ring-clinical-brand"
           >
             {CANCER_OPTIONS.map((o) => (
               <option key={o.code} value={o.code}>
@@ -137,7 +139,7 @@ export function ScenarioEditor({
           </div>
         </div>
 
-        <Field label="Active medications (drives DDI matrix & flags)">
+        <Field label="Current medications">
           <MedPicker
             medCodes={s.medCodes}
             onChange={(medCodes) => onChange({ medCodes })}
@@ -147,7 +149,7 @@ export function ScenarioEditor({
         {/* Clinician-assessed safety flag — a universal absolute contraindication.
             Toggling this on flips any otherwise-recommended patient to
             'contraindicated', demonstrating the safety gate live. */}
-        <Field label="Clinical safety flag">
+        <Field label="Is the patient actively bleeding?">
           <Toggle
             on={s.hasActiveMajorBleeding}
             onClick={() =>
@@ -155,20 +157,51 @@ export function ScenarioEditor({
             }
             label={
               s.hasActiveMajorBleeding
-                ? "Active major bleeding — anticoagulation contraindicated"
-                : "Active major bleeding (clinician-assessed)"
+                ? "Yes — active major bleeding"
+                : "No active major bleeding"
             }
           />
         </Field>
 
+        {/* WS-2: clinician-set bleeding-risk factors. These don't change the
+            verdict (the panel is qualitative, never a score) — they populate the
+            bleeding-risk card so the thrombotic/bleeding trade-off is visible. */}
+        <details className="rounded-md border border-clinical-border bg-slate-50/50">
+          <summary className="cursor-pointer px-3 py-2 text-base font-semibold text-clinical-muted">
+            Bleeding-risk factors (clinician-assessed)
+          </summary>
+          <div className="space-y-2 px-3 pb-3 pt-1">
+            <Toggle
+              on={s.onCorticosteroid}
+              onClick={() => onChange({ onCorticosteroid: !s.onCorticosteroid })}
+              label={s.onCorticosteroid ? "On systemic corticosteroids" : "No systemic corticosteroids"}
+            />
+            <Toggle
+              on={s.hasPriorMajorBleeding}
+              onClick={() => onChange({ hasPriorMajorBleeding: !s.hasPriorMajorBleeding })}
+              label={s.hasPriorMajorBleeding ? "Prior major bleeding" : "No prior major bleeding"}
+            />
+            <Toggle
+              on={s.isFrailOrPoorPerformance}
+              onClick={() => onChange({ isFrailOrPoorPerformance: !s.isFrailOrPoorPerformance })}
+              label={s.isFrailOrPoorPerformance ? "Frail / ECOG 3–4" : "Not frail (ECOG 0–2)"}
+            />
+            <Toggle
+              on={s.hasAnorexiaOrVomiting}
+              onClick={() => onChange({ hasAnorexiaOrVomiting: !s.hasAnorexiaOrVomiting })}
+              label={s.hasAnorexiaOrVomiting ? "Anorexia / vomiting" : "No anorexia / vomiting"}
+            />
+          </div>
+        </details>
+
         {/* Stable / lower-stakes inputs — out of prime visual space. */}
-        <details className="rounded-lg border border-clinical-border bg-slate-50/50">
-          <summary className="cursor-pointer px-3 py-2 text-xs font-semibold uppercase tracking-wide text-clinical-muted">
+        <details className="rounded-md border border-clinical-border bg-slate-50/50">
+          <summary className="cursor-pointer px-3 py-2 text-base font-semibold text-clinical-muted">
             Demographics &amp; body metrics
           </summary>
           <div className="space-y-4 px-3 pb-4 pt-1">
             <Field label="Sex">
-              <div className="flex rounded-lg border border-clinical-border p-0.5">
+              <div className="flex rounded-md border border-clinical-border p-0.5">
                 {(["female", "male"] as const).map((g) => (
                   <button
                     key={g}
@@ -236,7 +269,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-clinical-muted">
+      <span className="mb-1 block text-sm font-medium text-clinical-muted">
         {label}
       </span>
       {children}
@@ -246,7 +279,7 @@ function Field({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-clinical-ink">
+    <p className="mb-3 text-base font-semibold text-clinical-ink">
       {children}
     </p>
   );
@@ -272,10 +305,10 @@ function NumberSlider({
   return (
     <div>
       <div className="mb-1 flex items-baseline justify-between">
-        <span className="text-xs font-medium text-clinical-muted">{label}</span>
+        <span className="text-sm font-medium text-clinical-muted">{label}</span>
         <span className="text-sm font-semibold tabular-nums text-clinical-ink">
           {round(value, step)}{" "}
-          <span className="text-xs font-normal text-clinical-muted">{unit}</span>
+          <span className="text-sm font-normal text-clinical-muted">{unit}</span>
         </span>
       </div>
       <input
@@ -314,23 +347,23 @@ function LabSlider({
   return (
     <div>
       <div className="mb-1 flex items-baseline justify-between">
-        <span className="text-xs font-medium text-clinical-muted">{label}</span>
+        <span className="text-sm font-medium text-clinical-muted">{label}</span>
         <span className="flex items-baseline gap-2">
           {present ? (
             <span className="text-sm font-semibold tabular-nums text-clinical-ink">
               {round(value as number, step)}{" "}
-              <span className="text-xs font-normal text-clinical-muted">
+              <span className="text-sm font-normal text-clinical-muted">
                 {unit}
               </span>
             </span>
           ) : (
-            <span className="text-xs italic text-clinical-muted">
+            <span className="text-sm italic text-clinical-muted">
               not measured
             </span>
           )}
           <button
             onClick={() => onChange(present ? null : fallback)}
-            className="text-xs font-medium text-clinical-brand hover:underline"
+            className="text-sm font-medium text-clinical-brand hover:underline"
             title={present ? "Mark as not measured" : "Add a value"}
           >
             {present ? "clear" : "set"}
@@ -410,7 +443,7 @@ function MedPicker({
         {medCodes.map((code) => (
           <span
             key={code}
-            className="inline-flex items-center gap-1 rounded-full border border-clinical-border bg-white py-0.5 pl-2.5 pr-1 text-xs font-medium text-clinical-ink"
+            className="inline-flex items-center gap-1 rounded-sm border border-clinical-border bg-white py-0.5 pl-2 pr-1 text-sm font-medium text-clinical-ink"
           >
             {medLabel(code)}
             <button
@@ -429,7 +462,7 @@ function MedPicker({
           add(e.target.value);
           e.currentTarget.selectedIndex = 0;
         }}
-        className="w-full rounded-lg border border-clinical-border bg-white px-3 py-2 text-sm text-clinical-muted focus:border-clinical-brand focus:outline-none focus:ring-1 focus:ring-clinical-brand"
+        className="w-full rounded-md border border-clinical-border bg-white px-3 py-2 text-sm text-clinical-muted focus:border-clinical-brand focus:outline-none focus:ring-1 focus:ring-clinical-brand"
       >
         <option value="">+ Add a medication…</option>
         {groups.map((g) => (

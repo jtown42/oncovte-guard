@@ -45,7 +45,7 @@ export interface ContraindicationInput {
   onIMiD: boolean;
   /** Clinically-determined active major bleeding (no single code). */
   hasActiveMajorBleeding?: boolean;
-  /** Hepatic panel for Child-Pugh C screening. */
+  /** Hepatic panel for the lab-only severe-hepatic-impairment proxy (WS-1.4). */
   totalBilirubin?: number | null;
   alt?: number | null;
   ast?: number | null;
@@ -92,6 +92,10 @@ export function detectContraindications(
   }
 
   // Severe thrombocytopenia (<50,000/uL) — universal.
+  // NCCN VTE-B-2 lists "Avoid if platelet count <50,000/uL" as a per-agent
+  // consideration on all four prophylaxis agents (apixaban, rivaroxaban,
+  // dalteparin, enoxaparin); NCCN VTE-F separately states DOACs are not
+  // recommended below 50,000/uL given limited published experience (WS-1.2).
   if (
     input.plateletCount !== null &&
     input.plateletCount < CONTRAINDICATION_THRESHOLDS.SEVERE_THROMBOCYTOPENIA_LT
@@ -100,8 +104,9 @@ export function detectContraindications(
       type: "absolute",
       reason: "severe_thrombocytopenia",
       detail:
-        "Platelet count <50,000/uL — avoid all anticoagulation until platelet recovery.",
+        "Platelet count <50,000/uL — avoid all anticoagulation until platelet recovery. NCCN does not recommend DOAC use below a platelet count of 50,000/uL given limited published experience.",
       appliesTo: "all",
+      source: "NCCN VTE-B-2 (per-agent); VTE-F",
     });
   }
 
@@ -117,7 +122,13 @@ export function detectContraindications(
     });
   }
 
-  // Severe hepatic impairment (Child-Pugh C surrogate) — universal.
+  // Severe hepatic impairment — universal. WS-1.4: this is a conservative
+  // lab-only proxy for severe hepatic impairment (bilirubin >3 mg/dL and AST or
+  // ALT >5x ULN), NOT Child-Pugh: true Child-Pugh also needs albumin, INR,
+  // ascites, and encephalopathy, none of which the app reads. The domain is
+  // guideline-recognized — NCCN's regimen-selection language names "elevated
+  // transaminases or bilirubin, Child-Pugh B and C liver impairment, or
+  // cirrhosis" — but this operationalization is ours.
   const altUln = input.altUln ?? ALT_ULN_DEFAULT;
   const astUln = input.astUln ?? AST_ULN_DEFAULT;
   const mult = CONTRAINDICATION_THRESHOLDS.HEPATIC_AMINOTRANSFERASE_ULN_MULT;
@@ -132,8 +143,9 @@ export function detectContraindications(
       type: "absolute",
       reason: "severe_hepatic_impairment",
       detail:
-        "Total bilirubin >3 mg/dL with transaminases >5x ULN (Child-Pugh C surrogate) — avoid DOACs.",
+        "Total bilirubin >3 mg/dL with transaminases >5x ULN (conservative lab-only proxy for severe hepatic impairment; not Child-Pugh) — avoid DOACs.",
       appliesTo: "all",
+      source: "NCCN VTE-B (hepatic regimen selection); operationalization by OncoVTE Guard",
     });
   }
 
@@ -145,6 +157,24 @@ export function detectContraindications(
       detail:
         "Heparin-induced thrombocytopenia: avoid heparin/LMWH. DOACs are an acceptable alternative.",
       appliesTo: ["enoxaparin", "dalteparin"],
+    });
+  }
+
+  // Weight <40 kg — targeted ABSOLUTE for apixaban (WS-1.1). NCCN VTE-B-2 states
+  // verbatim "Avoid if weight <40 kg" for apixaban: a categorical guideline
+  // instruction, not a curator inference. Targeted (not universal), so a <40 kg
+  // patient still receives rivaroxaban or LMWH rather than a global contraindication.
+  if (
+    input.weightKg !== null &&
+    input.weightKg < CONTRAINDICATION_THRESHOLDS.APIXABAN_LOW_WEIGHT_LT
+  ) {
+    absolute.push({
+      type: "absolute",
+      reason: "weight_below_40kg",
+      detail:
+        "Weight <40 kg: avoid apixaban per NCCN (VTE-B-2). Use rivaroxaban or LMWH with weight-based dosing.",
+      appliesTo: ["apixaban"],
+      source: "NCCN VTE-B-2",
     });
   }
 
@@ -197,19 +227,7 @@ export function detectContraindications(
     });
   }
 
-  // Low weight (<40 kg) — targeted caution for apixaban.
-  if (
-    input.weightKg !== null &&
-    input.weightKg < CONTRAINDICATION_THRESHOLDS.APIXABAN_LOW_WEIGHT_LT
-  ) {
-    relative.push({
-      type: "relative",
-      reason: "low_weight",
-      detail:
-        "Weight <40 kg: avoid apixaban per NCCN. Consider LMWH with weight-based dosing.",
-      appliesTo: ["apixaban"],
-    });
-  }
+  // (Weight <40 kg is now a targeted ABSOLUTE for apixaban — see above, WS-1.1.)
 
   // canProceedWithProphylaxis is false only when a UNIVERSAL absolute
   // contraindication exists (ERRATA Issue 9).

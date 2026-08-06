@@ -19,6 +19,7 @@ import type {
   Alert,
   DOACOption,
   OverallAction,
+  VerdictLabel,
   ProphylaxisRecommendation,
 } from "../types/recommendation";
 import type { Contraindication } from "../types/contraindication";
@@ -36,6 +37,7 @@ import {
   getRenalRecommendation,
 } from "./renal-dosing";
 import { detectContraindications } from "./contraindications";
+import { assessBleedingRisk } from "./bleeding-risk";
 
 const STANDARD_DISCLAIMERS = [
   "This tool provides clinical decision support only and does not replace clinical judgment.",
@@ -74,6 +76,10 @@ const DOAC_PRESENTATION: Record<
   },
 };
 
+/** F8 (WS-5): user-facing copy when CrCl could not be computed (missing weight/creatinine). */
+const RENAL_UNAVAILABLE_REASON =
+  "Renal function not assessable — treated conservatively (obtain weight and serum creatinine).";
+
 const PROPHYLAXIS_DOACS: DoacName[] = ["apixaban", "rivaroxaban"];
 const REFERENCE_DOACS: DoacName[] = ["dabigatran", "edoxaban"];
 const LMWH_AGENTS = ["enoxaparin", "dalteparin"] as const;
@@ -111,7 +117,11 @@ function buildDoacOption(
     ineligibleReason = block.detail;
     eligible = false;
   } else if (renalStatus === "avoid") {
-    ineligibleReason = renalRec?.rationale ?? "Renal function precludes use.";
+    // F8 (WS-5): don't imply a measured CrCl of 0 when renal data is simply
+    // missing — the internal sentinel stays 0, but the user-facing copy is honest.
+    ineligibleReason = renalResult.warnings.includes("renal_data_unavailable")
+      ? RENAL_UNAVAILABLE_REASON
+      : (renalRec?.rationale ?? "Renal function precludes use.");
     eligible = false;
   } else if (worstDDI === "major") {
     ineligibleReason = "Major drug-drug interaction with active therapy — avoid.";
@@ -150,7 +160,9 @@ function buildLmwhOption(
     ineligibleReason = block.detail; // e.g. HIT blocks LMWH
   } else if (renalStatus === "avoid") {
     eligible = false;
-    ineligibleReason = renalRec?.rationale ?? "Renal function precludes use.";
+    ineligibleReason = renalResult.warnings.includes("renal_data_unavailable")
+      ? RENAL_UNAVAILABLE_REASON
+      : (renalRec?.rationale ?? "Renal function precludes use.");
   }
 
   const present = DOAC_PRESENTATION[agent];
@@ -241,15 +253,45 @@ export function generateRecommendation(
 
   const stale = staleLabs(patient);
 
+  // WS-2: qualitative bleeding-risk panel (never a score). Computed once here so
+  // it accompanies every terminal state, not only active recommendations.
+  const bleedingRisk = assessBleedingRisk({
+    conditions: patient.activeCancerConditions,
+    crclMlMin: renal?.crclMlMin ?? null,
+    weightKg: patient.weightKg,
+    hemoglobin: patient.labs.hemoglobin?.value ?? null,
+    plateletCount: patient.labs.platelets?.value ?? null,
+    onAntiplatelet: patient.onAntiplatelet,
+    onNSAID: patient.onNSAID,
+    onCorticosteroid: patient.onCorticosteroid,
+    hasPriorMajorBleeding: patient.hasPriorMajorBleeding,
+    isFrailOrPoorPerformance: patient.isFrailOrPoorPerformance,
+    hasAnorexiaOrVomiting: patient.hasAnorexiaOrVomiting,
+  });
+
   const base = {
     khorana,
     renal,
     ddiResults,
     contraindications,
+    bleedingRisk,
     staleLabWarning: stale.any,
     staleLabFields: stale.fields,
     disclaimers: STANDARD_DISCLAIMERS,
   };
+
+  // F7 (WS-5): the cancer-site risk-model caveat (kidney divergence, weak lung
+  // discrimination, pancreatic discrimination) must accompany EVERY terminal
+  // state, not only active recommendations — a not_indicated lung patient still
+  // needs the lung advisory.
+  const siteAlert: Alert | null = resolved.note
+    ? {
+        level: "info",
+        title: "Cancer-site risk-model caveat",
+        detail: resolved.note,
+        source: "OncoVTE Guard",
+      }
+    : null;
 
   // STEP 1 (return): excluded population.
   if (resolved.category === CancerCategory.EXCLUDED) {
@@ -275,10 +317,11 @@ export function generateRecommendation(
     return {
       ...base,
       overallAction: "excluded",
+      verdictLabel: "excluded",
       preferredOptions: [],
       alternativeOptions: [],
       avoidOptions: [],
-      alerts: exclusionAlerts,
+      alerts: siteAlert ? [...exclusionAlerts, siteAlert] : exclusionAlerts,
     };
   }
 
@@ -287,6 +330,7 @@ export function generateRecommendation(
     return {
       ...base,
       overallAction: "not_indicated",
+      verdictLabel: "not_indicated",
       preferredOptions: [],
       alternativeOptions: [],
       avoidOptions: [],
@@ -297,6 +341,7 @@ export function generateRecommendation(
           detail: `Khorana score ${khorana.totalScore} (${khorana.riskCategory}) is below the NCCN threshold (>=2) for routine ambulatory prophylaxis.`,
           source: "NCCN VTE-B",
         },
+        ...(siteAlert ? [siteAlert] : []),
       ],
     };
   }
@@ -310,18 +355,21 @@ export function generateRecommendation(
   );
 
   if (universalAbsolute.length > 0) {
+    const contraAlerts: Alert[] = universalAbsolute.map((c) => ({
+      level: "critical" as const,
+      title: "Absolute contraindication to anticoagulation",
+      detail: c.detail,
+      source: c.source ?? "NCCN VTE-B",
+    }));
+    if (siteAlert) contraAlerts.push(siteAlert);
     return {
       ...base,
       overallAction: "contraindicated",
+      verdictLabel: "contraindicated",
       preferredOptions: [],
       alternativeOptions: [],
       avoidOptions: [],
-      alerts: universalAbsolute.map((c) => ({
-        level: "critical" as const,
-        title: "Absolute contraindication to anticoagulation",
-        detail: c.detail,
-        source: "NCCN VTE-B",
-      })),
+      alerts: contraAlerts,
     };
   }
 
@@ -375,18 +423,9 @@ export function generateRecommendation(
     ...blockedLmwh,
   ];
 
-  // STEP 10: compile alerts.
-  // Cancer-site risk-model caveat (e.g. kidney classification, weak Khorana
-  // discrimination in lung cancer). Computed during classification; surfaced
-  // here so it accompanies an active recommendation.
-  if (resolved.note) {
-    alerts.push({
-      level: "info",
-      title: "Cancer-site risk-model caveat",
-      detail: resolved.note,
-      source: "OncoVTE Guard",
-    });
-  }
+  // STEP 10: compile alerts. Cancer-site risk-model caveat first (F7: shared with
+  // the non-recommend terminal states via `siteAlert`).
+  if (siteAlert) alerts.push(siteAlert);
   appendDdiAlerts(ddiResults, alerts);
   appendRenalAlerts(renal, alerts);
   appendContraindicationAlerts(contraindications.relative, alerts);
@@ -409,9 +448,17 @@ export function generateRecommendation(
     overallAction = "caution";
   }
 
+  // F4 (WS-5): display refinement. When both DOACs are blocked but LMWH is the
+  // recommendation, label it distinctly without changing `overallAction`.
+  const verdictLabel: VerdictLabel =
+    preferredOptions.length === 0 && eligibleLmwh.length > 0
+      ? "recommend_lmwh"
+      : overallAction;
+
   return {
     ...base,
     overallAction,
+    verdictLabel,
     preferredOptions,
     alternativeOptions,
     avoidOptions,
@@ -502,7 +549,7 @@ function appendContraindicationAlerts(
       level: "warning",
       title: "Relative caution",
       detail: c.detail,
-      source: "NCCN VTE-B",
+      source: c.source ?? "NCCN VTE-B",
     });
   }
 }

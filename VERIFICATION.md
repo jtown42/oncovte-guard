@@ -10,9 +10,9 @@ It also records the errata-compliance evidence, the synthetic-patient
 expected-output table, the FHIR/CDS-Hooks conformance surface, the full test
 inventory, and the exact commands to reproduce every result below.
 
-- **Verified on:** 2026-06-15
+- **Verified on:** 2026-08-06
 - **Authoritative contract:** [`plan/errata-contract-reconciliation.md`](plan/errata-contract-reconciliation.md) (overrides `plan/ddi-info.md` on its 10 resolved issues), with one dated clinical-review supersession noted in §5 (risk-tier labels).
-- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **123 / 123 tests passing**
+- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **173 / 173 tests passing**
 
 ---
 
@@ -21,7 +21,7 @@ inventory, and the exact commands to reproduce every result below.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit  → no errors
-npm test              # vitest run    → 10 files, 123 tests, all passing
+npm test              # vitest run    → 14 files, 173 tests, all passing
 npm run build         # tsc && vite build → dist/ (113 modules)
 npm run dev           # standalone demo (5 synthetic patients), http://localhost:5173
 npm run cds-server    # CDS Hooks service, http://localhost:3000/cds-services
@@ -37,14 +37,14 @@ running the cited test (`npx vitest run <path> -t "<test title>"`).
 | Gate | Command | Result |
 | --- | --- | --- |
 | Type safety | `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) | **0 errors** |
-| Unit + integration tests | `vitest run` | **10 files, 123 tests passed** |
+| Unit + integration tests | `vitest run` | **14 files, 173 tests passed** |
 | Production build | `tsc && vite build` | **113 modules transformed, built** |
 | Live render (manual) | `vite preview` + browser | All five pathways (recommend / LMWH-fallback / contraindicated / not-indicated / excluded) verified visually in the redesigned demo UI, including the live verdict flip and presentation mode (see `docs/screenshots/`) |
 
-Test files: `khorana-engine` (27), `ddi-checker` (13), `renal-dosing` (11),
-`contraindications` (11), `stale-lab` (9), `recommendation` (7),
-`rxnorm-codes` (3), `integration/patients` (19), `cds-hooks/cards` (11),
-`standalone/scenario` (12).
+Test files (14): `khorana-engine` (31), `bleeding-risk` (18), `ddi-checker` (13),
+`renal-dosing` (11), `contraindications` (13), `stale-lab` (9), `recommendation` (10),
+`rxnorm-codes` (3), `ddi-kb-provenance` (6), `integration/patients` (25),
+`cds-hooks/cards` (15), `cds-hooks/metrics` (5), `standalone/scenario` (12), `ui/asof` (2).
 
 ---
 
@@ -65,7 +65,7 @@ Test files: `khorana-engine` (27), `ddi-checker` (13), `renal-dosing` (11),
 
 | File | Responsibility |
 | --- | --- |
-| `ddi-knowledge-base.json` | 52 antineoplastic/supportive agents × 4-DOAC interaction profiles |
+| `ddi-knowledge-base.json` | 52 antineoplastic/supportive agents × 4-DOAC interaction profiles. **WS-3:** root carries `kbVersion` / `lastReviewed` (curation date) / `provenanceNote`; the 16 `major` cells each carry a per-cell `evidenceAnchor` (AHA 2022 Table 3, or FDA DOAC labeling for azoles). Guarded by `tests/data/ddi-kb-provenance.test.ts`. |
 | `icd10-cancer-map.ts` | ICD-10-CM → Khorana category (prefix matching) + exclusions |
 | `doac-renal-thresholds.ts` | Per-agent renal rules + prophylaxis dose strings |
 | `loinc-codes.ts` | Lab/vital LOINC constants + prefetch code lists |
@@ -86,7 +86,7 @@ in view while an input is dragged. It is a live "what-if" editor
 medications rebuilds a real `PatientData` (deriving onAntiplatelet/onIMiD/
 nephrotoxic/ESA flags from the same RxNorm sets the FHIR parser uses) and
 re-runs `generateRecommendation` — no clinical logic is duplicated. Proven by
-`tests/standalone/scenario.test.ts` (11 tests). When a result changes, the
+`tests/standalone/scenario.test.ts` (12 tests). When a result changes, the
 affected module replays a recompute flash (`src/components/Flash.tsx`); the DOAC
 interaction grid is summarized inline with the full matrix behind a modal
 (`DDISummary`/`DDIMatrix` in `src/components/DDIMatrix.tsx`); and a presentation
@@ -120,9 +120,23 @@ the suite.
 | Tiers: **0 Low, 1–2 Intermediate, ≥3 High**; prophylaxis at **≥2** | Khorana 2008; NCCN VTE-C (supersedes errata draft — see §5 #2) | `khorana-engine.ts: riskCategoryForScore`, `prophylaxisRecommended` | "Test 20: score 1 is Intermediate Risk, no prophylaxis", "maps 0→low; 1,2→intermediate; 3+→high" |
 | Missing labs → `missingFields` + `isComplete=false`, non-scoring | plan Part 1 | `khorana-engine.ts` null-guards | "Test 14: null platelets → missingFields + isComplete false" |
 
-\* Kidney is flagged high-risk with an advisory note that NCCN VTE-C names only
-bladder/testicular (`icd10-cancer-map.ts: KIDNEY_NOTE`) — documented divergence,
-not a silent assumption. **Lung cancer** carries a parallel advisory
+**WS-6:** pancreatic/hepatobiliary cancer (C25) carries a discrimination caveat note
+(`icd10-cancer-map.ts: PANCREATIC_NOTE`), surfaced as an info alert on Maria; it does **not**
+change the score. Test: "WS-6: pancreatic cancer (C25) carries the discrimination caveat".
+**WS-7:** every scored (non-excluded) patient carries `khorana.calibrationNote`
+(`KHORANA_CALIBRATION_NOTE`), rendered beneath the tier; null when excluded. Tests: "WS-7
+Khorana calibration transparency" + integration "every scored patient carries a Khorana
+calibration note".
+
+\* **Kidney (WS-1.3):** narrowed to **C64 only** (renal-cell carcinoma). The prior
+set (C64/C65/C66/C68 — kidney, renal pelvis, ureter, other urinary) was broader
+than any published interpretation supports; renal pelvis/ureter/other urinary
+(C65/C66/C68) now score 0. C64 remains high-risk with an advisory note flagging
+this as a deliberate divergence from the NCCN high-risk list (which names only
+bladder/testicular), retained per a JACC/ASCO interpretation
+(`icd10-cancer-map.ts: KIDNEY_NOTE`) — evidence grade C, documented divergence,
+not a silent assumption. Test: "WS-1.3: C64 (RCC) scores +1; renal
+pelvis/ureter/other urinary (C65/C66/C68) score 0". **Lung cancer** carries a parallel advisory
 (`LUNG_NOTE`) flagging the Khorana score's weak discrimination in lung cancer
 (van Es et al. IPD meta-analysis). Both notes are surfaced as an info-level
 alert by `recommendation.ts` when an active recommendation is produced. Tests:
@@ -150,7 +164,9 @@ carries no advisory note".
 | No-interaction agent → `none` | — | `ddi-knowledge-base.json` (gemcitabine) | "Test 2: gemcitabine has no interactions" |
 | Unknown RxNorm → `unknown` for all DOACs (no throw) | ERRATA Issue 7 | `ddi-checker.ts: unknownDetail` | "Test 6: unknown RxNorm yields unknown for every DOAC" |
 | Worst-per-DOAC aggregation across all active meds | ERRATA Issue 7 | `ddi-checker.ts: getWorstDDIForDoac` | "Test 7: aggregates the worst severity per DOAC…", "returns none for an empty result set" |
-| KB is camelCase and includes a `sources` field | ERRATA Issue 6 | `src/types/ddi.ts: DDIEntry`; `ddi-knowledge-base.json` | typecheck (KB cast to `DDIEntry[]`) |
+| KB is camelCase and includes a `sources` field | ERRATA Issue 6 | `src/types/ddi.ts: DDIEntry`; `ddi-knowledge-base.json` | typecheck (KB cast to `DDIKnowledgeBase`) |
+| **WS-3 (F12):** every `major` cell carries a non-empty `evidenceAnchor` {source, locator, claim} | AHA 2022 Table 3; FDA DOAC labeling (azoles) | `types/ddi.ts: DDIEvidenceAnchor`; `ddi-knowledge-base.json` (16 major cells) | "every major cell has a non-empty evidenceAnchor", "no mechanism stating a digit-percentage magnitude lacks an anchor", "the guard fails if an anchor is removed" |
+| **WS-3:** KB root carries `kbVersion` / `lastReviewed` / `provenanceNote`, surfaced in DDI matrix footer + CDS card | WS-3 | `ddi-checker.ts: DDI_KB_VERSION/…`; `DDIMatrix.tsx`; `cds-hooks/cards.ts: ddiDetailText` | "carries a version, a curation date, and a provenance note", "does NOT claim clinician validation…" |
 
 ### 4.4 Renal dosing (Cockcroft-Gault)
 
@@ -169,16 +185,43 @@ carries no advisory note".
 | Rule | appliesTo | Source | Code | Test |
 | --- | --- | --- | --- | --- |
 | Active major bleeding | all (absolute) | NCCN VTE-B | `contraindications.ts` | (covered via recommendation contraindicated path) |
-| Severe thrombocytopenia <50K | all (absolute) | NCCN VTE-B | `CONTRAINDICATION_THRESHOLDS.SEVERE_THROMBOCYTOPENIA_LT` | "Test 1…universal absolute", "Test 2: at/above 50K do not trigger" |
+| Severe thrombocytopenia <50K | all (absolute) | **NCCN VTE-B-2 (per-agent); VTE-F** (WS-1.2) | `CONTRAINDICATION_THRESHOLDS.SEVERE_THROMBOCYTOPENIA_LT`; `source` field | "Test 1…universal absolute", "Test 1b (WS-1.2): cites VTE-B-2 + VTE-F", "Test 2: at/above 50K do not trigger" |
 | Antiphospholipid syndrome (D68.61) | all (absolute) | TRAPS trial | `APS_PREFIXES` | "Test 3: antiphospholipid syndrome (D68.61) is a universal absolute" |
-| Severe hepatic impairment (bili >3 **and** AST/ALT >5× ULN) | all (absolute) | DOAC labeling (Child-Pugh C) | hepatic block | "Test 8: severe hepatic impairment… is absolute" |
+| Severe hepatic impairment (bili >3 **and** AST/ALT >5× ULN) — *conservative lab-only proxy, NOT Child-Pugh* (WS-1.4) | all (absolute) | NCCN VTE-B hepatic regimen selection; operationalization by OncoVTE Guard | hepatic block | "Test 8: severe hepatic impairment… is absolute" |
 | **HIT (D75.82)** | **LMWH only** (targeted) | clinical | `HIT_PREFIXES`, `appliesTo:["enoxaparin","dalteparin"]` | "Test 4: HIT (D75.82) blocks LMWH only", "Test 9: HIT blocks LMWH but DOACs remain available" |
 | GI/GU tract cancer | all (relative) | NCCN 2B | `GI_TRACT_PREFIXES` | "Test 5: GI tract cancer (gastric C16) is a relative caution" |
 | Brain tumor | all (relative) | NCCN VTE-2 | `BRAIN_TUMOR_PREFIXES` | (classifier + recommendation paths) |
 | Multiple myeloma + IMiD | all (relative) | NCCN MM | `MYELOMA_PREFIXES` + `onIMiD` | "multiple myeloma on an IMiD is a relative caution" |
 | Concurrent antiplatelet | all (relative) | clinical | `onAntiplatelet` | "Test 6: concurrent antiplatelet is a relative caution" |
-| Low weight <40 kg | **apixaban only** (relative) | NCCN | `APIXABAN_LOW_WEIGHT_LT` | "Test 7: low weight (<40 kg) is a relative caution for apixaban" |
+| Weight <40 kg (avoid apixaban) | **apixaban only** (**absolute**, WS-1.1) | **NCCN VTE-B-2** ("Avoid if weight <40 kg") | `APIXABAN_LOW_WEIGHT_LT`; reason `weight_below_40kg`; `source` field | "Test 7 (WS-1.1): targeted absolute, not relative", "Test 7b: ≥40 kg does not trigger", recommendation "WS-1.1: rivaroxaban preferred, apixaban in avoid, still recommend" |
 | `canProceedWithProphylaxis` false **only** for a universal absolute | ERRATA Issue 9 | `contraindications.ts: hasUniversalAbsolute` | "a clean patient… can proceed"; recommendation tests |
+
+### 4.5b Qualitative bleeding-risk panel (WS-2)
+
+Deliberately **not** a score (published CAT bleeding scores reach only c 0.50–0.70 and were
+derived in treatment, not prophylaxis, cohorts). A list of guideline-named factors → one of
+three tiers. Present on every recommendation pathway.
+
+| Rule | Source | Code | Test |
+| --- | --- | --- | --- |
+| Gastric/GEJ (C16) → elevated, prefer LMWH | NCCN VTE-2 footnote | `bleeding-risk.ts: GASTRIC_GEJ_PREFIXES` | "Factor 1: gastric/GEJ tumor… prefers LMWH" |
+| Luminal GI; urothelial/gyn; RCC/melanoma tumor sites → elevated | ACC 2026 | `bleeding-risk.ts` prefix sets | "Factor 2/3/4…" |
+| CrCl <30 → elevated, prefer LMWH | ACC 2026; NCCN VTE-B-2 | `bleeding-risk.ts` (`SEVERE_CRCL_LT`) | "Factor 5: CrCl <30… prefers LMWH" |
+| Low weight <50; anemia <10; thrombocytopenia <100 | ACC 2026 (thresholds curator-chosen, grade C) | `BLEEDING_RISK_THRESHOLDS` | "Factor 6/7/8…", "threshold edges do NOT fire" |
+| Anorexia/vomiting; frailty/ECOG 3–4; corticosteroids; antiplatelet/NSAID; prior major bleeding | ACC 2026; Vedovati (HR 2.69); ONCO-DOAC BLEED; ACCP | `bleeding-risk.ts` flags | "Factor 9–13…" |
+| Tiers: elevated (≥1 factor) / standard / insufficient_data (missing core inputs) | WS-2 | `bleeding-risk.ts: assessBleedingRisk` | "tiers and boundaries" block |
+| Present on all 5 synthetic patients; Maria (anemia) + Dorothy (CrCl <30) elevated | WS-2 | `recommendation.ts` (in `base`) | integration "the bleeding-risk panel is present on all five patients", Maria/Dorothy WS-2 assertions |
+
+### 4.5c WS-5 findings closure
+
+| Finding | Fix | Code | Test |
+| --- | --- | --- | --- |
+| F4 verdict label | `verdictLabel:"recommend_lmwh"` when both DOACs blocked + LMWH eligible; `overallAction` unchanged | `recommendation.ts`; `types/recommendation.ts: VerdictLabel`; `RecommendationPanel.tsx` | integration "F4 (WS-5): … verdictLabel 'recommend_lmwh'" |
+| F5 dabi/edox advisory | order-select advisory card for dabigatran/edoxaban + ACC dabigatran note | `cds-hooks/cards.ts: buildOrderSelectCards` | cards "F5 (WS-5): … 'not NCCN-supported' advisory" |
+| F7 site advisory everywhere | `siteAlert` attached to excluded / not_indicated / contraindicated / recommend | `recommendation.ts` | recommendation "F7 (WS-5): … not_indicated STILL carries the lung advisory" |
+| F8 renal copy | missing renal → "Renal function not assessable…" (sentinel CrCl 0 kept internal) | `recommendation.ts: RENAL_UNAVAILABLE_REASON` | recommendation "F8 (WS-5): … never a CrCl-0/<30 claim" |
+| F10 `?asof` | `?asof=YYYY-MM-DD` pins the reference date, defaults to now | `ui/asof.ts: getAsOfDate`; `App.tsx` | "getAsOfDate parses a valid ?asof date" |
+| F9 docx citations | **Open (human):** paste references into `.docx`, clear `(cite)` placeholders | — | — |
 
 ### 4.6 Stale labs
 
@@ -266,8 +309,11 @@ suite is fixed at `2026-06-10T12:00:00Z`. File: `tests/integration/patients.test
 ## 8. CDS Hooks conformance
 
 - **Discovery:** `GET /cds-services` → 2 services (`discovery.ts`). Test: "advertises a patient-view and an order-select service".
-- **`patient-view` (`oncovte-prophylaxis`):** summary card + one card per critical/warning alert; 140-char summary cap enforced. Tests: Maria/James/Dorothy/Priya card assertions.
-- **`order-select` (`oncovte-ddi-check`):** screens the order being composed against active therapy. Tests: "ordering apixaban for a patient on ibrutinib flags a critical interaction", "…clean patient produces no interaction cards".
+- **`patient-view` (`oncovte-prophylaxis`):** **WS-4 two-channel model** — only critical alerts emit interruptive cards; warning/info collapse into the single summary card. 140-char summary cap enforced. Tests: Maria/James/Dorothy/Priya assertions + "1 critical + 4 non-critical → exactly 2 cards, not five".
+- **Role tailoring (WS-4):** `role` = oncologist/pharmacist/app reorders summary detail. Test: "pharmacist leads with mechanism/renal detail; prescriber leads with the verdict".
+- **Override capture (WS-4):** critical cards carry a fixed `overrideReasons` vocabulary; `POST /cds-services/override-feedback` → append-only JSONL (`override-log.ts`). Tests: "critical cards carry an override-reason vocabulary…", "appends overrides and tallies them by reason".
+- **Governance metrics (WS-4):** `GET /metrics` → firing rate per 100 chart-opens, critical-to-total ratio, override rate (`metrics.ts`). Tests: "renders non-zero card counts for all five patients", "incorporates override reason counts…", "renders a self-contained HTML dashboard".
+- **`order-select` (`oncovte-ddi-check`):** screens the order being composed against active therapy; major cards carry `overrideReasons` + evidence anchor. Tests: "ordering apixaban for a patient on ibrutinib flags a critical interaction", "…clean patient produces no interaction cards".
 - **Prefetch:** templates declared per service; `prefetch.ts` adapts the prefetch block into `RawFHIRData` (same pipeline as SMART/standalone) and degrades missing bundles gracefully. Tests: "throws when the Patient resource is absent", "degrades missing search bundles to empty bundles".
 
 ---

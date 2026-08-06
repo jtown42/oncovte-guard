@@ -5,17 +5,20 @@ export default {
     extend: {
       colors: {
         // Clinical severity palette (semantic, WCAG-AA contrast on white).
+        // Structure carries the design, not color: a near-white canvas, white
+        // panels, and a visible 1px border. Color is reserved for the five
+        // terminal decision states so a verdict is the only thing that shouts.
         clinical: {
-          bg: "#eef2f7",
+          bg: "#f8fafc", // slate-50 canvas
           panel: "#ffffff",
-          border: "#e3e9f2",
-          hairline: "#eef2f7",
-          ink: "#0e1b2a",
-          muted: "#5b6b7a",
-          brand: "#0b6e99", // teal-blue — calm, clinical
-          brandDark: "#075066",
-          brandSoft: "#e7f1f6",
-          brandTint: "#f2f8fb",
+          border: "#d1d5db", // gray-300 — a real, visible edge
+          hairline: "#e5e7eb", // gray-200 — internal rules
+          ink: "#0f172a", // slate-900
+          muted: "#64748b", // slate-500
+          brand: "#0369a1", // sky-700 — interactive affordances only
+          brandDark: "#075985",
+          brandSoft: "#e0f2fe",
+          brandTint: "#f0f9ff",
         },
       },
       fontFamily: {
@@ -40,9 +43,12 @@ export default {
         ],
       },
       boxShadow: {
-        card: "0 1px 2px rgba(14,27,42,0.04), 0 6px 20px -12px rgba(14,27,42,0.18)",
-        cardhover: "0 2px 4px rgba(14,27,42,0.05), 0 12px 28px -14px rgba(14,27,42,0.22)",
-        hero: "0 10px 40px -18px rgba(11,110,153,0.45)",
+        // Structure over style: panels are defined by their border, not by a
+        // floating drop shadow. `card` is a hairline lift only — enough to
+        // separate a surface from the canvas under projector washout.
+        card: "0 1px 1px rgba(15,23,42,0.03)",
+        cardhover: "0 1px 2px rgba(15,23,42,0.06)",
+        hero: "0 1px 2px rgba(15,23,42,0.05)",
       },
     },
   },

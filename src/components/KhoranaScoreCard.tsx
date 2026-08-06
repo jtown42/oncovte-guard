@@ -11,13 +11,12 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
   if (exclusion.isExcluded) {
     return (
       <Card title="Khorana VTE Risk Score">
-        <div className="flex items-start gap-3 rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm text-sky-900">
-          <span aria-hidden>ℹ️</span>
+        <div className="rounded-md border-l-2 border-sky-400 bg-sky-50 p-3 text-base text-sky-900">
           <p>
-            Not applicable — this malignancy (
+            Not applicable. This cancer (
             <span className="font-medium">{humanize(exclusion.reason ?? "")}</span>
-            ) is excluded from the Khorana model and follows a disease-specific
-            VTE pathway (NCCN VTE-2).
+            ) is excluded from the Khorana model and follows its own VTE pathway
+            (NCCN VTE-2).
           </p>
         </div>
       </Card>
@@ -74,14 +73,17 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
         <span className="pb-1 text-sm text-clinical-muted">
           / {MAX_KHORANA_SCORE}
         </span>
-        <span className="ml-auto pb-1 text-sm">
+        {/* Plain sentence rather than "≥ 2 → prophylaxis indicated". The arrow
+            was standing in for "means", and the reader should not have to
+            translate an inequality to learn the conclusion. */}
+        <span className="ml-auto pb-1 text-base">
           {khorana.prophylaxisRecommended ? (
             <span className="font-semibold text-emerald-700">
-              ≥ 2 → prophylaxis indicated
+              Score of 2 or more: prophylaxis indicated
             </span>
           ) : (
             <span className="text-clinical-muted">
-              &lt; 2 → below NCCN threshold
+              Below the score of 2 needed for prophylaxis
             </span>
           )}
         </span>
@@ -107,6 +109,13 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
         <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800">
           Incomplete data — missing {khorana.missingFields.map(humanize).join(", ")}.
           Score may underestimate risk.
+        </p>
+      )}
+
+      {/* WS-7: calibration-transparency caveat beneath the tier. */}
+      {khorana.calibrationNote && (
+        <p className="mt-3 text-xs leading-relaxed text-clinical-muted">
+          {khorana.calibrationNote}
         </p>
       )}
     </Card>

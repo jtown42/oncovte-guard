@@ -9,20 +9,6 @@
   }
   body {
     @apply bg-clinical-bg text-clinical-ink font-sans;
-    /* Soft brand wash at the top of the page for atmosphere/depth, fading to
-       the calm clinical base — no flat white. */
-    background-image:
-      radial-gradient(
-        58rem 26rem at 50% -12rem,
-        rgba(11, 110, 153, 0.1),
-        transparent 70%
-      ),
-      radial-gradient(
-        40rem 20rem at 100% 0,
-        rgba(11, 110, 153, 0.05),
-        transparent 65%
-      );
-    background-attachment: fixed;
   }
   /* Tabular figures everywhere numbers matter. */
   .tabular-nums {
@@ -31,46 +17,73 @@
 }
 
 @layer components {
-  /* Reusable surface for dashboard cards. */
+  /* Reusable surface for dashboard cards. A 1px border and a tight radius —
+     this is a module embedded in an EHR, not a floating marketing card. */
   .card {
-    @apply rounded-2xl border border-clinical-border bg-clinical-panel shadow-card;
+    @apply rounded-md border border-clinical-border bg-clinical-panel shadow-card;
   }
   .card-header {
-    @apply flex items-center justify-between gap-3 border-b border-clinical-hairline px-5 py-3.5;
+    @apply flex items-center justify-between gap-3 border-b border-clinical-hairline bg-slate-50/70 px-4 py-2.5;
   }
+  /* Sentence case, normal spacing, real size. Condensed mono uppercase reads as
+     "technical" to an engineer and as "hard to read" to everyone else — and the
+     audience for this is clinicians, many of whom are reading it projected. */
   .card-title {
-    @apply text-xs font-semibold uppercase tracking-[0.08em] text-clinical-muted;
+    @apply text-base font-semibold text-clinical-ink;
   }
   .card-body {
-    @apply px-5 py-4;
+    @apply px-4 py-3;
   }
-  /* Severity / status pills. */
+  /* Severity / status chips. Rectangular rather than pill-shaped, but set in
+     plain sentence case at a readable size — a label, not a code. */
   .pill {
-    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 text-sm font-semibold;
   }
   .kv {
-    @apply flex items-baseline justify-between gap-4 py-1.5 text-sm;
+    @apply flex items-baseline justify-between gap-4 py-1 text-base;
   }
   .kv-label {
     @apply text-clinical-muted;
   }
   .kv-value {
-    @apply font-medium tabular-nums;
+    @apply font-mono font-medium tabular-nums;
   }
 
-  /* Brand-styled range slider for the live editor. */
+  /* Range slider for the live editor. Squared-off track and thumb so it reads
+     as an instrument control rather than an iOS volume slider. */
   .range-clinical {
-    @apply h-1.5 cursor-pointer appearance-none rounded-full bg-slate-200 accent-clinical-brand;
+    @apply h-1 cursor-pointer appearance-none rounded-sm bg-slate-200 accent-clinical-brand;
   }
   .range-clinical::-webkit-slider-thumb {
-    @apply h-4 w-4 appearance-none rounded-full border-2 border-white bg-clinical-brand shadow;
-    box-shadow: 0 0 0 1px rgba(11, 110, 153, 0.35);
+    @apply h-3.5 w-3.5 appearance-none rounded-sm border border-white bg-clinical-brand;
+    box-shadow: 0 0 0 1px rgba(3, 105, 161, 0.4);
   }
   .range-clinical::-moz-range-thumb {
-    @apply h-4 w-4 rounded-full border-2 border-white bg-clinical-brand shadow;
+    @apply h-3.5 w-3.5 rounded-sm border border-white bg-clinical-brand;
   }
   .range-clinical:disabled::-webkit-slider-thumb {
     @apply bg-slate-400;
+  }
+
+  /* Absolute contraindications only: a slow, low-amplitude border breath.
+     Deliberately restricted — if everything pulses, nothing does. */
+  @keyframes contra-breathe {
+    0%,
+    100% {
+      border-color: #ef4444;
+    }
+    50% {
+      border-color: #fca5a5;
+    }
+  }
+  .contra-alert {
+    animation: contra-breathe 2.4s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contra-alert {
+      animation: none;
+      border-color: #ef4444;
+    }
   }
 }
 
@@ -97,7 +110,7 @@
   .flash-info,
   .flash-neutral {
     animation: flash-pulse 0.65s ease-out;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
   }
   .flash-good {
     --flash-ring: rgba(16, 185, 129, 0.55);

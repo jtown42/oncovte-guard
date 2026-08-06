@@ -14,12 +14,19 @@ import {
   type DDICheckResult,
   type DDIDetail,
   type DDIEntry,
+  type DDIKnowledgeBase,
   type DDIInteractions,
   type DDISeverity,
   type DoacName,
 } from "../types/ddi";
 
-const KNOWLEDGE_BASE = ddiKnowledgeBase as DDIEntry[];
+const KB = ddiKnowledgeBase as DDIKnowledgeBase;
+const KNOWLEDGE_BASE = KB.agents;
+
+/** WS-3: KB provenance metadata, surfaced in the UI footer and CDS card detail. */
+export const DDI_KB_VERSION = KB.kbVersion;
+export const DDI_KB_LAST_REVIEWED = KB.lastReviewed;
+export const DDI_KB_PROVENANCE_NOTE = KB.provenanceNote;
 
 /** Index by RxNorm code for O(1) lookup. */
 const BY_RXNORM: Map<string, DDIEntry> = new Map(

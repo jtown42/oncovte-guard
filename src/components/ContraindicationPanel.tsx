@@ -58,8 +58,12 @@ export function ContraindicationPanel({
       ) : (
         <div className="space-y-4">
           {absolute.length > 0 && (
-            <div>
-              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-rose-700">
+            /* contra-alert: the slow border breath is deliberately scoped to
+               absolute contraindications and nothing else on the page. It is
+               the one thing that must catch the eye before the clinician acts;
+               spending the animation anywhere else would spend it here too. */
+            <div className="contra-alert rounded-sm border-l-2 border-rose-500 bg-rose-50/40 py-2 pl-3">
+              <h3 className="mb-1 text-base font-semibold text-rose-700">
                 Absolute
               </h3>
               <ul>
@@ -70,8 +74,10 @@ export function ContraindicationPanel({
             </div>
           )}
           {relative.length > 0 && (
-            <div>
-              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
+            /* Same left-accent grouping as absolute, but static — relative
+               contraindications inform the choice, they don't gate it. */
+            <div className="rounded-sm border-l-2 border-amber-400 bg-amber-50/40 py-2 pl-3">
+              <h3 className="mb-1 text-base font-semibold text-amber-700">
                 Relative
               </h3>
               <ul>

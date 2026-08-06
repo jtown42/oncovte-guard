@@ -25,11 +25,30 @@ export const DOAC_NAMES: readonly DoacName[] = [
   "edoxaban",
 ];
 
+/**
+ * WS-3 (F12): per-cell evidence anchor. Converts the knowledge base from
+ * KB-level *attested* (a uniform `sources` array on every agent) to *auditable*
+ * for the cells that actually change a recommendation. `locator` must name a
+ * table, section, or label subsection — not just a paper — so a reviewer can go
+ * straight to the source. `claim` restates the specific assertion being sourced.
+ */
+export interface DDIEvidenceAnchor {
+  source: string;
+  locator: string;
+  claim: string;
+}
+
 export interface DDIDetail {
   severity: DDISeverity;
   mechanism: string;
   recommendation: string;
   alternativeDoac: string | null;
+  /**
+   * Required (by the WS-3 validation test) for every `major` cell and for any
+   * mechanism carrying a quantitative (digit-percentage) magnitude. Optional
+   * elsewhere.
+   */
+  evidenceAnchor?: DDIEvidenceAnchor;
 }
 
 export type DDIInteractions = Record<DoacName, DDIDetail>;
@@ -45,6 +64,19 @@ export interface DDIEntry {
   pharmacodynamicBleedingRisk: boolean;
   notes: string;
   sources: string[]; // ERRATA Issue 6: added to the interface
+}
+
+/**
+ * WS-3: the knowledge base root carries version + review metadata so the UI and
+ * CDS card can display provenance. `lastReviewed` is the last **curation** date
+ * by the author — it is NOT a clinician sign-off (see F13); `provenanceNote`
+ * states exactly what the sourcing is and is not.
+ */
+export interface DDIKnowledgeBase {
+  kbVersion: string;
+  lastReviewed: string;
+  provenanceNote: string;
+  agents: DDIEntry[];
 }
 
 export interface DDICheckResult {

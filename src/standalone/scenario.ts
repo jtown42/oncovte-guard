@@ -41,6 +41,11 @@ export interface Scenario {
   ast: number | null;
   onESA: boolean;
   hasActiveMajorBleeding: boolean;
+  /** WS-2 clinician-set bleeding-risk flags (demonstrable in the what-if editor). */
+  onCorticosteroid: boolean;
+  hasPriorMajorBleeding: boolean;
+  isFrailOrPoorPerformance: boolean;
+  hasAnorexiaOrVomiting: boolean;
   medCodes: string[];
 }
 
@@ -79,12 +84,16 @@ export interface MedOption {
   group: string;
 }
 
-const KB = rawKb as {
-  agentName: string;
-  brandName?: string;
-  rxnormCode: string;
-  drugClass: string;
-}[];
+const KB = (
+  rawKb as {
+    agents: {
+      agentName: string;
+      brandName?: string;
+      rxnormCode: string;
+      drugClass: string;
+    }[];
+  }
+).agents;
 
 /** Agents not in the DDI KB but worth offering because they drive a flag/contraindication. */
 const EXTRA_AGENTS: MedOption[] = [
@@ -194,6 +203,10 @@ export function scenarioToPatient(s: Scenario): PatientData {
     onIMiD: s.medCodes.some((c) => IMID_RXNORM.has(c)),
     hasNephrotoxicChemo: s.medCodes.some((c) => NEPHROTOXIC_CHEMO_RXNORM.has(c)),
     hasActiveMajorBleeding: s.hasActiveMajorBleeding,
+    onCorticosteroid: s.onCorticosteroid,
+    hasPriorMajorBleeding: s.hasPriorMajorBleeding,
+    isFrailOrPoorPerformance: s.isFrailOrPoorPerformance,
+    hasAnorexiaOrVomiting: s.hasAnorexiaOrVomiting,
   };
 }
 
@@ -215,6 +228,10 @@ export function patientToScenario(p: PatientData): Scenario {
     ast: p.labs.ast?.value ?? null,
     onESA: p.onESA,
     hasActiveMajorBleeding: p.hasActiveMajorBleeding,
+    onCorticosteroid: p.onCorticosteroid ?? false,
+    hasPriorMajorBleeding: p.hasPriorMajorBleeding ?? false,
+    isFrailOrPoorPerformance: p.isFrailOrPoorPerformance ?? false,
+    hasAnorexiaOrVomiting: p.hasAnorexiaOrVomiting ?? false,
     medCodes: p.activeMedications.map((m) => m.rxnormCode),
   };
 }

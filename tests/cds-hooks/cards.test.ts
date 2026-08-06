@@ -11,6 +11,7 @@ import {
   buildPatientViewCards,
   buildOrderSelectCards,
 } from "../../src/cds-hooks/cards";
+import { generateRecommendation } from "../../src/core/recommendation";
 import { extractOrderedMeds } from "../../src/cds-hooks/server";
 import { DISCOVERY } from "../../src/cds-hooks/discovery";
 import { RXNORM } from "../../src/data/rxnorm-codes";
@@ -96,6 +97,47 @@ describe("patient-view cards", () => {
   });
 });
 
+describe("WS-4 two-channel alert model", () => {
+  it("1 critical + 4 non-critical alerts → exactly 2 cards, not five", () => {
+    const p = patient(0);
+    const rec = {
+      ...generateRecommendation(p),
+      overallAction: "caution" as const,
+      alerts: [
+        { level: "critical" as const, title: "Crit", detail: "d", source: "s" },
+        { level: "warning" as const, title: "W1", detail: "d", source: "s" },
+        { level: "warning" as const, title: "W2", detail: "d", source: "s" },
+        { level: "info" as const, title: "I1", detail: "d", source: "s" },
+        { level: "info" as const, title: "I2", detail: "d", source: "s" },
+      ],
+    };
+    const cards = buildPatientViewCards(p, rec);
+    expect(cards).toHaveLength(2);
+    expect(cards.filter((c) => c.indicator === "critical")).toHaveLength(1);
+    // The four non-critical alerts collapse into the summary card, not separate cards.
+    expect(cards[0].detail).toMatch(/4 additional considerations/i);
+  });
+
+  it("critical cards carry an override-reason vocabulary; the summary card does not", () => {
+    const cards = buildPatientViewCards(patient(1)); // James: major ibrutinib DDI
+    const crit = cards.find((c) => c.indicator === "critical");
+    expect(crit?.overrideReasons?.length).toBeGreaterThan(0);
+    expect(crit?.overrideReasons?.map((r) => r.code)).toContain("data_inaccurate");
+    expect(cards[0].overrideReasons).toBeUndefined();
+  });
+});
+
+describe("WS-4 role tailoring", () => {
+  it("pharmacist leads with mechanism/renal detail; prescriber leads with the verdict", () => {
+    const onc = buildPatientViewCards(patient(1), undefined, "oncologist")[0].detail!;
+    const pharm = buildPatientViewCards(patient(1), undefined, "pharmacist")[0].detail!;
+    expect(onc).not.toBe(pharm);
+    // Both mention the Khorana verdict and the major interaction, in opposite order.
+    expect(pharm.indexOf("Interaction:")).toBeLessThan(pharm.indexOf("Khorana"));
+    expect(onc.indexOf("Khorana")).toBeLessThan(onc.indexOf("Interaction:"));
+  });
+});
+
 describe("order-select cards", () => {
   it("ordering apixaban for a patient on ibrutinib flags a critical interaction", () => {
     const cards = buildOrderSelectCards(patient(1), [
@@ -112,6 +154,26 @@ describe("order-select cards", () => {
       { rxnormCode: RXNORM.APIXABAN, display: "apixaban" },
     ]);
     expect(cards).toHaveLength(0);
+  });
+
+  it("F5 (WS-5): ordering dabigatran or edoxaban emits a 'not NCCN-supported' advisory", () => {
+    for (const [code, name] of [
+      [RXNORM.DABIGATRAN, "dabigatran"],
+      [RXNORM.EDOXABAN, "edoxaban"],
+    ] as const) {
+      const cards = buildOrderSelectCards(patient(0), [
+        { rxnormCode: code, display: name },
+      ]);
+      const advisory = cards.find((c) =>
+        /not an NCCN-supported/i.test(c.summary),
+      );
+      expect(advisory, `${name} advisory`).toBeDefined();
+    }
+    // Dabigatran additionally cites the ACC CAT statement.
+    const dabi = buildOrderSelectCards(patient(0), [
+      { rxnormCode: RXNORM.DABIGATRAN, display: "dabigatran" },
+    ]);
+    expect(dabi.some((c) => /ACC/.test(c.detail ?? ""))).toBe(true);
   });
 });
 

@@ -30,6 +30,10 @@ const BASE: Scenario = {
   ast: 20,
   onESA: false,
   hasActiveMajorBleeding: false,
+  onCorticosteroid: false,
+  hasPriorMajorBleeding: false,
+  isFrailOrPoorPerformance: false,
+  hasAnorexiaOrVomiting: false,
   medCodes: [],
 };
 

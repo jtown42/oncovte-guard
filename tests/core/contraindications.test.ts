@@ -32,6 +32,13 @@ describe("detectContraindications", () => {
     expect(r.canProceedWithProphylaxis).toBe(false);
   });
 
+  it("Test 1b (WS-1.2): thrombocytopenia cites NCCN VTE-B-2 + VTE-F and states DOACs not recommended", () => {
+    const r = detectContraindications(ci({ plateletCount: 30 }));
+    const tc = r.absolute.find((c) => c.reason === "severe_thrombocytopenia");
+    expect(tc?.source).toBe("NCCN VTE-B-2 (per-agent); VTE-F");
+    expect(tc?.detail).toMatch(/does not recommend DOAC use below a platelet count of 50,000/i);
+  });
+
   it("Test 2: platelets at/above 50K do not trigger thrombocytopenia", () => {
     const r = detectContraindications(ci({ plateletCount: 85 }));
     expect(r.absolute.some((c) => c.reason === "severe_thrombocytopenia")).toBe(
@@ -75,11 +82,22 @@ describe("detectContraindications", () => {
     ).toBe(true);
   });
 
-  it("Test 7: low weight (<40 kg) is a relative caution for apixaban", () => {
+  it("Test 7 (WS-1.1): weight <40 kg is a TARGETED ABSOLUTE for apixaban, not relative", () => {
     const r = detectContraindications(ci({ weightKg: 38 }));
-    const lw = r.relative.find((c) => c.reason === "low_weight");
+    const lw = r.absolute.find((c) => c.reason === "weight_below_40kg");
     expect(lw).toBeDefined();
+    expect(lw?.type).toBe("absolute");
     expect(lw?.appliesTo).toEqual(["apixaban"]);
+    expect(lw?.source).toBe("NCCN VTE-B-2");
+    // No longer a relative caution.
+    expect(r.relative.some((c) => c.reason === "weight_below_40kg")).toBe(false);
+    // Targeted (not universal) -> prophylaxis with another agent still proceeds.
+    expect(r.canProceedWithProphylaxis).toBe(true);
+  });
+
+  it("Test 7b (WS-1.1): weight at/above 40 kg does not trigger the apixaban block", () => {
+    const r = detectContraindications(ci({ weightKg: 40 }));
+    expect(r.absolute.some((c) => c.reason === "weight_below_40kg")).toBe(false);
   });
 
   it("Test 8: severe hepatic impairment (bili >3 AND AST/ALT >5x ULN) is absolute", () => {

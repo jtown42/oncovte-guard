@@ -161,11 +161,13 @@ export function crclTone(c: CrclCategory): Tone {
   }
 }
 
+/* Spelled out. The arrow was doing the work of the word "reduced", and a
+   glyph that small disappears on a projector. */
 export const CRCL_LABEL: Record<CrclCategory, string> = {
-  normal: "Normal (≥90)",
-  mild: "Mild ↓ (60–89)",
-  moderate: "Moderate ↓ (30–59)",
-  severe: "Severe ↓ (<30)",
+  normal: "Normal (90 and above)",
+  mild: "Mildly reduced (60 to 89)",
+  moderate: "Moderately reduced (30 to 59)",
+  severe: "Severely reduced (under 30)",
 };
 
 /* ---------- Khorana risk tier ---------- */

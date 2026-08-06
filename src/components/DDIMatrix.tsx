@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import type { DDICheckResult } from "../types/ddi";
 import { DOAC_NAMES } from "../types/ddi";
 import type { DDISeverity } from "../types/ddi";
+import { DDI_KB_VERSION, DDI_KB_LAST_REVIEWED } from "../core/ddi-checker";
 import { Card, Pill } from "./primitives";
 import { Flash } from "./Flash";
 import {
@@ -49,7 +50,6 @@ const TALLY_ORDER: DDISeverity[] = [
 interface Headline {
   severity: DDISeverity;
   tone: Tone;
-  icon: string;
   title: string;
   detail: string | null;
 }
@@ -70,7 +70,6 @@ function buildHeadline(results: DDICheckResult[]): Headline {
       return {
         severity: worst,
         tone: "danger",
-        icon: "⛔",
         title: `${offenders.length} major interaction${offenders.length === 1 ? "" : "s"} detected`,
         detail: `${list} — a DOAC is unsafe with this therapy. LMWH may be preferred.`,
       };
@@ -78,7 +77,6 @@ function buildHeadline(results: DDICheckResult[]): Headline {
       return {
         severity: worst,
         tone: "warning",
-        icon: "⚠️",
         title: `${offenders.length} moderate interaction${offenders.length === 1 ? "" : "s"}`,
         detail: `${list} — monitor closely or adjust.`,
       };
@@ -86,7 +84,6 @@ function buildHeadline(results: DDICheckResult[]): Headline {
       return {
         severity: worst,
         tone: "warning",
-        icon: "⚠️",
         title: "Additive bleeding risk",
         detail: `${list} — pharmacodynamic bleeding risk independent of DOAC levels.`,
       };
@@ -94,7 +91,6 @@ function buildHeadline(results: DDICheckResult[]): Headline {
       return {
         severity: worst,
         tone: "caution",
-        icon: "ℹ️",
         title: "Only minor interactions",
         detail: `${list} — no change to anticoagulant selection.`,
       };
@@ -102,7 +98,6 @@ function buildHeadline(results: DDICheckResult[]): Headline {
       return {
         severity: "none",
         tone: "good",
-        icon: "✓",
         title: "No significant DOAC interactions",
         detail: null,
       };
@@ -114,7 +109,7 @@ export function DDISummary({ results }: { results: DDICheckResult[] }) {
 
   if (results.length === 0) {
     return (
-      <Card title="DOAC ↔ Therapy Interactions">
+      <Card title="Drug interactions with anticoagulants">
         <p className="text-sm text-clinical-muted">
           No active medications to screen.
         </p>
@@ -130,7 +125,7 @@ export function DDISummary({ results }: { results: DDICheckResult[] }) {
 
   return (
     <Card
-      title="DOAC ↔ Therapy Interactions"
+      title="Drug interactions with anticoagulants"
       right={
         <span className="text-xs text-clinical-muted">
           {results.length} medication{results.length === 1 ? "" : "s"} screened
@@ -139,11 +134,8 @@ export function DDISummary({ results }: { results: DDICheckResult[] }) {
     >
       <Flash watch={headline.severity} tone={headline.tone}>
         <div
-          className={`flex items-start gap-3 rounded-lg border px-4 py-3 ${TONE_BANNER[headline.tone]}`}
+          className={`flex items-start gap-3 rounded-md border px-4 py-3 ${TONE_BANNER[headline.tone]}`}
         >
-          <span className="text-lg leading-none" aria-hidden>
-            {headline.icon}
-          </span>
           <div className="min-w-0">
             <p className="font-semibold">{headline.title}</p>
             {headline.detail && (
@@ -161,15 +153,15 @@ export function DDISummary({ results }: { results: DDICheckResult[] }) {
         ))}
         <button
           onClick={() => setOpen(true)}
-          className="ml-auto rounded-md border border-clinical-border bg-white px-3 py-1.5 text-xs font-medium text-clinical-brand hover:border-clinical-brand"
+          className="ml-auto rounded-md border border-clinical-border bg-white px-3 py-1.5 text-base font-medium text-clinical-brand hover:border-clinical-brand"
         >
-          View full matrix →
+          See all interactions
         </button>
       </div>
 
       {open && (
         <Modal
-          title="DOAC ↔ Therapy interaction matrix"
+          title="All drug interactions with anticoagulants"
           onClose={() => setOpen(false)}
         >
           <DDIMatrix results={results} />
@@ -206,17 +198,17 @@ function Modal({
       aria-label={title}
     >
       <div className="absolute inset-0 bg-slate-900/50" onClick={onClose} />
-      <div className="relative z-10 max-h-[85vh] w-full max-w-3xl overflow-auto rounded-xl border border-clinical-border bg-clinical-panel shadow-xl">
+      <div className="relative z-10 max-h-[85vh] w-full max-w-3xl overflow-auto rounded-md border border-clinical-border bg-clinical-panel shadow-xl">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-clinical-border bg-clinical-panel px-5 py-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-clinical-muted">
+          <h2 className="text-base font-semibold text-clinical-muted">
             {title}
           </h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="flex h-7 w-7 items-center justify-center rounded-md text-clinical-muted hover:bg-slate-100 hover:text-clinical-ink"
+            className="rounded-md border border-clinical-border px-3 py-1 text-base font-medium text-clinical-muted hover:bg-slate-100 hover:text-clinical-ink"
           >
-            ✕
+            Close
           </button>
         </div>
         <div className="px-5 py-4">{children}</div>
@@ -242,7 +234,7 @@ export function DDIMatrix({ results }: { results: DDICheckResult[] }) {
         <table className="w-full border-separate border-spacing-0 text-sm">
           <thead>
             <tr>
-              <th className="sticky left-0 bg-clinical-panel py-2 pr-3 text-left text-xs font-medium uppercase tracking-wide text-clinical-muted">
+              <th className="sticky left-0 bg-clinical-panel py-2 pr-3 text-left text-sm font-medium text-clinical-muted">
                 Medication
               </th>
               {DOAC_NAMES.map((d) => (
@@ -269,6 +261,12 @@ export function DDIMatrix({ results }: { results: DDICheckResult[] }) {
       </div>
 
       <Legend />
+
+      <p className="mt-2 text-xs text-clinical-muted">
+        DDI knowledge base v{DDI_KB_VERSION} · curated {DDI_KB_LAST_REVIEWED}{" "}
+        (curation date, not clinician sign-off). Major cells are individually
+        source-anchored; expand a row to see the citation.
+      </p>
     </div>
   );
 }
@@ -322,7 +320,7 @@ function RowGroup({
                 return (
                   <div
                     key={d}
-                    className="rounded-lg border border-clinical-border bg-white p-3"
+                    className="rounded-md border border-clinical-border bg-white p-3"
                   >
                     <div className="mb-1 flex items-center justify-between">
                       <span className="font-semibold capitalize">{d}</span>
@@ -346,6 +344,15 @@ function RowGroup({
                       <p className="mt-1 text-xs">
                         <span className="font-medium">Prefer:</span>{" "}
                         <span className="capitalize">{detail.alternativeDoac}</span>
+                      </p>
+                    )}
+                    {detail.evidenceAnchor && (
+                      <p className="mt-1 text-xs text-clinical-muted">
+                        <span className="font-medium text-clinical-ink">
+                          Evidence:
+                        </span>{" "}
+                        {detail.evidenceAnchor.source} —{" "}
+                        {detail.evidenceAnchor.locator}
                       </p>
                     )}
                   </div>

@@ -84,6 +84,66 @@ describe("generateRecommendation", () => {
     ).toBe(true);
   });
 
+  it("WS-1.1: apixaban <40 kg -> rivaroxaban preferred, apixaban in avoid, still recommend", () => {
+    const r = generateRecommendation(patient({ weightKg: 38 }));
+    expect(r.khorana.totalScore).toBeGreaterThanOrEqual(2);
+    // A targeted (apixaban-only) absolute must NOT globally contraindicate.
+    expect(r.overallAction).toBe("recommend");
+    expect(r.preferredOptions.map((o) => o.name)).toEqual(["rivaroxaban"]);
+    const apix = r.avoidOptions.find((o) => o.name === "apixaban");
+    expect(apix).toBeDefined();
+    expect(apix?.eligible).toBe(false);
+    expect(apix?.ineligibleReason).toMatch(/<40 kg/i);
+    expect(
+      r.contraindications.absolute.some(
+        (c) =>
+          c.reason === "weight_below_40kg" &&
+          Array.isArray(c.appliesTo) &&
+          c.appliesTo.includes("apixaban"),
+      ),
+    ).toBe(true);
+  });
+
+  it("F7 (WS-5): a lung patient with not_indicated STILL carries the lung advisory", () => {
+    const r = generateRecommendation(
+      patient({
+        activeCancerConditions: [condition("C34.1", "Lung")],
+        bmi: 24,
+        labs: {
+          platelets: lab(200, LOINC.PLATELETS),
+          hemoglobin: lab(13, LOINC.HEMOGLOBIN),
+          wbc: lab(8, LOINC.WBC),
+          serumCreatinine: lab(0.7, LOINC.SERUM_CREATININE),
+          alt: lab(20, LOINC.ALT),
+          ast: lab(22, LOINC.AST),
+          totalBilirubin: lab(0.8, LOINC.TOTAL_BILIRUBIN),
+        },
+      }),
+    );
+    expect(r.overallAction).toBe("not_indicated");
+    expect(
+      r.alerts.some(
+        (a) => /cancer-site/i.test(a.title) && /lung/i.test(a.detail),
+      ),
+    ).toBe(true);
+  });
+
+  it("F8 (WS-5): missing renal data -> 'not assessable' copy, never a CrCl-0/<30 claim", () => {
+    const r = generateRecommendation(
+      patient({ weightKg: null }), // no weight -> CrCl not computable
+    );
+    expect(r.renal).toBeNull();
+    const reasons = [...r.preferredOptions, ...r.avoidOptions]
+      .map((o) => o.ineligibleReason ?? "")
+      .join(" | ");
+    // The internal sentinel is 0, but no user-facing option says CrCl 0 or <30 from it.
+    const apix = r.avoidOptions.find((o) => o.name === "apixaban");
+    if (apix && !apix.eligible) {
+      expect(apix.ineligibleReason).toMatch(/not assessable/i);
+    }
+    expect(reasons).not.toMatch(/CrCl 0|CrCl: 0/);
+  });
+
   it("excluded population (myeloma) -> overallAction 'excluded'", () => {
     const r = generateRecommendation(
       patient({ activeCancerConditions: [condition("C90.00", "Myeloma")] }),

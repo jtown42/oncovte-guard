@@ -13,10 +13,32 @@ import type { Bundle, MedicationRequest } from "fhir/r4";
 import { DISCOVERY } from "./discovery";
 import { prefetchToRawFHIRData } from "./prefetch";
 import { assemblePatientData } from "../fhir/fhir-parser";
-import { buildPatientViewCards, buildOrderSelectCards } from "./cards";
+import {
+  buildPatientViewCards,
+  buildOrderSelectCards,
+  OVERRIDE_REASONS,
+  type CardRole,
+} from "./cards";
+import { computeAlertMetrics, renderMetricsHtml } from "./metrics";
+import { appendOverride, readOverrideReasonCounts } from "./override-log";
+import {
+  loadSyntheticPatient,
+  listSyntheticPatients,
+} from "../fhir/standalone-loader";
 import type { CdsHookRequest, CdsResponse } from "./types";
 
 const RXNORM_SYSTEM = "http://www.nlm.nih.gov/research/umls/rxnorm";
+
+const VALID_ROLES: CardRole[] = ["oncologist", "pharmacist", "app"];
+
+/** WS-4: role tailoring — read an optional role from context or query. */
+function parseRole(body: CdsHookRequest, req: Request): CardRole {
+  const raw =
+    (body.context?.role as string | undefined) ??
+    (req.query.role as string | undefined) ??
+    "app";
+  return (VALID_ROLES as string[]).includes(raw) ? (raw as CardRole) : "app";
+}
 
 export function createServer() {
   const app = express();
@@ -36,13 +58,55 @@ export function createServer() {
         const body = req.body as CdsHookRequest;
         const raw = prefetchToRawFHIRData(body.prefetch);
         const patient = assemblePatientData(raw, new Date());
-        const response: CdsResponse = { cards: buildPatientViewCards(patient) };
+        const role = parseRole(body, req);
+        const response: CdsResponse = {
+          cards: buildPatientViewCards(patient, undefined, role),
+        };
         res.json(response);
       } catch (e) {
         res.status(400).json({ error: messageOf(e) });
       }
     },
   );
+
+  // WS-4: override capture. A clinician dismissing an interruptive card POSTs the
+  // reason here; it is appended to the log the /metrics route aggregates.
+  app.post("/cds-services/override-feedback", (req: Request, res: Response) => {
+    try {
+      const { reasonCode, reasonDisplay, cardUuid, patientId, note } =
+        req.body ?? {};
+      const valid = OVERRIDE_REASONS.some((r) => r.code === reasonCode);
+      if (!valid) {
+        res
+          .status(400)
+          .json({ error: `reasonCode must be one of the fixed vocabulary` });
+        return;
+      }
+      const entry = appendOverride({
+        reasonCode,
+        reasonDisplay,
+        cardUuid,
+        patientId,
+        note,
+      });
+      res.json({ recorded: entry });
+    } catch (e) {
+      res.status(400).json({ error: messageOf(e) });
+    }
+  });
+
+  // WS-4: alert-governance metrics dashboard across the synthetic cohort.
+  app.get("/metrics", (_req: Request, res: Response) => {
+    try {
+      const patients = listSyntheticPatients().map((_, i) =>
+        assemblePatientData(loadSyntheticPatient(i), new Date()),
+      );
+      const metrics = computeAlertMetrics(patients, readOverrideReasonCounts());
+      res.type("html").send(renderMetricsHtml(metrics));
+    } catch (e) {
+      res.status(500).json({ error: messageOf(e) });
+    }
+  });
 
   // order-select: DOAC interaction screening for the order being composed.
   app.post(

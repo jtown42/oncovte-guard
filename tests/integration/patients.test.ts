@@ -34,6 +34,29 @@ describe("synthetic patient roster", () => {
     expect(list[0].name).toBe("Maria Santos");
     expect(list[4].name).toBe("Priya Patel");
   });
+
+  it("WS-2: the bleeding-risk panel is present on all five patients", () => {
+    for (let i = 0; i < 5; i++) {
+      const r = generateRecommendation(load(i));
+      expect(["elevated", "standard", "insufficient_data"]).toContain(
+        r.bleedingRisk.tier,
+      );
+      expect(r.bleedingRisk.disclaimer).toMatch(/NOT a score/);
+    }
+  });
+
+  it("WS-7: every scored patient carries a Khorana calibration note; the excluded one does not", () => {
+    for (let i = 0; i < 5; i++) {
+      const r = generateRecommendation(load(i));
+      if (r.khorana.exclusion.isExcluded) {
+        expect(r.khorana.calibrationNote).toBeNull();
+      } else {
+        expect(r.khorana.calibrationNote, `patient ${i}`).toMatch(
+          /several-fold|not a precise/i,
+        );
+      }
+    }
+  });
 });
 
 describe("Patient 1: Maria Santos — High Khorana, clean meds, normal renal", () => {
@@ -72,6 +95,19 @@ describe("Patient 1: Maria Santos — High Khorana, clean meds, normal renal", (
     expect(nab?.worstSeverity).toBe("minor");
     expect(r.staleLabWarning).toBe(false);
   });
+
+  it("WS-2: surfaces an elevated bleeding-risk factor (anemia, Hgb <10)", () => {
+    expect(r.bleedingRisk.tier).toBe("elevated");
+    expect(r.bleedingRisk.factors.some((f) => f.key === "anemia")).toBe(true);
+  });
+
+  it("WS-6: pancreatic patient carries the discrimination caveat alert", () => {
+    expect(
+      r.alerts.some(
+        (a) => /cancer-site/i.test(a.title) && /pancrea|hepatobiliary/i.test(a.detail),
+      ),
+    ).toBe(true);
+  });
 });
 
 describe("Patient 2: James Chen — Intermediate Khorana, MAJOR ibrutinib DDI", () => {
@@ -109,6 +145,14 @@ describe("Patient 2: James Chen — Intermediate Khorana, MAJOR ibrutinib DDI", 
     const ritux = ddiFor(r.ddiResults, "121191");
     expect(ritux?.worstSeverity).toBe("none");
   });
+
+  it("F4 (WS-5): both DOACs blocked -> verdictLabel 'recommend_lmwh' (overallAction stays stable)", () => {
+    expect(r.preferredOptions).toHaveLength(0);
+    expect(r.alternativeOptions.length).toBeGreaterThan(0);
+    expect(r.verdictLabel).toBe("recommend_lmwh");
+    // The machine-stable overallAction is unchanged for API consumers.
+    expect(["recommend", "caution"]).toContain(r.overallAction);
+  });
 });
 
 describe("Patient 3: Dorothy Williams — High Khorana, severe renal + thrombocytopenia", () => {
@@ -136,6 +180,14 @@ describe("Patient 3: Dorothy Williams — High Khorana, severe renal + thrombocy
     expect(r.renal?.crclCategory).toBe("severe");
     expect(p.hasNephrotoxicChemo).toBe(true);
     expect(r.renal?.warnings).toContain("nephrotoxic_chemotherapy");
+  });
+
+  it("WS-2: bleeding-risk is elevated (CrCl <30) and prefers LMWH", () => {
+    expect(r.bleedingRisk.tier).toBe("elevated");
+    expect(
+      r.bleedingRisk.factors.some((f) => f.key === "severe_renal_impairment"),
+    ).toBe(true);
+    expect(r.bleedingRisk.prefersLmwh).toBe(true);
   });
 });
 

@@ -21,6 +21,7 @@ import {
   CancerCategory,
   RiskCategory,
   MAX_KHORANA_SCORE,
+  KHORANA_CALIBRATION_NOTE,
   type CancerConditionInput,
   type ExclusionReason,
   type KhoranaInput,
@@ -201,6 +202,8 @@ export function calculateKhoranaScore(input: KhoranaInput): KhoranaResult {
       reason: isExcluded ? input.exclusionReason ?? null : null,
     },
     prophylaxisRecommended,
+    // WS-7: calibration caveat accompanies every scored patient; none when excluded.
+    calibrationNote: isExcluded ? null : KHORANA_CALIBRATION_NOTE,
   };
 }
 

@@ -273,10 +273,66 @@ describe("cancer-site advisory notes", () => {
     const res = getCancerCategory([{ code: "C64.9" }]);
     expect(res.category).toBe(CancerCategory.HIGH);
     expect(res.note).toMatch(/kidney|renal/i);
+    expect(res.note).toMatch(/divergence/i);
+  });
+
+  it("WS-1.3: C64 (RCC) scores +1; renal pelvis/ureter/other urinary (C65/C66/C68) score 0", () => {
+    const siteScore = (code: string) =>
+      calculateKhoranaScoreFromConditions({
+        conditions: [{ code }],
+        plateletCount: 200,
+        hemoglobin: 13,
+        onESA: false,
+        wbcCount: 8,
+        bmi: 25,
+      }).breakdown.cancerSite.score;
+
+    // Only C64 remains high-risk after narrowing the kidney rule.
+    expect(siteScore("C64.9")).toBe(1);
+    for (const code of ["C65.9", "C66.9", "C68.0"]) {
+      const res = getCancerCategory([{ code }]);
+      expect(res.category, `${code} must be STANDARD`).toBe(
+        CancerCategory.STANDARD,
+      );
+      expect(siteScore(code), `${code} scores 0`).toBe(0);
+    }
   });
 
   it("a standard site carries no advisory note", () => {
     const res = getCancerCategory([{ code: "C50.9" }]); // breast
     expect(res.note).toBeNull();
+  });
+
+  it("WS-6: pancreatic cancer (C25) carries the discrimination caveat", () => {
+    const res = getCancerCategory([{ code: "C25.1" }]);
+    expect(res.category).toBe(CancerCategory.VERY_HIGH);
+    expect(res.note).toMatch(/pancrea|hepatobiliary/i);
+  });
+});
+
+describe("WS-7 Khorana calibration transparency", () => {
+  it("every scored (non-excluded) patient carries a calibration note", () => {
+    const scored = calculateKhoranaScoreFromConditions({
+      conditions: [{ code: "C25.1" }],
+      plateletCount: 410,
+      hemoglobin: 9.2,
+      onESA: false,
+      wbcCount: 8.5,
+      bmi: 36.2,
+    });
+    expect(scored.calibrationNote).toMatch(/several-fold|not a precise/i);
+  });
+
+  it("an excluded patient carries no calibration note", () => {
+    const excluded = calculateKhoranaScoreFromConditions({
+      conditions: [{ code: "C90.00" }], // myeloma → excluded
+      plateletCount: 200,
+      hemoglobin: 13,
+      onESA: false,
+      wbcCount: 8,
+      bmi: 25,
+    });
+    expect(excluded.exclusion.isExcluded).toBe(true);
+    expect(excluded.calibrationNote).toBeNull();
   });
 });

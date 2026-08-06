@@ -69,7 +69,7 @@ export function PatientBanner({ patient }: { patient: PatientData }) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs uppercase tracking-wide text-clinical-muted">
+      <dt className="text-sm text-clinical-muted">
         {label}
       </dt>
       <dd className="font-semibold tabular-nums">{value}</dd>

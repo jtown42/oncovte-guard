@@ -23,13 +23,21 @@ export type ContraindicationReason =
   | "brain_tumor"
   | "multiple_myeloma_imid"
   | "concurrent_antiplatelet"
-  | "low_weight";
+  // WS-1.1: apixaban <40 kg is a categorical NCCN VTE-B-2 instruction
+  // ("Avoid if weight <40 kg"), encoded as a targeted absolute — not a
+  // curator-chosen relative caution. Renamed from "low_weight".
+  | "weight_below_40kg";
 
 export interface Contraindication {
   type: "absolute" | "relative";
   reason: ContraindicationReason;
   detail: string;
   appliesTo: AppliesTo;
+  /**
+   * Guideline citation for this finding (auditability ground rule). Kept on the
+   * object so a reviewer can trace the rule to a source without reading code.
+   */
+  source?: string;
 }
 
 export interface ContraindicationResult {

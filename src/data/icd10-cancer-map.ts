@@ -81,12 +81,20 @@ export const HIGH_RULES: CategoryRule[] = [
   { prefixes: ["C51", "C52", "C57", "C58"], label: "Gynecologic cancer (other)" },
   { prefixes: ["C67"], label: "Bladder cancer" },
   { prefixes: ["C62"], label: "Testicular cancer" },
-  { prefixes: ["C64", "C65", "C66", "C68"], label: "Kidney/renal cancer" },
+  // WS-1.3: narrowed to C64 only (renal-cell carcinoma of the kidney). The
+  // prior set (C64/C65/C66/C68 — kidney, renal pelvis, ureter, other urinary)
+  // was broader than any published interpretation supports.
+  { prefixes: ["C64"], label: "Renal-cell carcinoma (kidney)" },
 ];
 
-/** Kidney is high-risk per JACC/ASCO interpretation; NCCN names only bladder/testicular. */
+/**
+ * Renal-cell carcinoma (C64) is scored high-risk here, a DELIBERATE DIVERGENCE
+ * from the NCCN high-risk list, which names only bladder and testicular. It is
+ * retained on the basis of a JACC/ASCO interpretation. Evidence grade C. Renal
+ * pelvis / ureter / other urinary (C65/C66/C68) are NOT scored.
+ */
 const KIDNEY_NOTE =
-  "Kidney/renal classified as high risk per JACC/ASCO interpretation; NCCN VTE-C names only bladder and testicular. Verify per local guideline.";
+  "Renal-cell carcinoma (kidney) is classified high-risk here as a divergence from the NCCN high-risk list (which names only bladder and testicular), retained per a JACC/ASCO interpretation. Verify against local guideline.";
 
 /**
  * Lung cancer scores as a Khorana high-risk site (1 pt), but the score's
@@ -97,6 +105,15 @@ const KIDNEY_NOTE =
  */
 const LUNG_NOTE =
   "Khorana score has limited discriminative ability in lung cancer (van Es et al. IPD meta-analysis); weigh the score together with individual clinical judgment.";
+
+/**
+ * WS-6: Maria Santos — the flagship "clean recommend" — is pancreatic, and the
+ * Khorana score's discrimination in pancreatic/hepatobiliary cancer is contested
+ * in large validation cohorts. Surfaced as an info-level caveat (mirrors the lung
+ * note); it does NOT change the score.
+ */
+const PANCREATIC_NOTE =
+  "Khorana score discrimination is contested in pancreatic/hepatobiliary cancer in large validation cohorts; the score still meets the ≥2 threshold here, but weigh it with individual clinical judgment.";
 
 function normalize(code: string): string {
   return code.trim().toUpperCase();
@@ -137,14 +154,14 @@ export function classifyIcd10(rawCode: string): Icd10Classification {
         category: CancerCategory.VERY_HIGH,
         label: rule.label,
         exclusionReason: null,
-        note: null,
+        note: matchesAny(code, ["C25"]) ? PANCREATIC_NOTE : null,
       };
     }
   }
 
   for (const rule of HIGH_RULES) {
     if (matchesAny(code, rule.prefixes)) {
-      const isKidney = matchesAny(code, ["C64", "C65", "C66", "C68"]);
+      const isKidney = matchesAny(code, ["C64"]);
       const isLung = matchesAny(code, ["C34"]);
       return {
         category: CancerCategory.HIGH,

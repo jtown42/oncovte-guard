@@ -24,6 +24,7 @@ import {
 } from "./standalone/scenario";
 import { initSmartClient } from "./fhir/smart-launch";
 import { fetchPatientData } from "./fhir/fhir-client";
+import { getAsOfDate } from "./ui/asof";
 
 type Mode = "smart" | "standalone";
 
@@ -64,7 +65,7 @@ export function App() {
     <div className={`min-h-screen ${present ? "present" : ""}`}>
       <TopBar mode={mode} present={present} onTogglePresent={togglePresent} />
       <main
-        className={`mx-auto px-4 py-6 ${mode === "standalone" ? "max-w-7xl" : "max-w-6xl"}`}
+        className={`mx-auto px-4 py-4 ${mode === "standalone" ? "max-w-7xl" : "max-w-6xl"}`}
       >
         {mode === "smart" ? <SmartView /> : <StandaloneView />}
       </main>
@@ -82,9 +83,9 @@ function TopBar({
   onTogglePresent: () => void;
 }) {
   return (
-    <header className="relative border-b border-clinical-border bg-clinical-panel/90 backdrop-blur-sm">
+    <header className="relative border-b border-clinical-border bg-clinical-panel">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-clinical-brand to-clinical-brandDark text-white shadow-sm ring-1 ring-inset ring-white/15">
+        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-clinical-brand text-white">
           <svg
             width="20"
             height="20"
@@ -112,7 +113,7 @@ function TopBar({
         </div>
         <button
           onClick={onTogglePresent}
-          className={`ml-auto rounded-full px-3 py-1 text-xs font-medium transition ${
+          className={`ml-auto rounded-sm px-2.5 py-1 text-xs font-medium transition ${
             present
               ? "bg-clinical-brand text-white"
               : "border border-clinical-border text-clinical-muted hover:border-clinical-brand hover:text-clinical-brand"
@@ -122,11 +123,10 @@ function TopBar({
         >
           {present ? "Exit presentation" : "Presentation mode"}
         </button>
-        <span className="present-hide rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-clinical-muted">
+        <span className="present-hide rounded-sm bg-slate-100 px-2.5 py-1 text-xs font-medium text-clinical-muted">
           {mode === "smart" ? "SMART-on-FHIR" : "Standalone demo"}
         </span>
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-clinical-brand/40 to-transparent" />
     </header>
   );
 }
@@ -146,7 +146,7 @@ function SmartView() {
       try {
         const client = await initSmartClient();
         const raw = await fetchPatientData(client);
-        const patient = assemblePatientData(raw, new Date());
+        const patient = assemblePatientData(raw, getAsOfDate());
         if (!cancelled) setState({ kind: "ready", patient });
       } catch (e) {
         if (!cancelled)
@@ -177,7 +177,7 @@ function SmartView() {
 /** Load preset `index` and seed an editable scenario from it. */
 function presetScenario(index: number): Scenario {
   return patientToScenario(
-    assemblePatientData(loadSyntheticPatient(index), new Date()),
+    assemblePatientData(loadSyntheticPatient(index), getAsOfDate()),
   );
 }
 
@@ -199,7 +199,7 @@ function StandaloneView() {
   };
 
   return (
-    <div className="lg:grid lg:grid-cols-[21rem_minmax(0,1fr)] lg:items-start lg:gap-6">
+    <div className="lg:grid lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start lg:gap-4">
       {/* Sticky control rail — the verdict on the right stays in view while
           a slider is dragged. Stacks above the dashboard on narrow screens. */}
       <aside className="mb-4 lg:sticky lg:top-4 lg:mb-0 lg:max-h-[calc(100vh-1.5rem)] lg:overflow-y-auto lg:pr-1">

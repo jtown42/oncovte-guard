@@ -49,6 +49,12 @@ export interface CdsSource {
   url?: string;
 }
 
+/** WS-4: a fixed override-reason vocabulary captured when a clinician dismisses a card. */
+export interface CdsOverrideReason {
+  code: string;
+  display: string;
+}
+
 export interface CdsCard {
   uuid?: string;
   summary: string; // <= 140 characters per spec
@@ -56,6 +62,12 @@ export interface CdsCard {
   indicator: CdsIndicator;
   source: CdsSource;
   links?: { label: string; url: string; type: "absolute" | "smart" }[];
+  /**
+   * WS-4: offered when a clinician overrides an interruptive (critical) card, so
+   * the reason is captured rather than lost. A small fixed vocabulary keeps the
+   * data analyzable (see the /metrics governance route).
+   */
+  overrideReasons?: CdsOverrideReason[];
 }
 
 export interface CdsResponse {

@@ -74,4 +74,16 @@ export interface PatientData {
    * deployment, a clinician confirmation step).
    */
   hasActiveMajorBleeding: boolean;
+
+  /**
+   * WS-2 qualitative bleeding-risk inputs that FHIR cannot reliably encode.
+   * All optional (default absent → false); consumed only by the bleeding-risk
+   * panel, never by a scored calculation.
+   */
+  onNSAID?: boolean;
+  onCorticosteroid?: boolean;
+  hasPriorMajorBleeding?: boolean;
+  /** Frailty or ECOG performance status 3–4. */
+  isFrailOrPoorPerformance?: boolean;
+  hasAnorexiaOrVomiting?: boolean;
 }
