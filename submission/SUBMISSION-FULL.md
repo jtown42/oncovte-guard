@@ -11,7 +11,7 @@
 _975 / 1000 characters_
 
 ```text
-Cancer raises venous thromboembolism (VTE) risk 4-7 fold, yet pharmacologic prophylaxis is underused and is complicated by interactions between direct oral anticoagulants (DOACs) and chemotherapy. OncoVTE Guard is a SMART on FHIR clinical decision support app that automates the NCCN-endorsed workflow. It computes the Khorana VTE risk score from the patient's diagnosis and labs, screens every active medication against a 52-agent DOAC interaction knowledge base, evaluates renal function (Cockcroft-Gault) and absolute/relative contraindications, then recommends a specific, guideline-concordant anticoagulant - or flags when none is safe. The identical reasoning engine is exposed two ways: an in-EHR dashboard for clinicians and a CDS Hooks service for passive, point-of-care alerts. A 123-test automated suite and a rule-to-source-to-code-to-test traceability matrix demonstrate guideline fidelity, and five synthetic patients exercise every decision pathway end to end.
+Cancer raises venous thromboembolism (VTE) risk 4-7 fold, yet pharmacologic prophylaxis is underused and is complicated by interactions between direct oral anticoagulants (DOACs) and chemotherapy. OncoVTE Guard is a SMART on FHIR clinical decision support app that automates the NCCN-endorsed workflow. It computes the Khorana VTE risk score from the patient's diagnosis and labs, screens every active medication against a 52-agent DOAC interaction knowledge base, evaluates renal function (Cockcroft-Gault) and absolute/relative contraindications, then recommends a specific, guideline-concordant anticoagulant - or flags when none is safe. The identical reasoning engine is exposed two ways: an in-EHR dashboard for clinicians and a CDS Hooks service for passive, point-of-care alerts. A 180-test automated suite and a rule-to-source-to-code-to-test traceability matrix demonstrate guideline fidelity, and five synthetic patients exercise every decision pathway end to end.
 ```
 
 ## Project rationale, impact and innovation
@@ -55,18 +55,20 @@ CHALLENGES OVERCOME. (1) Encoding "active major bleeding": FHIR has no single, r
 
 ## Project evaluation and sustainability
 
-_2705 / 3500 characters_
+_3376 / 3500 characters_
 
 ```text
 EVALUATION APPROACH. Because the project's central claim is clinical accuracy, evaluation focused on verifiable guideline fidelity rather than on usage metrics (the app is a pre-deployment prototype). We gathered both quantitative and qualitative evidence.
 
-QUANTITATIVE. (1) A 123-test automated suite (Vitest) covers every clinical engine and the integration boundaries: Khorana scoring including each criterion's boundary value (e.g., platelets exactly 350 scores, hemoglobin exactly 10.0 does not), the 52-agent DOAC interaction checker, Cockcroft-Gault renal dosing, appliesTo-aware contraindications, stale-lab detection, the recommendation orchestrator, RxNorm code integrity, and the CDS Hooks card builder. (2) Five synthetic FHIR R4 patients are run end to end, asserting the expected output of all five decision states - recommend, caution/LMWH fallback, contraindicated, not indicated, and excluded. (3) A rule-to-source-to-code-to-test traceability matrix links each clinical rule to its guideline citation, its implementing code, and the test that proves it, including the ten authoritative contract decisions. (4) Static gates: the TypeScript compiler runs clean under strict mode, and the production build succeeds.
+QUANTITATIVE. (1) A 180-test automated suite (Vitest) covers every clinical engine and the integration boundaries: Khorana scoring including each criterion's boundary value (e.g., platelets exactly 350 scores, hemoglobin exactly 10.0 does not), the 52-agent DOAC interaction checker, Cockcroft-Gault renal dosing, appliesTo-aware contraindications, stale-lab detection, the recommendation orchestrator, RxNorm code integrity, and the CDS Hooks card builder. (2) Five synthetic FHIR R4 patients are run end to end, asserting the expected output of all five decision states - recommend, caution/LMWH fallback, contraindicated, not indicated, and excluded. (3) A rule-to-source-to-code-to-test traceability matrix links each clinical rule to its guideline citation, its implementing code, and the test that proves it, including the ten authoritative contract decisions. (4) Static gates: the TypeScript compiler runs clean under strict mode, and the production build succeeds.
 
 QUALITATIVE. Each of the five decision states was visually verified in the running app and captured as a screenshot, confirming that the interface communicates severity (color-coded interaction matrix, ranked alerts, explicit "avoid / not an option" list) clearly and unambiguously.
 
 CONCLUSIONS. The engine reproduces NCCN-concordant outputs deterministically across the tested space, and the dual-surface architecture delivers identical results through both the dashboard and the CDS Hooks service. The project met its goals for clinical accuracy and for standards-based EHR integration. It has not yet been evaluated with live EHR data or in a clinical setting, which is the clear next step.
 
 SUSTAINABILITY. The design is built to last and to be maintained. The DOAC interaction knowledge base is an external, versioned data file in which every agent carries explicit sources, so guideline and labeling updates are data edits, not code rewrites. Clinical engines are decoupled from UI and transport, so a guideline change is localized and immediately re-verified by the test suite that encodes it. The app is built entirely on open standards - FHIR R4, SMART App Launch, and CDS Hooks - which maximizes portability across EHRs and avoids vendor lock-in. The roadmap is to validate against public SMART/FHIR sandboxes, broaden the knowledge base under clinical review, and, contingent on review, publish in the SMART App Gallery for community adoption and contribution.
+
+DESIGNED FUTURE WORK - CAT-TREATMENT MODULE. A therapeutic-anticoagulation module for established cancer-associated VTE is designed against NCCN VTE-D/-F/-G but deliberately deferred. It is a structurally different engine - eight-plus agents, two-phase regimens with a parenteral lead-in, per-agent rather than global selection, and treatment-duration and on-therapy-failure pathways - so shipping a partially built second engine would undercut the fully-tested discipline of this prophylaxis entry. Its per-agent hepatic thresholds and the appliesTo, interaction, and renal primitives reuse directly, making it a natural post-acceptance build rather than an oversight.
 ```
 
 ## Who is the intended user/audience of your app?
@@ -82,7 +84,7 @@ Primary users are clinicians who manage ambulatory cancer patients: medical onco
 _138 / 140 characters_
 
 ```text
-SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 123 tests proving guideline fidelity.
+SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 180 tests proving guideline fidelity.
 ```
 
 ## How is FHIR being used in the app?
@@ -111,10 +113,10 @@ In production, resources are accessed live via the SMART on FHIR API (SMART App 
 
 ## Any other information about the project
 
-_1159 / 1500 characters_
+_1387 / 1500 characters_
 
 ```text
-OncoVTE Guard is decision support, not a substitute for clinical judgment; every recommendation is accompanied by disclaimers and source attributions, and all demonstration data is synthetic with no PHI. Two design points are worth highlighting for reviewers. First, the dual-surface architecture (one tested engine behind both a SMART dashboard and a CDS Hooks service) is what distinguishes this from a data-display dashboard: it is a clinical reasoning engine that can integrate passively into existing EHR workflows. Second, accuracy is treated as an auditable property - a companion VERIFICATION document provides a rule-to-source-to-code-to-test traceability matrix so reviewers can independently confirm guideline fidelity. Known, deliberate scope decisions are documented openly: active major bleeding is modeled as a clinician-confirmable flag (FHIR cannot reliably encode it); kidney cancer is scored high-risk with an explicit note that NCCN names only bladder/testicular; and the knowledge base, while curated and sourced, is scoped to its listed agents, with any unrecognized medication surfaced as "verify manually" rather than silently ignored.
+OncoVTE Guard is decision support, not a substitute for clinical judgment; every recommendation is accompanied by disclaimers and source attributions, and all demonstration data is synthetic with no PHI. Two design points are worth highlighting for reviewers. First, the dual-surface architecture (one tested engine behind both a SMART dashboard and a CDS Hooks service) is what distinguishes this from a data-display dashboard: it is a clinical reasoning engine that can integrate passively into existing EHR workflows. Second, accuracy is treated as an auditable property - a companion VERIFICATION document provides a rule-to-source-to-code-to-test traceability matrix so reviewers can independently confirm guideline fidelity. Known, deliberate scope decisions are documented openly: active major bleeding is modeled as a clinician-confirmable flag (FHIR cannot reliably encode it); kidney cancer is scored high-risk with an explicit note that NCCN names only bladder/testicular; and the knowledge base, while curated and sourced, is scoped to its listed agents, with any unrecognized medication surfaced as "verify manually" rather than silently ignored; and the tool is scoped to primary prophylaxis, with the therapeutic-anticoagulation pathway designed against NCCN VTE-D but deliberately deferred as a structurally distinct engine (a documented scope decision, not an omission).
 ```
 
 ## Structured / short-answer fields

@@ -62,7 +62,7 @@ WHERE AND WITH WHOM. OncoVTE Guard was designed and built as a student competiti
 ```text
 EVALUATION APPROACH. Because the project's central claim is clinical accuracy, evaluation focused on verifiable guideline fidelity rather than on usage metrics (the app is a pre-deployment prototype). We gathered both quantitative and qualitative evidence.
 
-QUANTITATIVE. (1) A 123-test automated suite (Vitest) covers every clinical engine and the integration boundaries: Khorana scoring including each criterion's boundary value (e.g., platelets exactly 350 scores, hemoglobin exactly 10.0 does not), the 52-agent DOAC interaction checker, Cockcroft-Gault renal dosing, appliesTo-aware contraindications, stale-lab detection, the recommendation orchestrator, RxNorm code integrity, and the CDS Hooks card builder. (2) Five synthetic FHIR R4 patients are run end to end, asserting the expected output of all five decision states - recommend, caution/LMWH fallback, contraindicated, not indicated, and excluded. (3) A rule-to-source-to-code-to-test traceability matrix links each clinical rule to its guideline citation, its implementing code, and the test that proves it, including the ten authoritative contract decisions. (4) Static gates: the TypeScript compiler runs clean under strict mode, and the production build succeeds.
+QUANTITATIVE. (1) A 180-test automated suite (Vitest) covers every clinical engine and the integration boundaries: Khorana scoring including each criterion's boundary value (e.g., platelets exactly 350 scores, hemoglobin exactly 10.0 does not), the 52-agent DOAC interaction checker, Cockcroft-Gault renal dosing, appliesTo-aware contraindications, stale-lab detection, the recommendation orchestrator, RxNorm code integrity, and the CDS Hooks card builder. (2) Five synthetic FHIR R4 patients are run end to end, asserting the expected output of all five decision states - recommend, caution/LMWH fallback, contraindicated, not indicated, and excluded. (3) A rule-to-source-to-code-to-test traceability matrix links each clinical rule to its guideline citation, its implementing code, and the test that proves it, including the ten authoritative contract decisions. (4) Static gates: the TypeScript compiler runs clean under strict mode, and the production build succeeds.
 
 QUALITATIVE. Each of the five decision states was visually verified in the running app and captured as a screenshot, confirming that the interface communicates severity (color-coded interaction matrix, ranked alerts, explicit "avoid / not an option" list) clearly and unambiguously.
 
@@ -103,7 +103,7 @@ PROVENANCE. Two kinds of provenance are surfaced today. First, data timing and s
 **138 / 140**
 
 ```text
-SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 123 tests proving guideline fidelity.
+SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 180 tests proving guideline fidelity.
 ```
 
 ---
@@ -208,7 +208,7 @@ Promotional screenshots of all five decision states are in `docs/screenshots/`. 
 **≈ 70 / 250 words**
 
 ```text
-Reviewers can reproduce every claim: `npm test` runs the full 123-test suite, `npm run build` type-checks and builds, and `npm run dev` opens the standalone demo with its live "what-if" editor. Key artifacts in the repository: VERIFICATION.md (the rule-to-source-to-code-to-test traceability matrix), docs/DEMO-SCRIPT.md (an eight-minute walkthrough of all five decision states, including a live threshold-flip demonstration), and docs/screenshots/ (the five decision states). No live-demo video has been recorded yet.
+Reviewers can reproduce every claim: `npm test` runs the full 180-test suite, `npm run build` type-checks and builds, and `npm run dev` opens the standalone demo with its live "what-if" editor. Key artifacts in the repository: VERIFICATION.md (the rule-to-source-to-code-to-test traceability matrix), docs/DEMO-SCRIPT.md (an eight-minute walkthrough of all five decision states, including a live threshold-flip demonstration), and docs/screenshots/ (the five decision states). No live-demo video has been recorded yet.
 ```
 
 ## SMART App Gallery

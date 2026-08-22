@@ -843,6 +843,78 @@ App Gallery.
 
 ---
 
+## Designed future work — CAT-treatment module (designed, not built; deliberate scope)
+
+This tool is deliberately scoped to **primary VTE prophylaxis** (a yes/no-plus-agent-selection
+decision). The companion problem — **therapeutic anticoagulation for established
+cancer-associated VTE (CAT)** — has been *designed against NCCN VTE-D/-F/-G (v1.2026)* and is
+recorded here as future work. It is **not code**, and shipping a partially-built second engine
+before submission would undercut the auditable, fully-tested discipline that defines this entry.
+Captured now so the "why only prophylaxis?" question is answered with evidence of the opposite:
+a deliberate scope decision made from an understanding of the full CAT decision surface.
+
+**Why it is a structurally different engine (not a re-tuning):**
+- **The agent set widens** from the two prophylaxis DOACs (apixaban, rivaroxaban) to **eight-plus
+  therapeutic options**: + edoxaban, dabigatran, dalteparin, enoxaparin, fondaparinux, UFH, warfarin.
+- **Some regimens are two-phase.** Edoxaban and dabigatran require a **≥5-day parenteral lead-in**
+  (LMWH/UFH first), so a regimen must be modeled as a **sequence**, not a single dose. Warfarin
+  needs a bridge + INR overlap. The prophylaxis engine has no analog for this.
+- **The gating logic inverts.** Prophylaxis asks "recommend vs. not indicated"; treatment always
+  anticoagulates (a clot exists), so terminal states become **ranked agent-selection** states and
+  "contraindicated" applies **per agent**, never globally (a patient contraindicated to all DOACs
+  still gets LMWH/UFH/warfarin).
+- **New axes with no prophylaxis analog:** treatment **duration** (≥3 months; indefinite while
+  cancer active; a distinct catheter-associated pathway); a **gastric/gastroesophageal-lesion
+  selection fork** (the treatment analog of the Khorana ≥2 fork — LMWH preferred with such lesions,
+  apixaban possibly safer than rivaroxaban/edoxaban, cat 2B); **platelet-driven LMWH dose
+  modification** (VTE-F full/half/hold — a *dose-adjusting* construct, unlike the binary <50k
+  prophylaxis avoid); and an **on-therapy failure pathway** (VTE-G).
+
+**What carries over unchanged (the reuse argument):**
+- The **per-agent hepatic contraindication thresholds are identical** to the prophylaxis-side
+  NCCN VTE-D-5 numbers already encoded and tested here (WS-1.4) — same lab cutoffs apply to treatment.
+- The **`appliesTo`-aware contraindication model**, the **DDI checker**, and the **Cockcroft-Gault
+  renal module** all transfer directly. So the extension is principally **new data tables + a new
+  orchestrator over proven clinical primitives**, not new clinical logic.
+
+**Encoded reference tables (paraphrased factual parameters; NCCN VTE-D-2 / VTE-D-5 cited, no NCCN prose reproduced):**
+
+*Therapeutic dosing (VTE-D-2) — DOACs preferred without gastric/GE lesions; LMWH preferred with them:*
+
+| Agent | Regimen (summary) | Parenteral lead-in |
+|---|---|---|
+| Apixaban | 10 mg q12h ×7d → 5 mg q12h; consider 2.5 mg q12h after 6 mo (cat 1) | No |
+| Rivaroxaban | 15 mg q12h ×21d → 20 mg daily with food | No |
+| Edoxaban | LMWH/UFH ≥5d → 60 mg daily (30 mg if CrCl 30–50, wt <60 kg, or potent P-gp inhibitor) | **Yes (≥5d)** |
+| Dabigatran | LMWH/UFH ≥5d → 150 mg q12h | **Yes (≥5d)** |
+| Dalteparin | 200 u/kg daily ×30d → 150 u/kg daily (only LMWH FDA-approved for this indication) | N/A |
+| Enoxaparin | 1 mg/kg q12h (BMI <40) or 0.8 mg/kg q12h (BMI ≥40) | N/A |
+| Fondaparinux | 5 mg (<50 kg) / 7.5 mg (50–100) / 10 mg (>100) daily | N/A |
+| UFH (cat 2B) | IV bolus + titrated infusion, or SC load + q12h | N/A |
+| Warfarin | Bridge + overlap ≥5d and until INR ≥2; titrate INR 2–3 | Yes (bridge) |
+
+*Per-agent contraindications (VTE-D-5) — hepatic arm identical to the prophylaxis numbers already
+encoded; the treatment set adds: all-DOAC CrCl <30 and weight <50 kg (caution); LMWH/UFH acute-HIT
+absolute; fondaparinux CrCl <30 absolute; warfarin preferred agent for APS. Non-lab arms
+(Child-Pugh, cirrhosis/hepatitis) defer to clinician assessment, same caveat used here.*
+
+**Cross-society corroboration and preserved numeric disagreements (kept, not harmonized):**
+- Thrombocytopenia's graded 50k/25k structure is **multi-society** (ASH/ISTH ≥50 full / 25–50 reduced
+  / <25 hold; ESC lists <50k among DOAC-inappropriate factors; JACC 2019 similar) — treatment-domain,
+  LMWH-favored for reversibility.
+- **ITAC 2022 gates *prophylaxis* at platelets >80×10⁹/L** — **more conservative than NCCN's 50k**.
+  Preserve this as a documented cross-guideline disagreement rather than harmonizing it away.
+- A stronger, more current risk-model citation for the "swap in better models" narrative:
+  **EHR-CAT (Li et al., JAMA Netw Open 2025)** outperformed Khorana (AUC ~0.70 vs ~0.63), from the
+  same Epic/Cosmos ecosystem the FHIR pipeline targets.
+
+**Submission framing:** present this as a *designed, deliberately-deferred extension* — not as
+partial completeness. If a presentation slot is won, a scoped-and-tested VTE-D module (dosing +
+contraindication tables over the existing primitives) is an excellent post-acceptance,
+pre-November build, when the "the architecture generalizes" demo pays off without deadline pressure.
+
+---
+
 ## Appendix — References for the epidemiology figures
 
 Supplied by the submitter's literature search; map each claim to its source.
