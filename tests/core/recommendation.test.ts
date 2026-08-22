@@ -104,6 +104,47 @@ describe("generateRecommendation", () => {
     ).toBe(true);
   });
 
+  it("WS-1.4: AST ~4x ULN / normal bilirubin blocks BOTH DOACs -> LMWH fallback (closed gap)", () => {
+    // AST 160 = 4x ULN. Under the old bili>3 AND transaminase>5x universal gate
+    // this patient PASSED with a full DOAC recommendation. NCCN VTE-D-5 avoids
+    // apixaban and rivaroxaban at ALT/AST >3x ULN — so both DOACs must now drop
+    // out and the engine must fall back to LMWH (never dabigatran/edoxaban).
+    const r = generateRecommendation(
+      patient({
+        labs: {
+          platelets: lab(410, LOINC.PLATELETS),
+          hemoglobin: lab(9.2, LOINC.HEMOGLOBIN),
+          wbc: lab(8.5, LOINC.WBC),
+          serumCreatinine: lab(0.7, LOINC.SERUM_CREATININE),
+          alt: lab(20, LOINC.ALT),
+          ast: lab(160, LOINC.AST),
+          totalBilirubin: lab(0.8, LOINC.TOTAL_BILIRUBIN),
+        },
+      }),
+    );
+    expect(r.khorana.totalScore).toBeGreaterThanOrEqual(2);
+    // Hepatic is targeted per DOAC -> never a universal "contraindicated" verdict.
+    expect(r.overallAction).not.toBe("contraindicated");
+    // Both preferred DOACs blocked by the hepatic rule.
+    expect(r.preferredOptions).toHaveLength(0);
+    const apix = r.avoidOptions.find((o) => o.name === "apixaban");
+    const riva = r.avoidOptions.find((o) => o.name === "rivaroxaban");
+    expect(apix?.ineligibleReason).toMatch(/ALT\/AST >3x ULN/i);
+    expect(riva?.ineligibleReason).toMatch(/ALT\/AST >3x ULN/i);
+    // Falls back to LMWH, labeled distinctly (F4/WS-5).
+    expect(r.alternativeOptions.length).toBeGreaterThan(0);
+    expect(r.verdictLabel).toBe("recommend_lmwh");
+    // The hepatic contraindications cite NCCN VTE-D-5 and are targeted.
+    expect(
+      r.contraindications.absolute.some(
+        (c) =>
+          c.reason === "severe_hepatic_impairment" &&
+          c.source === "NCCN VTE-D-5 (v1.2026)" &&
+          Array.isArray(c.appliesTo),
+      ),
+    ).toBe(true);
+  });
+
   it("F7 (WS-5): a lung patient with not_indicated STILL carries the lung advisory", () => {
     const r = generateRecommendation(
       patient({

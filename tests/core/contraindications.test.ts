@@ -100,21 +100,77 @@ describe("detectContraindications", () => {
     expect(r.absolute.some((c) => c.reason === "weight_below_40kg")).toBe(false);
   });
 
-  it("Test 8: severe hepatic impairment (bili >3 AND AST/ALT >5x ULN) is absolute", () => {
-    const r = detectContraindications(
-      ci({ totalBilirubin: 4.0, ast: 250, alt: 60 }),
+  // --- Hepatic: per-agent NCCN VTE-D-5 (v1.2026), re-anchored in WS-1.4. ---
+  // Defaults: ULN 40 U/L for ALT/AST, 1.2 mg/dL for total bilirubin.
+
+  it("Test 8 (WS-1.4): hepatic is per-agent/targeted, never a universal absolute", () => {
+    const r = detectContraindications(ci({ ast: 130, alt: 130, totalBilirubin: 3 }));
+    const hep = r.absolute.filter((c) => c.reason === "severe_hepatic_impairment");
+    expect(hep.length).toBeGreaterThan(0);
+    // Every hepatic finding is targeted (appliesTo = [agent]), so no universal absolute.
+    expect(hep.every((c) => Array.isArray(c.appliesTo))).toBe(true);
+    expect(hep.every((c) => c.source === "NCCN VTE-D-5 (v1.2026)")).toBe(true);
+  });
+
+  it("Test 8a (WS-1.4): CLOSED GAP — AST ~4x ULN, normal bilirubin blocks apixaban & rivaroxaban", () => {
+    // AST 160 = 4x ULN (40); the old bili>3 AND transaminase>5x gate PASSED this.
+    const r = detectContraindications(ci({ ast: 160, alt: 30, totalBilirubin: 0.8 }));
+    const agents = r.absolute
+      .filter((c) => c.reason === "severe_hepatic_impairment")
+      .flatMap((c) => (Array.isArray(c.appliesTo) ? c.appliesTo : []));
+    expect(agents).toContain("apixaban"); // >3x ULN
+    expect(agents).toContain("rivaroxaban"); // >3x ULN
+    expect(agents).toContain("dabigatran"); // >2x ULN
+    expect(agents).not.toContain("edoxaban"); // needs transaminase>3x AND bili>2x
+    // Targeted -> prophylaxis can still proceed (falls back to LMWH).
+    expect(r.canProceedWithProphylaxis).toBe(true);
+  });
+
+  it("Test 8b (WS-1.4): isolated bilirubin >2x ULN blocks apixaban only", () => {
+    // Bilirubin 3.0 = 2.5x ULN (1.2); transaminases normal.
+    const r = detectContraindications(ci({ totalBilirubin: 3.0, ast: 30, alt: 30 }));
+    const agents = r.absolute
+      .filter((c) => c.reason === "severe_hepatic_impairment")
+      .flatMap((c) => (Array.isArray(c.appliesTo) ? c.appliesTo : []));
+    expect(agents).toEqual(["apixaban"]); // only apixaban has a bilirubin arm
+  });
+
+  it("Test 8c (WS-1.4): edoxaban is conjunctive (needs transaminase>3x AND bilirubin>2x)", () => {
+    // Transaminase high, bilirubin normal -> edoxaban NOT blocked.
+    const r1 = detectContraindications(ci({ ast: 160, totalBilirubin: 0.8 }));
+    const a1 = r1.absolute
+      .filter((c) => c.reason === "severe_hepatic_impairment")
+      .flatMap((c) => (Array.isArray(c.appliesTo) ? c.appliesTo : []));
+    expect(a1).not.toContain("edoxaban");
+    // Both high -> edoxaban blocked.
+    const r2 = detectContraindications(ci({ ast: 160, totalBilirubin: 3.0 }));
+    const a2 = r2.absolute
+      .filter((c) => c.reason === "severe_hepatic_impairment")
+      .flatMap((c) => (Array.isArray(c.appliesTo) ? c.appliesTo : []));
+    expect(a2).toContain("edoxaban");
+  });
+
+  it("Test 8d (WS-1.4): normal hepatic panel triggers nothing", () => {
+    const r = detectContraindications(ci({ ast: 30, alt: 30, totalBilirubin: 0.8 }));
+    expect(r.absolute.some((c) => c.reason === "severe_hepatic_impairment")).toBe(
+      false,
     );
-    expect(
-      r.absolute.some(
-        (c) =>
-          c.reason === "severe_hepatic_impairment" && c.appliesTo === "all",
-      ),
-    ).toBe(true);
-    // High bilirubin alone (without transaminase elevation) must NOT trigger it.
-    const r2 = detectContraindications(ci({ totalBilirubin: 4.0, ast: 30, alt: 30 }));
-    expect(
-      r2.absolute.some((c) => c.reason === "severe_hepatic_impairment"),
-    ).toBe(false);
+  });
+
+  it("Test 8e (WS-1.4): thresholds are ULN multiples, honoring per-lab overrides", () => {
+    // With ULN 80, AST 160 is only 2x ULN -> below apixaban's >3x, above dabigatran's >2x? (=2x, not >2x)
+    const r = detectContraindications(ci({ ast: 160, astUln: 80 }));
+    const agents = r.absolute
+      .filter((c) => c.reason === "severe_hepatic_impairment")
+      .flatMap((c) => (Array.isArray(c.appliesTo) ? c.appliesTo : []));
+    // 2x ULN exactly: not > 3x, not > 2x -> no agent trips.
+    expect(agents).toHaveLength(0);
+  });
+
+  it("Test 8f (WS-1.4): hepatic detail states the Child-Pugh caveat", () => {
+    const r = detectContraindications(ci({ ast: 160 }));
+    const hep = r.absolute.find((c) => c.reason === "severe_hepatic_impairment");
+    expect(hep?.detail).toMatch(/Child-Pugh B\/C is a separate NCCN contraindication/i);
   });
 
   it("Test 9: HIT blocks LMWH but DOACs remain available", () => {

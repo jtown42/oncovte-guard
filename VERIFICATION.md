@@ -12,7 +12,7 @@ inventory, and the exact commands to reproduce every result below.
 
 - **Verified on:** 2026-08-06
 - **Authoritative contract:** [`plan/errata-contract-reconciliation.md`](plan/errata-contract-reconciliation.md) (overrides `plan/ddi-info.md` on its 10 resolved issues), with one dated clinical-review supersession noted in §5 (risk-tier labels).
-- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **173 / 173 tests passing**
+- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **180 / 180 tests passing**
 
 ---
 
@@ -21,7 +21,7 @@ inventory, and the exact commands to reproduce every result below.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit  → no errors
-npm test              # vitest run    → 14 files, 173 tests, all passing
+npm test              # vitest run    → 14 files, 180 tests, all passing
 npm run build         # tsc && vite build → dist/ (113 modules)
 npm run dev           # standalone demo (5 synthetic patients), http://localhost:5173
 npm run cds-server    # CDS Hooks service, http://localhost:3000/cds-services
@@ -37,12 +37,12 @@ running the cited test (`npx vitest run <path> -t "<test title>"`).
 | Gate | Command | Result |
 | --- | --- | --- |
 | Type safety | `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) | **0 errors** |
-| Unit + integration tests | `vitest run` | **14 files, 173 tests passed** |
+| Unit + integration tests | `vitest run` | **14 files, 180 tests passed** |
 | Production build | `tsc && vite build` | **113 modules transformed, built** |
 | Live render (manual) | `vite preview` + browser | All five pathways (recommend / LMWH-fallback / contraindicated / not-indicated / excluded) verified visually in the redesigned demo UI, including the live verdict flip and presentation mode (see `docs/screenshots/`) |
 
 Test files (14): `khorana-engine` (31), `bleeding-risk` (18), `ddi-checker` (13),
-`renal-dosing` (11), `contraindications` (13), `stale-lab` (9), `recommendation` (10),
+`renal-dosing` (11), `contraindications` (19), `stale-lab` (9), `recommendation` (11),
 `rxnorm-codes` (3), `ddi-kb-provenance` (6), `integration/patients` (25),
 `cds-hooks/cards` (15), `cds-hooks/metrics` (5), `standalone/scenario` (12), `ui/asof` (2).
 
@@ -187,7 +187,7 @@ carries no advisory note".
 | Active major bleeding | all (absolute) | NCCN VTE-B | `contraindications.ts` | (covered via recommendation contraindicated path) |
 | Severe thrombocytopenia <50K | all (absolute) | **NCCN VTE-B-2 (per-agent); VTE-F** (WS-1.2) | `CONTRAINDICATION_THRESHOLDS.SEVERE_THROMBOCYTOPENIA_LT`; `source` field | "Test 1…universal absolute", "Test 1b (WS-1.2): cites VTE-B-2 + VTE-F", "Test 2: at/above 50K do not trigger" |
 | Antiphospholipid syndrome (D68.61) | all (absolute) | TRAPS trial | `APS_PREFIXES` | "Test 3: antiphospholipid syndrome (D68.61) is a universal absolute" |
-| Severe hepatic impairment (bili >3 **and** AST/ALT >5× ULN) — *conservative lab-only proxy, NOT Child-Pugh* (WS-1.4) | all (absolute) | NCCN VTE-B hepatic regimen selection; operationalization by OncoVTE Guard | hepatic block | "Test 8: severe hepatic impairment… is absolute" |
+| Severe hepatic impairment — **per-agent** (WS-1.4 re-anchored): apixaban ALT/AST >3× ULN **or** bili >2× ULN; rivaroxaban ALT/AST >3× ULN; dabigatran ALT/AST >2× ULN; edoxaban ALT/AST >3× ULN **and** bili >2× ULN. Lab arm automated; the non-lab VTE-D-5 arms — Child-Pugh B/C (dabigatran at C), and cirrhosis / active-or-acute hepatitis for dabigatran & edoxaban — are **deliberately deferred to the clinician-assessment caveat** (app reads labs, not those diagnoses), named in-line in each alert. Thresholds are ULN multiples. | **targeted per DOAC** (absolute) | **NCCN VTE-D-5 (v1.2026)** | `CONTRAINDICATION_THRESHOLDS.HEPATIC_*`; `hepaticRules` table; `source` field | "Test 8 (per-agent/targeted)", "Test 8a (closed gap: AST 4× ULN, normal bili → apixaban+rivaroxaban+dabigatran)", "Test 8b (isolated bili → apixaban only)", "Test 8c (edoxaban conjunctive)", "Test 8d/8e (ULN-multiple boundaries)", "Test 8f (Child-Pugh caveat)" |
 | **HIT (D75.82)** | **LMWH only** (targeted) | clinical | `HIT_PREFIXES`, `appliesTo:["enoxaparin","dalteparin"]` | "Test 4: HIT (D75.82) blocks LMWH only", "Test 9: HIT blocks LMWH but DOACs remain available" |
 | GI/GU tract cancer | all (relative) | NCCN 2B | `GI_TRACT_PREFIXES` | "Test 5: GI tract cancer (gastric C16) is a relative caution" |
 | Brain tumor | all (relative) | NCCN VTE-2 | `BRAIN_TUMOR_PREFIXES` | (classifier + recommendation paths) |

@@ -15,17 +15,30 @@ import type {
   Contraindication,
   ContraindicationResult,
 } from "../types/contraindication";
+import type { AnticoagulantName } from "../types/renal";
 
-/** Default upper limits of normal for aminotransferases (U/L). */
-const ALT_ULN_DEFAULT = 40;
-const AST_ULN_DEFAULT = 40;
+/** Default upper limits of normal (used when the lab does not carry its own). */
+const ALT_ULN_DEFAULT = 40; // U/L
+const AST_ULN_DEFAULT = 40; // U/L
+const BILI_ULN_DEFAULT = 1.2; // mg/dL (total bilirubin)
 
 /** Thresholds (kept explicit for auditability). */
 export const CONTRAINDICATION_THRESHOLDS = {
   SEVERE_THROMBOCYTOPENIA_LT: 50, // x10^9/L  (i.e. <50,000/uL)
-  HEPATIC_BILIRUBIN_GT: 3, // mg/dL
-  HEPATIC_AMINOTRANSFERASE_ULN_MULT: 5, // >5x ULN
   APIXABAN_LOW_WEIGHT_LT: 40, // kg
+  // Per-agent hepatic contraindications, NCCN VTE-D-5 (v1.2026). Expressed as
+  // multiples of each lab's own ULN (not absolute values), so they track the
+  // lab's reference range. Each DOAC has its own logic — see the hepaticRules
+  // table in detectContraindications for the disjunctive/conjunctive wiring.
+  // (WS-1.4 re-anchor: replaces the prior single conjunctive bilirubin>3 mg/dL
+  // AND transaminases>5x ULN universal surrogate, which under-excluded — e.g.
+  // AST 4x ULN with normal bilirubin passed it, yet NCCN avoids apixaban there.)
+  HEPATIC_APIXABAN_TRANSAMINASE_ULN_MULT: 3,
+  HEPATIC_APIXABAN_BILIRUBIN_ULN_MULT: 2,
+  HEPATIC_RIVAROXABAN_TRANSAMINASE_ULN_MULT: 3,
+  HEPATIC_DABIGATRAN_TRANSAMINASE_ULN_MULT: 2,
+  HEPATIC_EDOXABAN_TRANSAMINASE_ULN_MULT: 3,
+  HEPATIC_EDOXABAN_BILIRUBIN_ULN_MULT: 2,
 } as const;
 
 /** ICD-10 prefixes used by contraindication detection. */
@@ -45,12 +58,13 @@ export interface ContraindicationInput {
   onIMiD: boolean;
   /** Clinically-determined active major bleeding (no single code). */
   hasActiveMajorBleeding?: boolean;
-  /** Hepatic panel for the lab-only severe-hepatic-impairment proxy (WS-1.4). */
+  /** Hepatic panel for the per-agent NCCN VTE-D-5 hepatic contraindications. */
   totalBilirubin?: number | null;
   alt?: number | null;
   ast?: number | null;
   altUln?: number;
   astUln?: number;
+  biliUln?: number;
 }
 
 function normalize(code: string): string {
@@ -122,31 +136,84 @@ export function detectContraindications(
     });
   }
 
-  // Severe hepatic impairment — universal. WS-1.4: this is a conservative
-  // lab-only proxy for severe hepatic impairment (bilirubin >3 mg/dL and AST or
-  // ALT >5x ULN), NOT Child-Pugh: true Child-Pugh also needs albumin, INR,
-  // ascites, and encephalopathy, none of which the app reads. The domain is
-  // guideline-recognized — NCCN's regimen-selection language names "elevated
-  // transaminases or bilirubin, Child-Pugh B and C liver impairment, or
-  // cirrhosis" — but this operationalization is ours.
+  // Severe hepatic impairment — PER-AGENT, NCCN VTE-D-5 (v1.2026). Each DOAC
+  // carries its own hepatic contraindication; most are disjunctive (any one
+  // criterion avoids the agent), while edoxaban's transaminase+bilirubin arm is
+  // conjunctive. Modeled targeted (appliesTo per agent) exactly like HIT:
+  // hepatic impairment blocks the affected DOAC(s), not anticoagulation
+  // universally — LMWH remains, and the engine falls back to it. Thresholds are
+  // multiples of each lab's own ULN. Only the LAB-BASED arm is automated; NCCN
+  // also lists Child-Pugh class (and, for dabigatran/edoxaban, cirrhosis /
+  // active hepatitis), which require clinical assessment the app does not read
+  // (albumin, INR, ascites, encephalopathy) — surfaced as a caveat in each
+  // detail below so the automated vs. clinician-assessed arms stay explicit.
   const altUln = input.altUln ?? ALT_ULN_DEFAULT;
   const astUln = input.astUln ?? AST_ULN_DEFAULT;
-  const mult = CONTRAINDICATION_THRESHOLDS.HEPATIC_AMINOTRANSFERASE_ULN_MULT;
-  const highBili =
-    input.totalBilirubin != null &&
-    input.totalBilirubin > CONTRAINDICATION_THRESHOLDS.HEPATIC_BILIRUBIN_GT;
-  const highAminotransferase =
-    (input.alt != null && input.alt > mult * altUln) ||
-    (input.ast != null && input.ast > mult * astUln);
-  if (highBili && highAminotransferase) {
-    absolute.push({
-      type: "absolute",
-      reason: "severe_hepatic_impairment",
+  const biliUln = input.biliUln ?? BILI_ULN_DEFAULT;
+  const altR = input.alt != null ? input.alt / altUln : null;
+  const astR = input.ast != null ? input.ast / astUln : null;
+  const biliR =
+    input.totalBilirubin != null ? input.totalBilirubin / biliUln : null;
+  const gt = (ratio: number | null, mult: number): boolean =>
+    ratio != null && ratio > mult;
+  const T = CONTRAINDICATION_THRESHOLDS;
+  const CHILD_PUGH_CAVEAT =
+    " Child-Pugh B/C is a separate NCCN contraindication requiring clinical assessment (not lab-derived here).";
+
+  const hepaticRules: {
+    agent: AnticoagulantName;
+    trips: boolean;
+    detail: string;
+  }[] = [
+    {
+      agent: "apixaban",
+      trips:
+        gt(altR, T.HEPATIC_APIXABAN_TRANSAMINASE_ULN_MULT) ||
+        gt(astR, T.HEPATIC_APIXABAN_TRANSAMINASE_ULN_MULT) ||
+        gt(biliR, T.HEPATIC_APIXABAN_BILIRUBIN_ULN_MULT),
       detail:
-        "Total bilirubin >3 mg/dL with transaminases >5x ULN (conservative lab-only proxy for severe hepatic impairment; not Child-Pugh) — avoid DOACs.",
-      appliesTo: "all",
-      source: "NCCN VTE-B (hepatic regimen selection); operationalization by OncoVTE Guard",
-    });
+        "Apixaban: avoid if ALT/AST >3x ULN or total bilirubin >2x ULN (NCCN VTE-D-5)." +
+        CHILD_PUGH_CAVEAT,
+    },
+    {
+      agent: "rivaroxaban",
+      trips:
+        gt(altR, T.HEPATIC_RIVAROXABAN_TRANSAMINASE_ULN_MULT) ||
+        gt(astR, T.HEPATIC_RIVAROXABAN_TRANSAMINASE_ULN_MULT),
+      detail:
+        "Rivaroxaban: avoid if ALT/AST >3x ULN (NCCN VTE-D-5)." +
+        CHILD_PUGH_CAVEAT,
+    },
+    {
+      agent: "dabigatran",
+      trips:
+        gt(altR, T.HEPATIC_DABIGATRAN_TRANSAMINASE_ULN_MULT) ||
+        gt(astR, T.HEPATIC_DABIGATRAN_TRANSAMINASE_ULN_MULT),
+      detail:
+        "Dabigatran: avoid if ALT/AST >2x ULN (also cirrhosis or active/acute hepatitis) (NCCN VTE-D-5)." +
+        CHILD_PUGH_CAVEAT,
+    },
+    {
+      agent: "edoxaban",
+      trips:
+        (gt(altR, T.HEPATIC_EDOXABAN_TRANSAMINASE_ULN_MULT) ||
+          gt(astR, T.HEPATIC_EDOXABAN_TRANSAMINASE_ULN_MULT)) &&
+        gt(biliR, T.HEPATIC_EDOXABAN_BILIRUBIN_ULN_MULT),
+      detail:
+        "Edoxaban: avoid if ALT/AST >3x ULN AND total bilirubin >2x ULN (also cirrhosis or active hepatitis) (NCCN VTE-D-5)." +
+        CHILD_PUGH_CAVEAT,
+    },
+  ];
+  for (const rule of hepaticRules) {
+    if (rule.trips) {
+      absolute.push({
+        type: "absolute",
+        reason: "severe_hepatic_impairment",
+        detail: rule.detail,
+        appliesTo: [rule.agent],
+        source: "NCCN VTE-D-5 (v1.2026)",
+      });
+    }
   }
 
   // HIT (D75.82) — targeted: blocks LMWH only; DOACs remain (and are preferred).

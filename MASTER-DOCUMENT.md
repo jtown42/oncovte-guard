@@ -15,7 +15,7 @@
 - **Category:** AMIA / HL7 FHIR App Competition — **Student**.
 - **Live demo:** https://oncovte-guard.pages.dev · **SMART launch:** https://oncovte-guard.pages.dev/launch
 - **Source:** https://github.com/jtown42/oncovte-guard
-- **Verified state (live run, 2026-08-06):** `vitest run` → **14 files, 173/173 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
+- **Verified state (live run, 2026-08-06):** `vitest run` → **14 files, 180/180 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
 - **Companion docs:** `README.md` (orientation), `VERIFICATION.md` (rule→source→code→test audit), `ASSESSMENT.md` (reviewer verdict lens), `submission/SUBMISSION-FULL.md` (the actual entry text), `plan/errata-contract-reconciliation.md` (the authoritative contract).
 
 > ### If you are an outside reviewer or an evidence model, start here
@@ -40,8 +40,10 @@
 > test-guarded (**F12 / WS-3**); (b) **no clinician has ever used this** — alert-fatigue
 > *mitigations* are now built (two-channel alerts, role tailoring, override capture, a
 > `/metrics` route — WS-4) but remain *empirically unvalidated* until a clinician evaluation
-> (**F13**; WS-8 pending); (c) the hepatic rule is a **conservative lab-only proxy we built**
-> — *not* Child-Pugh (renamed accordingly in WS-1.4, **F14**). Note: WS-1, WS-2, WS-3, and
+> (**F13**; WS-8 pending); (c) the hepatic rule is now the **per-agent NCCN VTE-D-5
+> (v1.2026) lab thresholds** — re-anchored from the old curator surrogate, closing an
+> under-exclusion and upgrading it to Tier A (**F14**, WS-1.4); the Child-Pugh arm is
+> explicitly flagged as clinician-assessed, not automated. Note: WS-1, WS-2, WS-3, and
 > WS-4 have landed — see "Done since last revision" in §17.
 >
 > **State of the tree (be aware when reproducing):** the engine, tests, and docs are
@@ -49,7 +51,7 @@
 > larger type — §11.2) is **present in the working tree but not yet committed**, so the
 > **live site at oncovte-guard.pages.dev is behind `main`** and shows the prior styling.
 > **No clinical logic differs between the two** — the redesign touched only components,
-> `index.css`, `ui/format.ts`, and the Tailwind config; the 173 tests cover the engine and
+> `index.css`, `ui/format.ts`, and the Tailwind config; the 180 tests cover the engine and
 > pass identically on both.
 
 ---
@@ -85,7 +87,7 @@ cancer patient on systemic therapy**:
 2. **If yes, which anticoagulant is actually safe *for this patient right now*?** (renal function, drug–drug interactions with active chemotherapy, thrombocytopenia, hepatic function, and other contraindications.)
 
 The defining architectural claim: **this is not a dashboard that displays data — it is a
-clinical reasoning engine, proven by 173 automated tests, exposed through two EHR
+clinical reasoning engine, proven by 180 automated tests, exposed through two EHR
 surfaces.** All guideline logic lives in pure, framework-free TypeScript in `src/core/`.
 A SMART-on-FHIR dashboard (clinician *pull*), a CDS Hooks service (EHR *push*), and a
 standalone what-if demo all converge on **one seam**:
@@ -104,14 +106,15 @@ in isolation.
 **The single most important caveat** (repeat it to any reviewer, unprompted): the DDI
 knowledge base and clinical thresholds were **curated from supplied structured clinical
 input and published labeling**, encoded against an authoritative project contract. The
-173 tests prove the encoded rules are *applied faithfully and consistently*. They do
+180 tests prove the encoded rules are *applied faithfully and consistently*. They do
 **not** independently prove the underlying pharmacology is itself correct or current —
 that needs clinician/pharmacist sign-off for real use. The app says so everywhere.
 
 **§5 grades exactly how well-supported each rule is**, rule by rule, and separates the
 A-tier medicine (the Khorana model, the ≥2 threshold, the apixaban/rivaroxaban-only
-restriction) from the curator-mediated content (most DDI severities, the renal specifics,
-the hepatic surrogate) and from the pure engineering conventions (30-day staleness). If
+restriction, the per-agent NCCN VTE-D-5 hepatic thresholds) from the curator-mediated
+content (most DDI severities, the renal specifics) and from the pure engineering
+conventions (30-day staleness). If
 you read one section critically, read that one.
 
 ---
@@ -254,7 +257,7 @@ preferred (errata Issue 9).
 | Active major bleeding | absolute | all | `hasActiveMajorBleeding` boolean (clinician-assessed; wired through the pipeline and toggleable in the demo — see Finding F1, §12) |
 | Severe thrombocytopenia | absolute | all | platelets `< 50` ×10⁹/L (`SEVERE_THROMBOCYTOPENIA_LT`) |
 | Antiphospholipid syndrome | absolute | all | `D68.61` (DOACs failed in TRAPS) |
-| Severe hepatic impairment | absolute | all | total bilirubin `>3` mg/dL **and** (ALT **or** AST) `>5× ULN` (ULN default 40; **conservative lab-only proxy for severe hepatic impairment — not Child-Pugh**, WS-1.4) |
+| Severe hepatic impairment | absolute | **targeted per DOAC** | **Per-agent NCCN VTE-D-5 (v1.2026)**, ULN multiples: apixaban ALT/AST `>3×` **or** bili `>2×`; rivaroxaban ALT/AST `>3×`; dabigatran ALT/AST `>2×`; edoxaban ALT/AST `>3×` **and** bili `>2×`. Lab arm automated; Child-Pugh B/C flagged for clinician assessment (WS-1.4 re-anchor) |
 | HIT | absolute | **`["enoxaparin","dalteparin"]`** | `D75.82` — blocks LMWH only; DOACs remain (and are preferred) |
 | GI/GU luminal tumor | relative | all | `C15, C16, C67` |
 | Brain tumor | relative | all | `C71, C79.31` |
@@ -337,7 +340,7 @@ the thing under audit here — not the strength of the underlying medical litera
 | Severe thrombocytopenia <50 ×10⁹/L absolute | **NCCN VTE-B-2 (per-agent) + VTE-F** (WS-1.2) | **A** | The 50K cut is conventional; some centers dose-reduce rather than stop. Now cites the per-agent VTE-B-2 rows and the VTE-F "DOACs not recommended below 50,000/μL" statement, carried on the finding's `source` field. |
 | Antiphospholipid syndrome absolute | TRAPS trial | **A** | Rivaroxaban harm in triple-positive APS is well-established. |
 | HIT blocks LMWH only, DOACs remain | Clinical | **B/C** | Mechanistically sound and clinically standard, but encoded as "clinical" with no specific citation in `VERIFICATION.md`. **Would benefit from a named source.** |
-| Severe hepatic impairment: bili >3 **and** AST/ALT >5× ULN | NCCN VTE-B hepatic regimen selection; operationalization ours | **C** | **A curator-built lab-only proxy for severe hepatic impairment, not a published rule and not Child-Pugh** (real Child-Pugh needs albumin, INR, ascites, encephalopathy — none read). WS-1.4 renamed it off "Child-Pugh C" everywhere in code/docs; the domain is guideline-recognized (NCCN names elevated transaminases/bilirubin, Child-Pugh B/C, cirrhosis) but the operationalization is ours. Flagged as F14. |
+| Severe hepatic impairment: **per-agent NCCN VTE-D-5 (v1.2026)** (apixaban ALT/AST >3× or bili >2×; rivaroxaban ALT/AST >3×; dabigatran ALT/AST >2×; edoxaban ALT/AST >3× and bili >2×; ULN multiples) | **NCCN VTE-D-5 (v1.2026)** | **A** (WS-1.4 re-anchor, was C) | Re-anchored from a curator surrogate to the guideline's own per-agent thresholds, modeled targeted per DOAC like HIT. Only the **lab arm** is automated; **Child-Pugh B/C** (and cirrhosis/active hepatitis for dabigatran/edoxaban) is flagged for clinician assessment — the app does not read albumin/INR/ascites/encephalopathy. Closes the prior under-exclusion (old conjunctive bili>3 AND transaminase>5× let AST 4×/normal-bili through). F14 resolved. |
 | **Weight <40 kg → avoid apixaban (targeted absolute)** | **NCCN VTE-B-2 ("Avoid if weight <40 kg")** | **A** (WS-1.1, was B) | Now graded A: NCCN VTE-B-2 states this verbatim as a categorical per-agent instruction, not a curator inference. Regraded from relative/B to targeted absolute/A. |
 | Sarcopenia warning <60 kg | C-G overestimation | **C** | Well-known limitation; the specific 60 kg trigger is a curator choice. |
 | Nephrotoxic-chemo warning (cisplatin/carboplatin/methotrexate) | Clinical | **C** | Uncontroversial mechanistically; agent list is curator-scoped and non-exhaustive. |
@@ -410,16 +413,17 @@ Stated bluntly so nobody has to infer it:
 
 - **Strong (A-tier, defensible in front of an oncologist):** the Khorana model and its
   thresholds; the ≥2 prophylaxis gate; the apixaban/rivaroxaban-only restriction with LMWH
-  fallback; the Khorana exclusions; APS; the lung advisory; Cockcroft-Gault itself.
+  fallback; the Khorana exclusions; APS; the lung advisory; the per-agent NCCN VTE-D-5
+  hepatic thresholds; Cockcroft-Gault itself.
 - **Reasonable but curator-mediated (B/C):** the DDI table's per-agent severities, the
-  renal gating specifics, the hepatic surrogate, the low-weight and sarcopenia cuts.
+  renal gating specifics, the low-weight and sarcopenia cuts.
 - **Not clinical claims at all (D):** the 30-day staleness rule, severity display
   precedence, the conservative CrCl-0 fallback.
 - **Deliberately qualitative, not scored (WS-2):** the bleeding-risk panel (§5.5). The factor
   *list* is guideline-scaffolded (ACC 2026 / NCCN VTE-2); the numeric cut-points are curator
   choices; and *no bleeding score is computed on purpose* — the evidence does not support one
   for primary prophylaxis in this population.
-- **The engineering *is* the contribution.** The one-seam architecture, the 173 tests, the
+- **The engineering *is* the contribution.** The one-seam architecture, the 180 tests, the
   dual-surface coherence, and the traceability matrix are real, verifiable, and unusual for
   a student prototype. The clinical content is a *faithful encoding of a curated set* — the
   app's honest claim is **"provably consistent," not "independently validated."**
@@ -537,7 +541,7 @@ generateRecommendation` pipeline. Test reference date pinned at `2026-06-10T12:0
 
 ## 10. Testing & verification
 
-**Live run (this document): `vitest run` → 14 files, 173 tests, all passing** in ~6 s.
+**Live run (this document): `vitest run` → 14 files, 180 tests, all passing** in ~6 s.
 `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) → 0 errors.
 `tsc && vite build` → succeeds (113 modules).
 
@@ -546,9 +550,9 @@ generateRecommendation` pipeline. Test reference date pinned at `2026-06-10T12:0
 | `tests/core/khorana-engine.test.ts` | 27 | every criterion boundary, cap, tiers, exclusions, multi-condition precedence, advisory notes |
 | `tests/core/ddi-checker.test.ts` | 13 | per-DOAC shape, severity ordering, unknown handling, worst-per-DOAC aggregation |
 | `tests/core/renal-dosing.test.ts` | 11 | Cockcroft-Gault (M/F), guards, bands, 6-agent array, CrCl<30 rules, sarcopenia/nephrotoxic warnings |
-| `tests/core/contraindications.test.ts` | 11 | universal vs targeted, thrombocytopenia boundary, APS, hepatic, HIT-LMWH-only, GI, low-weight-apixaban |
+| `tests/core/contraindications.test.ts` | 19 | universal vs targeted, thrombocytopenia boundary, APS, per-agent hepatic (NCCN VTE-D-5: closed AST-4×/normal-bili gap, edoxaban conjunctive arm, ULN-multiple boundaries, Child-Pugh caveat), HIT-LMWH-only, GI, low-weight-apixaban |
 | `tests/core/stale-lab.test.ts` | 9 | 30/31-day boundary, fresh, missing-date, null-lab-absent |
-| `tests/core/recommendation.test.ts` | 7 | all five terminal states + LMWH fallback + HIT-DOACs-remain + active-bleeding gate |
+| `tests/core/recommendation.test.ts` | 11 | all five terminal states + LMWH fallback + HIT-DOACs-remain + active-bleeding gate + per-agent hepatic (NCCN VTE-D-5) closed-gap LMWH fallback |
 | `tests/data/rxnorm-codes.test.ts` | 3 | tamoxifen vs thalidomide regression lock |
 | `tests/integration/patients.test.ts` | 19 | five patients end-to-end |
 | `tests/cds-hooks/cards.test.ts` | 11 | discovery, patient-view cards, order-select interaction cards, 140-char cap, prefetch degradation |
@@ -638,7 +642,7 @@ surfaced, found while writing this document.
 
 ### F1 — `hasActiveMajorBleeding` end-to-end wiring **(RESOLVED 2026-07-15)**
 - *Originally:* the contraindications engine supported active major bleeding (`ContraindicationInput.hasActiveMajorBleeding`, checked at `contraindications.ts:85` → universal absolute), but it was unreachable from a patient — `PatientData` had no such field and the orchestrator never passed it, so the verdict could never actually fire. The submission described it as "modeled as a clinician-set boolean," which was then aspirational relative to the code.
-- **Fixed:** `hasActiveMajorBleeding: boolean` was added to `PatientData` (defaulted `false` in `assemblePatientData`, since FHIR has no reliable discrete signal for it), threaded through `Scenario` / `scenarioToPatient` / `patientToScenario`, forwarded in `generateRecommendation`'s `detectContraindications` call, and exposed as an "Active major bleeding (clinician-assessed)" toggle in the control rail. Two tests lock it (`tests/core/recommendation.test.ts`, `tests/standalone/scenario.test.ts`): toggling it on an otherwise-`recommend` patient flips the verdict to `contraindicated` with reason `active_major_bleeding`. Suite is now **173/173**, typecheck clean, build green.
+- **Fixed:** `hasActiveMajorBleeding: boolean` was added to `PatientData` (defaulted `false` in `assemblePatientData`, since FHIR has no reliable discrete signal for it), threaded through `Scenario` / `scenarioToPatient` / `patientToScenario`, forwarded in `generateRecommendation`'s `detectContraindications` call, and exposed as an "Active major bleeding (clinician-assessed)" toggle in the control rail. Two tests lock it (`tests/core/recommendation.test.ts`, `tests/standalone/scenario.test.ts`): toggling it on an otherwise-`recommend` patient flips the verdict to `contraindicated` with reason `active_major_bleeding`. Suite is now **180/180**, typecheck clean, build green.
 - The submission claim is now literally true and demonstrable live — the toggle is the companion safety-gate demo to the Dorothy platelet flip.
 
 ### F2 — Curated knowledge base, not a live interaction service *(the central scientific dependency)*
@@ -687,16 +691,22 @@ surfaced, found while writing this document.
 - **Why a judge will care:** for a CDS entry, usability *is* safety — alert fatigue is the best-documented failure mode in the CDS literature. The app now has *mitigations and measurement scaffolding*; what it lacks is *empirical* validation.
 - **Framing:** claim "designed for clinician readability, with stated rationale"; **do not** claim "clinician-validated" or "usable." Cheapest credible improvement: a measured contrast pass + one think-aloud with a single oncology APP would move this from zero to non-zero.
 
-### F14 — The hepatic-impairment rule is a curator-built surrogate — **renamed (WS-1.4)**
-- `bilirubin >3 mg/dL AND (ALT or AST) >5× ULN` was documented as a "Child-Pugh C surrogate," but **it is not Child-Pugh** and no published source states this rule. True Child-Pugh requires albumin, INR, ascites, and encephalopathy — none of which the app reads, and two of which are not lab-derivable at all.
-- Conservative and defensible in direction, but it is an **invention presented alongside A-tier rules**, and a hepatologist would notice. Tier **C** in §5.2.
-- **Resolution (WS-1.4):** the string "Child-Pugh C" has been removed from `src/`, the alert text, and `VERIFICATION.md`; it is now called "a conservative lab-only proxy for severe hepatic impairment (bilirubin >3 mg/dL and AST or ALT >5× ULN)." The rationale cites NCCN's own regimen-selection language ("elevated transaminases or bilirubin, Child-Pugh B and C liver impairment, or cirrhosis") as evidence the domain is guideline-recognized while stating the operationalization is ours. *Remaining `plan/ddi-info.md` mention is the authoritative source contract and is left as historical record.*
+### F14 — The hepatic-impairment rule — **re-anchored to NCCN VTE-D-5 (WS-1.4)**
+- **Original flaw:** a single universal `bilirubin >3 mg/dL AND (ALT or AST) >5× ULN` rule was documented as a "Child-Pugh C surrogate." It was not Child-Pugh, and — worse than a naming problem — its **conjunctive, high-cutoff, absolute-mg/dL** logic *under-excluded* against the guideline: a patient with AST 4× ULN and normal bilirubin **passed** it, yet NCCN VTE-D-5 avoids apixaban and rivaroxaban there. A first-pass fix (WS-1.4a) merely renamed it off "Child-Pugh"; that left the safety gap open.
+- **Resolution (WS-1.4 re-anchor):** replaced the surrogate with the **per-agent NCCN VTE-D-5 (v1.2026) hepatic contraindications**, modeled targeted (`appliesTo` per DOAC) exactly like HIT — hepatic impairment now blocks the affected DOAC(s), not anticoagulation universally, so the engine falls back to LMWH:
+  - **Apixaban:** ALT/AST >3× ULN **or** total bilirubin >2× ULN
+  - **Rivaroxaban:** ALT/AST >3× ULN
+  - **Dabigatran:** ALT/AST >2× ULN (also cirrhosis / active hepatitis)
+  - **Edoxaban:** ALT/AST >3× ULN **and** bilirubin >2× ULN (also cirrhosis / active hepatitis)
+- Thresholds are now **multiples of each lab's own ULN** (bilirubin no longer a hard-coded mg/dL), tracking the lab's reference range. Only the **lab-based arm is automated**; NCCN's **Child-Pugh B/C** criterion (and cirrhosis/active-hepatitis for dabigatran/edoxaban) needs clinical assessment the app does not read (albumin, INR, ascites, encephalopathy) — stated as a caveat in every hepatic alert so the automated vs. clinician-assessed arms stay explicit.
+- **Scope of the automated arm (deliberate, not an omission):** the app automates only the **lab-based** arm of VTE-D-5 for all four agents. The guideline's **non-lab arms** — Child-Pugh class (dabigatran specifically at Child-Pugh C), and **cirrhosis / active-or-acute hepatitis** for dabigatran and edoxaban — are **consciously deferred to the same clinician-assessment caveat**, because the app reads labs, not diagnoses of cirrhosis/hepatitis or the albumin/INR/ascites/encephalopathy that Child-Pugh needs. Each hepatic alert names those deferred criteria in-line so a reviewer reads them as scoped-out-with-a-caveat, not dropped. This is doubly safe for dabigatran/edoxaban, which are **reference-only** in this engine (never offered as prophylaxis) regardless.
+- **This upgrades F14 from a Tier-C curator invention to a Tier-A guideline-traceable rule** and closes the under-exclusion. Six boundary tests cover it (per-agent targeting, the closed AST-4×/normal-bili gap, the edoxaban conjunctive arm, ULN-multiple boundaries, and the Child-Pugh caveat). *Remaining `plan/ddi-info.md` mention is the historical source contract and left as-is.*
 
 **None of F2–F14 are disqualifiers for a Student-category prototype** — the bar is a
 well-engineered, well-reasoned, honestly-scoped prototype, and this clears it. **The items
 to actively fix or explicitly frame before presenting: F9** (docx citations), **F12** (anchor
 the 16 major DDI cells — WS-3), and **F13** (stop at "designed for readability"; WS-4/WS-8 in
-progress). **F1, F6 (narrowed, WS-1.3), and F14 (renamed, WS-1.4) are resolved.**
+progress). **F1, F6 (narrowed, WS-1.3), and F14 (re-anchored to NCCN VTE-D-5, WS-1.4 — now Tier A) are resolved.**
 
 ---
 
@@ -724,7 +734,7 @@ Use this to stress-test correctness in ~30 minutes:
     ```bash
     python -c "import json;from collections import Counter;kb=json.load(open('src/data/ddi-knowledge-base.json'));print('kbVersion',kb['kbVersion'],'| lastReviewed',kb['lastReviewed']);print(Counter(s for e in kb['agents'] for s in e['sources']))"
     ```
-11. **Grade-check §5.2** — disagree with our tiering. The rules we self-graded **C** (kidney +1, the hepatic surrogate, sarcopenia/low-weight cuts) are the ones where a specialist is most likely to overrule us; the rule graded **D** (30-day staleness) has no clinical source at all and is not defended as one.
+11. **Grade-check §5.2** — disagree with our tiering. The rules we self-graded **C** (kidney +1, sarcopenia/low-weight cuts) are the ones where a specialist is most likely to overrule us; the rule graded **D** (30-day staleness) has no clinical source at all and is not defended as one. (The hepatic rule was regraded **C→A** in WS-1.4 when it was re-anchored to NCCN VTE-D-5.)
 12. **Bleeding-risk handling (WS-2).** The app does **not** compute a bleeding *score* — deliberately: published cancer-associated-thrombosis bleeding scores reach c-statistics of only 0.50–0.70 and were derived in *treatment*, not prophylaxis, cohorts, so a number here would be the app's first genuinely unsupportable claim. Instead a **qualitative bleeding-risk panel** (`src/core/bleeding-risk.ts`) surfaces guideline-named factors (ACC 2026; NCCN VTE-2), each individually sourced, beside the Khorana card. Press on the honest residual: the factor *thresholds* (anemia <10, thrombocytopenia <100, weight <50) are curator choices (grade C), and the panel informs rather than decides.
 
 ---
@@ -756,7 +766,7 @@ not a slideshow. Use **presentation mode** (`?present=true` or the top-bar toggl
 enlarge the verdict/score/CrCl for projection.
 
 **The three sentences that frame the whole project:**
-1. "This is a clinical reasoning engine, not a dashboard — 173 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
+1. "This is a clinical reasoning engine, not a dashboard — 180 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
 2. "Every rule traces guideline → source → code → test in our VERIFICATION document."
 3. "The knowledge base is curated and tested for faithful application — clinician sign-off is the explicit next step, and we say so."
 
@@ -771,7 +781,7 @@ enlarge the verdict/score/CrCl for projection.
 | "What about active bleeding?" | Handled as a clinician-confirmable flag — FHIR has no reliable discrete signal for it, so it's an explicit toggle, and flipping it live drops every option and flips the verdict to contraindicated. Regression-locked by two tests (F1, resolved). |
 | "Max score 6 or 7?" | 6, from the component weights; the 0–7 in one review is a known error (§9). |
 | **"Where does each interaction severity come from?"** | Two secondary references (AHA 2022 statement, Hellfritzsch 2024) applied across all 52 agents — it's a KB-level attestation, not per-cell citation, and I can show you the exact counts. The 16 `major` cells are the ones that change a recommendation and they're the audit target. **Don't oversell this one** (F12). |
-| **"Is that really Child-Pugh C?"** | No — it's a conservative lab-only proxy using bilirubin and transaminases. True Child-Pugh needs albumin, INR, ascites, and encephalopathy, which we don't read. Documented as a surrogate (F14). |
+| **"Is that really Child-Pugh C?"** | The hepatic rule is now the **per-agent NCCN VTE-D-5 (v1.2026) lab thresholds** (e.g. apixaban ALT/AST >3× ULN or bili >2× ULN), not a surrogate. We automate the **lab arm** and explicitly flag that **Child-Pugh B/C** is a separate NCCN contraindication needing clinical assessment — we don't read albumin/INR/ascites/encephalopathy. That's the honest split of what's automated vs. clinician-judged (F14, re-anchored WS-1.4). |
 | **"Have any clinicians used it?"** | No. No user testing, no heuristic eval, no contrast audit. The design rationale is stated and deliberate, but it is unvalidated, and alert fatigue is unaddressed (F13, §11.3). |
 | **"What about alert fatigue?"** | Addressed by design (WS-4): a two-channel model where only critical alerts interrupt and the rest collapse into one non-interruptive card; role tailoring (the only design shown to improve acceptance); fixed-vocabulary override capture; and a `/metrics` route tracking firing rate, critical-to-total ratio, and override rate by reason — the Clickbusters governance loop. What I *can't* claim is measured impact: no clinician has used it, so the mitigations are implemented but not yet empirically validated (F13). |
 
@@ -786,7 +796,7 @@ Requires Node 18+.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit (strict)        → 0 errors
-npm test              # vitest run                    → 14 files, 173 tests pass
+npm test              # vitest run                    → 14 files, 180 tests pass
 npm run build         # tsc && vite build             → dist/ (113 modules)
 npm run dev           # standalone demo, 5 patients   → http://localhost:5173
 npm run preview       # serve the production build
@@ -812,7 +822,7 @@ actual reasoning) → `tests/integration/patients.test.ts` (five patients end-to
 6. **Commit the UI readability revision** — it is currently working-tree only, so the live site is behind `main` (see the header note).
 
 **Done since last revision:**
-- ✅ **WS-1 clinical contract corrections** — (1.1) apixaban <40 kg regraded to a targeted **absolute** citing NCCN VTE-B-2, regraded evidence **A**; (1.2) thrombocytopenia retagged to NCCN VTE-B-2 + VTE-F with the "DOACs not recommended <50,000/μL" rationale; (1.3) kidney rule narrowed to **C64 only** (RCC), C65/C66/C68 no longer score; (1.4) hepatic rule renamed off "Child-Pugh C" across code + `VERIFICATION.md`.
+- ✅ **WS-1 clinical contract corrections** — (1.1) apixaban <40 kg regraded to a targeted **absolute** citing NCCN VTE-B-2, regraded evidence **A**; (1.2) thrombocytopenia retagged to NCCN VTE-B-2 + VTE-F with the "DOACs not recommended <50,000/μL" rationale; (1.3) kidney rule narrowed to **C64 only** (RCC), C65/C66/C68 no longer score; (1.4) hepatic rule **re-anchored to the per-agent NCCN VTE-D-5 (v1.2026) thresholds** (targeted per DOAC, ULN multiples), replacing the old universal curator surrogate — closes the under-exclusion and regrades the rule **C→A**; Child-Pugh arm flagged as clinician-assessed.
 - ✅ **WS-3 DDI auditability (F12)** — the 16 `major` cells each carry a per-cell `evidenceAnchor` (AHA 2022 Table 3 / FDA azole labeling); KB root gained `kbVersion`/`lastReviewed`/`provenanceNote`, surfaced in the DDI matrix footer and CDS card; a new validation test makes the gap structurally impossible to reintroduce.
 - ✅ **WS-2 qualitative bleeding-risk panel** — `src/core/bleeding-risk.ts` surfaces guideline-named bleeding-risk factors (ACC 2026 / NCCN VTE-2), each sourced, in three tiers, **deliberately not a score** (the evidence does not support one for primary prophylaxis). Rendered beside the Khorana card; present on all 5 patients; 18 unit tests + integration. Converts the app's biggest acknowledged asymmetry into a documented, cited feature.
 - ✅ **WS-4 alert fatigue & CDS governance (F13)** — two-channel alert model (only critical interrupts; warning/info collapse into one card — 1-critical+4-non-critical now yields 2 cards not 5), role tailoring (oncologist/pharmacist/app), fixed-vocabulary override capture with an append-only log, and a `/metrics` governance route (firing rate per 100 chart-opens, critical-to-total ratio, override rate). Implements the evidence-based fatigue strategies (tiering, role tailoring, override capture, Clickbusters monitoring). Mitigations built; empirical validation still pending (WS-8).
@@ -823,7 +833,7 @@ actual reasoning) → `tests/integration/patients.test.ts` (five patients end-to
 - ✅ **F9 figures sourced + reconciled** across `materials.md`, `submission/02-rationale.txt`, and this document ("a leading cause," "approximately 2 million").
 - ✅ **Evidence base graded (§5)** — every clinical rule assigned a provenance tier; DDI KB provenance measured directly from the file rather than assumed.
 - ✅ **Interface documented (§11)**, including an explicit inventory of what has *not* been evaluated.
-- ✅ **Three new findings self-reported** — F12 (KB citation granularity), F13 (unvalidated interface / alert fatigue), F14 (hepatic surrogate).
+- ✅ **Three new findings self-reported** — F12 (KB citation granularity), F13 (unvalidated interface / alert fatigue), F14 (hepatic rule — since re-anchored to NCCN VTE-D-5 and resolved).
 
 **Optional before presenting:** distinct verdict label for LMWH fallback (F4); the dabigatran/edoxaban order-select note (F5).
 
@@ -849,4 +859,4 @@ Supporting trials cited in the narrative (not epidemiology): **AVERT** (Carrier 
 
 *This document is a reference, not a substitute for the code. Where it and the source
 disagree, the source wins — and that disagreement is itself a finding worth filing.
-Last verified against a live test run of 173/173 passing.*
+Last verified against a live test run of 180/180 passing.*
