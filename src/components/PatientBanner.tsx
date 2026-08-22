@@ -20,7 +20,7 @@ export function PatientBanner({ patient }: { patient: PatientData }) {
       <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <h1 className="patient-name truncate text-xl font-bold text-clinical-ink">
+            <h1 className="patient-name truncate font-serif text-2xl font-medium text-clinical-ink">
               {patient.name}
             </h1>
             <span className="text-sm text-clinical-muted">
@@ -49,7 +49,7 @@ export function PatientBanner({ patient }: { patient: PatientData }) {
       </div>
 
       {(flags.length > 0 || patient.race || patient.ethnicity) && (
-        <div className="flex flex-wrap items-center gap-2 border-t border-clinical-border bg-slate-50/60 px-5 py-2.5">
+        <div className="flex flex-wrap items-center gap-2 border-t border-clinical-hairline bg-clinical-bg px-5 py-2.5">
           {flags.map((f) => (
             <Pill key={f.label} tone="info" dot>
               {f.label}

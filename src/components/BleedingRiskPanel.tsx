@@ -34,31 +34,31 @@ export function BleedingRiskPanel({ profile }: { profile: BleedingRiskProfile })
           {profile.factors.map((f) => (
             <li
               key={f.key}
-              className="rounded-md border-l-2 border-amber-400 bg-amber-50 px-3 py-2 text-sm text-amber-900"
+              className="rounded-md border-l-2 border-sev-caution bg-sev-cautionWash px-3 py-2 text-sm text-sev-cautionInk"
             >
               <div className="flex items-baseline justify-between gap-2">
                 <span className="font-semibold">{f.label}</span>
                 {f.prefersLmwh && (
-                  <span className="shrink-0 text-xs font-medium text-amber-700">
+                  <span className="shrink-0 text-xs font-medium text-sev-cautionInk">
                     LMWH preferred
                   </span>
                 )}
               </div>
               <p className="mt-0.5 opacity-90">{f.detail}</p>
-              <p className="mt-0.5 text-xs text-amber-700">Source: {f.source}</p>
+              <p className="mt-0.5 text-xs text-sev-cautionInk opacity-80">Source: {f.source}</p>
             </li>
           ))}
         </ul>
       )}
 
       {profile.tier === "standard" && (
-        <p className="rounded-md border-l-2 border-emerald-400 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+        <p className="rounded-md border-l-2 border-clinical-brand bg-clinical-brandSoft px-3 py-2 text-sm text-clinical-brandDark">
           No guideline-named bleeding-risk factors detected in the available data.
         </p>
       )}
 
       {profile.tier === "insufficient_data" && (
-        <p className="rounded-md border-l-2 border-slate-400 bg-slate-50 px-3 py-2 text-sm text-clinical-muted">
+        <p className="rounded-md border-l-2 border-clinical-border bg-clinical-bg px-3 py-2 text-sm text-clinical-muted">
           Insufficient data to assess bleeding-risk factors — missing{" "}
           {profile.missingInputs.join(", ")}. Obtain before relying on this panel.
         </p>

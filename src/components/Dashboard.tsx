@@ -38,7 +38,7 @@ export function Dashboard({ patient }: { patient: PatientData }) {
 
       <ContraindicationPanel contraindications={rec.contraindications} />
 
-      <details className="present-hide rounded-md border border-clinical-border bg-slate-50 text-xs leading-relaxed text-clinical-muted">
+      <details className="present-hide rounded-card border border-clinical-hairline bg-clinical-bg text-xs leading-relaxed text-clinical-muted">
         <summary className="cursor-pointer px-4 py-3 text-base font-semibold">
           Disclaimers
         </summary>

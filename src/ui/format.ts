@@ -13,41 +13,43 @@ import { RiskCategory } from "../types/khorana";
 /** Semantic tone shared by pills, banners, and bars. */
 export type Tone = "danger" | "warning" | "caution" | "good" | "neutral" | "info";
 
+// Quiet chips: a faint hue wash, hue-ink text, and a hairline ring in the same
+// hue. Severity reads without a saturated fill — the paired dot does the rest.
 export const TONE_PILL: Record<Tone, string> = {
-  danger: "bg-rose-100 text-rose-800 ring-1 ring-inset ring-rose-200",
-  warning: "bg-amber-100 text-amber-800 ring-1 ring-inset ring-amber-200",
-  caution: "bg-yellow-100 text-yellow-800 ring-1 ring-inset ring-yellow-200",
-  good: "bg-emerald-100 text-emerald-800 ring-1 ring-inset ring-emerald-200",
-  neutral: "bg-slate-100 text-slate-700 ring-1 ring-inset ring-slate-200",
-  info: "bg-sky-100 text-sky-800 ring-1 ring-inset ring-sky-200",
+  danger: "bg-sev-dangerWash text-sev-dangerInk ring-1 ring-inset ring-sev-danger/20",
+  warning: "bg-sev-cautionWash text-sev-cautionInk ring-1 ring-inset ring-sev-caution/20",
+  caution: "bg-sev-cautionWash text-sev-cautionInk ring-1 ring-inset ring-sev-caution/20",
+  good: "bg-sev-okWash text-sev-okInk ring-1 ring-inset ring-sev-ok/20",
+  neutral: "bg-sev-neutralWash text-clinical-inkSoft ring-1 ring-inset ring-clinical-border",
+  info: "bg-sev-infoWash text-sev-infoInk ring-1 ring-inset ring-sev-info/20",
 };
 
 export const TONE_BANNER: Record<Tone, string> = {
-  danger: "border-rose-300 bg-rose-50 text-rose-900",
-  warning: "border-amber-300 bg-amber-50 text-amber-900",
-  caution: "border-yellow-300 bg-yellow-50 text-yellow-900",
-  good: "border-emerald-300 bg-emerald-50 text-emerald-900",
-  neutral: "border-slate-300 bg-slate-50 text-slate-800",
-  info: "border-sky-300 bg-sky-50 text-sky-900",
+  danger: "border-sev-danger/40 bg-sev-dangerWash text-sev-dangerInk",
+  warning: "border-sev-caution/40 bg-sev-cautionWash text-sev-cautionInk",
+  caution: "border-sev-caution/40 bg-sev-cautionWash text-sev-cautionInk",
+  good: "border-clinical-brand/40 bg-clinical-brandSoft text-clinical-brandDark",
+  neutral: "border-clinical-border bg-clinical-bg text-clinical-inkSoft",
+  info: "border-sev-info/40 bg-sev-infoWash text-sev-infoInk",
 };
 
 export const TONE_DOT: Record<Tone, string> = {
-  danger: "bg-rose-500",
-  warning: "bg-amber-500",
-  caution: "bg-yellow-500",
-  good: "bg-emerald-500",
-  neutral: "bg-slate-400",
-  info: "bg-sky-500",
+  danger: "bg-sev-danger",
+  warning: "bg-sev-caution",
+  caution: "bg-sev-caution",
+  good: "bg-sev-ok",
+  neutral: "bg-clinical-faint",
+  info: "bg-sev-info",
 };
 
-/** Solid fills for icon badges (white glyph on a saturated tone). */
+/** Solid fills for icon badges (white glyph on a desaturated tone). */
 export const TONE_SOLID: Record<Tone, string> = {
-  danger: "bg-rose-600",
-  warning: "bg-amber-500",
-  caution: "bg-yellow-500",
-  good: "bg-emerald-600",
-  neutral: "bg-slate-500",
-  info: "bg-sky-600",
+  danger: "bg-sev-danger",
+  warning: "bg-sev-caution",
+  caution: "bg-sev-caution",
+  good: "bg-clinical-brand",
+  neutral: "bg-clinical-muted",
+  info: "bg-sev-info",
 };
 
 /* ---------- DDI severity ---------- */

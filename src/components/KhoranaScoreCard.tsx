@@ -11,7 +11,7 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
   if (exclusion.isExcluded) {
     return (
       <Card title="Khorana VTE Risk Score">
-        <div className="rounded-md border-l-2 border-sky-400 bg-sky-50 p-3 text-base text-sky-900">
+        <div className="rounded-md border-l-2 border-sev-info bg-sev-infoWash p-3 text-base text-sev-infoInk">
           <p>
             Not applicable. This cancer (
             <span className="font-medium">{humanize(exclusion.reason ?? "")}</span>
@@ -66,7 +66,7 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
     >
       <div className="flex items-end gap-2">
         <Flash watch={khorana.totalScore} tone={riskTone(khorana.riskCategory)}>
-          <span className="metric-hero text-4xl font-bold tabular-nums leading-none">
+          <span className="metric-hero text-5xl font-medium tabular-nums leading-none">
             {khorana.totalScore}
           </span>
         </Flash>
@@ -78,7 +78,7 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
             translate an inequality to learn the conclusion. */}
         <span className="ml-auto pb-1 text-base">
           {khorana.prophylaxisRecommended ? (
-            <span className="font-semibold text-emerald-700">
+            <span className="font-semibold text-clinical-brandDark">
               Score of 2 or more: prophylaxis indicated
             </span>
           ) : (
@@ -92,7 +92,7 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
       <table className="mt-4 w-full text-sm">
         <tbody>
           {rows.map((r, i) => (
-            <tr key={i} className="border-t border-clinical-border">
+            <tr key={i} className="border-t border-clinical-hairline">
               <td className="py-1.5 pr-2">{r.label}</td>
               <td className="py-1.5 pr-2 text-right tabular-nums text-clinical-muted">
                 {r.value}
@@ -106,7 +106,7 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
       </table>
 
       {!khorana.isComplete && (
-        <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800">
+        <p className="mt-3 rounded-md bg-sev-cautionWash px-3 py-2 text-xs text-sev-cautionInk">
           Incomplete data — missing {khorana.missingFields.map(humanize).join(", ")}.
           Score may underestimate risk.
         </p>

@@ -197,7 +197,7 @@ function Modal({
       aria-modal="true"
       aria-label={title}
     >
-      <div className="absolute inset-0 bg-slate-900/50" onClick={onClose} />
+      <div className="absolute inset-0 bg-clinical-ink/40" onClick={onClose} />
       <div className="relative z-10 max-h-[85vh] w-full max-w-3xl overflow-auto rounded-md border border-clinical-border bg-clinical-panel shadow-xl">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-clinical-border bg-clinical-panel px-5 py-3">
           <h2 className="text-base font-semibold text-clinical-muted">
@@ -206,7 +206,7 @@ function Modal({
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded-md border border-clinical-border px-3 py-1 text-base font-medium text-clinical-muted hover:bg-slate-100 hover:text-clinical-ink"
+            className="rounded-md border border-clinical-border px-3 py-1 text-base font-medium text-clinical-muted hover:bg-clinical-bg hover:text-clinical-ink"
           >
             Close
           </button>
@@ -283,7 +283,7 @@ function RowGroup({
   return (
     <>
       <tr
-        className="cursor-pointer border-t border-clinical-border hover:bg-slate-50"
+        className="cursor-pointer border-t border-clinical-hairline hover:bg-clinical-bg"
         onClick={onToggle}
       >
         <td className="sticky left-0 bg-inherit py-2 pr-3">
@@ -312,7 +312,7 @@ function RowGroup({
         })}
       </tr>
       {expanded && (
-        <tr className="bg-slate-50/70">
+        <tr className="bg-clinical-bg">
           <td colSpan={DOAC_NAMES.length + 1} className="px-3 py-3">
             <div className="grid gap-2 sm:grid-cols-2">
               {DOAC_NAMES.map((d) => {
