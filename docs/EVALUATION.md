@@ -11,8 +11,8 @@ is invented.** Empty result tables are empty on purpose.
 
 A full WCAG 2.1 AA contrast audit across all five decision states and presentation mode is
 **complete and passing** — every text/background pair clears 4.5:1 (normal) / 3:1 (large).
-Full table and method in [`ACCESSIBILITY.md`](./ACCESSIBILITY.md). Tightest margin 4.55:1
-(slate-500 muted on the slate-50 canvas).
+Full table and method in [`ACCESSIBILITY.md`](./ACCESSIBILITY.md). Tightest margin 4.72:1
+(faint `#647069` on the paper canvas, "Ink" theme).
 
 This is a genuine, reproducible measurement — the one part of interface evaluation that does
 not require a human participant.
