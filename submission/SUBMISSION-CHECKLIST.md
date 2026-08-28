@@ -17,8 +17,8 @@ combined paste doc with `npm run build:submission` (output: `SUBMISSION-FULL.md`
 - [ ] **Advisor attestation PDF** — see Tab 1. *Email your advisor today; it's the longest-lead item.*
 - [ ] **Logo** and **headshot** — see Tab 3 uploads.
 
-## 🟡 One decision to make early
-- [ ] **Which UI do you submit — current or the "Ink" reskin?** The reskin lives on the `design/ink` branch (not merged, not deployed). If you switch to it you must re-take screenshots and redeploy the demo. **Decide this week**, not in the final 48 hours.
+## ✅ UI decision — RESOLVED
+- [x] **Adopted the green "Ink" theme** (pine-green + paper, serif headings). Merged to `main`, 180 tests + prod build pass, all 5 decision-state screenshots re-shot in green. **Remaining:** push `main` and **redeploy the live demo** so `oncovte-guard.pages.dev` shows green (see "Outward-facing" below).
 
 ---
 
@@ -92,14 +92,26 @@ combined paste doc with `npm run build:submission` (output: `SUBMISSION-FULL.md`
 
 ---
 
+## Outward-facing steps (deploy the green UI before the URL goes in the form)
+- [ ] **Push `main`** to GitHub (backs up the theme + screenshots + submission edits).
+- [ ] **Redeploy the live demo** so `oncovte-guard.pages.dev` shows green — Cloudflare Pages direct-upload (NOT git-connected, so a push alone won't update it):
+  ```
+  npm run build
+  npx wrangler pages deploy dist --project-name=oncovte-guard --branch=main --commit-dirty=true
+  ```
+  Do this **before** finalizing the portal, since the demo URL is part of the submission.
+
+---
+
 ## Final submit sequence
 1. All 🔴 items cleared (typo, abstract, advisor PDF, logo, headshot).
-2. `npm run check:submission` → all within limits.
-3. Paste every long-form + short field from the files above (or from `SUBMISSION-FULL.md`).
-4. Set every radio/checkbox per the tables.
-5. Upload: advisor PDF · capability statement · logo · headshot · (PowerPoint if required).
-6. Complete Tabs 4 & 5 affirmations + signature.
-7. **Submit.** ✅
+2. Green demo pushed + redeployed (Outward-facing, above) — URL shows green.
+3. `npm run check:submission` → all within limits.
+4. Paste every long-form + short field from the files above (or from `SUBMISSION-FULL.md`).
+5. Set every radio/checkbox per the tables.
+6. Upload: advisor PDF · capability statement · logo · headshot · (PowerPoint if required).
+7. Complete Tabs 4 & 5 affirmations + signature.
+8. **Submit.** ✅
 
 ## Supporting artifacts already in the repo
 - FHIR CapabilityStatement — `public/capability-statement.json`
