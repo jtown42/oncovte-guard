@@ -25,7 +25,9 @@ const BILI_ULN_DEFAULT = 1.2; // mg/dL (total bilirubin)
 /** Thresholds (kept explicit for auditability). */
 export const CONTRAINDICATION_THRESHOLDS = {
   SEVERE_THROMBOCYTOPENIA_LT: 50, // x10^9/L  (i.e. <50,000/uL)
-  APIXABAN_LOW_WEIGHT_LT: 40, // kg
+  APIXABAN_LOW_WEIGHT_LT: 40, // kg — absolute, apixaban (NCCN VTE-B-2)
+  // (The general DOAC caution at weight <50 kg per NCCN VTE-D is already surfaced
+  // by the bleeding-risk panel's low-body-weight factor — not duplicated here.)
   // Per-agent hepatic contraindications, NCCN VTE-D-5 (v1.2026). Expressed as
   // multiples of each lab's own ULN (not absolute values), so they track the
   // lab's reference range. Each DOAC has its own logic — see the hepaticRules
@@ -47,6 +49,18 @@ const APS_PREFIXES = ["D68.61"];
 const GI_TRACT_PREFIXES = ["C15", "C16", "C67"]; // esophagus/GEJ, gastric, bladder
 const BRAIN_TUMOR_PREFIXES = ["C71", "C79.31"];
 const MYELOMA_PREFIXES = ["C90.0", "C90.1", "C90.2", "C90.3"];
+// Pregnancy (O00-O9A, Z33.1 incidental pregnant state, Z3A weeks of gestation)
+// and breastfeeding (Z39.1). DOACs cross the placenta and are excreted in milk;
+// LMWH is the standard anticoagulant in pregnancy.
+const PREGNANCY_PREFIXES = ["O", "Z33.1", "Z3A", "Z39.1"];
+
+/** The four DOACs (prophylaxis + reference), targeted by class-level DOAC blocks. */
+const ALL_DOACS: AnticoagulantName[] = [
+  "apixaban",
+  "rivaroxaban",
+  "dabigatran",
+  "edoxaban",
+];
 
 /** Inputs for contraindication detection (a projection of PatientData). */
 export interface ContraindicationInput {
@@ -124,15 +138,36 @@ export function detectContraindications(
     });
   }
 
-  // Antiphospholipid syndrome (triple-positive), D68.61 — universal absolute
-  // (DOACs failed in TRAPS; this pathway requires individualized management).
+  // Antiphospholipid syndrome, D68.61 — targeted to the DOAC class, NOT universal.
+  // DOACs cause excess arterial thrombosis vs VKA (TRAPS stopped early; pooled OR
+  // ~5.4, driven by stroke), with no difference in VTE or major bleeding. NCCN
+  // VTE-D-5 contraindicates the DOAC class in APS, warfarin preferred — it does
+  // NOT contraindicate all anticoagulation, so LMWH remains available and the
+  // engine falls back to it. Flagged for any diagnosed thrombotic APS (the trial
+  // evidence found no effect modification by triple- vs single/double-positivity).
   if (hasConditionMatching(input.conditions, APS_PREFIXES)) {
     absolute.push({
       type: "absolute",
       reason: "antiphospholipid_syndrome",
       detail:
-        "Antiphospholipid syndrome (triple-positive): DOACs are contraindicated. Manage per specialist guidance.",
-      appliesTo: "all",
+        "Antiphospholipid syndrome: avoid DOACs (excess arterial thrombosis vs VKA — TRAPS; pooled OR ~5.4). Warfarin is preferred for therapeutic APS; for prophylaxis here, LMWH is the acceptable alternative.",
+      appliesTo: ALL_DOACS,
+      source: "NCCN VTE-D-5; TRAPS (Pengo 2018)",
+    });
+  }
+
+  // Pregnancy or breastfeeding — targeted absolute to the DOAC class (NCCN VTE-D-5).
+  // DOACs cross the placenta and are excreted in breast milk; LMWH is the standard
+  // anticoagulant in pregnancy, so LMWH remains and the engine falls back to it.
+  // Detected from coded conditions (O*/Z33.1/Z3A/Z39.1) — no clinician boolean needed.
+  if (hasConditionMatching(input.conditions, PREGNANCY_PREFIXES)) {
+    absolute.push({
+      type: "absolute",
+      reason: "pregnancy_or_breastfeeding",
+      detail:
+        "Pregnancy or breastfeeding: DOACs are contraindicated (placental transfer / milk excretion). Use LMWH, the standard anticoagulant in pregnancy.",
+      appliesTo: ALL_DOACS,
+      source: "NCCN VTE-D-5",
     });
   }
 
@@ -294,7 +329,9 @@ export function detectContraindications(
     });
   }
 
-  // (Weight <40 kg is now a targeted ABSOLUTE for apixaban — see above, WS-1.1.)
+  // (Weight <40 kg is now a targeted ABSOLUTE for apixaban — see above, WS-1.1.
+  // The general DOAC caution at weight <50 kg per NCCN VTE-D is surfaced by the
+  // bleeding-risk panel's low-body-weight factor rather than duplicated here.)
 
   // canProceedWithProphylaxis is false only when a UNIVERSAL absolute
   // contraindication exists (ERRATA Issue 9).

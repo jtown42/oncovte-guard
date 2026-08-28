@@ -172,8 +172,15 @@ just the affected agent(s).
   single code for it) → universal.
 - **Severe thrombocytopenia < 50,000/µL** → universal (NCCN VTE-B-2 per-agent;
   VTE-F for DOACs).
-- **Antiphospholipid syndrome** `D68.61` (triple-positive; DOACs failed in TRAPS)
-  → universal.
+- **Antiphospholipid syndrome** `D68.61` → **targeted to the DOAC class**
+  (apixaban/rivaroxaban/dabigatran/edoxaban), NOT universal. DOACs cause excess
+  arterial thrombosis vs VKA (TRAPS; pooled OR ~5.4), so NCCN VTE-D-5
+  contraindicates the DOAC class with warfarin preferred — LMWH remains, and the
+  engine falls back to it. Flagged for any diagnosed thrombotic APS (trial
+  evidence found no effect modification by triple- vs single/double-positivity).
+- **Pregnancy or breastfeeding** (`O*`, `Z33.1`, `Z3A`, `Z39.1`) → **targeted to
+  the DOAC class** (placental transfer / milk excretion; LMWH is the standard
+  anticoagulant in pregnancy). Detected from coded conditions, not a boolean.
 - **Severe hepatic impairment — per-agent, NCCN VTE-D-5 (v1.2026):** thresholds
   expressed as multiples of each lab's **own ULN**. Apixaban: ALT/AST >3× **or**
   bilirubin >2×. Rivaroxaban: ALT/AST >3×. Dabigatran: ALT/AST >2×. Edoxaban:
@@ -205,7 +212,9 @@ Pipeline order → the five states:
    (myeloma-on-IMiD gets a myeloma-specific prophylaxis pointer).
 2. **`not_indicated`** — Khorana < 2 → routine prophylaxis not indicated.
 3. **`contraindicated`** — a **universal** absolute contraindication (active
-   bleeding, platelets <50k, APS) → no pharmacologic options presented.
+   bleeding, platelets <50k) → no pharmacologic options presented. (APS,
+   pregnancy, HIT, and per-agent hepatic blocks are *targeted*, not universal —
+   they steer between agents rather than aborting.)
 4. **`recommend`** — Khorana ≥2, no universal contraindication, ≥1 preferred DOAC
    eligible after DDI/renal/targeted-contraindication filtering.
 5. **`caution` / LMWH fallback** — both preferred DOACs blocked but LMWH eligible

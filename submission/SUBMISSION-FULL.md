@@ -21,12 +21,12 @@ The SMART dashboard and the CDS Hooks service share one clinical reasoning pipel
 
 ## Project rationale, impact and innovation
 
-_3494 / 3500 characters_
+_3474 / 3500 characters_
 
 ```text
 THE PROBLEM. Venous thromboembolism (VTE) is a leading cause of death in people with cancer and accounts for roughly one in five of all VTE events. Active malignancy raises VTE risk approximately 4-7 fold, and many systemic therapies raise it further. Ambulatory patients receiving chemotherapy are a high-yield target for prevention, but blanket prophylaxis is inappropriate: it must be reserved for those at sufficient risk to outweigh bleeding harm. NCCN guidance therefore recommends risk-stratified prophylaxis - using the validated Khorana score - and endorses the DOACs apixaban and rivaroxaban as preferred oral options.
 
-The catch is that this decision is genuinely hard to make correctly at the point of care. The clinician must (a) compute a multi-variable risk score from the diagnosis and a current CBC and BMI; (b) know that DOACs are metabolized through CYP3A4 and transported by P-glycoprotein, and that numerous antineoplastic and supportive-care agents induce or inhibit these pathways - changing DOAC levels enough to cause bleeding or therapeutic failure; (c) account for renal function, thrombocytopenia, hepatic impairment, antiphospholipid syndrome, luminal GI/GU tumors, and heparin-induced thrombocytopenia; and (d) recognize the malignancies (myeloma, primary brain tumor, acute leukemia, myeloproliferative neoplasms) that fall outside the Khorana model entirely. Doing this reliably, for every patient, under time pressure, is exactly the kind of task that is offloaded poorly to human memory.
+The catch is that this decision is genuinely hard to make correctly at the point of care. The clinician must (a) compute a multi-variable risk score from the diagnosis and a current CBC and BMI; (b) know that DOACs are cleared via CYP3A4 and/or P-glycoprotein, and that numerous antineoplastic and supportive-care agents induce or inhibit these pathways - changing DOAC levels enough to cause bleeding or therapeutic failure; (c) account for renal function, thrombocytopenia, hepatic impairment, antiphospholipid syndrome, luminal GI/GU tumors, and heparin-induced thrombocytopenia; and (d) recognize the malignancies (myeloma, primary brain tumor, acute leukemia, myeloproliferative neoplasms) that fall outside the Khorana model entirely. Doing this reliably, for every patient, under time pressure, is exactly the kind of task that is offloaded poorly to human memory.
 
 WHO IS AFFECTED. The patients are approximately 2 million people newly diagnosed with cancer in the US each year, a large fraction of whom receive ambulatory systemic therapy. The clinicians are oncologists, hematologist-oncologists, oncology pharmacists, and advanced practice providers.
 

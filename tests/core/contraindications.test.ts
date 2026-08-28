@@ -46,15 +46,36 @@ describe("detectContraindications", () => {
     );
   });
 
-  it("Test 3: antiphospholipid syndrome (D68.61) is a universal absolute", () => {
+  it("Test 3: antiphospholipid syndrome (D68.61) is targeted to the DOAC class, NOT a universal abort", () => {
     const r = detectContraindications(ci({ conditions: [{ code: "D68.61" }] }));
-    expect(
-      r.absolute.some(
-        (c) =>
-          c.reason === "antiphospholipid_syndrome" && c.appliesTo === "all",
-      ),
-    ).toBe(true);
-    expect(r.canProceedWithProphylaxis).toBe(false);
+    const aps = r.absolute.find((c) => c.reason === "antiphospholipid_syndrome");
+    expect(aps).toBeDefined();
+    // Blocks all four DOACs but leaves LMWH — so anticoagulation can still proceed.
+    expect(aps?.appliesTo).toEqual([
+      "apixaban",
+      "rivaroxaban",
+      "dabigatran",
+      "edoxaban",
+    ]);
+    expect(Array.isArray(aps?.appliesTo) && aps!.appliesTo).not.toContain(
+      "enoxaparin",
+    );
+    expect(r.canProceedWithProphylaxis).toBe(true);
+  });
+
+  it("Test 3b: pregnancy (O*, Z33.1) and breastfeeding (Z39.1) contraindicate DOACs, not LMWH", () => {
+    for (const code of ["Z33.1", "O09.90", "Z39.1"]) {
+      const r = detectContraindications(ci({ conditions: [{ code }] }));
+      const preg = r.absolute.find(
+        (c) => c.reason === "pregnancy_or_breastfeeding",
+      );
+      expect(preg, `${code} should flag pregnancy/breastfeeding`).toBeDefined();
+      expect(
+        Array.isArray(preg?.appliesTo) && preg!.appliesTo,
+      ).not.toContain("enoxaparin");
+      // DOAC-class block only — LMWH remains, so prophylaxis can still proceed.
+      expect(r.canProceedWithProphylaxis).toBe(true);
+    }
   });
 
   it("Test 4: HIT (D75.82) blocks LMWH only (targeted appliesTo)", () => {

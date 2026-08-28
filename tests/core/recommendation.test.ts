@@ -57,13 +57,22 @@ function patient(overrides: Partial<PatientData> = {}): PatientData {
       totalBilirubin: lab(0.8, LOINC.TOTAL_BILIRUBIN),
     },
     activeMedications: [],
+    activeConditions: [],
     onESA: false,
     onAntiplatelet: false,
     onIMiD: false,
     hasNephrotoxicChemo: false,
     hasActiveMajorBleeding: false,
   };
-  return { ...base, ...overrides };
+  const merged = { ...base, ...overrides };
+  // Default activeConditions (what the contraindication engine reads) to the
+  // cancer conditions unless a scenario overrides it to add non-cancer codes.
+  if (!overrides.activeConditions) {
+    merged.activeConditions = merged.activeCancerConditions.map((c) => ({
+      code: c.code,
+    }));
+  }
+  return merged;
 }
 
 const ibrutinib: MedicationItem = {

@@ -51,8 +51,17 @@ export interface PatientData {
   heightCm: number | null;
   bmi: number | null;
 
-  // Cancer
+  // Cancer conditions only (categorized), consumed by the Khorana engine.
   activeCancerConditions: CancerConditionItem[];
+
+  /**
+   * ALL active condition codes (cancer and non-cancer), code-only. The
+   * contraindication engine consumes this so non-cancer contraindication codes —
+   * antiphospholipid syndrome (D68.61), HIT (D75.82), pregnancy/breastfeeding
+   * (O*, Z33.1, Z3A, Z39.1) — actually reach it. (activeCancerConditions is
+   * cancer-filtered and would silently drop these.)
+   */
+  activeConditions: { code: string }[];
 
   // Labs (most recent per analyte)
   labs: PatientLabs;

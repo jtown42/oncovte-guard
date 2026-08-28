@@ -23,6 +23,7 @@ export type ContraindicationReason =
   | "brain_tumor"
   | "multiple_myeloma_imid"
   | "concurrent_antiplatelet"
+  | "pregnancy_or_breastfeeding"
   // WS-1.1: apixaban <40 kg is a categorical NCCN VTE-B-2 instruction
   // ("Avoid if weight <40 kg"), encoded as a targeted absolute — not a
   // curator-chosen relative caution. Renamed from "low_weight".

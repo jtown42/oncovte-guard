@@ -222,7 +222,9 @@ export function generateRecommendation(
 
   // Always compute these so the result object is fully populated even on early return.
   const contraindications = detectContraindications({
-    conditions: patient.activeCancerConditions,
+    // ALL active conditions (not just cancer) so non-cancer contraindication codes
+    // — APS (D68.61), HIT (D75.82), pregnancy/breastfeeding — actually reach here.
+    conditions: patient.activeConditions,
     plateletCount: patient.labs.platelets?.value ?? null,
     weightKg: patient.weightKg,
     onAntiplatelet: patient.onAntiplatelet,

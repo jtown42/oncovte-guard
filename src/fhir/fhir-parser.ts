@@ -131,6 +131,22 @@ export function parseConditions(bundle: Bundle): CancerConditionItem[] {
   return out;
 }
 
+/**
+ * All active ICD-10-CM condition codes (cancer AND non-cancer), code-only. The
+ * contraindication engine needs the non-cancer ones (APS D68.61, HIT D75.82,
+ * pregnancy/breastfeeding) that the cancer-filtered parseConditions drops.
+ */
+export function parseAllConditionCodes(bundle: Bundle): { code: string }[] {
+  const conditions = resources<Condition>(bundle, "Condition");
+  const out: { code: string }[] = [];
+  for (const c of conditions) {
+    const coding = c.code?.coding?.find((cd) => cd.system === ICD10_SYSTEM);
+    const code = coding?.code;
+    if (code) out.push({ code });
+  }
+  return out;
+}
+
 /** Most-recent Observation matching a LOINC code, as a LabValue (or null). */
 export function parseLatestLab(
   bundle: Bundle,
@@ -253,6 +269,7 @@ export function assemblePatientData(
   const vitals = parseVitals(raw.vitals, now);
   const medications = parseMedications(raw.medications);
   const activeCancerConditions = parseConditions(raw.conditions);
+  const activeConditions = parseAllConditionCodes(raw.conditions);
   const bmi = computeBmi(vitals.weightKg, vitals.heightCm);
 
   return {
@@ -267,6 +284,7 @@ export function assemblePatientData(
     heightCm: vitals.heightCm,
     bmi,
     activeCancerConditions,
+    activeConditions,
     labs,
     activeMedications: medications,
     onESA: anyMedIn(medications, ESA_RXNORM),

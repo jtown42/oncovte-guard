@@ -46,6 +46,10 @@ export interface Scenario {
   hasPriorMajorBleeding: boolean;
   isFrailOrPoorPerformance: boolean;
   hasAnorexiaOrVomiting: boolean;
+  /** Comorbid conditions that steer anticoagulant choice (added to activeConditions). */
+  hasAntiphospholipidSyndrome?: boolean;
+  hasHIT?: boolean;
+  isPregnantOrBreastfeeding?: boolean;
   medCodes: string[];
 }
 
@@ -164,6 +168,13 @@ export function scenarioToPatient(s: Scenario): PatientData {
     { code: s.conditionCode, display: cls.label, category: cls.category },
   ];
 
+  // ALL active condition codes the contraindication engine reads (cancer + the
+  // non-cancer comorbidities that steer anticoagulant choice).
+  const activeConditions: { code: string }[] = [{ code: s.conditionCode }];
+  if (s.hasAntiphospholipidSyndrome) activeConditions.push({ code: "D68.61" });
+  if (s.hasHIT) activeConditions.push({ code: "D75.82" });
+  if (s.isPregnantOrBreastfeeding) activeConditions.push({ code: "Z33.1" });
+
   const meds: MedicationItem[] = s.medCodes.map((code) => ({
     rxnormCode: code,
     display: medLabel(code),
@@ -188,6 +199,7 @@ export function scenarioToPatient(s: Scenario): PatientData {
     heightCm,
     bmi: s.bmi,
     activeCancerConditions: conditions,
+    activeConditions,
     labs: {
       platelets: lab(s.platelets, LOINC.PLATELETS, "10³/µL"),
       hemoglobin: lab(s.hemoglobin, LOINC.HEMOGLOBIN, "g/dL"),
@@ -232,6 +244,14 @@ export function patientToScenario(p: PatientData): Scenario {
     hasPriorMajorBleeding: p.hasPriorMajorBleeding ?? false,
     isFrailOrPoorPerformance: p.isFrailOrPoorPerformance ?? false,
     hasAnorexiaOrVomiting: p.hasAnorexiaOrVomiting ?? false,
+    hasAntiphospholipidSyndrome:
+      p.activeConditions?.some((c) => c.code.toUpperCase().startsWith("D68.61")) ?? false,
+    hasHIT:
+      p.activeConditions?.some((c) => c.code.toUpperCase().startsWith("D75.82")) ?? false,
+    isPregnantOrBreastfeeding:
+      p.activeConditions?.some((c) =>
+        /^(O|Z33\.1|Z3A|Z39\.1)/.test(c.code.toUpperCase()),
+      ) ?? false,
     medCodes: p.activeMedications.map((m) => m.rxnormCode),
   };
 }
