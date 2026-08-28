@@ -15,7 +15,7 @@ function appliesToLabel(c: Contraindication): string {
 function Row({ c }: { c: Contraindication }) {
   const tone = c.type === "absolute" ? "danger" : "warning";
   return (
-    <li className="flex flex-col gap-1 border-t border-clinical-border py-2.5 first:border-t-0">
+    <li className="flex flex-col gap-1 border-t border-clinical-hairline py-2.5 first:border-t-0">
       <div className="flex items-center gap-2">
         <Pill tone={tone}>{humanize(c.reason)}</Pill>
         <span className="text-xs capitalize text-clinical-muted">
@@ -62,8 +62,8 @@ export function ContraindicationPanel({
                absolute contraindications and nothing else on the page. It is
                the one thing that must catch the eye before the clinician acts;
                spending the animation anywhere else would spend it here too. */
-            <div className="contra-alert rounded-sm border-l-2 border-rose-500 bg-rose-50/40 py-2 pl-3">
-              <h3 className="mb-1 text-base font-semibold text-rose-700">
+            <div className="contra-alert rounded-sm border-l-2 border-sev-danger bg-sev-dangerWash/50 py-2 pl-3">
+              <h3 className="mb-1 text-base font-semibold text-sev-dangerInk">
                 Absolute
               </h3>
               <ul>
@@ -76,8 +76,8 @@ export function ContraindicationPanel({
           {relative.length > 0 && (
             /* Same left-accent grouping as absolute, but static — relative
                contraindications inform the choice, they don't gate it. */
-            <div className="rounded-sm border-l-2 border-amber-400 bg-amber-50/40 py-2 pl-3">
-              <h3 className="mb-1 text-base font-semibold text-amber-700">
+            <div className="rounded-sm border-l-2 border-sev-caution bg-sev-cautionWash/50 py-2 pl-3">
+              <h3 className="mb-1 text-base font-semibold text-sev-cautionInk">
                 Relative
               </h3>
               <ul>

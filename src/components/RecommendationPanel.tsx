@@ -8,17 +8,23 @@ import type {
   ProphylaxisRecommendation,
 } from "../types/recommendation";
 import type { OverallAction } from "../types/recommendation";
-import { Pill } from "./primitives";
 import { Flash } from "./Flash";
 import {
   ACTION,
   TONE_BANNER,
   TONE_SOLID,
+  TONE_DOT,
+  type Tone,
   renalStatusTone,
   RENAL_STATUS_LABEL,
   severityTone,
   SEVERITY_LABEL,
 } from "../ui/format";
+
+/** A small severity dot — carries state without a filled chip. */
+function Dot({ tone }: { tone: Tone }) {
+  return <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${TONE_DOT[tone]}`} />;
+}
 
 /** Minimal stroke glyph per verdict — a clinical status mark, not an emoji. */
 function VerdictIcon({ action }: { action: OverallAction }) {
@@ -94,23 +100,23 @@ export function RecommendationPanel({
     <section className="card overflow-hidden">
       {/* Hero banner — flashes on every verdict change so the flip lands on stage. */}
       <Flash watch={rec.overallAction} tone={action.tone}>
-        <div className={`flex items-start gap-3 px-4 py-3.5 ${TONE_BANNER[action.tone]}`}>
+        <div className={`flex items-center gap-4 border-l-4 px-6 py-5 ${TONE_BANNER[action.tone]}`}>
           <span
-            className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-sm text-white ${TONE_SOLID[action.tone]}`}
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white ${TONE_SOLID[action.tone]}`}
             aria-hidden
           >
             <VerdictIcon action={rec.overallAction} />
           </span>
           <div className="min-w-0">
-            <h2 className="verdict-hero font-bold">{heroLabel}</h2>
-            <p className="mt-1 text-sm opacity-90">{heroSummary}</p>
+            <h2 className="verdict-hero">{heroLabel}</h2>
+            <p className="mt-1.5 max-w-[62ch] text-sm opacity-90">{heroSummary}</p>
           </div>
         </div>
       </Flash>
 
-      <div className="card-body space-y-3.5">
+      <div className="card-body space-y-6">
         {rec.staleLabWarning && (
-          <p className="rounded-md border-l-2 border-amber-400 bg-amber-50 px-3 py-2 text-base text-amber-900">
+          <p className="rounded-md border-l-2 border-sev-caution bg-sev-cautionWash px-3 py-2 text-base text-sev-cautionInk">
             <span className="font-semibold">Caution.</span> This decision uses
             laboratory values older than 30 days ({rec.staleLabFields.join(", ")}
             ). Please re-check before acting.
@@ -122,7 +128,6 @@ export function RecommendationPanel({
             <OptionGroup
               heading="Preferred"
               subheading="NCCN-supported ambulatory prophylaxis"
-              tone="good"
               options={rec.preferredOptions}
               emptyNote="No DOAC is currently appropriate — see alternatives."
             />
@@ -134,7 +139,6 @@ export function RecommendationPanel({
                     ? "DOACs blocked — use LMWH (never dabigatran/edoxaban)"
                     : "LMWH — NCCN-concordant alternative"
                 }
-                tone="warning"
                 options={rec.alternativeOptions}
               />
             )}
@@ -154,30 +158,28 @@ export function RecommendationPanel({
 function OptionGroup({
   heading,
   subheading,
-  tone,
   options,
   emptyNote,
 }: {
   heading: string;
   subheading: string;
-  tone: "good" | "warning";
   options: DOACOption[];
   emptyNote?: string;
 }) {
   return (
     <div>
-      <div className="mb-2 flex items-baseline gap-2">
-        <h3 className="text-base font-semibold text-clinical-ink">
-          {heading}
-        </h3>
+      <div className="mb-1 flex items-baseline gap-3">
+        <p className="eyebrow">{heading}</p>
         <span className="text-xs text-clinical-muted">{subheading}</span>
       </div>
       {options.length === 0 ? (
-        <p className="text-sm text-clinical-muted">{emptyNote}</p>
+        <p className="border-t border-clinical-hairline pt-3 text-sm text-clinical-muted">
+          {emptyNote}
+        </p>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-x-10 sm:grid-cols-2">
           {options.map((o) => (
-            <OptionCard key={o.name} o={o} tone={tone} />
+            <OptionRow key={o.name} o={o} />
           ))}
         </div>
       )}
@@ -185,32 +187,35 @@ function OptionGroup({
   );
 }
 
-function OptionCard({ o, tone }: { o: DOACOption; tone: "good" | "warning" }) {
-  const ring = tone === "good" ? "ring-emerald-200" : "ring-amber-200";
+/* A typeset prescription line, not a boxed card: the agent set in serif, the
+   dose in mono, and small dots for kidney-function fit and interaction. */
+function OptionRow({ o }: { o: DOACOption }) {
+  const renalOk = o.renalStatus === "standard";
   return (
-    <div className={`rounded-sm border border-clinical-border bg-white p-3 ring-1 ${ring}`}>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-xl font-semibold capitalize">{o.name}</span>
-        {/* "renal: Standard" was shorthand for the reader who already knows the
-            data model. Say what it means to the person prescribing. */}
-        <Pill tone={renalStatusTone(o.renalStatus)}>
-          {RENAL_STATUS_LABEL[o.renalStatus] === "Standard"
+    <div className="flex flex-col gap-1 border-t border-clinical-hairline py-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="font-serif text-lg font-medium capitalize text-clinical-ink">
+          {o.name}
+        </span>
+        <span className="font-mono text-[0.95rem] font-medium tabular-nums text-clinical-ink">
+          {[o.dose, o.route, o.frequency].filter(Boolean).join(" ")}
+        </span>
+      </div>
+      {o.duration && <p className="text-sm text-clinical-muted">{o.duration}</p>}
+      <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.82rem] text-clinical-inkSoft">
+        <span className="inline-flex items-center gap-1.5">
+          <Dot tone={renalStatusTone(o.renalStatus)} />
+          {renalOk
             ? "Standard dose for kidney function"
             : `Kidney function: ${RENAL_STATUS_LABEL[o.renalStatus].toLowerCase()}`}
-        </Pill>
-      </div>
-      <p className="mt-1 text-lg font-semibold tabular-nums text-clinical-ink">
-        {[o.dose, o.route, o.frequency].filter(Boolean).join(" ")}
-      </p>
-      {o.duration && (
-        <p className="text-sm text-clinical-muted">{o.duration}</p>
-      )}
-      <div className="mt-2 flex items-center gap-2">
-        <Pill tone={severityTone(o.worstDDI)}>
+        </span>
+        <span className="text-clinical-faint">·</span>
+        <span className="inline-flex items-center gap-1.5">
+          <Dot tone={severityTone(o.worstDDI)} />
           {o.worstDDI === "none"
-            ? "No drug interaction"
-            : `${SEVERITY_LABEL[o.worstDDI]} drug interaction`}
-        </Pill>
+            ? "No interaction"
+            : `${SEVERITY_LABEL[o.worstDDI]} interaction`}
+        </span>
       </div>
     </div>
   );
@@ -220,24 +225,22 @@ function AvoidList({ options }: { options: DOACOption[] }) {
   if (options.length === 0) return null;
   return (
     <div>
-      <h3 className="mb-2 text-base font-semibold text-rose-700">
-        Avoid / not an option
-      </h3>
-      <ul className="space-y-1.5">
+      <p className="eyebrow mb-1">Not recommended here</p>
+      <div>
         {options.map((o) => (
-          <li
+          <div
             key={o.name}
-            className="flex flex-col gap-0.5 rounded-sm bg-slate-50 px-3 py-1.5 text-sm sm:flex-row sm:items-center sm:gap-3"
+            className="grid gap-1 border-t border-clinical-hairline py-2.5 text-sm sm:grid-cols-[8rem_1fr] sm:gap-4"
           >
-            <span className="font-semibold capitalize text-clinical-ink sm:w-28">
+            <span className="font-serif text-[0.95rem] capitalize text-clinical-inkSoft">
               {o.name}
             </span>
             <span className="text-clinical-muted">
               {o.ineligibleReason ?? "Not appropriate for this patient."}
             </span>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

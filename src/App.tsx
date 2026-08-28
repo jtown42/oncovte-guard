@@ -85,7 +85,7 @@ function TopBar({
   return (
     <header className="relative border-b border-clinical-border bg-clinical-panel">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-clinical-brand text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-clinical-brand text-white">
           <svg
             width="20"
             height="20"
@@ -96,7 +96,7 @@ function TopBar({
             <path d="M16 5l9 3v6c0 6-4 10-9 13-5-3-9-7-9-13V8z" fill="#fff" />
             <path
               d="M11 15l3.5 3.5L21 12"
-              stroke="#0b6e99"
+              stroke="#3A6B5C"
               strokeWidth="2.6"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -104,7 +104,7 @@ function TopBar({
           </svg>
         </div>
         <div className="leading-tight">
-          <p className="text-sm font-bold tracking-tight text-clinical-ink">
+          <p className="font-serif text-base font-semibold tracking-tight text-clinical-ink">
             OncoVTE Guard
           </p>
           <p className="present-hide hidden text-xs text-clinical-muted sm:block">
@@ -123,7 +123,7 @@ function TopBar({
         >
           {present ? "Exit presentation" : "Presentation mode"}
         </button>
-        <span className="present-hide rounded-sm bg-slate-100 px-2.5 py-1 text-xs font-medium text-clinical-muted">
+        <span className="present-hide rounded-sm border border-clinical-hairline bg-clinical-bg px-2.5 py-1 text-xs font-medium text-clinical-muted">
           {mode === "smart" ? "SMART-on-FHIR" : "Standalone demo"}
         </span>
       </div>
@@ -165,7 +165,7 @@ function SmartView() {
   if (state.kind === "error")
     return (
       <Centered>
-        <p className="font-semibold text-rose-700">Could not load EHR data</p>
+        <p className="font-semibold text-sev-danger">Could not load EHR data</p>
         <p className="mt-1 text-sm text-clinical-muted">{state.message}</p>
       </Centered>
     );

@@ -51,7 +51,7 @@ export function ScenarioEditor({
       </div>
 
       {/* Preset chips — primary navigation between the demo scenarios. */}
-      <div className="border-b border-clinical-border bg-slate-50/60 px-4 py-3">
+      <div className="border-b border-clinical-hairline bg-clinical-bg px-4 py-3">
         <span className="mb-2 block text-sm font-medium text-clinical-muted">
           Example patient
         </span>
@@ -70,7 +70,7 @@ export function ScenarioEditor({
             </button>
           ))}
           {activePreset === null && (
-            <span className="rounded-sm bg-amber-100 px-3 py-1.5 text-base font-semibold text-amber-800">
+            <span className="rounded-sm bg-sev-cautionWash px-3 py-1.5 text-base font-semibold text-sev-cautionInk">
               Edited
             </span>
           )}
@@ -166,7 +166,7 @@ export function ScenarioEditor({
         {/* WS-2: clinician-set bleeding-risk factors. These don't change the
             verdict (the panel is qualitative, never a score) — they populate the
             bleeding-risk card so the thrombotic/bleeding trade-off is visible. */}
-        <details className="rounded-md border border-clinical-border bg-slate-50/50">
+        <details className="rounded-md border border-clinical-hairline bg-clinical-bg">
           <summary className="cursor-pointer px-3 py-2 text-base font-semibold text-clinical-muted">
             Bleeding-risk factors (clinician-assessed)
           </summary>
@@ -195,7 +195,7 @@ export function ScenarioEditor({
         </details>
 
         {/* Stable / lower-stakes inputs — out of prime visual space. */}
-        <details className="rounded-md border border-clinical-border bg-slate-50/50">
+        <details className="rounded-md border border-clinical-hairline bg-clinical-bg">
           <summary className="cursor-pointer px-3 py-2 text-base font-semibold text-clinical-muted">
             Demographics &amp; body metrics
           </summary>
@@ -402,7 +402,7 @@ function Toggle({
     >
       <span
         className={`relative h-5 w-9 rounded-full transition ${
-          on ? "bg-clinical-brand" : "bg-slate-300"
+          on ? "bg-clinical-brand" : "bg-clinical-border"
         }`}
       >
         <span
@@ -448,7 +448,7 @@ function MedPicker({
             {medLabel(code)}
             <button
               onClick={() => remove(code)}
-              className="flex h-4 w-4 items-center justify-center rounded-full text-clinical-muted hover:bg-rose-100 hover:text-rose-700"
+              className="flex h-4 w-4 items-center justify-center rounded-full text-clinical-muted hover:bg-sev-dangerWash hover:text-sev-danger"
               aria-label={`Remove ${medLabel(code)}`}
             >
               ×

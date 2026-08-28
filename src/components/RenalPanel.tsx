@@ -14,7 +14,7 @@ export function RenalPanel({ renal }: { renal: RenalResult | null }) {
   if (!renal) {
     return (
       <Card title="Renal Function">
-        <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <p className="rounded-md bg-sev-cautionWash px-3 py-2 text-sm text-sev-cautionInk">
           CrCl could not be calculated — weight and/or serum creatinine are
           missing. Obtain both before dosing any anticoagulant.
         </p>
@@ -33,7 +33,7 @@ export function RenalPanel({ renal }: { renal: RenalResult | null }) {
     >
       <div className="flex items-end gap-2">
         <Flash watch={renal.crclMlMin} tone={crclTone(renal.crclCategory)}>
-          <span className="metric-hero text-3xl font-bold tabular-nums leading-none">
+          <span className="metric-hero text-5xl font-medium tabular-nums leading-none">
             {renal.crclMlMin}
           </span>
         </Flash>
@@ -52,7 +52,7 @@ export function RenalPanel({ renal }: { renal: RenalResult | null }) {
         </thead>
         <tbody>
           {renal.doacRecommendations.map((rec) => (
-            <tr key={rec.doac} className="border-t border-clinical-border align-top">
+            <tr key={rec.doac} className="border-t border-clinical-hairline align-top">
               <td className="py-1.5 pr-2 font-medium capitalize">{rec.doac}</td>
               <td className="py-1.5 pr-2">
                 <Pill tone={renalStatusTone(rec.recommendation)}>

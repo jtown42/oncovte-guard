@@ -17,27 +17,27 @@
 }
 
 @layer components {
-  /* Reusable surface for dashboard cards. A 1px border and a tight radius —
-     this is a module embedded in an EHR, not a floating marketing card. */
+  /* A surface is paper, not a floating card: a soft radius, a hairline edge,
+     and the faintest lift. Structure comes from whitespace and rules, not from
+     heavy borders or shadow. */
   .card {
-    @apply rounded-md border border-clinical-border bg-clinical-panel shadow-card;
+    @apply rounded-card border border-clinical-hairline bg-clinical-panel shadow-card;
   }
+  /* Header is a quiet rule, not a filled bar — the eye should land on content. */
   .card-header {
-    @apply flex items-center justify-between gap-3 border-b border-clinical-hairline bg-slate-50/70 px-4 py-2.5;
+    @apply flex items-center justify-between gap-3 border-b border-clinical-hairline px-5 py-3;
   }
-  /* Sentence case, normal spacing, real size. Condensed mono uppercase reads as
-     "technical" to an engineer and as "hard to read" to everyone else — and the
-     audience for this is clinicians, many of whom are reading it projected. */
+  /* Titles are set, not shouted: a reading serif at a calm size. */
   .card-title {
-    @apply text-base font-semibold text-clinical-ink;
+    @apply font-serif text-lg font-medium text-clinical-ink;
   }
   .card-body {
-    @apply px-4 py-3;
+    @apply px-5 py-4;
   }
-  /* Severity / status chips. Rectangular rather than pill-shaped, but set in
-     plain sentence case at a readable size — a label, not a code. */
+  /* Severity / status chips — quiet by default. A faint hue wash, hue-ink text,
+     and a small dot carry the state without a saturated fill. */
   .pill {
-    @apply inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 text-sm font-semibold;
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-sm font-medium;
   }
   .kv {
     @apply flex items-baseline justify-between gap-4 py-1 text-base;
@@ -49,59 +49,67 @@
     @apply font-mono font-medium tabular-nums;
   }
 
+  /* Eyebrow — the uppercase section label used across the document. */
+  .eyebrow {
+    @apply text-[0.7rem] font-semibold uppercase tracking-[0.13em] text-clinical-faint;
+  }
+
   /* Range slider for the live editor. Squared-off track and thumb so it reads
      as an instrument control rather than an iOS volume slider. */
   .range-clinical {
-    @apply h-1 cursor-pointer appearance-none rounded-sm bg-slate-200 accent-clinical-brand;
+    @apply h-1 cursor-pointer appearance-none rounded-sm bg-clinical-border accent-clinical-brand;
   }
   .range-clinical::-webkit-slider-thumb {
-    @apply h-3.5 w-3.5 appearance-none rounded-sm border border-white bg-clinical-brand;
-    box-shadow: 0 0 0 1px rgba(3, 105, 161, 0.4);
+    @apply h-3.5 w-3.5 appearance-none rounded-[4px] border border-clinical-panel bg-clinical-brand;
+    box-shadow: 0 0 0 1px rgba(58, 107, 92, 0.35);
   }
   .range-clinical::-moz-range-thumb {
-    @apply h-3.5 w-3.5 rounded-sm border border-white bg-clinical-brand;
+    @apply h-3.5 w-3.5 rounded-[4px] border border-clinical-panel bg-clinical-brand;
   }
   .range-clinical:disabled::-webkit-slider-thumb {
-    @apply bg-slate-400;
+    @apply bg-clinical-faint;
   }
 
-  /* Absolute contraindications only: a slow, low-amplitude border breath.
-     Deliberately restricted — if everything pulses, nothing does. */
+  /* Absolute contraindications only: a slow, low-amplitude border breath in
+     muted brick. Deliberately restricted — if everything pulses, nothing does. */
   @keyframes contra-breathe {
     0%,
     100% {
-      border-color: #ef4444;
+      border-color: #a8443a;
     }
     50% {
-      border-color: #fca5a5;
+      border-color: #d8a59e;
     }
   }
   .contra-alert {
-    animation: contra-breathe 2.4s ease-in-out infinite;
+    animation: contra-breathe 2.6s ease-in-out infinite;
   }
   @media (prefers-reduced-motion: reduce) {
     .contra-alert {
       animation: none;
-      border-color: #ef4444;
+      border-color: #a8443a;
     }
   }
 }
 
 @layer utilities {
   /*
-   * Recompute flash. When a live edit changes a clinical result (the verdict,
-   * the Khorana number, the CrCl, the worst interaction) the affected module
-   * pulses a high-visibility colored glow for ~0.6s, then settles. Designed to
-   * read clearly on a washed-out conference projector — not a subtle slide.
+   * The signature: the e-ink refresh. When a live edit recomputes a clinical
+   * result (the verdict, the Khorana number, the CrCl, the worst interaction),
+   * the affected module settles like an e-reader page turn — a brief grayscale
+   * pass that resolves back to ink — rather than flashing a colored glow. It
+   * ties the whole interface to the calm "ink screen" it is modeled on.
+   * (Class names are kept as .flash-* so Flash.tsx needs no change.)
    */
-  @keyframes flash-pulse {
+  @keyframes eink-refresh {
     0% {
-      box-shadow: 0 0 0 4px var(--flash-ring);
-      background-color: var(--flash-bg);
+      filter: grayscale(1) contrast(1.12) brightness(0.95);
+    }
+    45% {
+      filter: grayscale(1) contrast(0.9) brightness(1.04);
     }
     100% {
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-      background-color: transparent;
+      filter: none;
     }
   }
   .flash-good,
@@ -109,28 +117,8 @@
   .flash-warning,
   .flash-info,
   .flash-neutral {
-    animation: flash-pulse 0.65s ease-out;
-    border-radius: 0.25rem;
-  }
-  .flash-good {
-    --flash-ring: rgba(16, 185, 129, 0.55);
-    --flash-bg: rgba(16, 185, 129, 0.14);
-  }
-  .flash-danger {
-    --flash-ring: rgba(244, 63, 94, 0.55);
-    --flash-bg: rgba(244, 63, 94, 0.14);
-  }
-  .flash-warning {
-    --flash-ring: rgba(245, 158, 11, 0.6);
-    --flash-bg: rgba(245, 158, 11, 0.16);
-  }
-  .flash-info {
-    --flash-ring: rgba(14, 165, 233, 0.5);
-    --flash-bg: rgba(14, 165, 233, 0.12);
-  }
-  .flash-neutral {
-    --flash-ring: rgba(100, 116, 139, 0.5);
-    --flash-bg: rgba(100, 116, 139, 0.12);
+    animation: eink-refresh 0.5s ease-out;
+    border-radius: 0.5rem;
   }
   @media (prefers-reduced-motion: reduce) {
     .flash-good,
@@ -151,9 +139,11 @@
  * single-class Tailwind utilities they override.
  */
 .verdict-hero {
-  font-size: 1.5rem; /* text-2xl — larger than baseline even off-stage */
-  line-height: 1.12;
-  letter-spacing: -0.018em;
+  font-family: "Newsreader", Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
 }
 /* Big clinical readouts (Khorana score, CrCl) — mono, like a vitals monitor. */
 .metric-hero {
@@ -163,8 +153,8 @@
   letter-spacing: -0.04em;
 }
 .present .verdict-hero {
-  font-size: 2.5rem;
-  line-height: 1.1;
+  font-size: 2.6rem;
+  line-height: 1.08;
 }
 .present .metric-hero {
   font-size: 4.5rem;
