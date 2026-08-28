@@ -60,7 +60,7 @@ CHALLENGES OVERCOME. (1) Encoding "active major bleeding": FHIR has no single, r
 
 ## Project evaluation and sustainability
 
-_3487 / 3500 characters_
+_3498 / 3500 characters_
 
 ```text
 EVALUATION APPROACH. Because the project's central claim is clinical accuracy, evaluation focused on verifiable guideline fidelity rather than on usage metrics (the app is a pre-deployment prototype). We gathered both quantitative and qualitative evidence.
@@ -69,9 +69,9 @@ QUANTITATIVE. (1) A 180-test automated suite (Vitest) covers every clinical engi
 
 QUALITATIVE. Each of the five decision states was visually verified in the running app and captured as a screenshot against a stated readability rationale: severity is carried by a color-coded matrix, ranked alerts, and an explicit "avoid / not an option" list - never by color alone. Every text/background pair passes a measured WCAG 2.1 AA contrast audit (docs/ACCESSIBILITY.md).
 
-CONCLUSIONS. The engine reproduces NCCN-concordant outputs deterministically across the tested space, and the dual-surface architecture delivers identical results through both the dashboard and the CDS Hooks service. The project met its goals for clinical accuracy and for standards-based EHR integration. It has not yet been evaluated with live EHR data or in a clinical setting, which is the clear next step.
+CONCLUSIONS. The engine reproduces NCCN-concordant outputs deterministically across the tested space; the dual-surface architecture delivers identical results through both surfaces. The project met its goals for clinical accuracy and for standards-based EHR integration. It has not yet been evaluated with live EHR data or in a clinical setting; prospective validation would track appropriate-prophylaxis rate, symptomatic VTE, major bleeding, and alert override/fatigue.
 
-SUSTAINABILITY. The design is built to last and to be maintained. The DOAC interaction knowledge base is an external, versioned data file in which every agent carries source attribution, so guideline and labeling updates are data edits, not code rewrites. Clinical engines are decoupled from UI and transport, so a guideline change is localized and immediately re-verified by the test suite that encodes it. The app is built entirely on open standards - FHIR R4, SMART App Launch, and CDS Hooks - which maximizes portability across EHRs and avoids vendor lock-in. The roadmap is to validate against public SMART/FHIR sandboxes, broaden the knowledge base under clinical review, and, contingent on review, publish in the SMART App Gallery for community adoption and contribution.
+SUSTAINABILITY. The DOAC interaction knowledge base is an external, versioned data file in which every agent carries source attribution, so guideline and labeling updates are data edits, not code rewrites. Clinical engines are decoupled from UI and transport, so a guideline change is localized and immediately re-verified by the test suite that encodes it. The app is built entirely on open standards - FHIR R4, SMART App Launch, and CDS Hooks - which maximizes portability across EHRs and avoids vendor lock-in. The roadmap is to validate against public SMART/FHIR sandboxes, broaden the knowledge base under clinical review, and, contingent on review, publish in the SMART App Gallery for community adoption and contribution.
 
 DESIGNED FUTURE WORK - CAT-TREATMENT MODULE. A therapeutic-anticoagulation module for established cancer-associated VTE is designed against NCCN VTE-D/-F/-G but deliberately deferred. It is a structurally different engine - eight-plus agents, two-phase regimens with a parenteral lead-in, per-agent rather than global selection, and treatment-duration and on-therapy-failure pathways - so shipping a partially built second engine would undercut the fully-tested discipline of this prophylaxis entry. Its per-agent hepatic thresholds and the appliesTo, interaction, and renal primitives reuse directly, making it a natural post-acceptance build rather than an oversight.
 ```
