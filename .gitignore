@@ -8,3 +8,6 @@ coverage/
 *.log
 npm-debug.log*
 .vite/
+
+# Scratch screenshots at repo root (real ones live in docs/screenshots/)
+/*.png
