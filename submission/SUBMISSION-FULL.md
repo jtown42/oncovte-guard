@@ -8,10 +8,10 @@
 
 ## Project abstract
 
-_216 / 250 words_
+_220 / 250 words_
 
 ```text
-Cancer-associated venous thromboembolism (VTE) is a leading cause of death in patients with cancer, and active malignancy raises VTE risk four- to sevenfold. Landmark trials (AVERT, CASSINI) show that targeted direct oral anticoagulant (DOAC) prophylaxis reduces VTE in higher-risk ambulatory patients, yet safe prescribing demands that a clinician simultaneously compute a Khorana risk score, screen for DOAC-chemotherapy drug-drug interactions across the CYP3A4 and P-glycoprotein pathways, assess renal function, and evaluate contraindications. That cognitive load is rarely carried reliably in a single encounter.
+Cancer-associated venous thromboembolism (VTE) is a leading cause of death in patients with cancer, and active malignancy raises VTE risk four- to sevenfold. Landmark trials (AVERT, CASSINI) and their pooled analysis show that targeted direct oral anticoagulant (DOAC) prophylaxis reduces VTE in higher-risk ambulatory patients, yet safe prescribing demands that a clinician simultaneously compute a Khorana risk score, screen for DOAC-chemotherapy drug-drug interactions across the CYP3A4 and P-glycoprotein pathways, assess renal function, and evaluate contraindications. That cognitive load is rarely carried reliably in a single encounter.
 
 OncoVTE Guard is a SMART on FHIR clinical decision support application, with a companion CDS Hooks service, that automates this reasoning. It ingests FHIR R4 patient data and routes it through a deterministic clinical engine: it classifies the cancer site by ICD-10, computes the Khorana score against the NCCN prophylaxis threshold, screens 52 antineoplastic agents for per-DOAC interaction severity, calculates creatinine clearance with renal dosing rules, and evaluates contraindications - producing one of five terminal decisions. LMWH fallback logic engages when both prophylaxis DOACs are blocked.
 
@@ -21,7 +21,7 @@ The SMART dashboard and the CDS Hooks service share one clinical reasoning pipel
 
 ## Project rationale, impact and innovation
 
-_3464 / 3500 characters_
+_3494 / 3500 characters_
 
 ```text
 THE PROBLEM. Venous thromboembolism (VTE) is a leading cause of death in people with cancer and accounts for roughly one in five of all VTE events. Active malignancy raises VTE risk approximately 4-7 fold, and many systemic therapies raise it further. Ambulatory patients receiving chemotherapy are a high-yield target for prevention, but blanket prophylaxis is inappropriate: it must be reserved for those at sufficient risk to outweigh bleeding harm. NCCN guidance therefore recommends risk-stratified prophylaxis - using the validated Khorana score - and endorses the DOACs apixaban and rivaroxaban as preferred oral options.
@@ -30,7 +30,7 @@ The catch is that this decision is genuinely hard to make correctly at the point
 
 WHO IS AFFECTED. The patients are approximately 2 million people newly diagnosed with cancer in the US each year, a large fraction of whom receive ambulatory systemic therapy. The clinicians are oncologists, hematologist-oncologists, oncology pharmacists, and advanced practice providers.
 
-IMPACT. Cancer-associated VTE drives substantial morbidity, mortality, hospitalization, and cost, and it interrupts oncologic treatment. Randomized trials (AVERT, CASSINI) show that targeted DOAC prophylaxis in higher-risk ambulatory patients reduces VTE events. Conversely, anticoagulating the wrong patient - one with severe thrombocytopenia, an active bleed, or a major DOAC drug interaction - causes preventable hemorrhage. A tool that makes the guideline-concordant choice fast and explicit can both increase appropriate prophylaxis and prevent inappropriate or unsafe anticoagulation. Because the logic is reusable, even small per-encounter improvements scale across a very large population.
+IMPACT. Cancer-associated VTE drives substantial morbidity, mortality, hospitalization, and cost, and it interrupts oncologic treatment. Randomized trials (AVERT, CASSINI) and a pooled analysis of both show that targeted DOAC prophylaxis in higher-risk ambulatory patients reduces VTE events. Conversely, anticoagulating the wrong patient - one with severe thrombocytopenia, an active bleed, or a major DOAC drug interaction - causes preventable hemorrhage. A tool that makes the guideline-concordant choice fast and explicit can both increase appropriate prophylaxis and prevent inappropriate or unsafe anticoagulation. Because the logic is reusable, even small per-encounter improvements scale across a very large population.
 
 INNOVATION. OncoVTE Guard is distinguished by four things. First, it unifies Khorana risk scoring with a structured, source-attributed 52-agent DOAC-chemotherapy interaction knowledge base whose recommendation-changing major interactions are each individually evidence-anchored; most available tools do one or the other, not both in a single recommendation. Second, its contraindication logic is "appliesTo"-aware: a condition such as HIT removes only the affected agents (LMWH) while leaving DOACs preferred, instead of bluntly aborting the assessment. Third, it is dual-surface - the exact same tested reasoning engine powers both an interactive SMART on FHIR dashboard (clinician pull) and a CDS Hooks service (EHR push) - so it meets clinicians where they already work. Fourth, it treats clinical accuracy as a testable property: every rule is backed by an automated test and an auditable rule-to-source-to-code-to-test traceability matrix.
 ```
@@ -78,7 +78,7 @@ DESIGNED FUTURE WORK - CAT-TREATMENT MODULE. A therapeutic-anticoagulation modul
 
 ## Data validation, terminology and provenance
 
-_3098 / 3500 characters_
+_3103 / 3500 characters_
 
 ```text
 VALIDATING AND FLAGGING STALE OR INCOMPLETE DATA. Every clinical input is validated before it can drive a decision. Laboratory and vital Observations each carry their effectiveDateTime, and any value older than 30 days is flagged as stale (a missing or unparseable date is treated as stale, i.e., conservatively) and surfaced as an explicit warning rather than silently trusted. When multiple Observations exist for the same analyte, the engine sorts by effective time and uses only the most recent. Required-field completeness is tracked: the Khorana engine records any missing component in missingFields and marks the result isComplete=false; creatinine clearance is computed only when both weight and serum creatinine are present, otherwise the app emits a "renal function not assessable" alert instead of guessing. Numeric guards prevent invalid math (a non-positive creatinine or weight, or a negative age, yields a guarded result rather than a divide-by-zero). A medication whose RxNorm code is not in the knowledge base is surfaced as "unknown - verify manually," never silently dropped. Every threshold is an explicit, unit-tested boundary.

@@ -32,5 +32,27 @@ Supporting sources named in the narrative (not epidemiology figures):
 [7] NCCN Clinical Practice Guidelines in Oncology (NCCN Guidelines): Cancer-
     Associated Venous Thromboembolic Disease.
 
-WORDING NOTE: the submission uses "a leading cause of death" (ITAC-supported),
-not "the second leading cause," whose primary source is unconfirmed.
+WORDING NOTES (rationale for phrasing, in case a reviewer asks):
+
+- "a leading cause of death": cancer-associated VTE is commonly described as the
+  SECOND leading cause of death in patients with cancer (after cancer progression
+  itself), supported by ITAC [1]. The submission uses the slightly more
+  conservative "a leading cause," which is equally defensible.
+
+- AVERT/CASSINI framing: the text credits the trials "and their pooled analysis,"
+  not each trial's primary result. This is deliberate. AVERT showed a significant
+  VTE reduction (4.2% vs 10.2%, HR 0.14) but with more major bleeding (3.5% vs
+  1.8%). CASSINI's PRIMARY endpoint over the full 180-day period was NOT
+  statistically significant (HR 0.66, 95% CI 0.40-1.09, p=0.10); its benefit was
+  significant only during the on-treatment window (HR 0.40). A pooled analysis of
+  both trials shows a significant reduction in VTE (RR ~0.56) without a significant
+  increase in major bleeding [1]. Citing the pooled result avoids overstating
+  CASSINI's headline finding.
+
+- Khorana threshold: the app applies the NCCN prophylaxis threshold of Khorana
+  score >=2 (intermediate-to-high risk), which aligns with the AVERT/CASSINI
+  inclusion criteria. Note this differs from the ORIGINAL Khorana high-risk cut
+  point of >=3; the app is explicit about using >=2. NCCN population exclusions
+  (multiple myeloma, acute leukemia, myeloproliferative neoplasms, primary/
+  metastatic brain tumors) are handled on a separate "excluded" pathway, not
+  scored against Khorana.
