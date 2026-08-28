@@ -14,11 +14,11 @@ combined paste doc with `npm run build:submission` (output: `SUBMISSION-FULL.md`
 
 - [ ] **Title typo in the portal** — it currently reads **"OncoVTE Ga​urd"**. Correct it to **"OncoVTE Guard"** everywhere it appears. The repo spells it correctly; only the portal entry is wrong.
 - [ ] **Replace the stale portal abstract** — the abstract currently in the portal says *"121 automated tests"* and *"second leading cause of death."* Both are wrong. Paste the corrected abstract from `submission/01-abstract.txt` (says **180 tests**, **"a leading cause"** — the wording our own `11-references.txt` supports).
-- [ ] **Advisor attestation PDF** — see Tab 1. *Email your advisor today; it's the longest-lead item.*
-- [ ] **Logo** and **headshot** — see Tab 3 uploads.
+- [ ] **Advisor attestation PDF** — *send the ready email today:* `submission/advisor-email-draft.md` (attach `advisor-attestation-template.md`, now covering all six portal components). Longest-lead item.
+- [ ] **Logo** and **headshot** — see Tab 3 uploads. *(Logo directions drafted; awaiting your A/B/C pick + favicon recolor.)*
 
 ## ✅ UI decision — RESOLVED
-- [x] **Adopted the green "Ink" theme** (pine-green + paper, serif headings). Merged to `main`, 180 tests + prod build pass, all 5 decision-state screenshots re-shot in green. **Remaining:** push `main` and **redeploy the live demo** so `oncovte-guard.pages.dev` shows green (see "Outward-facing" below).
+- [x] **Adopted the green "Ink" theme** (pine-green + paper, serif headings). Merged to `main`, pushed, **redeployed live** — `oncovte-guard.pages.dev` verified serving green. All 5 decision-state screenshots re-shot in green.
 
 ---
 
@@ -115,7 +115,9 @@ combined paste doc with `npm run build:submission` (output: `SUBMISSION-FULL.md`
 
 ## Supporting artifacts already in the repo
 - FHIR CapabilityStatement — `public/capability-statement.json`
-- Five decision-state screenshots — `docs/screenshots/`
+- Five decision-state screenshots (green) — `docs/screenshots/`
 - Rule→source→code→test traceability — `VERIFICATION.md`
-- Full references (all confirmed) — `submission/11-references.txt`
-- Advisor attestation template — `submission/advisor-attestation-template.md`
+- Full references + defense notes (CASSINI, Khorana ≥2, DDI sources) — `submission/11-references.txt`
+- Advisor attestation template (all 6 components) — `submission/advisor-attestation-template.md`
+- Advisor email, ready to send — `submission/advisor-email-draft.md`
+- 8-minute live demo script — `submission/DEMO-SCRIPT.md`
