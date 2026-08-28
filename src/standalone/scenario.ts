@@ -66,7 +66,7 @@ export const CANCER_OPTIONS: CancerOption[] = [
   { code: "C54.1", label: "Uterine — high (1 pt)" },
   { code: "C67.9", label: "Bladder — high (1 pt)" },
   { code: "C62.9", label: "Testicular — high (1 pt)" },
-  { code: "C64.9", label: "Kidney/renal — high* (1 pt)" },
+  { code: "C64.9", label: "Kidney/renal — advisory (0 pts)" },
   { code: "C18.9", label: "Colon — standard (0 pts)" },
   { code: "C50.9", label: "Breast — standard (0 pts)" },
   { code: "C61", label: "Prostate — standard (0 pts)" },

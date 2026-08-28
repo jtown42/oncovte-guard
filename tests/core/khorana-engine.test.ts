@@ -269,14 +269,16 @@ describe("cancer-site advisory notes", () => {
     expect(res.note).toMatch(/lung/i);
   });
 
-  it("kidney cancer (C64) carries the NCCN-divergence advisory note", () => {
+  it("kidney cancer (C64) is non-scoring but carries the elevated-risk advisory note", () => {
     const res = getCancerCategory([{ code: "C64.9" }]);
-    expect(res.category).toBe(CancerCategory.HIGH);
+    // RCC is NOT scored (matches NCCN); a grade-C divergence must not silently
+    // change the actionable score, so it resolves to STANDARD with an advisory.
+    expect(res.category).toBe(CancerCategory.STANDARD);
     expect(res.note).toMatch(/kidney|renal/i);
-    expect(res.note).toMatch(/divergence/i);
+    expect(res.note).toMatch(/not scored|grade c/i);
   });
 
-  it("WS-1.3: C64 (RCC) scores +1; renal pelvis/ureter/other urinary (C65/C66/C68) score 0", () => {
+  it("C64 (RCC) scores 0 (advisory only); renal pelvis/ureter/other urinary (C65/C66/C68) also score 0", () => {
     const siteScore = (code: string) =>
       calculateKhoranaScoreFromConditions({
         conditions: [{ code }],
@@ -287,8 +289,8 @@ describe("cancer-site advisory notes", () => {
         bmi: 25,
       }).breakdown.cancerSite.score;
 
-    // Only C64 remains high-risk after narrowing the kidney rule.
-    expect(siteScore("C64.9")).toBe(1);
+    // RCC no longer adds a point; the advisory carries the elevated-risk concern.
+    expect(siteScore("C64.9")).toBe(0);
     for (const code of ["C65.9", "C66.9", "C68.0"]) {
       const res = getCancerCategory([{ code }]);
       expect(res.category, `${code} must be STANDARD`).toBe(

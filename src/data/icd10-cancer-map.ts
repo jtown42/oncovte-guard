@@ -81,20 +81,24 @@ export const HIGH_RULES: CategoryRule[] = [
   { prefixes: ["C51", "C52", "C57", "C58"], label: "Gynecologic cancer (other)" },
   { prefixes: ["C67"], label: "Bladder cancer" },
   { prefixes: ["C62"], label: "Testicular cancer" },
-  // WS-1.3: narrowed to C64 only (renal-cell carcinoma of the kidney). The
-  // prior set (C64/C65/C66/C68 — kidney, renal pelvis, ureter, other urinary)
-  // was broader than any published interpretation supports.
-  { prefixes: ["C64"], label: "Renal-cell carcinoma (kidney)" },
+  // NOTE: renal-cell carcinoma (C64) is intentionally NOT in the high-risk set.
+  // NCCN scores only bladder and testicular among GU cancers; scoring RCC would be
+  // a grade-C divergence that could by itself cross the >=2 threshold. It is handled
+  // as a non-scoring advisory in classifyIcd10 (see KIDNEY_NOTE).
 ];
 
 /**
- * Renal-cell carcinoma (C64) is scored high-risk here, a DELIBERATE DIVERGENCE
- * from the NCCN high-risk list, which names only bladder and testicular. It is
- * retained on the basis of a JACC/ASCO interpretation. Evidence grade C. Renal
- * pelvis / ureter / other urinary (C65/C66/C68) are NOT scored.
+ * Renal-cell carcinoma (C64) is NOT scored by the Khorana engine (0 points),
+ * matching NCCN, which names only bladder and testicular among GU high-risk sites.
+ * Scoring RCC would be a grade-C divergence that could by itself cross the >=2
+ * prophylaxis threshold — a contested rule should not silently change the
+ * actionable output. The elevated-risk concern is instead surfaced as an advisory
+ * note, and metastatic RCC additionally appears as a bleeding-risk factor (where
+ * LMWH may be preferred). Renal pelvis / ureter / other urinary (C65/C66/C68) are
+ * likewise not scored.
  */
 const KIDNEY_NOTE =
-  "Renal-cell carcinoma (kidney) is classified high-risk here as a divergence from the NCCN high-risk list (which names only bladder and testicular), retained per a JACC/ASCO interpretation. Verify against local guideline.";
+  "Renal-cell carcinoma (kidney) carries elevated VTE risk, but NCCN scores only bladder and testicular among GU cancers, so it is NOT scored here (0 points); consider prophylaxis on individual clinical judgment. Metastatic RCC is a higher-bleeding-risk site where LMWH may be preferred. Evidence grade C.";
 
 /**
  * Lung cancer scores as a Khorana high-risk site (1 pt), but the score's
@@ -161,15 +165,25 @@ export function classifyIcd10(rawCode: string): Icd10Classification {
 
   for (const rule of HIGH_RULES) {
     if (matchesAny(code, rule.prefixes)) {
-      const isKidney = matchesAny(code, ["C64"]);
       const isLung = matchesAny(code, ["C34"]);
       return {
         category: CancerCategory.HIGH,
         label: rule.label,
         exclusionReason: null,
-        note: isKidney ? KIDNEY_NOTE : isLung ? LUNG_NOTE : null,
+        note: isLung ? LUNG_NOTE : null,
       };
     }
+  }
+
+  // Renal-cell carcinoma (C64): NOT scored (matches NCCN) but surfaces an advisory
+  // note. A grade-C divergence should not silently change the actionable score.
+  if (matchesAny(code, ["C64"])) {
+    return {
+      category: CancerCategory.STANDARD,
+      label: "Renal-cell carcinoma (kidney)",
+      exclusionReason: null,
+      note: KIDNEY_NOTE,
+    };
   }
 
   return {

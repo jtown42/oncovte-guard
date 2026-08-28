@@ -73,10 +73,9 @@ ICD-10-CM codes. Exclusions are checked first and take precedence.
 - **Very high risk (+2 pts):** gastric `C16`, pancreatic `C25`.
 - **High risk (+1 pt):** lung `C34`; Hodgkin `C81`; non-Hodgkin lymphoma
   `C82–C86`; ovarian `C56`; uterine `C54/C55`; cervical `C53`; other gynecologic
-  `C51/C52/C57/C58`; bladder `C67`; testicular `C62`; **renal-cell carcinoma `C64`
-  only**.
+  `C51/C52/C57/C58`; bladder `C67`; testicular `C62`.
 - **Standard risk (0 pts):** any other malignant neoplasm (e.g., colon, breast,
-  prostate).
+  prostate). **Renal-cell carcinoma `C64` also scores 0** (see divergence note).
 - **Excluded (disease-specific pathway, NCCN VTE-2 — Khorana not applied):**
   multiple myeloma / plasma-cell neoplasm `C90.0–C90.3`; **acute** leukemias
   (`C91.0, C92.0, C92.4–6, C92.A, C93.0, C94.0, C95.0` — chronic CLL/CML are
@@ -84,10 +83,13 @@ ICD-10-CM codes. Exclusions are checked first and take precedence.
   D47.4`; primary/metastatic brain tumor `C71, C79.31`.
 
 **Deliberate divergences the reviewer should judge (flagged in-code):**
-- **Renal-cell carcinoma (C64) scored high-risk** is a *divergence from NCCN*,
-  which names only bladder and testicular. Retained per a JACC/ASCO interpretation;
-  self-graded **evidence grade C**; surfaced as an advisory note. Renal
-  pelvis/ureter/other urinary (C65/C66/C68) are **not** scored.
+- **Renal-cell carcinoma (C64) is deliberately NOT scored (0 pts), matching NCCN**
+  (which names only bladder and testicular). Scoring it would be a grade-C
+  divergence that could by itself cross the ≥2 threshold and flip the terminal
+  decision — so the elevated-risk concern is surfaced as an **advisory note only**,
+  keeping the actionable score guideline-faithful. Metastatic RCC additionally
+  appears as a **bleeding-risk factor** (where LMWH may be preferred). Renal
+  pelvis/ureter/other urinary (C65/C66/C68) are likewise not scored.
 - **Lung cancer** carries an advisory: Khorana's discrimination is weak in lung
   specifically (van Es et al. IPD meta-analysis: OR ~1.1 in lung vs ~3.2 elsewhere,
   P-interaction 0.002). Score unchanged; caveat surfaced.
@@ -340,7 +342,8 @@ measured contrast" — never "clinician-validated" or "proven usable."
 - **Active major bleeding** is a clinician-confirmed boolean (FHIR has no reliable
   single representation) — determination stays with the clinician, but it still
   gates the recommendation.
-- **Renal-cell carcinoma high-risk scoring** diverges from NCCN (grade C; see 2.1).
+- **Renal-cell carcinoma** is not scored (matches NCCN); the elevated-risk concern
+  is an advisory + a bleeding-risk factor only, never a score input (see 2.1).
 - **DDI module** carries the most clinical uncertainty (thin evidence, source
   disagreement); it is source-attributed, not validated.
 - **No FHIR `Provenance` resource / `meta.source`** consumption yet (who entered a
@@ -390,8 +393,8 @@ measured contrast" — never "clinician-validated" or "proven usable."
    sufficient?
 3. **CASSINI framing** — is efficacy stated as the pooled result (correct) rather
    than implying CASSINI's primary endpoint was positive (incorrect)?
-4. **Renal-cell carcinoma high-risk divergence (grade C)** — defensible, or should
-   it be dropped to match NCCN?
+4. **Renal-cell carcinoma** — now non-scoring (matches NCCN), surfaced only as an
+   advisory + bleeding-risk factor. Confirm no contested rule changes the score.
 5. **Per-agent hepatic thresholds (NCCN VTE-D-5)** — are the ULN-multiple cutoffs
    and the disjunctive/conjunctive logic (esp. edoxaban's AND) correct?
 6. **`appliesTo` contraindication model** — does targeting (HIT→LMWH only,
