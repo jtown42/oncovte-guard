@@ -360,12 +360,13 @@ measured contrast" — never "clinician-validated" or "proven usable."
   described as *a leading cause of death* in cancer patients. (The submission uses
   the conservative "a leading cause"; "second leading cause" is also supportable.)
 - **Prophylaxis efficacy — the nuance:** **AVERT** (apixaban 2.5 mg BID, Khorana
-  ≥2) significantly reduced VTE (4.2% vs 10.2%, HR 0.14) with more major bleeding
-  (3.5% vs 1.8%). **CASSINI** (rivaroxaban 10 mg, Khorana ≥2): its **primary
-  endpoint over the full 180-day period was NOT statistically significant** (HR
-  0.66, 95% CI 0.40–1.09, p=0.10); benefit was significant only on-treatment (HR
-  0.40). A **pooled analysis** of both shows a significant VTE reduction (RR ~0.56)
-  without a significant increase in major bleeding. **The submission credits the
+  ≥2) significantly reduced VTE (4.2% vs 10.2%, HR 0.41, 95% CI 0.26–0.65) with
+  more major bleeding (3.5% vs 1.8%, HR 2.00, 95% CI 1.01–3.95). **CASSINI**
+  (rivaroxaban 10 mg, Khorana ≥2): its **primary endpoint over the full 180-day
+  period was NOT statistically significant** (HR 0.66, 95% CI 0.40–1.09, p=0.10);
+  benefit was significant only on-treatment (HR 0.40, 95% CI 0.20–0.80). A
+  **pooled analysis** of both shows a significant VTE reduction (RR ~0.56, 95% CI
+  0.35–0.89) without a significant increase in major bleeding. **The submission credits the
   pooled analysis, not each trial's primary result** — verify this framing is
   preserved wherever efficacy is claimed.
 - **Risk model:** Khorana et al., *Blood* 2008 (development/validation).

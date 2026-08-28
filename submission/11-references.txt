@@ -41,11 +41,12 @@ WORDING NOTES (rationale for phrasing, in case a reviewer asks):
 
 - AVERT/CASSINI framing: the text credits the trials "and their pooled analysis,"
   not each trial's primary result. This is deliberate. AVERT showed a significant
-  VTE reduction (4.2% vs 10.2%, HR 0.14) but with more major bleeding (3.5% vs
-  1.8%). CASSINI's PRIMARY endpoint over the full 180-day period was NOT
-  statistically significant (HR 0.66, 95% CI 0.40-1.09, p=0.10); its benefit was
-  significant only during the on-treatment window (HR 0.40). A pooled analysis of
-  both trials shows a significant reduction in VTE (RR ~0.56) without a significant
+  VTE reduction (4.2% vs 10.2%, HR 0.41, 95% CI 0.26-0.65) but with more major
+  bleeding (3.5% vs 1.8%, HR 2.00, 95% CI 1.01-3.95). CASSINI's PRIMARY endpoint
+  over the full 180-day period was NOT statistically significant (HR 0.66, 95% CI
+  0.40-1.09, p=0.10); its benefit was significant only during the on-treatment
+  window (HR 0.40, 95% CI 0.20-0.80). A pooled analysis of both trials shows a
+  significant reduction in VTE (RR ~0.56, 95% CI 0.35-0.89) without a significant
   increase in major bleeding [1]. Citing the pooled result avoids overstating
   CASSINI's headline finding.
 
