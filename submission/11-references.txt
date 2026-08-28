@@ -1,7 +1,6 @@
 REFERENCES (epidemiology figures used in the abstract and rationale)
 
-Map each claim to its source. Supplied by the submitter's literature search;
-confirm the Lam et al. 2026 volume/pages on final publication.
+Map each claim to its source. Supplied by the submitter's literature search.
 
 [1] Farge D, Frere C, Connors JM, et al. 2019 International Clinical Practice
     Guidelines for the Treatment and Prophylaxis of Venous Thromboembolism in
@@ -15,11 +14,12 @@ confirm the Lam et al. 2026 volume/pages on final publication.
     -> supports: approximately 2 million new US cancer diagnoses per year
        (~2,001,140 projected for 2024).
 
-[3] Lam BD, Ryu J, Jafari O, et al. Epidemiology of Cancer-Associated Venous
-    Thromboembolism Across the United States. Am J Hematol. 2026.
+[3] Lam BD, Ryu J, Jafari O, Kim RB, Ma S, Ranjan M, Jiang JY, Li A.
+    Epidemiology of Cancer-Associated Venous Thromboembolism Across the United
+    States. Am J Hematol. 2026;101(5):1005-1018. doi:10.1002/ajh.70271
     -> supports: contemporary cancer-associated VTE epidemiology (12-month
        cumulative incidence ~3.7% overall, ~5.7% with systemic therapy;
-       Epic Cosmos, 911,855 patients). Confirm volume/pages on publication.
+       Epic Cosmos).
 
 Supporting sources named in the narrative (not epidemiology figures):
 [4] Carrier M, et al. Apixaban to Prevent VTE in Patients with Cancer (AVERT).

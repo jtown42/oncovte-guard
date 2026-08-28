@@ -9,20 +9,25 @@ const path = require("path");
 
 const DIR = path.join(__dirname, "..", "submission");
 
-// Limit per field file. null = no stated limit (informational only).
+// Limit per field file, mirroring the ACTUAL AMIA portal. The portal enforces
+// WORD limits on the abstract and the two "other info" fields, and CHARACTER
+// limits on the FHIR narratives and Twitter field. { chars } / { words } / null.
 const LIMITS = {
   "00-short-answers.txt": null,
-  "01-abstract.txt": 1000,
-  "02-rationale.txt": 3500,
-  "03-design.txt": 7000,
-  "04-evaluation.txt": 3500,
+  "01-abstract.txt": { words: 250 },
+  "02-rationale.txt": { chars: 3500 },
+  "03-design.txt": { chars: 7000 },
+  "04-evaluation.txt": { chars: 3500 },
+  "04b-data-validation.txt": { chars: 3500 },
   "05-audience.txt": null,
-  "06-twitter.txt": 140,
-  "07-fhir-usage.txt": 500,
-  "08-fhir-release-resources.txt": 500,
-  "09-data-source.txt": 500,
-  "10-other-info.txt": 1500,
+  "06-twitter.txt": { chars: 140 },
+  "07-fhir-usage.txt": { chars: 500 },
+  "08-fhir-release-resources.txt": { chars: 500 },
+  "09-data-source.txt": { chars: 500 },
+  "10-other-info.txt": { words: 250 },
 };
+
+const wordCount = (t) => (t.trim() === "" ? 0 : t.trim().split(/\s+/).length);
 
 let anyOver = false;
 const rows = [];
@@ -34,30 +39,44 @@ for (const file of Object.keys(LIMITS)) {
     continue;
   }
   const text = fs.readFileSync(p, "utf8");
-  const len = text.length;
-  const limit = LIMITS[file];
-  let status = "ok";
-  if (limit != null) {
-    if (len > limit) {
-      status = "OVER";
-      anyOver = true;
-    } else {
-      status = `${limit - len} left`;
-    }
+  const cfg = LIMITS[file];
+  let measure, unit, limit;
+  if (cfg == null) {
+    measure = text.length;
+    unit = "chars";
+    limit = null;
+  } else if (cfg.words != null) {
+    measure = wordCount(text);
+    unit = "words";
+    limit = cfg.words;
   } else {
-    status = "(no limit)";
+    measure = text.length;
+    unit = "chars";
+    limit = cfg.chars;
   }
-  rows.push([file, String(len), limit == null ? "-" : String(limit), status]);
+  let status;
+  if (limit == null) {
+    status = "(no limit)";
+  } else if (measure > limit) {
+    status = "OVER";
+    anyOver = true;
+  } else {
+    status = `${limit - measure} left`;
+  }
+  rows.push([
+    file,
+    `${measure} ${unit}`,
+    limit == null ? "-" : `${limit} ${unit}`,
+    status,
+  ]);
 }
 
 const pad = (s, n) => String(s).padEnd(n);
-console.log(
-  pad("field", 32) + pad("chars", 8) + pad("limit", 8) + "status",
-);
-console.log("-".repeat(60));
+console.log(pad("field", 32) + pad("size", 14) + pad("limit", 14) + "status");
+console.log("-".repeat(66));
 for (const r of rows) {
-  console.log(pad(r[0], 32) + pad(r[1], 8) + pad(r[2], 8) + r[3]);
+  console.log(pad(r[0], 32) + pad(r[1], 14) + pad(r[2], 14) + r[3]);
 }
-console.log("-".repeat(60));
+console.log("-".repeat(66));
 console.log(anyOver ? "RESULT: one or more fields OVER limit" : "RESULT: all fields within limits");
 process.exit(anyOver ? 1 : 0);

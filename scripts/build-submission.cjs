@@ -11,20 +11,24 @@ const path = require("path");
 const DIR = path.join(__dirname, "..", "submission");
 const OUT = path.join(DIR, "SUBMISSION-FULL.md");
 
-// Ordered to mirror the official submission form. limit = null -> no stated cap.
+// Ordered to mirror the official submission form. Each field is measured in the
+// unit the portal actually enforces: { chars } or { words }; null -> no cap.
 const FIELDS = [
-  ["01-abstract.txt", "Project abstract", 1000],
-  ["02-rationale.txt", "Project rationale, impact and innovation", 3500],
-  ["03-design.txt", "Project design and implementation", 7000],
-  ["04-evaluation.txt", "Project evaluation and sustainability", 3500],
+  ["01-abstract.txt", "Project abstract", { words: 250 }],
+  ["02-rationale.txt", "Project rationale, impact and innovation", { chars: 3500 }],
+  ["03-design.txt", "Project design and implementation", { chars: 7000 }],
+  ["04-evaluation.txt", "Project evaluation and sustainability", { chars: 3500 }],
+  ["04b-data-validation.txt", "Data validation, terminology and provenance", { chars: 3500 }],
   ["05-audience.txt", "Who is the intended user/audience of your app?", null],
-  ["06-twitter.txt", "Twitter project summary", 140],
-  ["07-fhir-usage.txt", "How is FHIR being used in the app?", 500],
-  ["08-fhir-release-resources.txt", "What FHIR release and resources does your application use?", 500],
-  ["09-data-source.txt", "Data source for the FHIR resources and how they are accessed", 500],
-  ["10-other-info.txt", "Any other information about the project", 1500],
+  ["06-twitter.txt", "Twitter project summary", { chars: 140 }],
+  ["07-fhir-usage.txt", "How is FHIR being used in the app?", { chars: 500 }],
+  ["09-data-source.txt", "Data source for the FHIR resources and how they are accessed", { chars: 500 }],
+  ["08-fhir-release-resources.txt", "List of FHIR resources (supplementary to the uploaded CapabilityStatement)", { chars: 500 }],
+  ["10-other-info.txt", "Any other information about the project", { words: 250 }],
   ["00-short-answers.txt", "Structured / short-answer fields", null],
 ];
+
+const wordCount = (t) => (t.trim() === "" ? 0 : t.trim().split(/\s+/).length);
 
 const lines = [];
 lines.push("# OncoVTE Guard — Full Submission (copy-paste ready)");
@@ -42,16 +46,19 @@ lines.push("---");
 lines.push("");
 
 let anyOver = false;
-for (const [file, title, limit] of FIELDS) {
+for (const [file, title, cfg] of FIELDS) {
   const p = path.join(DIR, file);
   const text = fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "(MISSING)";
-  const len = text.length;
-  const over = limit != null && len > limit;
+  const useWords = cfg != null && cfg.words != null;
+  const measure = useWords ? wordCount(text) : text.length;
+  const unit = useWords ? "words" : "characters";
+  const limit = cfg == null ? null : useWords ? cfg.words : cfg.chars;
+  const over = limit != null && measure > limit;
   if (over) anyOver = true;
   const meta =
     limit == null
-      ? `${len} characters`
-      : `${len} / ${limit} characters${over ? "  ** OVER LIMIT **" : ""}`;
+      ? `${measure} ${unit}`
+      : `${measure} / ${limit} ${unit}${over ? "  ** OVER LIMIT **" : ""}`;
   lines.push(`## ${title}`);
   lines.push("");
   lines.push(`_${meta}_`);

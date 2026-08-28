@@ -8,10 +8,15 @@
 
 ## Project abstract
 
-_975 / 1000 characters_
+_216 / 250 words_
 
 ```text
-Cancer raises venous thromboembolism (VTE) risk 4-7 fold, yet pharmacologic prophylaxis is underused and is complicated by interactions between direct oral anticoagulants (DOACs) and chemotherapy. OncoVTE Guard is a SMART on FHIR clinical decision support app that automates the NCCN-endorsed workflow. It computes the Khorana VTE risk score from the patient's diagnosis and labs, screens every active medication against a 52-agent DOAC interaction knowledge base, evaluates renal function (Cockcroft-Gault) and absolute/relative contraindications, then recommends a specific, guideline-concordant anticoagulant - or flags when none is safe. The identical reasoning engine is exposed two ways: an in-EHR dashboard for clinicians and a CDS Hooks service for passive, point-of-care alerts. A 180-test automated suite and a rule-to-source-to-code-to-test traceability matrix demonstrate guideline fidelity, and five synthetic patients exercise every decision pathway end to end.
+Cancer-associated venous thromboembolism (VTE) is a leading cause of death in patients with cancer, and active malignancy raises VTE risk four- to sevenfold. Landmark trials (AVERT, CASSINI) show that targeted direct oral anticoagulant (DOAC) prophylaxis reduces VTE in higher-risk ambulatory patients, yet safe prescribing demands that a clinician simultaneously compute a Khorana risk score, screen for DOAC-chemotherapy drug-drug interactions across the CYP3A4 and P-glycoprotein pathways, assess renal function, and evaluate contraindications. That cognitive load is rarely carried reliably in a single encounter.
+
+OncoVTE Guard is a SMART on FHIR clinical decision support application, with a companion CDS Hooks service, that automates this reasoning. It ingests FHIR R4 patient data and routes it through a deterministic clinical engine: it classifies the cancer site by ICD-10, computes the Khorana score against the NCCN prophylaxis threshold, screens 52 antineoplastic agents for per-DOAC interaction severity, calculates creatinine clearance with renal dosing rules, and evaluates contraindications - producing one of five terminal decisions. LMWH fallback logic engages when both prophylaxis DOACs are blocked.
+
+The SMART dashboard and the CDS Hooks service share one clinical reasoning pipeline, identical by construction. A 180-test automated suite verifies every clinical threshold boundary, five synthetic FHIR patient bundles exercise all terminal states end to end, and a rule-to-source-to-code-to-test traceability matrix lets reviewers independently confirm guideline fidelity.
+
 ```
 
 ## Project rationale, impact and innovation
@@ -71,6 +76,19 @@ SUSTAINABILITY. The design is built to last and to be maintained. The DOAC inter
 DESIGNED FUTURE WORK - CAT-TREATMENT MODULE. A therapeutic-anticoagulation module for established cancer-associated VTE is designed against NCCN VTE-D/-F/-G but deliberately deferred. It is a structurally different engine - eight-plus agents, two-phase regimens with a parenteral lead-in, per-agent rather than global selection, and treatment-duration and on-therapy-failure pathways - so shipping a partially built second engine would undercut the fully-tested discipline of this prophylaxis entry. Its per-agent hepatic thresholds and the appliesTo, interaction, and renal primitives reuse directly, making it a natural post-acceptance build rather than an oversight.
 ```
 
+## Data validation, terminology and provenance
+
+_3098 / 3500 characters_
+
+```text
+VALIDATING AND FLAGGING STALE OR INCOMPLETE DATA. Every clinical input is validated before it can drive a decision. Laboratory and vital Observations each carry their effectiveDateTime, and any value older than 30 days is flagged as stale (a missing or unparseable date is treated as stale, i.e., conservatively) and surfaced as an explicit warning rather than silently trusted. When multiple Observations exist for the same analyte, the engine sorts by effective time and uses only the most recent. Required-field completeness is tracked: the Khorana engine records any missing component in missingFields and marks the result isComplete=false; creatinine clearance is computed only when both weight and serum creatinine are present, otherwise the app emits a "renal function not assessable" alert instead of guessing. Numeric guards prevent invalid math (a non-positive creatinine or weight, or a negative age, yields a guarded result rather than a divide-by-zero). A medication whose RxNorm code is not in the knowledge base is surfaced as "unknown - verify manually," never silently dropped. Every threshold is an explicit, unit-tested boundary.
+
+STANDARD TERMINOLOGY AND CORRECT RESOURCE TYPES. The parser is terminology- and resource-type-strict. Diagnoses are read only from Condition resources and only from the coding whose system is ICD-10-CM (http://hl7.org/fhir/sid/icd-10-cm); non-malignancy codes are filtered out, and matching respects the ICD-10-CM hierarchy through prefix logic. Labs and vitals are read only from Observation resources and only from LOINC codings (http://loinc.org). Medications are read only from MedicationRequest resources and only from RxNorm codings (http://www.nlm.nih.gov/research/umls/rxnorm), and only requests with status "active" are used, so discontinued or draft orders never influence a recommendation. Because each datum is accepted only from the semantically correct resource paired with its expected code system, a diagnosis cannot be mistaken for a procedure, or vice versa. Terminology precision is enforced by tests - for example, a regression test locks RxNorm 10324 to tamoxifen and 10400 to thalidomide so a tamoxifen patient is never mis-flagged as taking an immunomodulatory drug.
+
+PROVENANCE. Two kinds of provenance are surfaced today. First, data timing and status: each lab retains its source effectiveDateTime (which drives the staleness flag) and each medication retains its MedicationRequest.status. Second, decision provenance: every recommendation, alert, and CDS Hooks card carries an explicit source attribution (e.g., "NCCN VTE-B," "AHA 2022 Scientific Statement," or the DDI knowledge base), and each agent entry in the interaction knowledge base carries source attribution, so a clinician sees exactly which rule and reference produced each output. We are transparent about the current limit: the app does not yet consume the FHIR Provenance resource or meta.source to display which system recorded a value or which user entered it; capturing that author/origin metadata is a defined roadmap item before any live deployment.
+
+```
+
 ## Who is the intended user/audience of your app?
 
 _598 characters_
@@ -95,14 +113,6 @@ _476 / 500 characters_
 FHIR is used two ways. (1) As an end-user-facing SMART on FHIR app: launched from the EHR, it reads the in-context patient's FHIR resources to drive an interactive VTE prophylaxis dashboard. (2) As a machine-to-machine interface via CDS Hooks: the same engine is served as a CDS service that consumes FHIR resources delivered in the hook prefetch and returns decision cards, enabling passive, point-of-care guidance inside native EHR workflows (patient-view and order-select).
 ```
 
-## What FHIR release and resources does your application use?
-
-_461 / 500 characters_
-
-```text
-FHIR release: R4 (4.0.1). Resources read: Patient (demographics, sex, birthDate, US Core race/ethnicity); Condition (active malignancy by ICD-10-CM, for Khorana scoring and exclusions); Observation (labs - platelets, hemoglobin, WBC, creatinine, ALT, AST, bilirubin; vitals - weight, height, by LOINC); MedicationRequest (active meds by RxNorm, for DOAC interaction, ESA, antiplatelet, IMiD, and nephrotoxic detection). A client CapabilityStatement is provided.
-```
-
 ## Data source for the FHIR resources and how they are accessed
 
 _471 / 500 characters_
@@ -111,9 +121,17 @@ _471 / 500 characters_
 In production, resources are accessed live via the SMART on FHIR API (SMART App Launch, OAuth2) per the Argonaut/US Core ecosystem - the app reads Patient, Condition, Observation, and MedicationRequest for the launch patient. For CDS Hooks, resources arrive in the hook prefetch (or via the referenced FHIR server). For demo and automated testing, five synthetic FHIR R4 bundles (no PHI) run through the identical parsing pipeline, so demo and live modes behave the same.
 ```
 
+## List of FHIR resources (supplementary to the uploaded CapabilityStatement)
+
+_461 / 500 characters_
+
+```text
+FHIR release: R4 (4.0.1). Resources read: Patient (demographics, sex, birthDate, US Core race/ethnicity); Condition (active malignancy by ICD-10-CM, for Khorana scoring and exclusions); Observation (labs - platelets, hemoglobin, WBC, creatinine, ALT, AST, bilirubin; vitals - weight, height, by LOINC); MedicationRequest (active meds by RxNorm, for DOAC interaction, ESA, antiplatelet, IMiD, and nephrotoxic detection). A client CapabilityStatement is provided.
+```
+
 ## Any other information about the project
 
-_1387 / 1500 characters_
+_193 / 250 words_
 
 ```text
 OncoVTE Guard is decision support, not a substitute for clinical judgment; every recommendation is accompanied by disclaimers and source attributions, and all demonstration data is synthetic with no PHI. Two design points are worth highlighting for reviewers. First, the dual-surface architecture (one tested engine behind both a SMART dashboard and a CDS Hooks service) is what distinguishes this from a data-display dashboard: it is a clinical reasoning engine that can integrate passively into existing EHR workflows. Second, accuracy is treated as an auditable property - a companion VERIFICATION document provides a rule-to-source-to-code-to-test traceability matrix so reviewers can independently confirm guideline fidelity. Known, deliberate scope decisions are documented openly: active major bleeding is modeled as a clinician-confirmable flag (FHIR cannot reliably encode it); kidney cancer is scored high-risk with an explicit note that NCCN names only bladder/testicular; and the knowledge base, while curated and sourced, is scoped to its listed agents, with any unrecognized medication surfaced as "verify manually" rather than silently ignored; and the tool is scoped to primary prophylaxis, with the therapeutic-anticoagulation pathway designed against NCCN VTE-D but deliberately deferred as a structurally distinct engine (a documented scope decision, not an omission).

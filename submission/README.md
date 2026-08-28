@@ -18,31 +18,40 @@ letterhead, sign, and upload as PDF (student-category requirement).
 
 ## Field → file map
 
-| Form field | Limit | File | Chars |
-| --- | --- | --- | --- |
-| Project abstract | 1,000 | `01-abstract.txt` | 975 |
-| Project rationale, impact and innovation | 3,500 | `02-rationale.txt` | 3,370 |
-| Project design and implementation | 7,000 | `03-design.txt` | 4,678 |
-| Project evaluation and sustainability | 3,500 | `04-evaluation.txt` | 2,705 |
-| Intended user/audience | — | `05-audience.txt` | 598 |
-| Twitter project summary | 140 | `06-twitter.txt` | 138 |
-| How is FHIR being used? | 500 | `07-fhir-usage.txt` | 476 |
-| FHIR release & resources | 500 | `08-fhir-release-resources.txt` | 461 |
-| Data source & access | 500 | `09-data-source.txt` | 471 |
-| Any other information | 1,500 | `10-other-info.txt` | 1,159 |
-| Structured / short-answer fields | — | `00-short-answers.txt` | — |
+Limits mirror the ACTUAL AMIA portal: the abstract and "other info" fields are
+capped by **words**, the FHIR narratives and Twitter field by **characters**.
 
-(Counts are a snapshot; the script is the source of truth.)
+| Form field | Limit | File |
+| --- | --- | --- |
+| Project abstract | 250 words | `01-abstract.txt` |
+| Project rationale, impact and innovation | 3,500 chars | `02-rationale.txt` |
+| Project design and implementation | 7,000 chars | `03-design.txt` |
+| Project evaluation and sustainability | 3,500 chars | `04-evaluation.txt` |
+| Data validation, terminology and provenance | 3,500 chars | `04b-data-validation.txt` |
+| Intended user/audience | — | `05-audience.txt` |
+| Twitter project summary | 140 chars | `06-twitter.txt` |
+| How is FHIR being used? | 500 chars | `07-fhir-usage.txt` |
+| Data source & access | 500 chars | `09-data-source.txt` |
+| List of FHIR resources (supplementary) | 500 chars | `08-fhir-release-resources.txt` |
+| Any other information | 250 words | `10-other-info.txt` |
+| Structured / short-answer fields | — | `00-short-answers.txt` |
+
+Run `npm run check:submission` for live sizes — the script is the source of truth.
+A field-by-field portal walkthrough (radios, uploads, affirmations) is in
+`SUBMISSION-CHECKLIST.md`.
 
 ## Supporting artifacts (already in the repo)
 
 - **FHIR Capability Statement:** `public/capability-statement.json` (R4 client, lists Patient/Condition/Observation/MedicationRequest).
 - **Promotional photos:** `docs/screenshots/patient-1..5-*.png` — the five decision states (recommend, LMWH fallback, contraindicated, not indicated, excluded).
-- **Verification evidence:** `VERIFICATION.md` — rule→source→code→test traceability matrix, errata compliance, and the 106-test inventory referenced in the evaluation field.
+- **Verification evidence:** `VERIFICATION.md` — rule→source→code→test traceability matrix, errata compliance, and the 180-test inventory referenced in the evaluation field.
 
-## Items the submitter must still supply (flagged with `[ ]` in `00-short-answers.txt`)
+## Items the submitter must still supply
 
-1. **Advisor attestation PDF** (student category) — program name/address, primary advisor, co-authors + contributions, attestation of the student's contribution.
-2. **Dates** — when conceived / when implemented.
-3. **Website/URL** (repo or demo).
-4. **Logo and student headshot.**
+Dates and URLs are now filled in `00-short-answers.txt`. What still requires a
+human is tracked, with its portal location, in **`SUBMISSION-CHECKLIST.md`**:
+
+1. **Advisor attestation PDF** (student category) — signed on program letterhead.
+2. **Logo** and **student headshot** — image uploads.
+3. **Fix the "Ga​urd" title typo** in the portal.
+4. **Replace the stale portal abstract** (it still says 121 tests / "second leading cause").
