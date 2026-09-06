@@ -300,7 +300,7 @@ thrombotic (Khorana) risk.
 Because the central claim is **clinical accuracy**, evaluation targets **verifiable
 guideline fidelity**, not usage metrics.
 
-- **180 automated tests (Vitest), 14 files, all passing.** Cover Khorana scoring
+- **185 automated tests (Vitest), 15 files, all passing.** Cover Khorana scoring
   (incl. every boundary value), the 52-agent DDI checker, Cockcroft-Gault dosing,
   `appliesTo`-aware contraindications, stale-lab detection, the recommendation
   orchestrator, RxNorm code integrity, and the CDS Hooks card builder.
@@ -336,7 +336,7 @@ The project uses a deliberate three-tier claim standard:
   KB level, 16 major cells individually anchored, but **not** independently
   validated and inheriting the underlying literature's uncertainty.
 - **C-tier / engineering assertions (true by construction, not clinically
-  validated):** "180 tests pass," "dual-surface identical by construction,"
+  validated):** "185 tests pass," "dual-surface identical by construction,"
   "provably consistent." These are software facts, not clinical efficacy.
 
 **The honest headline claim is "provably consistent," NOT "clinically validated."**

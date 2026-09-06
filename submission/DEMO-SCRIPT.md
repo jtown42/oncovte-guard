@@ -77,7 +77,7 @@ in the live demo; the audience remembers the tool *doing something*, not slides.
 
 ## 6:15 – 7:15 · Maturity & honesty (this audience rewards candor)
 > "This is a rigorous **prototype**, and I'll be honest about its maturity:
-> **180 automated tests** cover every clinical threshold boundary, and **five
+> **185 automated tests** cover every clinical threshold boundary, and **five
 > synthetic FHIR patients** exercise all five decision states end to end. It has
 > **not** been used on live EHR data or validated with clinicians yet — the
 > prospective study I'd run next would measure appropriate-prophylaxis rate,

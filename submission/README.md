@@ -44,7 +44,7 @@ A field-by-field portal walkthrough (radios, uploads, affirmations) is in
 
 - **FHIR Capability Statement:** `public/capability-statement.json` (R4 client, lists Patient/Condition/Observation/MedicationRequest).
 - **Promotional photos:** `docs/screenshots/patient-1..5-*.png` — the five decision states (recommend, LMWH fallback, contraindicated, not indicated, excluded).
-- **Verification evidence:** `VERIFICATION.md` — rule→source→code→test traceability matrix, errata compliance, and the 180-test inventory referenced in the evaluation field.
+- **Verification evidence:** `VERIFICATION.md` — rule→source→code→test traceability matrix, errata compliance, and the 185-test inventory referenced in the evaluation field.
 
 ## Items the submitter must still supply
 

@@ -15,7 +15,7 @@
 - **Category:** AMIA / HL7 FHIR App Competition — **Student**.
 - **Live demo:** https://oncovte-guard.pages.dev · **SMART launch:** https://oncovte-guard.pages.dev/launch
 - **Source:** https://github.com/jtown42/oncovte-guard
-- **Verified state (live run, 2026-08-06):** `vitest run` → **14 files, 180/180 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
+- **Verified state (live run, 2026-08-06):** `vitest run` → **15 files, 185/185 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
 - **Companion docs:** `README.md` (orientation), `VERIFICATION.md` (rule→source→code→test audit), `ASSESSMENT.md` (reviewer verdict lens), `submission/SUBMISSION-FULL.md` (the actual entry text), `plan/errata-contract-reconciliation.md` (the authoritative contract).
 
 > ### If you are an outside reviewer or an evidence model, start here
@@ -51,7 +51,7 @@
 > larger type — §11.2) is **present in the working tree but not yet committed**, so the
 > **live site at oncovte-guard.pages.dev is behind `main`** and shows the prior styling.
 > **No clinical logic differs between the two** — the redesign touched only components,
-> `index.css`, `ui/format.ts`, and the Tailwind config; the 180 tests cover the engine and
+> `index.css`, `ui/format.ts`, and the Tailwind config; the 185 tests cover the engine and
 > pass identically on both.
 
 ---
@@ -87,7 +87,7 @@ cancer patient on systemic therapy**:
 2. **If yes, which anticoagulant is actually safe *for this patient right now*?** (renal function, drug–drug interactions with active chemotherapy, thrombocytopenia, hepatic function, and other contraindications.)
 
 The defining architectural claim: **this is not a dashboard that displays data — it is a
-clinical reasoning engine, proven by 180 automated tests, exposed through two EHR
+clinical reasoning engine, proven by 185 automated tests, exposed through two EHR
 surfaces.** All guideline logic lives in pure, framework-free TypeScript in `src/core/`.
 A SMART-on-FHIR dashboard (clinician *pull*), a CDS Hooks service (EHR *push*), and a
 standalone what-if demo all converge on **one seam**:
@@ -106,7 +106,7 @@ in isolation.
 **The single most important caveat** (repeat it to any reviewer, unprompted): the DDI
 knowledge base and clinical thresholds were **curated from supplied structured clinical
 input and published labeling**, encoded against an authoritative project contract. The
-180 tests prove the encoded rules are *applied faithfully and consistently*. They do
+185 tests prove the encoded rules are *applied faithfully and consistently*. They do
 **not** independently prove the underlying pharmacology is itself correct or current —
 that needs clinician/pharmacist sign-off for real use. The app says so everywhere.
 
@@ -423,7 +423,7 @@ Stated bluntly so nobody has to infer it:
   *list* is guideline-scaffolded (ACC 2026 / NCCN VTE-2); the numeric cut-points are curator
   choices; and *no bleeding score is computed on purpose* — the evidence does not support one
   for primary prophylaxis in this population.
-- **The engineering *is* the contribution.** The one-seam architecture, the 180 tests, the
+- **The engineering *is* the contribution.** The one-seam architecture, the 185 tests, the
   dual-surface coherence, and the traceability matrix are real, verifiable, and unusual for
   a student prototype. The clinical content is a *faithful encoding of a curated set* — the
   app's honest claim is **"provably consistent," not "independently validated."**
@@ -541,7 +541,7 @@ generateRecommendation` pipeline. Test reference date pinned at `2026-06-10T12:0
 
 ## 10. Testing & verification
 
-**Live run (this document): `vitest run` → 14 files, 180 tests, all passing** in ~6 s.
+**Live run (this document): `vitest run` → 15 files, 185 tests, all passing** in ~6 s.
 `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) → 0 errors.
 `tsc && vite build` → succeeds (113 modules).
 
@@ -642,7 +642,7 @@ surfaced, found while writing this document.
 
 ### F1 — `hasActiveMajorBleeding` end-to-end wiring **(RESOLVED 2026-07-15)**
 - *Originally:* the contraindications engine supported active major bleeding (`ContraindicationInput.hasActiveMajorBleeding`, checked at `contraindications.ts:85` → universal absolute), but it was unreachable from a patient — `PatientData` had no such field and the orchestrator never passed it, so the verdict could never actually fire. The submission described it as "modeled as a clinician-set boolean," which was then aspirational relative to the code.
-- **Fixed:** `hasActiveMajorBleeding: boolean` was added to `PatientData` (defaulted `false` in `assemblePatientData`, since FHIR has no reliable discrete signal for it), threaded through `Scenario` / `scenarioToPatient` / `patientToScenario`, forwarded in `generateRecommendation`'s `detectContraindications` call, and exposed as an "Active major bleeding (clinician-assessed)" toggle in the control rail. Two tests lock it (`tests/core/recommendation.test.ts`, `tests/standalone/scenario.test.ts`): toggling it on an otherwise-`recommend` patient flips the verdict to `contraindicated` with reason `active_major_bleeding`. Suite is now **180/180**, typecheck clean, build green.
+- **Fixed:** `hasActiveMajorBleeding: boolean` was added to `PatientData` (defaulted `false` in `assemblePatientData`, since FHIR has no reliable discrete signal for it), threaded through `Scenario` / `scenarioToPatient` / `patientToScenario`, forwarded in `generateRecommendation`'s `detectContraindications` call, and exposed as an "Active major bleeding (clinician-assessed)" toggle in the control rail. Two tests lock it (`tests/core/recommendation.test.ts`, `tests/standalone/scenario.test.ts`): toggling it on an otherwise-`recommend` patient flips the verdict to `contraindicated` with reason `active_major_bleeding`. Suite is now **185/185**, typecheck clean, build green.
 - The submission claim is now literally true and demonstrable live — the toggle is the companion safety-gate demo to the Dorothy platelet flip.
 
 ### F2 — Curated knowledge base, not a live interaction service *(the central scientific dependency)*
@@ -766,7 +766,7 @@ not a slideshow. Use **presentation mode** (`?present=true` or the top-bar toggl
 enlarge the verdict/score/CrCl for projection.
 
 **The three sentences that frame the whole project:**
-1. "This is a clinical reasoning engine, not a dashboard — 180 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
+1. "This is a clinical reasoning engine, not a dashboard — 185 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
 2. "Every rule traces guideline → source → code → test in our VERIFICATION document."
 3. "The knowledge base is curated and tested for faithful application — clinician sign-off is the explicit next step, and we say so."
 
@@ -796,7 +796,7 @@ Requires Node 18+.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit (strict)        → 0 errors
-npm test              # vitest run                    → 14 files, 180 tests pass
+npm test              # vitest run                    → 15 files, 185 tests pass
 npm run build         # tsc && vite build             → dist/ (113 modules)
 npm run dev           # standalone demo, 5 patients   → http://localhost:5173
 npm run preview       # serve the production build
@@ -931,4 +931,4 @@ Supporting trials cited in the narrative (not epidemiology): **AVERT** (Carrier 
 
 *This document is a reference, not a substitute for the code. Where it and the source
 disagree, the source wins — and that disagreement is itself a finding worth filing.
-Last verified against a live test run of 180/180 passing.*
+Last verified against a live test run of 185/185 passing.*

@@ -15,7 +15,7 @@ Cancer-associated venous thromboembolism (VTE) is a leading cause of death in pa
 
 OncoVTE Guard is a SMART on FHIR clinical decision support application, with a companion CDS Hooks service, that automates this reasoning. It ingests FHIR R4 patient data and routes it through a deterministic clinical engine: it classifies the cancer site by ICD-10, computes the Khorana score against the NCCN prophylaxis threshold, screens 52 antineoplastic agents for per-DOAC interaction severity, calculates creatinine clearance with renal dosing rules, and evaluates contraindications - producing one of five terminal decisions. LMWH fallback logic engages when both prophylaxis DOACs are blocked.
 
-The SMART dashboard and the CDS Hooks service share one clinical reasoning pipeline, identical by construction. A 180-test automated suite verifies every clinical threshold boundary, five synthetic FHIR patient bundles exercise all terminal states end to end, and a rule-to-source-to-code-to-test traceability matrix lets reviewers independently confirm guideline fidelity.
+The SMART dashboard and the CDS Hooks service share one clinical reasoning pipeline, identical by construction. A 185-test automated suite verifies every clinical threshold boundary, five synthetic FHIR patient bundles exercise all terminal states end to end, and a rule-to-source-to-code-to-test traceability matrix lets reviewers independently confirm guideline fidelity.
 
 ```
 
@@ -60,12 +60,12 @@ CHALLENGES OVERCOME. (1) Encoding "active major bleeding": FHIR has no single, r
 
 ## Project evaluation and sustainability
 
-_3498 / 3500 characters_
+_3488 / 3500 characters_
 
 ```text
 EVALUATION APPROACH. Because the project's central claim is clinical accuracy, evaluation focused on verifiable guideline fidelity rather than on usage metrics (the app is a pre-deployment prototype). We gathered both quantitative and qualitative evidence.
 
-QUANTITATIVE. (1) A 180-test automated suite (Vitest) covers every clinical engine and the integration boundaries: Khorana scoring including each criterion's boundary value (e.g., platelets exactly 350 scores, hemoglobin exactly 10.0 does not), the 52-agent DOAC interaction checker, Cockcroft-Gault renal dosing, appliesTo-aware contraindications, stale-lab detection, the recommendation orchestrator, RxNorm code integrity, and the CDS Hooks card builder. (2) Five synthetic FHIR R4 patients are run end to end, asserting the expected output of all five decision states - recommend, caution/LMWH fallback, contraindicated, not indicated, and excluded. (3) A rule-to-source-to-code-to-test traceability matrix links each clinical rule to its guideline citation, its implementing code, and the test that proves it, including the ten authoritative contract decisions. (4) Static gates: the TypeScript compiler runs clean under strict mode, and the production build succeeds.
+QUANTITATIVE. (1) A 185-test automated suite (Vitest) covers every clinical engine and the integration boundaries: Khorana scoring including each criterion's boundary value (e.g., platelets exactly 350 scores, hemoglobin exactly 10.0 does not), the 52-agent DOAC interaction checker, Cockcroft-Gault renal dosing, appliesTo-aware contraindications, stale-lab detection, the recommendation orchestrator, RxNorm code integrity, and the CDS Hooks card builder. (2) Five synthetic FHIR R4 patients are run end to end, asserting the expected output of all five decision states - recommend, caution/LMWH fallback, contraindicated, not indicated, and excluded. (3) A rule-to-source-to-code-to-test traceability matrix links each clinical rule to its guideline citation, its implementing code, and the test that proves it, including the ten authoritative contract decisions. (4) Static gates: the TypeScript compiler runs clean under strict mode, and the production build succeeds.
 
 QUALITATIVE. Each of the five decision states was visually verified in the running app and captured as a screenshot against a stated readability rationale: severity is carried by a color-coded matrix, ranked alerts, and an explicit "avoid / not an option" list - never by color alone. Every text/background pair passes a measured WCAG 2.1 AA contrast audit (docs/ACCESSIBILITY.md).
 
@@ -102,7 +102,7 @@ Primary users are clinicians who manage ambulatory cancer patients: medical onco
 _138 / 140 characters_
 
 ```text
-SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 180 tests proving guideline fidelity.
+SMART on FHIR + CDS Hooks engine that scores cancer VTE risk and flags DOAC-chemo interactions, with 185 tests proving guideline fidelity.
 ```
 
 ## How is FHIR being used in the app?
