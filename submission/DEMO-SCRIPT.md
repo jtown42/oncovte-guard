@@ -19,20 +19,25 @@ in the live demo; the audience remembers the tool *doing something*, not slides.
 > score, cross-check every chemo drug against the anticoagulant for CYP3A4 and
 > P-glycoprotein interactions, check kidney function, and rule out
 > contraindications. That's four reasoning tasks under time pressure, and it's
-> offloaded to human memory. Cancer-associated clot is a leading cause of death
-> in these patients — and anticoagulating the *wrong* one causes bleeding."
+> offloaded to human memory. Cancer-associated clot is the second leading cause of
+> death in these patients — after the cancer itself — and anticoagulating the
+> *wrong* one causes bleeding."
 
 ## 1:00 – 2:15 · The design (your differentiator — one or two slides)
-> "OncoVTE Guard is **one clinical reasoning engine** exposed **two ways**: an
-> interactive SMART-on-FHIR dashboard the clinician pulls up, and a CDS Hooks
-> service the EHR pushes at the point of order entry. They are **identical by
-> construction** — same engine, so they can never disagree.
+> "OncoVTE Guard's core idea is **verifiable decision support** — the opposite of a
+> black box. Every recommendation traces through three links you can check:
+> **tests** prove the engine faithfully applies its rules; a
+> **rule → source → code → test traceability matrix** proves those rules trace to
+> the guideline literature; and — as you'll see in a moment — the engine's live
+> behavior proves those rules are *clinically intelligent*, not just consistent.
 >
-> And every clinical rule is backed by an automated test and a
-> **rule → source → code → test traceability matrix** — you can click any
-> recommendation back to its guideline citation and the test that proves it."
+> That one engine is exposed **two ways**: an interactive SMART-on-FHIR dashboard
+> the clinician pulls up, and a CDS Hooks service the EHR pushes at order entry —
+> **identical by construction**, so they can never disagree."
 
-*(This matrix + the dual-surface design are what a FHIR panel rewards. Say it early.)*
+*(Lead with the matrix / verifiability — that provenance story is what a FHIR panel
+rewards. Treat the test count as supporting evidence, never the headline: tests only
+prove the code does what you intended, the matrix proves the intent is guideline-true.)*
 
 ---
 
@@ -40,8 +45,8 @@ in the live demo; the audience remembers the tool *doing something*, not slides.
 
 ### Beat 1 — a clean recommendation (Maria) · ~45s
 - **Maria** is already loaded. Point to the green **"Prophylaxis recommended."**
-> "Pancreatic cancer, Khorana **5** — the app scores it against the NCCN ≥2
-> threshold, confirms kidneys are fine, screens her chemo, and recommends
+> "Pancreatic cancer, Khorana **5** — the app scores it against the trial-validated
+> ≥2 threshold (ITAC and NCCN), confirms kidneys are fine, screens her chemo, and recommends
 > apixaban or rivaroxaban with the exact prophylaxis dose. Every card cites its
 > source."
 
@@ -76,21 +81,25 @@ in the live demo; the audience remembers the tool *doing something*, not slides.
 ---
 
 ## 6:15 – 7:15 · Maturity & honesty (this audience rewards candor)
-> "This is a rigorous **prototype**, and I'll be honest about its maturity:
-> **185 automated tests** cover every clinical threshold boundary, and **five
-> synthetic FHIR patients** exercise all five decision states end to end. It has
-> **not** been used on live EHR data or validated with clinicians yet — the
-> prospective study I'd run next would measure appropriate-prophylaxis rate,
-> symptomatic VTE, major bleeding, and alert-override rate.
+> "This is a rigorous **prototype**, and I hold it to a three-tier claim standard,
+> so I'll be precise: the honest headline is **provably consistent — not clinically
+> validated.** **185 automated tests** cover every clinical threshold boundary, and
+> **five synthetic FHIR patients** exercise all five decision states end to end. It
+> has **not** been used on live EHR data or validated with clinicians — no patients,
+> no clinician evaluation, synthetic data only. And here's exactly what would move it
+> to the next tier: the prospective study I'd run next would measure
+> appropriate-prophylaxis rate, symptomatic VTE, major bleeding, and alert-override rate.
 >
 > It's built entirely on open standards — FHIR R4, SMART App Launch, CDS Hooks —
 > so it's portable across EHRs, and I've agreed to publish it in the SMART App
 > Gallery."
 
 ## 7:15 – 8:00 · The ask (vote line)
-> "OncoVTE Guard turns four error-prone reasoning tasks into one explicit,
-> testable, guideline-cited recommendation — at the point of care, in the tools
-> clinicians already use. If that's the kind of decision support you'd want in
+> "Here's the one thing to remember: **every recommendation OncoVTE Guard makes can
+> be traced — live, in this room — from a guideline, to a line of code, to a test
+> that proves it; and when a drug is unsafe, the engine narrows to the safe option
+> instead of just firing an alert.** That's decision support you can *audit*, at the
+> point of care, in the tools clinicians already use. If that's what you'd want in
 > your EHR, I'd be grateful for your vote."
 
 ---

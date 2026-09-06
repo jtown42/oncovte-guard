@@ -31,13 +31,43 @@ Supporting sources named in the narrative (not epidemiology figures):
     2008;111(10):4902-4907.
 [7] NCCN Clinical Practice Guidelines in Oncology (NCCN Guidelines): Cancer-
     Associated Venous Thromboembolic Disease.
+[8] Farge D, Frere C, Connors JM, et al. 2022 international clinical practice
+    guidelines for the treatment and prophylaxis of venous thromboembolism in
+    patients with cancer, including patients with COVID-19 (ITAC 2022).
+    Lancet Oncol. 2022;23(7):e334-e347.
+[9] Lyon AR, Lopez-Fernandez T, Couch LS, et al. 2022 ESC Guidelines on
+    cardio-oncology. Eur Heart J. 2022;43(41):4229-4361.
+[10] Bosch FTM, Mulder FI, Kamphuisen PW, et al. Primary thromboprophylaxis in
+    ambulatory cancer patients: a systematic review and meta-analysis.
+    Blood Adv. 2020;4(20):5215-5225.
+[11] Lyman GH, Carrier M, Ay C, et al. American Society of Hematology 2021
+    guidelines for management of venous thromboembolism: prevention and treatment
+    in patients with cancer. Blood Adv. 2021;5(4):927-974.
+[12] Key NS, Khorana AA, Kuderer NM, et al. Venous thromboembolism prophylaxis
+    and treatment in patients with cancer: ASCO guideline update.
+    J Clin Oncol. 2023;41(16):3063-3071.
+[13] Gervaso L, Dave H, Khorana AA. Venous and arterial thromboembolism in
+    patients with cancer: JACC: CardioOncology state-of-the-art review.
+    [DDI + LMWH-fallback decision framework; confirm exact locator for the ACC 2026
+    statement cited by OpenEvidence before external use.]
+[14] AHA 2022 Scientific Statement on cardio-oncology drug interactions
+    (DDI knowledge-base source; full citation recorded in the DDI knowledge base
+    `sources` array).
+[15] Hellfritzsch M, et al. 2024 (per-agent DOAC-antineoplastic interaction
+    reference; DDI knowledge-base source; full citation in the KB `sources` array).
 
 WORDING NOTES (rationale for phrasing, in case a reviewer asks):
 
-- "a leading cause of death": cancer-associated VTE is commonly described as the
-  SECOND leading cause of death in patients with cancer (after cancer progression
-  itself), supported by ITAC [1]. The submission uses the slightly more
-  conservative "a leading cause," which is equally defensible.
+- "second leading cause of death": the submission states cancer-associated VTE is
+  the SECOND leading cause of death in patients with cancer, after cancer
+  progression itself. This is the guideline-standard phrasing, stated in ITAC 2019
+  [1], ITAC 2022 [8], and the 2022 ESC Cardio-Oncology guideline [9]; it is a
+  society-guideline claim, not an interpretation, so it cannot be characterized as
+  overstatement. (An earlier draft softened this to "a leading cause"; the
+  guideline-anchored "second leading cause" is restored as both stronger and fully
+  defensible. Even the leading-cause claim is defensible for the ambulatory
+  chemotherapy population specifically per Brito-Dellan et al., but we use the
+  broader "second leading cause" for maximum, zero-defense sourcing.)
 
 - AVERT/CASSINI framing: the text credits the trials "and their pooled analysis,"
   not each trial's primary result. This is deliberate. AVERT showed a significant
@@ -48,12 +78,58 @@ WORDING NOTES (rationale for phrasing, in case a reviewer asks):
   window (HR 0.40, 95% CI 0.20-0.80). A pooled analysis of both trials shows a
   significant reduction in VTE (RR ~0.56, 95% CI 0.35-0.89) without a significant
   increase in major bleeding [1]. Citing the pooled result avoids overstating
-  CASSINI's headline finding.
+  CASSINI's headline finding. IMPORTANT precision: the pooled RR 0.56 (0.35-0.89)
+  is for OVERALL VTE (including screen-detected); the pooled reduction in
+  SYMPTOMATIC VTE did not reach significance (RR ~0.58, 95% CI 0.29-1.13), and the
+  pooled major-bleeding estimate was not significantly increased (RR ~1.96, 95% CI
+  0.80-4.82). A Khorana-stratified meta-analysis (Bosch et al., Blood Adv 2020 [10])
+  reports RR ~0.51 at KS >=2, with number-needed-to-treat roughly 34 at a score of 2
+  versus ~17 at >=3. So whenever RR 0.56 is quoted, label it "overall VTE," not
+  symptomatic VTE.
 
-- Khorana threshold: the app applies the NCCN prophylaxis threshold of Khorana
-  score >=2 (intermediate-to-high risk), which aligns with the AVERT/CASSINI
-  inclusion criteria. Note this differs from the ORIGINAL Khorana high-risk cut
-  point of >=3; the app is explicit about using >=2. NCCN population exclusions
-  (multiple myeloma, acute leukemia, myeloproliferative neoplasms, primary/
-  metastatic brain tumors) are handled on a separate "excluded" pathway, not
-  scored against Khorana.
+- Khorana threshold: the app offers prophylaxis at Khorana score >=2 - the
+  trial-validated threshold used by ITAC [1][8] and NCCN [7] and matching the
+  AVERT/CASSINI inclusion criteria - deliberately distinct from the ORIGINAL Khorana
+  high-risk cut point of >=3. Framing note (per expert review): describe >=2 as "the
+  trial-validated threshold used by ITAC and NCCN," NOT as "the" universal
+  prophylaxis threshold. ASH 2021 [11] preserves the original 3-tier model and
+  treats a score of 2 as a zone of equipoise (DOAC OR no prophylaxis, conditional),
+  reserving a clearer recommendation for >=3; net benefit is greatest at >=3 (NNT
+  ~17) versus a score of 2 (NNT ~34) [10]. The rule (offer at >=2) is correct and
+  trial-aligned and does not change; only the wording is tightened, and this nuance
+  is a strong live-Q&A answer. NCCN population exclusions (multiple myeloma, acute
+  leukemia, myeloproliferative neoplasms, primary/metastatic brain tumors) are
+  handled on a separate "excluded" pathway, not scored against Khorana.
+
+- DDI knowledge-base sourcing (per expert review): the 52-agent per-DOAC table is
+  curated from a single named source set - the AHA 2022 Scientific Statement [14],
+  Hellfritzsch et al. 2024 [15], and FDA DOAC labeling - which is defensible and
+  roughly state-of-the-art; Hellfritzsch remains the most granular per-agent/per-DOAC
+  reference available and has not been superseded. This module carries the most
+  clinical uncertainty (the DOAC-antineoplastic evidence base is thin and CDS
+  sources disagree - e.g., Nowinski & Chaireti 2025 found ~35% of pairs flagged by
+  >=1 source), so its defense is transparency about that single named source set and
+  the 16 individually-anchored major cells, NOT a claim of independent validation.
+  Describe the DDI output as "faithful to a single named source set," never as
+  "accurate" unqualified. The EHRA Practical Guide is the most widely-used clinical
+  DOAC-interaction reference and is a reasonable pointer for clinicians, but it is
+  NOT a curation input to this KB and is not claimed as a source. The switch-to-LMWH
+  logic when a strong DDI precludes a DOAC follows ITAC 2022 (grade 1A) [8] and ACC
+  2026 [13].
+
+- Guideline currency (per expert review): the encoded primary-prophylaxis rules are
+  current as of NCCN v1.2026 [7], ITAC 2022 [8], ASCO 2023 [12], and ACC 2026 [13],
+  and nothing published 2024-2026 changes them (threshold >=2, apixaban/rivaroxaban
+  preferred, LMWH fallback all stand). Out-of-scope-but-tracked developments: API-CAT
+  (NEJM 2025; reduced-dose apixaban 2.5 mg BID noninferior for EXTENDED secondary
+  prevention - treatment, not primary prophylaxis), TARGET-TP (biomarker-guided
+  prophylaxis in lung/GI; reinforces the lung Khorana caveat), and factor XI
+  inhibitors (abelacimab: ASTER/MAGNOLIA) as the emerging CAT anticoagulation class.
+
+- Renal-cell carcinoma (per expert review): C64 is deliberately NOT scored (0 pts),
+  matching NCCN, which scores only bladder and testicular among GU cancers. RCC risk
+  is nonetheless genuinely elevated - contemporary US data show ~7.6% 12-month VTE
+  incidence, above bladder (~4.8%) and testicular (~3.8%) [3] - so the engine
+  surfaces it as an advisory + a bleeding-risk factor rather than letting a contested
+  rule silently cross the >=2 threshold. This "score the guideline, flag the gap"
+  discipline is a feature to foreground, not a limitation to hide.

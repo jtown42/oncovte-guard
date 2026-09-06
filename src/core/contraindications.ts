@@ -143,14 +143,16 @@ export function detectContraindications(
   // ~5.4, driven by stroke), with no difference in VTE or major bleeding. NCCN
   // VTE-D-5 contraindicates the DOAC class in APS, warfarin preferred — it does
   // NOT contraindicate all anticoagulation, so LMWH remains available and the
-  // engine falls back to it. Flagged for any diagnosed thrombotic APS (the trial
-  // evidence found no effect modification by triple- vs single/double-positivity).
+  // engine falls back to it. The evidence is strongest in triple-positive /
+  // high-risk APS (TRAPS enrolled triple-positive patients), but NCCN notes the
+  // concern extends to single- and double-positive disease, so we apply the block
+  // to any diagnosed APS and surface the positivity nuance in the detail.
   if (hasConditionMatching(input.conditions, APS_PREFIXES)) {
     absolute.push({
       type: "absolute",
       reason: "antiphospholipid_syndrome",
       detail:
-        "Antiphospholipid syndrome: avoid DOACs (excess arterial thrombosis vs VKA — TRAPS; pooled OR ~5.4). Warfarin is preferred for therapeutic APS; for prophylaxis here, LMWH is the acceptable alternative.",
+        "Antiphospholipid syndrome: avoid DOACs (excess arterial thrombosis vs VKA — TRAPS; pooled OR ~5.4). Evidence is strongest in triple-positive / high-risk APS, though NCCN extends the concern to single- and double-positive disease. Warfarin is preferred for therapeutic APS; for prophylaxis here, LMWH is the acceptable alternative.",
       appliesTo: ALL_DOACS,
       source: "NCCN VTE-D-5; TRAPS (Pengo 2018)",
     });

@@ -98,7 +98,7 @@ export const HIGH_RULES: CategoryRule[] = [
  * likewise not scored.
  */
 const KIDNEY_NOTE =
-  "Renal-cell carcinoma (kidney) carries elevated VTE risk, but NCCN scores only bladder and testicular among GU cancers, so it is NOT scored here (0 points); consider prophylaxis on individual clinical judgment. Metastatic RCC is a higher-bleeding-risk site where LMWH may be preferred. Evidence grade C.";
+  "Renal-cell carcinoma (kidney) carries elevated VTE risk — contemporary US data put its 12-month incidence (~7.6%) above some scored GU sites (bladder ~4.8%, testicular ~3.8%; Lam 2026) — yet NCCN scores only bladder and testicular among GU cancers, so it is NOT scored here (0 points); consider prophylaxis on individual clinical judgment. Metastatic RCC is a higher-bleeding-risk site where LMWH may be preferred (ACC 2026). Evidence grade C.";
 
 /**
  * Lung cancer scores as a Khorana high-risk site (1 pt), but the score's

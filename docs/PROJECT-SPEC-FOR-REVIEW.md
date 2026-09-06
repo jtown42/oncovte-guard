@@ -113,9 +113,13 @@ Components (Khorana et al., *Blood* 2008), max score **6**:
 - **Risk tiers** (original Khorana / NCCN VTE-C labeling): 0 = Low, 1–2 =
   Intermediate, ≥3 = High.
 - **Actionable threshold: prophylaxis is indicated at Khorana ≥ 2** (AND not
-  excluded). *This is the ≥2 NCCN prophylaxis threshold, which aligns with the
-  AVERT/CASSINI inclusion criteria — deliberately distinct from the original
-  ≥3 high-risk cut point. The app is explicit about using ≥2.*
+  excluded). *This is the trial-validated threshold used by ITAC and NCCN and
+  matching the AVERT/CASSINI inclusion criteria — deliberately distinct from the
+  original ≥3 high-risk cut point. Describe it as "the trial-validated threshold used
+  by ITAC and NCCN," NOT as "the" universal prophylaxis threshold: ASH 2021 treats a
+  score of 2 as a zone of equipoise, reserving a clearer recommendation for ≥3 (net
+  benefit greatest at ≥3, NNT ~17 vs ~34 at 2). The rule is unchanged; only the
+  wording is tightened. The app is explicit about using ≥2.*
 - Missing labs are treated as **non-scoring (0)** and recorded in `missingFields`;
   `isComplete=false` flags an incomplete assessment (conservative, never throws).
 - ESA use can satisfy the hemoglobin criterion even without a hemoglobin value.
@@ -176,8 +180,10 @@ just the affected agent(s).
   (apixaban/rivaroxaban/dabigatran/edoxaban), NOT universal. DOACs cause excess
   arterial thrombosis vs VKA (TRAPS; pooled OR ~5.4), so NCCN VTE-D-5
   contraindicates the DOAC class with warfarin preferred — LMWH remains, and the
-  engine falls back to it. Flagged for any diagnosed thrombotic APS (trial
-  evidence found no effect modification by triple- vs single/double-positivity).
+  engine falls back to it. Evidence is strongest in triple-positive / high-risk APS
+  (TRAPS enrolled triple-positive), but NCCN extends the concern to single- and
+  double-positive disease, so the block is applied to any diagnosed APS and the
+  positivity nuance is surfaced in the detail string.
 - **Pregnancy or breastfeeding** (`O*`, `Z33.1`, `Z3A`, `Z39.1`) → **targeted to
   the DOAC class** (placental transfer / milk excretion; LMWH is the standard
   anticoagulant in pregnancy). Detected from coded conditions, not a boolean.
@@ -368,9 +374,12 @@ measured contrast" — never "clinician-validated" or "proven usable."
 
 ## 8. Clinical evidence base (with the nuances a reviewer should check)
 
-- **Cancer VTE burden:** active malignancy raises VTE risk ~4–7× (ITAC); commonly
-  described as *a leading cause of death* in cancer patients. (The submission uses
-  the conservative "a leading cause"; "second leading cause" is also supportable.)
+- **Cancer VTE burden:** active malignancy raises VTE risk ~4–7× (ITAC; higher in
+  recent cohorts, e.g. Danish HR ~8.5); VTE is the **second leading cause of death**
+  in patients with cancer, after cancer progression itself — guideline-standard
+  phrasing (ITAC 2019/2022; ESC 2022). Contemporary US scale: 12-mo VTE incidence
+  ~3.7% overall, ~5.7% on systemic therapy (Lam 2026). *(The submission now uses the
+  guideline-anchored "second leading cause"; an earlier draft had softened it.)*
 - **Prophylaxis efficacy — the nuance:** **AVERT** (apixaban 2.5 mg BID, Khorana
   ≥2) significantly reduced VTE (4.2% vs 10.2%, HR 0.41, 95% CI 0.26–0.65) with
   more major bleeding (3.5% vs 1.8%, HR 2.00, 95% CI 1.01–3.95). **CASSINI**
@@ -380,12 +389,21 @@ measured contrast" — never "clinician-validated" or "proven usable."
   **pooled analysis** of both shows a significant VTE reduction (RR ~0.56, 95% CI
   0.35–0.89) without a significant increase in major bleeding. **The submission credits the
   pooled analysis, not each trial's primary result** — verify this framing is
-  preserved wherever efficacy is claimed.
+  preserved wherever efficacy is claimed. *Precision (per OE review): the pooled RR
+  0.56 is for OVERALL VTE (incl. screen-detected); the pooled SYMPTOMATIC-VTE
+  reduction was not significant (RR ~0.58, 0.29–1.13). Khorana-stratified: Bosch
+  2020 RR ~0.51 at KS≥2, NNT ~34 at score 2 vs ~17 at ≥3.*
 - **Risk model:** Khorana et al., *Blood* 2008 (development/validation).
 - **Guideline anchors named:** NCCN Cancer-Associated VTE Disease (v1.2026, VTE-B
   family); ITAC 2019/2022; ACC 2026 DOAC statement; AHA 2022 cardio-oncology drug
   interactions (DDI source); Hellfritzsch et al. 2024 (DDI source); FDA DOAC
-  labeling.
+  labeling. The switch-to-LMWH-on-strong-DDI logic follows ITAC 2022 (1A) and ACC 2026.
+- **Currency (per OE review):** primary-prophylaxis rules are current as of NCCN
+  v1.2026, ITAC 2022, ASCO 2023, and ACC 2026; nothing published 2024–2026 changes
+  them. Out-of-scope-but-tracked: API-CAT (NEJM 2025, reduced-dose apixaban for
+  EXTENDED secondary prevention — treatment, not primary prophylaxis), TARGET-TP
+  (biomarker-guided prophylaxis in lung/GI), and factor XI inhibitors (abelacimab:
+  ASTER/MAGNOLIA).
 - **Epidemiology:** Lam BD, et al. *Am J Hematol.* 2026;101(5):1005-1018.
   doi:10.1002/ajh.70271 (contemporary US CAT epidemiology, Epic Cosmos).
 
