@@ -14,11 +14,14 @@ import {
   TONE_BANNER,
   TONE_SOLID,
   TONE_DOT,
+  TONE_TEXT,
   type Tone,
   renalStatusTone,
   RENAL_STATUS_LABEL,
   severityTone,
   SEVERITY_LABEL,
+  RISK_LABEL,
+  humanize,
 } from "../ui/format";
 
 /** A small severity dot — carries state without a filled chip. */
@@ -90,29 +93,53 @@ export function RecommendationPanel({
   // F4 (WS-5): distinct LMWH-fallback label without changing overallAction/tone.
   const isLmwhVerdict = rec.verdictLabel === "recommend_lmwh";
   const heroLabel = isLmwhVerdict
-    ? "Prophylaxis recommended — LMWH (DOACs blocked)"
+    ? "Prophylaxis recommended — LMWH"
     : action.label;
-  const heroSummary = isLmwhVerdict
-    ? "Both apixaban and rivaroxaban are blocked; LMWH is the NCCN-concordant choice (never dabigatran/edoxaban)."
-    : action.summary;
+
+  // The regimen the clinician acts on: preferred DOACs, or the LMWH fallback.
+  const regimen = rec.preferredOptions.length
+    ? rec.preferredOptions
+    : rec.alternativeOptions;
 
   return (
-    <section className="card overflow-hidden">
+    <section className="card overflow-hidden shadow-hero">
       {/* Hero banner — flashes on every verdict change so the flip lands on stage. */}
       <Flash watch={rec.overallAction} tone={action.tone}>
-        <div className={`flex items-center gap-4 border-l-4 px-6 py-5 ${TONE_BANNER[action.tone]}`}>
-          <span
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white ${TONE_SOLID[action.tone]}`}
-            aria-hidden
-          >
-            <VerdictIcon action={rec.overallAction} />
-          </span>
-          <div className="min-w-0">
-            <h2 className="verdict-hero">{heroLabel}</h2>
-            <p className="mt-1.5 max-w-[62ch] text-sm opacity-90">{heroSummary}</p>
+        <div className={`border-l-4 px-6 py-5 ${TONE_BANNER[action.tone]}`}>
+          <div className="flex items-start gap-4">
+            <span
+              className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white ${TONE_SOLID[action.tone]}`}
+              aria-hidden
+            >
+              <VerdictIcon action={rec.overallAction} />
+            </span>
+            <div className="min-w-0">
+              <h2 className="verdict-hero">{heroLabel}</h2>
+              {showOptions && regimen.length > 0 ? (
+                <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  {regimen.map((o) => (
+                    <span key={o.name} className="inline-flex items-baseline gap-2">
+                      <span className="text-lg font-semibold capitalize text-clinical-ink">
+                        {o.name}
+                      </span>
+                      <span className="font-mono text-sm tabular-nums text-clinical-inkSoft">
+                        {[o.dose, o.route, o.frequency].filter(Boolean).join(" ")}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-1.5 max-w-[62ch] text-sm opacity-90">
+                  {action.summary}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </Flash>
+
+      {/* The decision pathway — the engine's fixed pipeline, told in one glance. */}
+      <PathwayStrip rec={rec} />
 
       <div className="card-body space-y-6">
         {rec.staleLabWarning && (
@@ -155,6 +182,132 @@ export function RecommendationPanel({
   );
 }
 
+/** A pass/caution/stop mark for one pathway step — reads faster than a dot. */
+function StepMark({ tone }: { tone: Tone }) {
+  const common = {
+    width: 15,
+    height: 15,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2.6,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    className: `${TONE_TEXT[tone]} shrink-0`,
+  };
+  if (tone === "good") return <svg {...common}><path d="M20 6 9 17l-5-5" /></svg>;
+  if (tone === "danger")
+    return (
+      <svg {...common}>
+        <path d="M18 6 6 18M6 6l12 12" />
+      </svg>
+    );
+  if (tone === "warning" || tone === "caution")
+    return (
+      <svg {...common}>
+        <path d="M12 3 2 20h20L12 3Z" />
+        <path d="M12 10v3.5" />
+      </svg>
+    );
+  return <span className={`h-1.5 w-1.5 rounded-full ${TONE_DOT[tone]}`} />;
+}
+
+/**
+ * The decision pathway: VTE risk -> Safety -> Drug fit -> Decision. A divided
+ * four-cell strip that narrates the engine's fixed pipeline in one horizontal
+ * read — the app's visual signature and the anchor of the live demo.
+ */
+function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
+  const action = ACTION[rec.overallAction];
+  const excluded = rec.khorana.exclusion.isExcluded;
+  const canProceed = rec.contraindications.canProceedWithProphylaxis;
+  const preferredN = rec.preferredOptions.length;
+  const altN = rec.alternativeOptions.length;
+  const universal = rec.contraindications.absolute.find(
+    (c) => c.appliesTo === "all",
+  );
+  const inactive =
+    excluded || rec.overallAction === "not_indicated";
+
+  const steps: { label: string; value: string; note: string; tone: Tone }[] = [
+    {
+      label: "VTE risk",
+      value: excluded ? "Excluded" : `Khorana ${rec.khorana.totalScore}`,
+      note: excluded ? "own pathway" : `${RISK_LABEL[rec.khorana.riskCategory]} risk`,
+      tone: excluded
+        ? "info"
+        : rec.khorana.prophylaxisRecommended
+          ? "good"
+          : "neutral",
+    },
+    {
+      label: "Safety",
+      value: canProceed ? "Clear" : "Blocked",
+      note: canProceed
+        ? "no absolute contraindication"
+        : universal
+          ? humanize(universal.reason)
+          : "absolute contraindication",
+      tone: canProceed ? "good" : "danger",
+    },
+    {
+      label: "Drug fit",
+      value: preferredN ? "DOACs fit" : altN ? "DOACs blocked" : "—",
+      note: preferredN
+        ? "preferred available"
+        : altN
+          ? "LMWH fallback"
+          : inactive
+            ? "not assessed"
+            : "no agent",
+      tone: preferredN ? "good" : altN ? "caution" : inactive ? "neutral" : "danger",
+    },
+    {
+      label: "Decision",
+      value: excluded
+        ? "Excluded"
+        : rec.overallAction === "not_indicated"
+          ? "Not indicated"
+          : rec.overallAction === "contraindicated"
+            ? "No anticoag"
+            : preferredN
+              ? "DOACs"
+              : altN
+                ? "LMWH"
+                : "—",
+      note: excluded
+        ? "disease-specific"
+        : rec.overallAction === "not_indicated"
+          ? "below threshold"
+          : rec.overallAction === "contraindicated"
+            ? "no pharmacologic option"
+            : preferredN
+              ? "guideline-preferred"
+              : "DOACs blocked",
+      tone: action.tone,
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 gap-px border-y border-clinical-hairline bg-clinical-hairline sm:grid-cols-4">
+      {steps.map((s) => (
+        <div key={s.label} className="bg-clinical-panel px-4 py-3">
+          <div className="flex items-center gap-1.5">
+            <StepMark tone={s.tone} />
+            <span className="text-xs font-medium text-clinical-muted">{s.label}</span>
+          </div>
+          <p className="mt-1 font-semibold tracking-tight text-clinical-ink">
+            {s.value}
+          </p>
+          <p className="truncate text-xs text-clinical-muted" title={s.note}>
+            {s.note}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function OptionGroup({
   heading,
   subheading,
@@ -194,7 +347,7 @@ function OptionRow({ o }: { o: DOACOption }) {
   return (
     <div className="flex flex-col gap-1 border-t border-clinical-hairline py-4">
       <div className="flex items-baseline justify-between gap-3">
-        <span className="font-serif text-lg font-medium capitalize text-clinical-ink">
+        <span className="text-lg font-semibold capitalize text-clinical-ink">
           {o.name}
         </span>
         <span className="font-mono text-[0.95rem] font-medium tabular-nums text-clinical-ink">
@@ -232,7 +385,7 @@ function AvoidList({ options }: { options: DOACOption[] }) {
             key={o.name}
             className="grid gap-1 border-t border-clinical-hairline py-2.5 text-sm sm:grid-cols-[8rem_1fr] sm:gap-4"
           >
-            <span className="font-serif text-[0.95rem] capitalize text-clinical-inkSoft">
+            <span className="text-[0.95rem] font-semibold capitalize text-clinical-inkSoft">
               {o.name}
             </span>
             <span className="text-clinical-muted">

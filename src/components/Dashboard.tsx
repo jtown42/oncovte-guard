@@ -23,6 +23,13 @@ export function Dashboard({ patient }: { patient: PatientData }) {
       {/* The verdict itself flashes on change (see RecommendationPanel/Flash). */}
       <RecommendationPanel rec={rec} />
 
+      {/* Everything below is the auditable evidence behind the decision above —
+          subordinated by a quiet divider so the verdict clearly leads. */}
+      <div className="flex items-center gap-3 pt-1">
+        <span className="eyebrow">Supporting detail</span>
+        <span className="h-px flex-1 bg-clinical-hairline" />
+      </div>
+
       {/* Thrombotic risk (Khorana) beside bleeding risk — the two sides of the
           prophylaxis decision, shown together so the asymmetry is visible.
           items-start: the cards have genuinely different natural heights; let

@@ -42,6 +42,16 @@ export const TONE_DOT: Record<Tone, string> = {
   info: "bg-sev-info",
 };
 
+/** Tone-colored text (for pathway marks, inline status words). */
+export const TONE_TEXT: Record<Tone, string> = {
+  danger: "text-sev-dangerInk",
+  warning: "text-sev-cautionInk",
+  caution: "text-sev-cautionInk",
+  good: "text-sev-okInk",
+  neutral: "text-clinical-muted",
+  info: "text-sev-infoInk",
+};
+
 /** Solid fills for icon badges (white glyph on a desaturated tone). */
 export const TONE_SOLID: Record<Tone, string> = {
   danger: "bg-sev-danger",

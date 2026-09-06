@@ -27,9 +27,9 @@
   .card-header {
     @apply flex items-center justify-between gap-3 border-b border-clinical-hairline px-5 py-3;
   }
-  /* Titles are set, not shouted: a reading serif at a calm size. */
+  /* Titles are quiet sans, tracked tight — a product label, not a paper heading. */
   .card-title {
-    @apply font-serif text-lg font-medium text-clinical-ink;
+    @apply font-sans text-base font-semibold tracking-tight text-clinical-ink;
   }
   .card-body {
     @apply px-5 py-4;
@@ -49,9 +49,10 @@
     @apply font-mono font-medium tabular-nums;
   }
 
-  /* Eyebrow — the uppercase section label used across the document. */
+  /* Section label — sentence case, quiet. (Deliberately NOT tracked-out all-caps,
+     which reads as generated template chrome.) */
   .eyebrow {
-    @apply text-[0.7rem] font-semibold uppercase tracking-[0.13em] text-clinical-faint;
+    @apply text-xs font-semibold tracking-tight text-clinical-muted;
   }
 
   /* Range slider for the live editor. Squared-off track and thumb so it reads
@@ -139,11 +140,13 @@
  * single-class Tailwind utilities they override.
  */
 .verdict-hero {
-  font-family: "Newsreader", Georgia, Cambria, "Times New Roman", serif;
-  font-size: 1.6rem;
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
+  font-family:
+    "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.028em;
 }
 /* Big clinical readouts (Khorana score, CrCl) — mono, like a vitals monitor. */
 .metric-hero {
@@ -153,8 +156,8 @@
   letter-spacing: -0.04em;
 }
 .present .verdict-hero {
-  font-size: 2.6rem;
-  line-height: 1.08;
+  font-size: 3rem;
+  line-height: 1.03;
 }
 .present .metric-hero {
   font-size: 4.5rem;

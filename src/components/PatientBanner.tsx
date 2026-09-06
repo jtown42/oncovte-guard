@@ -17,46 +17,40 @@ export function PatientBanner({ patient }: { patient: PatientData }) {
 
   return (
     <header className="card overflow-hidden">
-      <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0">
-          <div className="flex items-center gap-3">
-            <h1 className="patient-name truncate font-serif text-2xl font-medium text-clinical-ink">
-              {patient.name}
-            </h1>
-            <span className="text-sm text-clinical-muted">
-              {patient.age} y · {patient.gender === "female" ? "Female" : "Male"}
-            </span>
-          </div>
-          <p className="mt-0.5 text-sm text-clinical-muted">
-            {dx ? (
-              <>
-                <span className="font-medium text-clinical-ink">
-                  {dx.display}
-                </span>{" "}
-                <span className="font-mono text-xs">({dx.code})</span>
-              </>
-            ) : (
-              "No active cancer diagnosis on file"
-            )}
-          </p>
-        </div>
+      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 px-5 py-3">
+        <h1 className="patient-name truncate text-xl font-semibold tracking-tight text-clinical-ink">
+          {patient.name}
+        </h1>
+        <span className="text-sm text-clinical-muted">
+          {patient.age} · {patient.gender === "female" ? "F" : "M"}
+        </span>
+        <span className="hidden h-4 w-px self-center bg-clinical-border sm:block" aria-hidden />
+        <span className="min-w-0 text-sm">
+          {dx ? (
+            <>
+              <span className="font-medium text-clinical-ink">{dx.display}</span>{" "}
+              <span className="font-mono text-xs text-clinical-muted">{dx.code}</span>
+            </>
+          ) : (
+            <span className="text-clinical-muted">No active cancer diagnosis on file</span>
+          )}
+        </span>
 
-        <dl className="flex shrink-0 flex-wrap gap-x-6 gap-y-1 text-sm">
+        <dl className="ml-auto flex shrink-0 items-baseline gap-x-5">
+          <Stat label="BMI" value={fmt(patient.bmi, "")} />
           <Stat label="Weight" value={fmt(patient.weightKg, "kg")} />
-          <Stat label="Height" value={fmt(patient.heightCm, "cm")} />
-          <Stat label="BMI" value={fmt(patient.bmi, "kg/m²")} />
         </dl>
       </div>
 
       {(flags.length > 0 || patient.race || patient.ethnicity) && (
-        <div className="flex flex-wrap items-center gap-2 border-t border-clinical-hairline bg-clinical-bg px-5 py-2.5">
+        <div className="flex flex-wrap items-center gap-2 border-t border-clinical-hairline bg-clinical-bg px-5 py-2">
           {flags.map((f) => (
             <Pill key={f.label} tone="info" dot>
               {f.label}
             </Pill>
           ))}
           {(patient.race || patient.ethnicity) && (
-            <span className="ml-auto text-xs text-clinical-muted">
+            <span className="ml-auto text-xs text-clinical-faint">
               {[patient.race, patient.ethnicity].filter(Boolean).join(" · ")}
             </span>
           )}
@@ -68,15 +62,16 @@ export function PatientBanner({ patient }: { patient: PatientData }) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <dt className="text-sm text-clinical-muted">
-        {label}
-      </dt>
-      <dd className="font-semibold tabular-nums">{value}</dd>
+    <div className="flex items-baseline gap-1.5">
+      <dt className="text-xs text-clinical-muted">{label}</dt>
+      <dd className="font-mono text-sm font-medium tabular-nums text-clinical-ink">
+        {value}
+      </dd>
     </div>
   );
 }
 
 function fmt(n: number | null, unit: string): string {
-  return n == null ? "—" : `${n} ${unit}`;
+  if (n == null) return "—";
+  return unit ? `${n} ${unit}` : String(n);
 }
