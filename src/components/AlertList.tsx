@@ -21,15 +21,15 @@ export function AlertList({ alerts }: { alerts: Alert[] }) {
       {sorted.map((a, i) => (
         <div
           key={i}
-          className={`rounded-md border px-4 py-3 ${TONE_BANNER[alertTone(a.level)]}`}
+          className={`rounded-md border px-3.5 py-2.5 ${TONE_BANNER[alertTone(a.level)]}`}
           role={a.level === "critical" ? "alert" : "status"}
         >
-          <p className="text-sm font-semibold uppercase tracking-wide opacity-70">
-            {LEVEL_LABEL[a.level]}
+          <p className="text-sm font-semibold tracking-tight">
+            <span className="opacity-60">{LEVEL_LABEL[a.level]} · </span>
+            {a.title}
           </p>
-          <p className="mt-0.5 text-lg font-semibold">{a.title}</p>
-          <p className="mt-0.5 text-base opacity-90">{a.detail}</p>
-          <p className="mt-1.5 text-sm opacity-70">Source: {a.source}</p>
+          <p className="mt-0.5 text-sm opacity-90">{a.detail}</p>
+          <p className="mt-1 text-xs opacity-60">Source: {a.source}</p>
         </div>
       ))}
     </div>

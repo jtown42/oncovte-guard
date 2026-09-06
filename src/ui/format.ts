@@ -52,6 +52,17 @@ export const TONE_TEXT: Record<Tone, string> = {
   info: "text-sev-infoInk",
 };
 
+/** Very faint per-tone cell wash (pathway cells). Neutral/info stay plain so the
+    meaningful states — a blocked step, a positive decision — are the ones that read. */
+export const TONE_WASH: Record<Tone, string> = {
+  danger: "bg-sev-dangerWash",
+  warning: "bg-sev-cautionWash",
+  caution: "bg-sev-cautionWash",
+  good: "bg-clinical-brandTint",
+  neutral: "bg-clinical-panel",
+  info: "bg-clinical-panel",
+};
+
 /** Solid fills for icon badges (white glyph on a desaturated tone). */
 export const TONE_SOLID: Record<Tone, string> = {
   danger: "bg-sev-danger",

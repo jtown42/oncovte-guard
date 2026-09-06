@@ -18,10 +18,13 @@ export function Dashboard({ patient }: { patient: PatientData }) {
     <div className="space-y-3">
       <PatientBanner patient={patient} />
 
-      {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
-
-      {/* The verdict itself flashes on change (see RecommendationPanel/Flash). */}
+      {/* The verdict leads. The terminal decision already encodes the critical
+          state (a universal contraindication turns the hero red), and the pathway
+          strip narrates the safety/DDI story — so alerts follow the decision as
+          considerations rather than competing with it for the first read. */}
       <RecommendationPanel rec={rec} />
+
+      {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
 
       {/* Everything below is the auditable evidence behind the decision above —
           subordinated by a quiet divider so the verdict clearly leads. */}

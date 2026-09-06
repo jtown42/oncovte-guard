@@ -55,6 +55,18 @@
     @apply text-xs font-semibold tracking-tight text-clinical-muted;
   }
 
+  /* Decision-pathway cell type — its own classes so presentation mode can scale
+     the pathway (the thing most in need of projection) alongside the verdict. */
+  .pathway-label {
+    @apply text-xs font-medium text-clinical-muted;
+  }
+  .pathway-value {
+    @apply mt-1 font-semibold tracking-tight text-clinical-ink;
+  }
+  .pathway-note {
+    @apply truncate text-xs text-clinical-muted;
+  }
+
   /* Range slider for the live editor. Squared-off track and thumb so it reads
      as an instrument control rather than an iOS volume slider. */
   .range-clinical {
@@ -170,6 +182,24 @@
 .present .pill {
   font-size: 0.875rem;
   padding: 0.25rem 0.75rem;
+}
+/* The pathway is the story to project; scale it with the hero, not with the body. */
+.present .pathway-cell {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.present .pathway-label {
+  font-size: 0.95rem;
+}
+.present .pathway-value {
+  font-size: 1.4rem;
+  line-height: 1.15;
+}
+.present .pathway-note {
+  font-size: 0.95rem;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
 }
 .present .present-hide {
   display: none;

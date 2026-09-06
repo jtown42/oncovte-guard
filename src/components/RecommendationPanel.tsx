@@ -15,6 +15,7 @@ import {
   TONE_SOLID,
   TONE_DOT,
   TONE_TEXT,
+  TONE_WASH,
   type Tone,
   renalStatusTone,
   RENAL_STATUS_LABEL,
@@ -291,15 +292,13 @@ function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
   return (
     <div className="grid grid-cols-1 gap-px border-y border-clinical-hairline bg-clinical-hairline sm:grid-cols-4">
       {steps.map((s) => (
-        <div key={s.label} className="bg-clinical-panel px-4 py-3">
+        <div key={s.label} className={`pathway-cell px-4 py-3 ${TONE_WASH[s.tone]}`}>
           <div className="flex items-center gap-1.5">
             <StepMark tone={s.tone} />
-            <span className="text-xs font-medium text-clinical-muted">{s.label}</span>
+            <span className="pathway-label">{s.label}</span>
           </div>
-          <p className="mt-1 font-semibold tracking-tight text-clinical-ink">
-            {s.value}
-          </p>
-          <p className="truncate text-xs text-clinical-muted" title={s.note}>
+          <p className="pathway-value">{s.value}</p>
+          <p className="pathway-note" title={s.note}>
             {s.note}
           </p>
         </div>

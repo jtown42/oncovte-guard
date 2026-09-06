@@ -36,7 +36,7 @@ export function PatientBanner({ patient }: { patient: PatientData }) {
           )}
         </span>
 
-        <dl className="ml-auto flex shrink-0 items-baseline gap-x-5">
+        <dl className="present-hide ml-auto flex shrink-0 items-baseline gap-x-5">
           <Stat label="BMI" value={fmt(patient.bmi, "")} />
           <Stat label="Weight" value={fmt(patient.weightKg, "kg")} />
         </dl>
