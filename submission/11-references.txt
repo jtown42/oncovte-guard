@@ -6,8 +6,8 @@ Map each claim to its source. Supplied by the submitter's literature search.
     Guidelines for the Treatment and Prophylaxis of Venous Thromboembolism in
     Patients With Cancer (ITAC). Lancet Oncol. 2019;20(10):e566-e581.
     -> supports: ~4-7-fold increased VTE risk in cancer; cancer accounts for
-       ~20% ("one in five") of all VTE events; VTE as a leading cause of death
-       in patients with cancer.
+       ~20% ("one in five") of all VTE events; VTE as the second leading cause of
+       death in patients with cancer (after cancer progression).
 
 [2] Siegel RL, Giaquinto AN, Jemal A. Cancer Statistics, 2024.
     CA Cancer J Clin. 2024;74(1):12-49.

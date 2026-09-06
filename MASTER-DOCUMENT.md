@@ -121,7 +121,7 @@ you read one section critically, read that one.
 
 ## 2. The clinical problem
 
-**Why it matters.** VTE is a leading cause of death in people with cancer and accounts
+**Why it matters.** VTE is the second leading cause of death in people with cancer, after cancer progression itself, and accounts
 for roughly **one in five** of all VTE events. Active malignancy raises VTE risk
 **~4–7×**, and many systemic therapies raise it further. Ambulatory chemotherapy
 patients are a high-yield prevention target — **but blanket prophylaxis is wrong**:
@@ -144,9 +144,10 @@ oncologists, hematologist-oncologists, oncology pharmacists, and APPs (NPs/PAs).
 > **The epidemiology figures above are now sourced** (see the References appendix):
 > ~4–7× risk and ~20% of all VTE events → ITAC 2019 (Farge et al.); ~2 million new US
 > diagnoses/yr → ACS 2024 (Siegel et al.); cancer-associated VTE epidemiology → Lam et
-> al. 2026. "Second leading cause" was deliberately softened to "a leading cause" absent
-> a confirmed primary source. Remaining task (§17): paste them into the `.docx`
-> references section and clear its `(cite)` placeholders.
+> al. 2026. The submission uses the guideline-standard "second leading cause of death,
+> after cancer progression" (ITAC 2019/2022, ESC 2022) — an earlier draft had softened
+> this to "a leading cause"; it is now restored. Remaining task (§17): paste them into
+> the `.docx` references section and clear its `(cite)` placeholders.
 
 ---
 
@@ -668,7 +669,7 @@ surfaced, found while writing this document.
 - Missing weight/creatinine still synthesizes an internal `CrCl 0 / severe` sentinel so dosing gates safely, **but** the user-facing copy now reads **"Renal function not assessable — treated conservatively (obtain weight and serum creatinine)"** instead of leaning on a placeholder CrCl. Test: recommendation "F8 (WS-5): missing renal data → 'not assessable' copy, never a CrCl-0/<30 claim".
 
 ### F9 — Epidemiology figures **(citations supplied; docx insert remaining)**
-- The figures are now grounded in specific sources (see the References appendix): ~4–7× risk and ~20% of all VTE events → ITAC 2019 (Farge et al., *Lancet Oncol*); ~2 million new US diagnoses/yr → ACS 2024 (Siegel et al., *CA Cancer J Clin*); cancer-associated VTE epidemiology → Lam et al. 2026 (*Am J Hematol*). The prose was reconciled across `SUBMIT!/materials.md`, `submission/02-rationale.txt`, and this document ("a leading cause," "approximately 2 million"). **Remaining:** paste the references into `AMIA-App-Competition-Submission.docx` and clear its `(cite)` placeholders (§17). The Lam et al. 2026 volume/pages should be confirmed on final publication.
+- The figures are now grounded in specific sources (see the References appendix): ~4–7× risk and ~20% of all VTE events → ITAC 2019 (Farge et al., *Lancet Oncol*); ~2 million new US diagnoses/yr → ACS 2024 (Siegel et al., *CA Cancer J Clin*); cancer-associated VTE epidemiology → Lam et al. 2026 (*Am J Hematol*). The prose was reconciled across `SUBMIT!/materials.md`, `submission/02-rationale.txt`, and this document ("second leading cause of death, after cancer progression," "approximately 2 million"). **Remaining:** paste the references into `AMIA-App-Competition-Submission.docx` and clear its `(cite)` placeholders (§17). The Lam et al. 2026 volume/pages should be confirmed on final publication.
 
 ### F10 — Live demo reference date — **resolved (WS-5)**
 - **Resolution:** a `?asof=YYYY-MM-DD` query parameter (`src/ui/asof.ts: getAsOfDate`) pins the reference date used for lab-staleness, defaulting to `new Date()`. Robert's stale-lab state is now reproducible on any stage day (e.g. `?asof=2026-07-16`). Test: "getAsOfDate parses a valid ?asof date".
@@ -830,7 +831,7 @@ actual reasoning) → `tests/integration/patients.test.ts` (five patients end-to
 - ✅ **WS-6/7 caveats** — pancreatic/hepatobiliary Khorana-discrimination caveat on Maria (does not change her score); Khorana calibration-transparency line on every scored patient (tier is not a precise individual estimate).
 - ⏳ **WS-8 evaluation** — **contrast audit DONE** (`docs/ACCESSIBILITY.md`, all AA-passing); **think-aloud + n=2 timing protocols written** (`docs/EVALUATION.md`) but **awaiting a clinician participant** — this is the one workstream that needs a human, by design. No transcript or timing has been invented.
 - ✅ **F1 wired end-to-end** — active major bleeding now flips the verdict live.
-- ✅ **F9 figures sourced + reconciled** across `materials.md`, `submission/02-rationale.txt`, and this document ("a leading cause," "approximately 2 million").
+- ✅ **F9 figures sourced + reconciled** across `materials.md`, `submission/02-rationale.txt`, and this document ("second leading cause of death, after cancer progression," "approximately 2 million").
 - ✅ **Evidence base graded (§5)** — every clinical rule assigned a provenance tier; DDI KB provenance measured directly from the file rather than assumed.
 - ✅ **Interface documented (§11)**, including an explicit inventory of what has *not* been evaluated.
 - ✅ **Three new findings self-reported** — F12 (KB citation granularity), F13 (unvalidated interface / alert fatigue), F14 (hepatic rule — since re-anchored to NCCN VTE-D-5 and resolved).
@@ -919,13 +920,13 @@ pre-November build, when the "the architecture generalizes" demo pays off withou
 
 Supplied by the submitter's literature search; map each claim to its source.
 
-- **Farge D, Frere C, Connors JM, et al.** 2019 International Clinical Practice Guidelines for the Treatment and Prophylaxis of Venous Thromboembolism in Patients With Cancer (ITAC). *Lancet Oncol.* 2019;20(10):e566–e581. — supports **~4–7-fold increased VTE risk** and **cancer accounts for ~20% of all VTE events**; cancer-associated VTE as a leading cause of death in cancer patients.
+- **Farge D, Frere C, Connors JM, et al.** 2019 International Clinical Practice Guidelines for the Treatment and Prophylaxis of Venous Thromboembolism in Patients With Cancer (ITAC). *Lancet Oncol.* 2019;20(10):e566–e581. — supports **~4–7-fold increased VTE risk** and **cancer accounts for ~20% of all VTE events**; cancer-associated VTE as the second leading cause of death in cancer patients (after cancer progression).
 - **Siegel RL, Giaquinto AN, Jemal A.** Cancer Statistics, 2024. *CA Cancer J Clin.* 2024;74(1):12–49. — supports **~2 million (≈2,001,140) new US cancer diagnoses per year**.
 - **Lam BD, Ryu J, Jafari O, et al.** Epidemiology of Cancer-Associated Venous Thromboembolism Across the United States (Epic Cosmos, 911,855 patients). *Am J Hematol.* 2026. — supports contemporary cancer-associated VTE epidemiology (12-month cumulative incidence ~3.7% overall, ~5.7% with systemic therapy). *(Confirm volume/pages on final publication.)*
 
 Supporting trials cited in the narrative (not epidemiology): **AVERT** (Carrier et al., *NEJM* 2019) and **CASSINI** (Khorana et al., *NEJM* 2019) for DOAC prophylaxis efficacy in higher-risk ambulatory patients; **Khorana et al.**, *Blood* 2008 for the risk score; **NCCN Guidelines®, Cancer-Associated Venous Thromboembolic Disease** for the prophylaxis pathway.
 
-> **Wording note:** the submission uses **"a leading cause of death"** (not "the second leading cause"), which the ITAC guidance supports; "second leading cause" is widely quoted but its primary source is unconfirmed, so it is intentionally avoided.
+> **Wording note:** the submission uses the guideline-standard **"second leading cause of death, after cancer progression"** (stated verbatim in ITAC 2019/2022 and the 2022 ESC Cardio-Oncology guideline). An earlier draft had softened this to "a leading cause"; it is now restored as both stronger and fully defensible. The pooled AVERT+CASSINI estimate (RR ~0.56) is for **overall VTE** (screen-detected included); the pooled **symptomatic**-VTE reduction was not statistically significant.
 
 ---
 

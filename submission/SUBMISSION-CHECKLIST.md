@@ -13,7 +13,7 @@ combined paste doc with `npm run build:submission` (output: `SUBMISSION-FULL.md`
 ## 🔴 Fix these first (errors currently live or missing)
 
 - [ ] **Title typo in the portal** — it currently reads **"OncoVTE Ga​urd"**. Correct it to **"OncoVTE Guard"** everywhere it appears. The repo spells it correctly; only the portal entry is wrong.
-- [ ] **Replace the stale portal abstract** — the abstract currently in the portal says *"121 automated tests"* and *"second leading cause of death."* Both are wrong. Paste the corrected abstract from `submission/01-abstract.txt` (says **185 tests**, **"a leading cause"** — the wording our own `11-references.txt` supports).
+- [ ] **Replace the stale portal abstract** — the abstract currently in the portal says *"121 automated tests."* Paste the corrected abstract from `submission/01-abstract.txt` (says **185 tests** and the guideline-standard **"second leading cause of death, after cancer progression itself"** with the Lam-2026 scale figure — see `11-references.txt` wording notes). *(Note: "second leading cause" is now the intended wording, restored per the OpenEvidence review; only the "121 tests" figure was ever wrong.)*
 - [ ] **Advisor attestation PDF** — *send the ready email today:* `submission/advisor-email-draft.md` (attach `advisor-attestation-template.md`, now covering all six portal components). Longest-lead item.
 - [ ] **Logo** and **headshot** — see Tab 3 uploads. *(Logo directions drafted; awaiting your A/B/C pick + favicon recolor.)*
 

@@ -25,8 +25,8 @@ claim yourself, the reproduction commands are in §8.
 
 ## 1. The clinical problem (why this is non-trivial)
 
-Venous thromboembolism is a leading cause of death in people with cancer and
-accounts for roughly one in five of all VTE events. Active malignancy raises VTE
+Venous thromboembolism is the second leading cause of death in people with cancer,
+after cancer progression itself, and accounts for roughly one in five of all VTE events. Active malignancy raises VTE
 risk ~4–7×, and many systemic therapies raise it further. Ambulatory
 chemotherapy patients are a high-yield prevention target — **but blanket
 prophylaxis is wrong**: anticoagulation must be reserved for patients whose
