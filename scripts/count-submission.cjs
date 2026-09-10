@@ -26,6 +26,7 @@ const LIMITS = {
   "09-data-source.txt": { chars: 500 },
   "10-other-info.txt": { words: 250 },
   "12-additional-info.txt": { words: 250 },
+  "13-fhir-resource-list.txt": null,
 };
 
 const wordCount = (t) => (t.trim() === "" ? 0 : t.trim().split(/\s+/).length);

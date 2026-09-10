@@ -1,0 +1,8 @@
+FHIR release: R4 (4.0.1). Access: SMART on FHIR (SMART App Launch / OAuth2) for the interactive app; CDS Hooks prefetch for the services. Resources are read-only (the app writes nothing back).
+
+Patient - read. Demographics: sex, birthDate; US Core race and ethnicity extensions.
+Condition - search. Active malignancy by ICD-10-CM (Khorana site scoring and disease-specific exclusions).
+Observation - search. Labs (platelets, hemoglobin, WBC, creatinine, ALT, AST, total bilirubin) and vitals (weight, height) by LOINC.
+MedicationRequest - search. Active medications by RxNorm (DOAC-chemotherapy interaction screening; ESA, antiplatelet, IMiD, and nephrotoxic-agent detection).
+
+A FHIR R4 client CapabilityStatement (public/capability-statement.json, kind: requirements) declares exactly these resources and interactions.
