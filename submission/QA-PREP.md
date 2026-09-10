@@ -106,11 +106,15 @@ renal references — and the app *actively refuses* to fall back to them, which 
 safety feature, not a gap."
 
 ### Q9. "Have you run this against a live EHR or a real FHIR sandbox?"
-"Not yet — that's the defined next step, testing against public SMART/FHIR sandboxes.
-Today it's exercised end-to-end against five synthetic FHIR R4 bundles through the
-identical parsing pipeline the live SMART launch uses, plus a client CapabilityStatement
-declaring exactly the four resources it reads. The plumbing is real FHIR; the data is
-synthetic and PHI-free."
+"Yes — a real SMART sandbox. I loaded the five synthetic oncology bundles into the
+SMART Health IT public sandbox and EHR-launched the app against each: it completed the
+real OAuth2/PKCE handshake, read the patient's live Condition, Observation, and
+MedicationRequest resources off the server, and produced the correct verdicts — recommend
+for the pancreatic patient, the LMWH fallback when ibrutinib blocked both DOACs, and
+contraindicated at platelets 42k. That's the full pipeline against a real SMART-secured
+FHIR server, not just the login. Honest scope: it's a public sandbox with synthetic
+patients I authored, so it demonstrates standards-native interoperability and faithful
+reasoning — not clinician validation or production-EHR use, which stay the next steps."
 
 ### Q10. "Active major bleeding is just a checkbox the clinician sets — isn't that a cop-out?"
 "It's a deliberate scope decision. FHIR has no single reliable representation of
