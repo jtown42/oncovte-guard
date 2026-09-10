@@ -3,7 +3,7 @@ import type { KhoranaResult } from "../types/khorana";
 import { MAX_KHORANA_SCORE } from "../types/khorana";
 import { Card, Pill } from "./primitives";
 import { Flash } from "./Flash";
-import { riskTone, RISK_LABEL, humanize } from "../ui/format";
+import { riskTone, RISK_LABEL, humanize, fmtNum } from "../ui/format";
 
 export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
   const { breakdown, exclusion } = khorana;
@@ -31,7 +31,7 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
     },
     {
       label: "Platelets ≥ 350 ×10⁹/L",
-      value: numUnit(breakdown.platelets.value, "×10⁹/L"),
+      value: numUnit(breakdown.platelets.value, "×10⁹/L", 0),
       score: breakdown.platelets.score,
     },
     {
@@ -122,6 +122,6 @@ export function KhoranaScoreCard({ khorana }: { khorana: KhoranaResult }) {
   );
 }
 
-function numUnit(v: number | null, unit: string): string {
-  return v == null ? "missing" : `${v} ${unit}`;
+function numUnit(v: number | null, unit: string, decimals = 1): string {
+  return v == null ? "missing" : `${fmtNum(v, decimals)} ${unit}`;
 }

@@ -8,6 +8,7 @@ import {
   renalStatusTone,
   RENAL_STATUS_LABEL,
   humanize,
+  fmtNum,
 } from "../ui/format";
 
 export function RenalPanel({ renal }: { renal: RenalResult | null }) {
@@ -34,7 +35,7 @@ export function RenalPanel({ renal }: { renal: RenalResult | null }) {
       <div className="flex items-end gap-2">
         <Flash watch={renal.crclMlMin} tone={crclTone(renal.crclCategory)}>
           <span className="metric-hero text-5xl font-medium tabular-nums leading-none">
-            {renal.crclMlMin}
+            {fmtNum(renal.crclMlMin, 0)}
           </span>
         </Flash>
         <span className="pb-0.5 text-sm text-clinical-muted">

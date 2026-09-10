@@ -1,6 +1,7 @@
 /** Patient demographics + key clinical flags banner (top of dashboard). */
 import type { PatientData } from "../types/patient";
 import { Pill } from "./primitives";
+import { fmtNum } from "../ui/format";
 
 function flagPills(p: PatientData) {
   const flags: { label: string }[] = [];
@@ -72,6 +73,6 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 function fmt(n: number | null, unit: string): string {
-  if (n == null) return "—";
-  return unit ? `${n} ${unit}` : String(n);
+  const s = fmtNum(n, 1); // round for display; engine keeps full precision
+  return unit && s !== "—" ? `${s} ${unit}` : s;
 }

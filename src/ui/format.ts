@@ -226,3 +226,18 @@ export function humanize(s: string): string {
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
+
+/**
+ * Round a numeric value for DISPLAY only — the engine always computes on full
+ * precision. Real FHIR Observations carry many decimals (e.g. a Synthea weight of
+ * 76.35937510054274); showing that raw looks broken. Trailing zeros are dropped:
+ * 76.359 -> "76.4", 29.0 -> "29", 186.457 (0 dp) -> "186".
+ */
+export function fmtNum(
+  v: number | null | undefined,
+  decimals = 1,
+  fallback = "—",
+): string {
+  if (v == null || !Number.isFinite(v)) return fallback;
+  return String(Number(v.toFixed(decimals)));
+}
