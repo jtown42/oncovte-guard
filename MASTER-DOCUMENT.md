@@ -484,49 +484,55 @@ is why" is a stronger, more defensible answer than a fabricated c-0.6 number. Th
   - **`oncovte-ddi-check` (`order-select`):** screens the order(s) being composed — ordering a DOAC screens active meds against it; ordering another agent screens it against the patient's active DOAC(s). Only major (critical) and moderate/pharmacodynamic (warning) surface as cards; major cards also carry `overrideReasons` and each `major` cell's evidence anchor (WS-3).
   - **Prefetch:** templates declared per service; `prefetch.ts` adapts the prefetch block into `RawFHIRData` through the same pipeline and degrades missing bundles gracefully (throws only if the Patient resource is absent).
 
-### 7.1 Live SMART sandbox launch — demonstrated (2026-09-10)
+### 7.1 Live SMART sandbox demonstration — full pipeline, three verdict types (2026-09-10)
 
-**What was done.** OncoVTE Guard was EHR-launched from the **SMART Health IT public
-sandbox** (`launch.smarthealthit.org`, Provider EHR Launch, FHIR R4) against the live
-deployment at `oncovte-guard.pages.dev/launch.html`, and driven through the full flow
-to a rendered dashboard on a real sandbox patient.
+**What was done.** The app was **EHR-launched from the SMART Health IT public sandbox**
+(`launch.smarthealthit.org`, Provider EHR Launch, FHIR R4, real OAuth2 + PKCE) against the
+live deployment at `oncovte-guard.pages.dev/launch.html`, and driven end-to-end to a
+rendered verdict — **twice over:**
 
-**What it proves (interoperability, on data we did not control):**
-- **OAuth2 authorization-code + PKCE (S256)** handshake completed — the server received
-  `client_id=oncovte-guard`, the exact scopes `launch patient/{Patient,Condition,
-  Observation,MedicationRequest}.read openid fhirUser`, and `redirect_uri=…/index.html`.
-- **Patient read** — demographics **and US Core race/ethnicity** extensions parsed and
-  displayed ("Black or African American · Not Hispanic or Latino").
-- **Observation read + scored** — real **LOINC** labs (platelets, hemoglobin, WBC) were
-  fetched and fed the Khorana engine, which computed a score end-to-end.
-- **MedicationRequest read** — the DDI screen correctly reported "no active medications."
-- **The data-validation logic fired on real data**, not fixtures: the >30-day
-  **stale-lab caution** triggered, renal returned **"CrCl not assessable — creatinine
-  missing,"** and the bleeding panel returned **"insufficient data."** These are the
-  defensive behaviors the submission claims (§4.6, Data Validation field), demonstrated
-  on an uncontrolled chart.
+1. **First pass — a stock sandbox patient.** Proved the handshake and reads, but the
+   patient was non-oncologic and (like most Synthea data) coded in **SNOMED**, which the
+   deliberately **ICD-10-CM-strict** parser does not classify — so the verdict was the
+   correct "not indicated." Interop proven; clinical reasoning not exercised. *This pass
+   also surfaced the display-rounding defect below.*
+2. **Second pass — our five synthetic bundles, loaded into the sandbox.** The sandbox's
+   FHIR server (Smile CDR R4) is **writable**, so the five ICD-10-CM/LOINC/RxNorm patient
+   bundles (§8) were `PUT` via a FHIR **transaction**, then the app was EHR-launched
+   against each by patient id. The engine read each patient's **live** Condition,
+   Observations, and MedicationRequests **from the server** and produced the exact expected
+   terminal states — the **full pipeline** (auth → read → ICD-10 classify → Khorana → DDI →
+   Cockcroft-Gault → contraindications → verdict), not just the OAuth handshake:
 
-**Honest scope — what it does NOT prove.** The sandbox patient is not an oncology
-patient and, like most Synthea/SMART sandbox data, codes conditions in **SNOMED, not
-ICD-10-CM**; the parser is deliberately ICD-10-CM-strict, so no cancer classified and the
-verdict was the correct **"routine prophylaxis not indicated"** (Khorana 0). This is a
-**launch/interoperability demonstration**, not clinician validation, not a production-EHR
-deployment, and not evidence of clinical benefit. The *clinical reasoning* remains proven
-by the five synthetic ICD-10-CM patients (§8); the *plumbing* is now shown against a real
-SMART server.
+   | Launched patient | Live server data | Engine verdict (from the sandbox) |
+   |---|---|---|
+   | **Maria** — C25.1 pancreatic | platelets 410, Hgb 9.2, WBC 8.5, nab-paclitaxel | **recommend** — apixaban + rivaroxaban; Khorana **5**; CrCl **115** |
+   | **James** — C83.1 lymphoma | ibrutinib + rituximab active | **recommend_lmwh** — both DOACs blocked by the ibrutinib **major** DDI → LMWH; Khorana **2**; CrCl **67** |
+   | **Dorothy** — C34.1 lung | platelets **42k**, creatinine high | **contraindicated** — severe thrombocytopenia (universal absolute); Khorana **3**; CrCl **13** severe |
 
-**A real defect this surfaced (and its fix).** Launching against uncontrolled real data
-immediately exposed a display bug the clean synthetic patients had hidden: raw FHIR
-Observations carry full precision, so weight rendered as `76.35937510054274 kg` and labs
-showed 10+ decimals. Fixed the same day with a **display-only** rounding helper
-(`fmtNum`; the engine still computes on full precision) — weight/BMI to 1 dp, platelets
-to integer, CrCl to integer (commit `862b123`), then redeployed. **185 tests unchanged.**
-This is itself a small piece of evidence for the testing story: a real-data launch caught
-something synthetic fixtures could not.
+**What it proves.** Real, standards-native interoperability with the *reasoning intact*:
+OAuth2/PKCE, **US Core race/ethnicity** parsed from live resources, LOINC labs scored,
+RxNorm meds screened (the ibrutinib major DDI fired and drove the LMWH fallback on live
+data), Cockcroft-Gault computed from server values, and the stale-lab / provenance guards
+firing on server data. The **identical engine** proven on the five synthetic patients (§8)
+now demonstrably drives the **live SMART path** — the dual-surface "identical by
+construction" claim, shown rather than asserted.
 
-*(Reviewer note: this is the single "real-world grounding" data point in the project.
-It is a manual, one-off sandbox launch — not systematic conformance testing or an
-Inferno/Touchstone run — and is presented as such.)*
+**Honest scope — what it does NOT prove.** The patients are synthetic bundles **we
+authored** (no PHI), loaded into a **public sandbox** — not a production EHR, not a
+clinician-validated run, not outcome data. It demonstrates *conformant interoperability and
+faithful reasoning against a real SMART-secured FHIR server*; it does not demonstrate
+clinical benefit. It is a **manual demonstration**, not an automated Inferno/Touchstone
+conformance suite.
+
+**A real defect the first pass surfaced (and its fix).** Uncontrolled real data exposed a
+display bug the clean synthetic fixtures had hidden: raw FHIR Observations carry full
+precision, so weight rendered as `76.35937510054274 kg` and labs showed 10+ decimals.
+Fixed the same day with a **display-only** rounding helper (`fmtNum`; the engine still
+computes on full precision) — weight/BMI 1 dp, platelets integer, CrCl integer (commit
+`862b123`), redeployed and confirmed clean in the second-pass runs above. **185 tests
+unchanged.** A real-data launch caught what synthetic fixtures could not — a small but real
+data point for the testing story.
 
 ---
 
@@ -694,17 +700,19 @@ surfaced, found while writing this document.
 - The DDI KB and thresholds are curated from supplied structured input + labeling. The tests prove *faithful application*, **not** that the pharmacology is correct or current.
 - **Framing for a reviewer:** "faithful, tested implementation of a curated guideline set," **not** "independently validated drug-interaction service." Needs clinician/pharmacist sign-off and a maintenance steward for real use. Disclosed in `ASSESSMENT.md §5`, `VERIFICATION.md §9`, in-app disclaimers, and every submission field.
 
-### F3 — No live-EHR deployment or end-user validation *(partially addressed — public-sandbox launch demonstrated 2026-09-10, §7.1)*
+### F3 — No live-EHR deployment or end-user validation *(substantially addressed for interoperability — full-pipeline sandbox demonstration 2026-09-10, §7.1)*
 - SMART launch is **code-complete and standards-conformant**, and has now been
-  **exercised against a live public SMART sandbox** (SMART Health IT launcher) end-to-end:
-  real OAuth2/PKCE handshake, live Patient/Observation/MedicationRequest reads, and the
-  data-validation logic firing on an uncontrolled chart (§7.1). It has **not** been run
-  against a **production EHR**, validated by a clinician, or exercised by an external
-  reviewer in the SMART App Gallery. No users, no outcome data; impact is argued from
-  literature (AVERT/CASSINI), not measured. Standalone synthetic mode and live SMART mode
-  share one pipeline (identical *by construction*), so the reasoning proven on the five
-  synthetic patients carries to the live path — but a reviewer should still treat the
-  sandbox run as a *launch/interoperability* demonstration, not clinical validation.
+  **exercised end-to-end against a live public SMART sandbox** (SMART Health IT launcher /
+  Smile CDR R4) with the **clinical reasoning intact**: the five oncology bundles were
+  loaded into the sandbox's FHIR server and EHR-launched, and the engine read live
+  Condition/Observation/MedicationRequest data and produced the correct **recommend**,
+  **LMWH-fallback**, and **contraindicated** verdicts from the server — the whole pipeline,
+  not just OAuth (§7.1). It has **not** been run against a **production EHR**, validated by
+  a clinician, or exercised by an external reviewer in the SMART App Gallery, and the
+  sandbox patients are synthetic bundles we authored. No users, no outcome data; clinical
+  *benefit* is argued from literature (AVERT/CASSINI), not measured. Net: interoperability
+  and faithful reasoning are now **demonstrated against a real SMART-secured server**;
+  clinical validation remains the open axis.
 
 ### F4 — Verdict word didn't distinguish "recommend DOAC" from "recommend LMWH fallback" — **resolved (WS-5)**
 - **Resolution:** added a `verdictLabel` field (`recommend_lmwh`) alongside the machine-stable `overallAction`. When both DOACs are blocked and LMWH is eligible (e.g. James Chen), the hero now reads **"Prophylaxis recommended — LMWH (DOACs blocked)"**; API consumers still see `overallAction` unchanged. Test: integration "F4 (WS-5): … verdictLabel 'recommend_lmwh'".
