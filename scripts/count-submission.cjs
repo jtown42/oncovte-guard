@@ -25,6 +25,7 @@ const LIMITS = {
   "08-fhir-release-resources.txt": { chars: 500 },
   "09-data-source.txt": { chars: 500 },
   "10-other-info.txt": { words: 250 },
+  "12-additional-info.txt": { words: 250 },
 };
 
 const wordCount = (t) => (t.trim() === "" ? 0 : t.trim().split(/\s+/).length);
