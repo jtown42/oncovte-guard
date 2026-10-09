@@ -105,7 +105,8 @@ CapabilityStatement), `public/launch.html` (SMART launch entry).
 ## 4. Clinical traceability matrix
 
 Each row: **rule → source → code → test**. Test titles are quoted verbatim from
-the suite.
+the suite. Full citations for the sources named below are in `docs/REFERENCES.md`
+(consolidated from the OpenEvidence audit rounds, 2026-10-09).
 
 ### 4.1 Khorana VTE Risk Score
 

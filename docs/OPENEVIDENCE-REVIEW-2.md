@@ -317,7 +317,7 @@ Recommendation: use itraconazole with the relapsed-lymphoma + invasive-aspergill
 
 ## Open items
 
-- **Part C reference list not returned** with the paste (markers [1]–[17]). Retrieve it from
+- **Resolved 2026-10-09:** see `docs/REFERENCES.md` (consolidated bibliography) and `docs/OPENEVIDENCE-REVIEW-3.md` (exact ACC 2025 and label sections). Original note: **Part C reference list not returned** with the paste (markers [1]–[17]). Retrieve it from
   OpenEvidence before citing the ibrutinib correction externally — in particular the exact
   citation for "2025 ACC guidance" ([4]; Part A names it Ganatra et al., JACC) and the
   ibrutinib FDA label ([1]).

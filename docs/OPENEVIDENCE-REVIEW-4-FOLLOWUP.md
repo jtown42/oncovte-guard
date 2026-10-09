@@ -44,6 +44,15 @@ Yes, proceed. Two must-dos before you call it done: (1) since all five bundles c
 
 This is a display mechanic, not a dropped output. The numbered sources are rendered by the interface as a block appended below each answer — they are generated from the inline [N] markers and are not part of the message body text. When you save an answer "word for word" into a markdown file, you're capturing only the body; you need to also copy the references block that appears beneath it in the interface. For your error-log purposes, the key sources behind this answer's clinical calls are named inline above: NCCN Cancer-Associated VTE v1.2026 VTE-B-2 (apixaban caution <30) and VTE-D-5 (DOAC renal/hepatic contraindications), the AVERT trial exclusion of GFR <30, and the EMA-versus-FDA apixaban renal dosing divergence — cite those by name and they'll survive the copy. [1-4]
 
+### References (as shown under the answer in OpenEvidence)
+
+1. Cancer-Associated Venous Thromboembolic Disease. National Comprehensive Cancer Network. Updated 2026-05-05. Guideline.
+2. Serum Concentration of Apixaban in Relation to Renal Function in Older Hospitalized Patients. Drugs & Aging. 2025. Mellingsæter TC, Molden E, Steihaug OM. Observational.
+3. Direct Oral Anticoagulants: Navigating Through Clinical Challenges. Cardiovascular Drugs and Therapy. 2024. Ioannou M, Leonidou E, Chaziri I, Mouzarou A. Review.
+4. Apixaban to Prevent Venous Thromboembolism in Patients with Cancer. The New England Journal of Medicine. 2019. Carrier M, Abou-Nassar K, Mallick R, et al. RCT.
+
+A consolidated bibliography for all audit rounds is in `docs/REFERENCES.md`.
+
 ---
 
 ## What was done

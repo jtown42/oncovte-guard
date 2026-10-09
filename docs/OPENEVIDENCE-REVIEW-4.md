@@ -197,6 +197,6 @@ The net of this audit: your hepatic rules, Khorana sites, duration text, platele
 - Renal-conditional DDI rules (cyclosporine and isavuconazonium with rivaroxaban at CrCl 15–80): need a CrCl-aware severity.
 - Q12 Child-Pugh: still a caveat only.
 - James on a BTK inhibitor instead of rituximab: not done, as it would add a pharmacodynamic warning to the climax screen.
-- Reference list [1]–[53]: not returned again.
+- Reference list [1]–[53]: the per-number list was never captured, because it is a separate block shown under the answer in OpenEvidence. A consolidated, de-duplicated bibliography for all rounds is now in `docs/REFERENCES.md`.
 
 Tests: 189 → 207 (`tests/core/openevidence-review-4.test.ts` plus the RxNorm code-lock test).
