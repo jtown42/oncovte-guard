@@ -137,8 +137,9 @@ Components (Khorana et al., *Blood* 2008), max score **6**:
   Statement (cardio-oncology drug interactions, Table 3) and Hellfritzsch et al.
   2024 (100 agents evaluated)** — **plus FDA DOAC labeling for the azole
   antifungals**, applied consistently across all 52 agents. The per-agent `sources`
-  array is a **KB-level attestation, not per-interaction citation**. The **16
-  recommendation-changing `major` cells** (8 agents × apixaban/rivaroxaban) are
+  array is a **KB-level attestation, not per-interaction citation**. The **14
+  recommendation-changing `major` cells** (7 agents × apixaban/rivaroxaban; ibrutinib
+  corrected to pharmacodynamic in KB v1.1.0, 2026-10-09) are
   **individually anchored** via `evidenceAnchor`. The `lastReviewed` date is the
   **author curation date and explicitly does NOT denote clinician validation**.
 - **Reviewer caution (acknowledged by the project):** the evidence base for
@@ -313,8 +314,8 @@ guideline fidelity**, not usage metrics.
 - **Five synthetic FHIR R4 patients** run end-to-end, asserting all five decision
   states:
   1. **Maria Santos** — pancreatic (C25.1) → **recommend** (clean).
-  2. **James Chen** — NHL (C83.1) on ibrutinib → **LMWH fallback** (both DOACs
-     blocked by a major DDI).
+  2. **James Chen** — NHL (C83.1) with invasive aspergillosis on itraconazole →
+     **LMWH fallback** (both DOACs blocked by a label-level major DDI).
   3. **Dorothy Williams** — lung (C34.1), platelets <50k + severe renal impairment
      → **contraindicated**.
   4. **Robert Johnson** — low Khorana, stale labs, pharmacodynamic DDI → **not

@@ -13,7 +13,7 @@ export const RXNORM = {
 
   // Other anticoagulants
   ENOXAPARIN: "67108",
-  DALTEPARIN: "27340",
+  DALTEPARIN: "67109",
   HEPARIN_UFH: "5224",
   WARFARIN: "11289",
 
@@ -29,16 +29,16 @@ export const RXNORM = {
   METHOTREXATE: "6851",
 
   // Erythropoiesis-stimulating agents (ESAs)
-  EPOETIN_ALFA: "3521",
-  DARBEPOETIN_ALFA: "237071",
+  EPOETIN_ALFA: "105694",
+  DARBEPOETIN_ALFA: "283838",
 
   // Immunomodulatory imide drugs (IMiDs)
-  // NOTE: thalidomide is 10400; 10324 is TAMOXIFEN (a SERM, not an IMiD) and is
+  // NOTE: thalidomide is 10432; 10324 is TAMOXIFEN (a SERM, not an IMiD) and is
   // used by the DDI knowledge base. Keeping these distinct prevents tamoxifen
   // patients from being falsely flagged onIMiD.
-  THALIDOMIDE: "10400",
-  LENALIDOMIDE: "321191",
-  POMALIDOMIDE: "1369409",
+  THALIDOMIDE: "10432",
+  LENALIDOMIDE: "342369",
+  POMALIDOMIDE: "1369713",
 } as const;
 
 export type RxNormCode = (typeof RXNORM)[keyof typeof RXNORM];

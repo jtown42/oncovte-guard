@@ -2,7 +2,7 @@
  * End-to-end integration tests: synthetic FHIR bundle -> parser -> PatientData
  * -> generateRecommendation, asserting the expected clinical outputs from
  * plan/ddi-info.md Part 7 (with ERRATA corrections, e.g. Maria's nab-paclitaxel
- * RxNorm 686924 and the LMWH-not-dabi/edox fallback).
+ * RxNorm 486610 and the LMWH-not-dabi/edox fallback).
  *
  * A fixed reference date makes age and lab-staleness deterministic.
  */
@@ -84,12 +84,12 @@ describe("Patient 1: Maria Santos — High Khorana, clean meds, normal renal", (
       "apixaban",
       "rivaroxaban",
     ]);
-    expect(r.renal?.crclMlMin).toBeCloseTo(115, 0);
-    expect(r.renal?.crclCategory).toBe("normal");
+    expect(r.renal?.crclMlMin).toBeCloseTo(85.3, 0) // adjusted body weight at BMI 36.2 (OpenEvidence review 4); actual weight gave 115;
+    expect(r.renal?.crclCategory).toBe("mild"); // 60-89 band with adjusted body weight
   });
 
-  it("uses ERRATA-corrected nab-paclitaxel 686924 -> MINOR, not blocking", () => {
-    const nab = ddiFor(r.ddiResults, "686924");
+  it("uses ERRATA-corrected nab-paclitaxel 486610 -> MINOR, not blocking", () => {
+    const nab = ddiFor(r.ddiResults, "486610");
     expect(nab).toBeDefined();
     expect(nab?.perDoac.apixaban.severity).toBe("minor");
     expect(nab?.worstSeverity).toBe("minor");
@@ -110,7 +110,7 @@ describe("Patient 1: Maria Santos — High Khorana, clean meds, normal renal", (
   });
 });
 
-describe("Patient 2: James Chen — Intermediate Khorana, MAJOR ibrutinib DDI", () => {
+describe("Patient 2: James Chen — Intermediate Khorana, MAJOR itraconazole DDI", () => {
   const p = load(1);
   const r = generateRecommendation(p);
 
@@ -121,10 +121,10 @@ describe("Patient 2: James Chen — Intermediate Khorana, MAJOR ibrutinib DDI", 
     expect(r.khorana.prophylaxisRecommended).toBe(true);
   });
 
-  it("flags ibrutinib as MAJOR for both DOACs", () => {
-    const ibr = ddiFor(r.ddiResults, "1442981");
-    expect(ibr?.perDoac.apixaban.severity).toBe("major");
-    expect(ibr?.perDoac.rivaroxaban.severity).toBe("major");
+  it("flags itraconazole as MAJOR for both DOACs", () => {
+    const itz = ddiFor(r.ddiResults, "28031");
+    expect(itz?.perDoac.apixaban.severity).toBe("major");
+    expect(itz?.perDoac.rivaroxaban.severity).toBe("major");
     expect(r.alerts.some((a) => a.level === "critical")).toBe(true);
   });
 
@@ -175,8 +175,8 @@ describe("Patient 3: Dorothy Williams — High Khorana, severe renal + thrombocy
     expect(r.preferredOptions).toHaveLength(0);
   });
 
-  it("computes severe CrCl (~12.9) and flags nephrotoxic carboplatin", () => {
-    expect(r.renal?.crclMlMin).toBeCloseTo(12.9, 1);
+  it("computes severe CrCl (~18.1) and flags nephrotoxic carboplatin", () => {
+    expect(r.renal?.crclMlMin).toBeCloseTo(18.1, 1);
     expect(r.renal?.crclCategory).toBe("severe");
     expect(p.hasNephrotoxicChemo).toBe(true);
     expect(r.renal?.warnings).toContain("nephrotoxic_chemotherapy");
@@ -188,6 +188,14 @@ describe("Patient 3: Dorothy Williams — High Khorana, severe renal + thrombocy
       r.bleedingRisk.factors.some((f) => f.key === "severe_renal_impairment"),
     ).toBe(true);
     expect(r.bleedingRisk.prefersLmwh).toBe(true);
+  });
+
+  it("live demo what-if: platelets 55 -> apixaban with renal caution; rivaroxaban and LMWH avoided", () => {
+    const plt = p.labs.platelets!;
+    const r2 = generateRecommendation({ ...p, labs: { ...p.labs, platelets: { ...plt, value: 55 } } });
+    expect(r2.preferredOptions.map((o) => o.name)).toEqual(["apixaban"]);
+    expect(r2.preferredOptions[0].renalStatus).toBe("caution");
+    expect(r2.alternativeOptions).toHaveLength(0);
   });
 });
 
@@ -230,9 +238,9 @@ describe("Patient 5: Priya Patel — Multiple myeloma exclusion + IMiD", () => {
     expect(p.onIMiD).toBe(true);
   });
 
-  it("still surfaces dexamethasone as a MODERATE DDI for awareness", () => {
+  it("rates dexamethasone as a MINOR DDI (antiemetic-course rating, OpenEvidence review 4)", () => {
     const dex = ddiFor(r.ddiResults, "3264");
-    expect(dex?.worstSeverity).toBe("moderate");
+    expect(dex?.worstSeverity).toBe("minor");
   });
 
   it("points the clinician to myeloma-specific prophylaxis (IMiD pathway)", () => {

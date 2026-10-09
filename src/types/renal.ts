@@ -23,6 +23,8 @@ export interface RenalInput {
   gender: "male" | "female";
   serumCreatinine: number; // mg/dL
   bmi?: number | null;
+  /** Height in cm; with BMI >= 30 it enables the adjusted-body-weight CrCl. */
+  heightCm?: number | null;
   /** Active medications (RxNorm) used to raise the nephrotoxic-chemo warning. */
   medications?: { rxnormCode: string }[];
 }

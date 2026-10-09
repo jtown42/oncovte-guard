@@ -7,6 +7,10 @@
  *
  * Cockcroft-Gault (mL/min):
  *   CrCl = [(140 - age) * weight(kg) * (0.85 if female)] / [72 * SCr(mg/dL)]
+ *
+ * Weight: actual body weight, except at BMI >= 30 (with a known height), where
+ * adjusted body weight = IBW + 0.4 x (actual - IBW) is used. Actual weight
+ * overestimates CrCl in obesity (OpenEvidence review 4; Hart & Anderson 2018).
  */
 
 import type {
@@ -27,11 +31,36 @@ import { NEPHROTOXIC_CHEMO_RXNORM } from "../data/rxnorm-codes";
  * Returns mL/min, rounded to one decimal place. Guards against a zero/negative
  * serum creatinine (which would divide by zero) by returning 0.
  */
+/** BMI at or above which Cockcroft-Gault uses adjusted body weight. */
+export const ADJUSTED_WEIGHT_BMI_GTE = 30;
+
+/** Devine ideal body weight (kg). */
+export function idealBodyWeight(heightCm: number, gender: "male" | "female"): number {
+  const inchesOver60 = heightCm / 2.54 - 60;
+  return (gender === "male" ? 50 : 45.5) + 2.3 * inchesOver60;
+}
+
+/**
+ * The weight Cockcroft-Gault should use: adjusted body weight when BMI >= 30
+ * and height is known (and actual weight exceeds IBW), else actual weight.
+ */
+export function crclWeight(input: RenalInput): { weightKg: number; adjusted: boolean } {
+  const { weightKg, bmi, heightCm, gender } = input;
+  if (bmi != null && bmi >= ADJUSTED_WEIGHT_BMI_GTE && heightCm != null && heightCm > 0) {
+    const ibw = idealBodyWeight(heightCm, gender);
+    if (weightKg > ibw) {
+      return { weightKg: ibw + 0.4 * (weightKg - ibw), adjusted: true };
+    }
+  }
+  return { weightKg, adjusted: false };
+}
+
 export function calculateCrCl(input: RenalInput): number {
-  const { age, weightKg, gender, serumCreatinine } = input;
-  if (serumCreatinine <= 0 || weightKg <= 0 || age < 0) {
+  const { age, gender, serumCreatinine } = input;
+  if (serumCreatinine <= 0 || input.weightKg <= 0 || age < 0) {
     return 0;
   }
+  const { weightKg } = crclWeight(input);
   const sexFactor = gender === "female" ? 0.85 : 1;
   const crcl = ((140 - age) * weightKg * sexFactor) / (72 * serumCreatinine);
   const bounded = Math.max(crcl, 0);
@@ -65,6 +94,9 @@ export function assessRenalFunction(input: RenalInput): RenalResult {
   );
 
   const warnings: string[] = [];
+  if (crclWeight(input).adjusted) {
+    warnings.push("adjusted_body_weight");
+  }
   if (input.weightKg > 0 && input.weightKg < 60) {
     warnings.push("sarcopenia");
   }

@@ -10,7 +10,11 @@ import { useEffect, useState } from "react";
 import type { DDICheckResult } from "../types/ddi";
 import { DOAC_NAMES } from "../types/ddi";
 import type { DDISeverity } from "../types/ddi";
-import { DDI_KB_VERSION, DDI_KB_LAST_REVIEWED } from "../core/ddi-checker";
+import {
+  DDI_KB_VERSION,
+  DDI_KB_LAST_REVIEWED,
+  prophylaxisSeverity,
+} from "../core/ddi-checker";
 import { Card, Pill } from "./primitives";
 import { Flash } from "./Flash";
 import {
@@ -54,14 +58,18 @@ interface Headline {
   detail: string | null;
 }
 
+// Headline and tally rank by the prophylaxis DOACs only (apixaban/rivaroxaban);
+// dabigatran/edoxaban findings stay visible in the full matrix.
 function buildHeadline(results: DDICheckResult[]): Headline {
   const worst = results.reduce<DDISeverity>(
     (acc, r) =>
-      SEVERITY_RANK[r.worstSeverity] > SEVERITY_RANK[acc] ? r.worstSeverity : acc,
+      SEVERITY_RANK[prophylaxisSeverity(r)] > SEVERITY_RANK[acc]
+        ? prophylaxisSeverity(r)
+        : acc,
     "none",
   );
   const offenders = results
-    .filter((r) => r.worstSeverity === worst)
+    .filter((r) => prophylaxisSeverity(r) === worst)
     .map((r) => r.medication);
   const list = offenders.join(", ");
 
@@ -120,7 +128,7 @@ export function DDISummary({ results }: { results: DDICheckResult[] }) {
   const headline = buildHeadline(results);
   const counts = TALLY_ORDER.map((sev) => ({
     sev,
-    count: results.filter((r) => r.worstSeverity === sev).length,
+    count: results.filter((r) => prophylaxisSeverity(r) === sev).length,
   })).filter((t) => t.count > 0);
 
   return (

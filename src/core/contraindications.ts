@@ -46,7 +46,9 @@ export const CONTRAINDICATION_THRESHOLDS = {
 /** ICD-10 prefixes used by contraindication detection. */
 const HIT_PREFIXES = ["D75.82"];
 const APS_PREFIXES = ["D68.61"];
-const GI_TRACT_PREFIXES = ["C15", "C16", "C67"]; // esophagus/GEJ, gastric, bladder
+// Luminal GI and GU tract tumors (NCCN VTE-D-5: DOAC caution with GI/GU lesions).
+// C18-C20 colorectal and C65-C66 upper-tract urothelial added in OpenEvidence review 4.
+const GI_TRACT_PREFIXES = ["C15", "C16", "C18", "C19", "C20", "C65", "C66", "C67"];
 const BRAIN_TUMOR_PREFIXES = ["C71", "C79.31"];
 const MYELOMA_PREFIXES = ["C90.0", "C90.1", "C90.2", "C90.3"];
 // Pregnancy (O00-O9A, Z33.1 incidental pregnant state, Z3A weeks of gestation)
@@ -276,7 +278,7 @@ export function detectContraindications(
       type: "absolute",
       reason: "weight_below_40kg",
       detail:
-        "Weight <40 kg: avoid apixaban per NCCN (VTE-B-2). Use rivaroxaban or LMWH with weight-based dosing.",
+        "Weight <40 kg: avoid apixaban per NCCN (VTE-B-2). Use rivaroxaban or LMWH at a low-weight dose.",
       appliesTo: ["apixaban"],
       source: "NCCN VTE-B-2",
     });

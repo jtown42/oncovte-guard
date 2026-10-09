@@ -31,6 +31,7 @@ export const OVERRIDE_REASONS: CdsOverrideReason[] = [
 import { generateRecommendation } from "../core/recommendation";
 import {
   checkDDIs,
+  prophylaxisSeverity,
   DDI_KB_VERSION,
   DDI_KB_LAST_REVIEWED,
 } from "../core/ddi-checker";
@@ -109,7 +110,7 @@ function summaryCard(
       `**Renal:** CrCl ${rec.renal.crclMlMin} mL/min (${rec.renal.crclCategory}).`,
     );
   }
-  const worstDdi = rec.ddiResults.find((r) => r.worstSeverity === "major");
+  const worstDdi = rec.ddiResults.find((r) => prophylaxisSeverity(r) === "major");
   if (worstDdi) {
     pharmLines.push(
       `**Interaction:** ${worstDdi.medication} — major with a DOAC; review the DDI matrix.`,

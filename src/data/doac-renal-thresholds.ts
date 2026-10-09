@@ -30,12 +30,19 @@ export const PROPHYLAXIS_DOSES: Record<AnticoagulantName, string> = {
   rivaroxaban: "10 mg PO daily",
   dabigatran: "Not an NCCN-supported ambulatory cancer VTE prophylaxis option",
   edoxaban: "Not an NCCN-supported ambulatory cancer VTE prophylaxis option",
-  enoxaparin: "1 mg/kg SC daily x 3 months, then 40 mg SC daily",
-  dalteparin: "200 units/kg SC daily x 1 month, then 150 units/kg SC daily",
+  enoxaparin: "40 mg SC daily (weight-based regimen in pancreatic cancer)",
+  dalteparin: "5,000 units SC daily (weight-based regimen in pancreatic cancer)",
 };
 
 /** CrCl threshold below which prophylaxis dosing changes (mL/min). */
 export const SEVERE_CRCL_THRESHOLD = 30;
+
+/**
+ * CrCl below which apixaban is avoided for prophylaxis (end-stage range).
+ * Between 15 and 30 it stays "caution". AVERT excluded CrCl <30, and there is
+ * no prophylaxis evidence at end-stage renal function (OpenEvidence review 4).
+ */
+export const APIXABAN_AVOID_CRCL_LT = 15;
 
 interface RuleOutput {
   recommendation: RenalRecommendationStatus;
@@ -50,11 +57,18 @@ function ruleFor(agent: AnticoagulantName, crcl: number): RuleOutput {
   const severe = crcl < SEVERE_CRCL_THRESHOLD;
   switch (agent) {
     case "apixaban":
+      if (crcl < APIXABAN_AVOID_CRCL_LT) {
+        return {
+          recommendation: "avoid",
+          rationale:
+            "CrCl <15 mL/min: no prophylaxis evidence at end-stage renal function — avoid.",
+        };
+      }
       return severe
         ? {
             recommendation: "caution",
             rationale:
-              "CrCl <30 mL/min: limited data (patients with CrCl <30 were excluded from prophylaxis trials). Use with caution.",
+              "CrCl 15–29 mL/min: limited data (patients with CrCl <30 were excluded from prophylaxis trials). Use with caution.",
           }
         : { recommendation: "standard", rationale: "No renal dose adjustment for prophylaxis." };
     case "rivaroxaban":

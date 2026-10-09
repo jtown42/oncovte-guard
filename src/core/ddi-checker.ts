@@ -110,6 +110,28 @@ export function checkDDIs(medication: {
 }
 
 /**
+ * The DOACs that can actually be offered for prophylaxis (NCCN). Dabigatran and
+ * edoxaban are reference-only matrix columns, so their severities never drive
+ * an alert or a headline.
+ */
+export const PROPHYLAXIS_DOAC_NAMES: readonly DoacName[] = ["apixaban", "rivaroxaban"];
+
+/**
+ * Worst severity for one medication across the prophylaxis DOACs only. Use this
+ * — not `worstSeverity`, which spans all four matrix columns — for anything that
+ * tells the clinician what to do. Example: ibrutinib is major only with
+ * dabigatran (reference-only) and pharmacodynamic with apixaban/rivaroxaban, so
+ * it must surface as a bleeding-risk caution, not as "LMWH may be preferred".
+ */
+export function prophylaxisSeverity(result: DDICheckResult): DDISeverity {
+  let worst: DDISeverity = "unknown";
+  for (const doac of PROPHYLAXIS_DOAC_NAMES) {
+    worst = worseSeverity(worst, result.perDoac[doac].severity);
+  }
+  return worst;
+}
+
+/**
  * Given the DDI results for every active medication, return the worst severity
  * for one specific DOAC across all of them (ERRATA Issue 7). Used by the
  * orchestration to decide whether a DOAC is eligible.

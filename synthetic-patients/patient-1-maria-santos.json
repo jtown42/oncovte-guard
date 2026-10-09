@@ -356,7 +356,7 @@
           "coding": [
             {
               "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
-              "code": "686924",
+              "code": "486610",
               "display": "paclitaxel protein-bound"
             }
           ],

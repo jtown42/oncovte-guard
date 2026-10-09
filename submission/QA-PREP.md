@@ -53,7 +53,7 @@ reason the conservative default is the honest one."
 **Answer.** "You shouldn't trust it as validated — and I don't claim it is. This is my
 B-tier claim: it's *curator-mediated*, faithful to a single named source set — the AHA
 2022 cardio-oncology statement, Hellfritzsch 2024, and FDA labeling — applied
-consistently, with the 16 recommendation-changing 'major' cells individually
+consistently, with the 14 recommendation-changing 'major' cells individually
 evidence-anchored. The literature genuinely disagrees: Nowinski and Chaireti 2025
 found about 35% of pairs flagged by at least one source, with frequent conflict. My
 answer to that isn't to pretend certainty — it's transparency: every interaction shows
@@ -80,7 +80,7 @@ time, and you can audit that claim in this room."
 "A calculator gives you a number. This gives you a *decision* — it unifies the score
 with a per-drug interaction screen, renal dosing, and targeted contraindications, and
 it reasons to the next-best agent when the preferred one is unsafe. The James case in
-the demo — ibrutinib blocks both preferred DOACs, so it falls back to LMWH and refuses
+the demo — itraconazole blocks both preferred DOACs, so it falls back to LMWH and refuses
 to substitute a non-guideline DOAC — is something no calculator does."
 
 ### Q6. "Renal-cell carcinoma isn't scored — aren't you missing high-risk patients? RCC clots a lot."
@@ -110,7 +110,7 @@ safety feature, not a gap."
 SMART Health IT public sandbox and EHR-launched the app against each: it completed the
 real OAuth2/PKCE handshake, read the patient's live Condition, Observation, and
 MedicationRequest resources off the server, and produced the correct verdicts — recommend
-for the pancreatic patient, the LMWH fallback when ibrutinib blocked both DOACs, and
+for the pancreatic patient, the LMWH fallback when a major interaction blocked both DOACs, and
 contraindicated at platelets 42k. That's the full pipeline against a real SMART-secured
 FHIR server, not just the login. Honest scope: it's a public sandbox with synthetic
 patients I authored, so it demonstrates standards-native interoperability and faithful
@@ -182,4 +182,4 @@ conformance or validation — only what I actually implemented."
 - Lung Khorana: OR ~1.1 vs ~3.2 elsewhere (van Es IPD; P-interaction 0.002).
 - Burden: VTE = second leading cause of death in cancer (after progression); risk ~4–7×;
   12-mo incidence ~3.7% overall, ~5.7% on systemic therapy (Lam 2026).
-- Engine: 185 tests, 15 files; 52 DDI agents × 4 DOACs; 5 terminal states; 5 synthetic patients.
+- Engine: 207 tests, 15 files; 52 DDI agents × 4 DOACs; 5 terminal states; 5 synthetic patients.

@@ -12,7 +12,7 @@ inventory, and the exact commands to reproduce every result below.
 
 - **Verified on:** 2026-08-06
 - **Authoritative contract:** [`plan/errata-contract-reconciliation.md`](plan/errata-contract-reconciliation.md) (overrides `plan/ddi-info.md` on its 10 resolved issues), with one dated clinical-review supersession noted in §5 (risk-tier labels).
-- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **185 / 185 tests passing**
+- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **207 / 207 tests passing** (KB v1.2.0; 16 files)
 
 ---
 
@@ -21,7 +21,7 @@ inventory, and the exact commands to reproduce every result below.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit  → no errors
-npm test              # vitest run    → 15 files, 185 tests, all passing
+npm test              # vitest run    → 16 files, 207 tests, all passing
 npm run build         # tsc && vite build → dist/ (113 modules)
 npm run dev           # standalone demo (5 synthetic patients), http://localhost:5173
 npm run cds-server    # CDS Hooks service, http://localhost:3000/cds-services
@@ -37,7 +37,7 @@ running the cited test (`npx vitest run <path> -t "<test title>"`).
 | Gate | Command | Result |
 | --- | --- | --- |
 | Type safety | `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) | **0 errors** |
-| Unit + integration tests | `vitest run` | **15 files, 185 tests passed** |
+| Unit + integration tests | `vitest run` | **16 files, 207 tests passed** |
 | Production build | `tsc && vite build` | **113 modules transformed, built** |
 | Live render (manual) | `vite preview` + browser | All five pathways (recommend / LMWH-fallback / contraindicated / not-indicated / excluded) verified visually in the redesigned demo UI, including the live verdict flip and presentation mode (see `docs/screenshots/`) |
 
@@ -157,7 +157,10 @@ carries no advisory note".
 
 | Rule | Source | Code | Test |
 | --- | --- | --- | --- |
-| `checkDDIs()` returns the **full per-DOAC shape** for all 4 DOACs | ERRATA Issue 7 | `ddi-checker.ts: checkDDIs` | "Test 1: ibrutinib interacts across all DOACs" |
+| `checkDDIs()` returns the **full per-DOAC shape** for all 4 DOACs | ERRATA Issue 7 | `ddi-checker.ts: checkDDIs` | "Test 1: itraconazole (combined P-gp + strong CYP3A4 inhibitor) is major for both prophylaxis DOACs" |
+| **F15 (2026-10-09):** ibrutinib is **pharmacodynamic** with apixaban/rivaroxaban/edoxaban and **major** only with dabigatran; it never blocks a factor Xa inhibitor | FDA ibrutinib labeling; 2025 ACC cardio-oncology guidance | `ddi-knowledge-base.json` (ibrutinib, KB v1.1.0) | "Test 1b (regression, 2026-10-09)…", "regression (2026-10-09): ibrutinib does NOT block factor Xa inhibitors" |
+| **F16 (2026-10-09):** LMWH fallback shows fixed prophylactic doses (enoxaparin 40 mg / dalteparin 5,000 units SC daily); the weight-based regimen only for pancreatic cancer (C25*) | NCCN VTE-B-2 footnote (weight-based regimens: pancreatic cancer data); ITAC 2022 | `recommendation.ts: PANCREATIC_LMWH_PRESENTATION`, `buildLmwhOption` | "regression (2026-10-09): LMWH fallback uses fixed prophylactic doses…", "…pancreatic cancer keeps the weight-based LMWH regimen" |
+| Alerts and DDI headline rank severity across the **prophylaxis DOACs only** (dabigatran/edoxaban are reference columns) | NCCN (apixaban/rivaroxaban are the prophylaxis DOACs) | `ddi-checker.ts: prophylaxisSeverity`; `recommendation.ts: appendDdiAlerts`; `DDIMatrix.tsx: buildHeadline` | "regression (2026-10-09)…" (asserts no critical alert for ibrutinib) |
 | Severity rank: major > moderate > pharmacodynamic > minor > none > unknown | ERRATA Issue 7 | `ddi-checker.ts: SEVERITY_RANK / worseSeverity` | "orders major > moderate > pharmacodynamic > minor > none > unknown" |
 | Strong CYP3A4/P-gp inducer → **major** for apixaban/rivaroxaban | DOAC labeling | `ddi-knowledge-base.json` (e.g. enzalutamide) | "Test 4: enzalutamide…major for apixaban/rivaroxaban" |
 | Pharmacodynamic (additive bleeding) flagged independent of DOAC levels | AHA 2022 statement | `ddi-knowledge-base.json` (bevacizumab) | "Test 3: bevacizumab is a pharmacodynamic bleeding risk" |
@@ -165,7 +168,7 @@ carries no advisory note".
 | Unknown RxNorm → `unknown` for all DOACs (no throw) | ERRATA Issue 7 | `ddi-checker.ts: unknownDetail` | "Test 6: unknown RxNorm yields unknown for every DOAC" |
 | Worst-per-DOAC aggregation across all active meds | ERRATA Issue 7 | `ddi-checker.ts: getWorstDDIForDoac` | "Test 7: aggregates the worst severity per DOAC…", "returns none for an empty result set" |
 | KB is camelCase and includes a `sources` field | ERRATA Issue 6 | `src/types/ddi.ts: DDIEntry`; `ddi-knowledge-base.json` | typecheck (KB cast to `DDIKnowledgeBase`) |
-| **WS-3 (F12):** every `major` cell carries a non-empty `evidenceAnchor` {source, locator, claim} | AHA 2022 Table 3; FDA DOAC labeling (azoles) | `types/ddi.ts: DDIEvidenceAnchor`; `ddi-knowledge-base.json` (16 major cells) | "every major cell has a non-empty evidenceAnchor", "no mechanism stating a digit-percentage magnitude lacks an anchor", "the guard fails if an anchor is removed" |
+| **WS-3 (F12):** every `major` cell carries a non-empty `evidenceAnchor` {source, locator, claim} | AHA 2022 Table 3; FDA DOAC labeling (azoles) | `types/ddi.ts: DDIEvidenceAnchor`; `ddi-knowledge-base.json` (15 major cells: 14 apixaban/rivaroxaban + ibrutinib × dabigatran) | "every major cell has a non-empty evidenceAnchor", "no mechanism stating a digit-percentage magnitude lacks an anchor", "the guard fails if an anchor is removed" |
 | **WS-3:** KB root carries `kbVersion` / `lastReviewed` / `provenanceNote`, surfaced in DDI matrix footer + CDS card | WS-3 | `ddi-checker.ts: DDI_KB_VERSION/…`; `DDIMatrix.tsx`; `cds-hooks/cards.ts: ddiDetailText` | "carries a version, a curation date, and a provenance note", "does NOT claim clinician validation…" |
 
 ### 4.4 Renal dosing (Cockcroft-Gault)
@@ -285,9 +288,9 @@ suite is fixed at `2026-06-10T12:00:00Z`. File: `tests/integration/patients.test
 
 | # | Patient | Expected output (asserted) |
 | --- | --- | --- |
-| 1 | Maria Santos (C25.1 pancreas) | Khorana **5 High**; apixaban+rivaroxaban preferred; CrCl ~**115** normal; nab-paclitaxel (686924) **minor**, non-blocking |
-| 2 | James Chen (C83.1 NHL) | Khorana **2**; ibrutinib **major** on both DOACs → preferred empty, **enoxaparin+dalteparin** alternative; **no dabigatran/edoxaban** offered; rituximab none |
-| 3 | Dorothy Williams (C34.1 lung) | Khorana **3 High** but platelets **42K** → `contraindicated` (universal absolute); CrCl **12.9** severe; carboplatin nephrotoxic warning |
+| 1 | Maria Santos (C25.1 pancreas) | Khorana **5 High**; apixaban+rivaroxaban preferred; CrCl ~**85** mild (adjusted body weight, F18); nab-paclitaxel (486610) **minor**, non-blocking |
+| 2 | James Chen (C83.1 NHL + B44.0 aspergillosis) | Khorana **2**; itraconazole **major** on both DOACs → preferred empty, **enoxaparin+dalteparin** alternative; **no dabigatran/edoxaban** offered; rituximab none |
+| 3 | Dorothy Williams (C34.1 lung) | Khorana **3 High** but platelets **42K** → `contraindicated` (universal absolute); CrCl **18.1** severe; carboplatin nephrotoxic warning |
 | 4 | Robert Johnson (C18.4 colon) | Khorana **0** → `not_indicated`; labs **stale** (>30d); bevacizumab **pharmacodynamic** |
 | 5 | Priya Patel (C90.00 myeloma) | Khorana **excluded**; `onIMiD` true (lenalidomide); dexamethasone surfaced **moderate** |
 
@@ -313,7 +316,7 @@ suite is fixed at `2026-06-10T12:00:00Z`. File: `tests/integration/patients.test
 - **Role tailoring (WS-4):** `role` = oncologist/pharmacist/app reorders summary detail. Test: "pharmacist leads with mechanism/renal detail; prescriber leads with the verdict".
 - **Override capture (WS-4):** critical cards carry a fixed `overrideReasons` vocabulary; `POST /cds-services/override-feedback` → append-only JSONL (`override-log.ts`). Tests: "critical cards carry an override-reason vocabulary…", "appends overrides and tallies them by reason".
 - **Governance metrics (WS-4):** `GET /metrics` → firing rate per 100 chart-opens, critical-to-total ratio, override rate (`metrics.ts`). Tests: "renders non-zero card counts for all five patients", "incorporates override reason counts…", "renders a self-contained HTML dashboard".
-- **`order-select` (`oncovte-ddi-check`):** screens the order being composed against active therapy; major cards carry `overrideReasons` + evidence anchor. Tests: "ordering apixaban for a patient on ibrutinib flags a critical interaction", "…clean patient produces no interaction cards".
+- **`order-select` (`oncovte-ddi-check`):** screens the order being composed against active therapy; major cards carry `overrideReasons` + evidence anchor. Tests: "ordering apixaban for a patient on itraconazole flags a critical interaction", "…clean patient produces no interaction cards".
 - **Prefetch:** templates declared per service; `prefetch.ts` adapts the prefetch block into `RawFHIRData` (same pipeline as SMART/standalone) and degrades missing bundles gracefully. Tests: "throws when the Patient resource is absent", "degrades missing search bundles to empty bundles".
 
 ---

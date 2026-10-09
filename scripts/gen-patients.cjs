@@ -1,6 +1,6 @@
 /**
  * Generator for the 5 synthetic FHIR R4 patient bundles (Part 7 + Part 18).
- * RxNorm codes follow ERRATA Issue 3 (Maria's nab-paclitaxel = 686924).
+ * RxNorm codes follow ERRATA Issue 3 (Maria's nab-paclitaxel = 486610).
  * Run: node scripts/gen-patients.cjs
  */
 const fs = require("fs");
@@ -65,7 +65,7 @@ function patientResource(p) {
   };
 }
 
-function conditionResource(p, idx) {
+function conditionResource(p, idx, cond = p.condition) {
   return {
     resource: {
       resourceType: "Condition",
@@ -106,11 +106,11 @@ function conditionResource(p, idx) {
         coding: [
           {
             system: "http://hl7.org/fhir/sid/icd-10-cm",
-            code: p.condition.code,
-            display: p.condition.display,
+            code: cond.code,
+            display: cond.display,
           },
         ],
-        text: p.condition.text,
+        text: cond.text,
       },
       subject: { reference: `Patient/${p.id}` },
     },
@@ -179,10 +179,20 @@ function buildBundle(p) {
   const entries = [
     patientResource(p),
     conditionResource(p, p.id.split("-")[1]),
+    // Non-cancer comorbidities (e.g. the infection an interacting drug treats).
+    ...(p.otherConditions || []).map((c, i) =>
+      conditionResource(p, `${p.id.split("-")[1]}-${i + 2}`, c),
+    ),
     obs(p, `obs-platelets-${p.n}`, "laboratory", "777-3", "Platelets [#/volume] in Blood by Automated count", p.labs.plt, "10*3/uL", d),
     obs(p, `obs-hemoglobin-${p.n}`, "laboratory", "718-7", "Hemoglobin [Mass/volume] in Blood", p.labs.hgb, "g/dL", d),
     obs(p, `obs-wbc-${p.n}`, "laboratory", "6690-2", "Leukocytes [#/volume] in Blood by Automated count", p.labs.wbc, "10*3/uL", d),
     obs(p, `obs-creatinine-${p.n}`, "laboratory", "2160-0", "Creatinine [Mass/volume] in Serum or Plasma", p.labs.scr, "mg/dL", d),
+    // Optional hepatic panel (James: resolving voriconazole liver injury).
+    ...(p.labs.alt != null ? [
+      obs(p, `obs-alt-${p.n}`, "laboratory", "1742-6", "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma", p.labs.alt, "U/L", d),
+      obs(p, `obs-ast-${p.n}`, "laboratory", "1920-8", "Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma", p.labs.ast, "U/L", d),
+      obs(p, `obs-bilirubin-${p.n}`, "laboratory", "1975-2", "Bilirubin.total [Mass/volume] in Serum or Plasma", p.labs.bili, "mg/dL", d),
+    ] : []),
     obs(p, `obs-weight-${p.n}`, "vital-signs", "29463-7", "Body weight", p.weightKg, "kg", d),
     obs(p, `obs-height-${p.n}`, "vital-signs", "8302-2", "Body height", p.heightCm, "cm", d),
     ...p.meds.map((m) => medResource(p, m)),
@@ -200,7 +210,7 @@ const patients = [
     labs: { plt: 410, hgb: 9.2, wbc: 8.5, scr: 0.8 },
     meds: [
       { id: "gemcitabine", code: "12574", display: "gemcitabine", text: "Gemcitabine" },
-      { id: "nab-paclitaxel", code: "686924", display: "paclitaxel protein-bound", text: "nab-Paclitaxel (paclitaxel protein-bound)" },
+      { id: "nab-paclitaxel", code: "486610", display: "paclitaxel protein-bound", text: "nab-Paclitaxel (paclitaxel protein-bound)" },
     ],
   },
   {
@@ -209,9 +219,20 @@ const patients = [
     race: RACE.asian, ethnicity: ETHNICITY.nonHispanic,
     weightKg: 78, heightCm: 175, labDate: "2026-05-30",
     condition: { code: "C83.1", display: "Mantle cell lymphoma", text: "Mantle cell lymphoma" },
-    labs: { plt: 195, hgb: 11.8, wbc: 12.3, scr: 1.1 },
+    // Itraconazole is oral step-down/consolidation for invasive pulmonary
+    // aspergillosis acquired during chemotherapy-induced neutropenia (relapsed
+    // lymphoma), after a switch off first-line voriconazole for hepatotoxicity.
+    // ALT/AST are mildly elevated and resolving (<3x ULN, so the hepatic DOAC
+    // rule does not fire) — OpenEvidence review 4. It is a combined
+    // P-gp + strong CYP3A4 inhibitor that both DOAC labels say to avoid at
+    // prophylactic doses -> LMWH fallback. (Replaced ibrutinib 2026-10-09: its
+    // DOAC interaction is pharmacodynamic, not a block; docs/OPENEVIDENCE-REVIEW-2.md.)
+    otherConditions: [
+      { code: "B44.0", display: "Invasive pulmonary aspergillosis", text: "Invasive pulmonary aspergillosis" },
+    ],
+    labs: { plt: 195, hgb: 11.8, wbc: 12.3, scr: 1.1, alt: 68, ast: 54, bili: 0.9 },
     meds: [
-      { id: "ibrutinib", code: "1442981", display: "ibrutinib", text: "Ibrutinib" },
+      { id: "itraconazole", code: "28031", display: "itraconazole", text: "Itraconazole" },
       { id: "rituximab", code: "121191", display: "rituximab", text: "Rituximab" },
     ],
   },
@@ -221,10 +242,10 @@ const patients = [
     race: RACE.black, ethnicity: ETHNICITY.nonHispanic,
     weightKg: 52, heightCm: 155, labDate: "2026-06-06",
     condition: { code: "C34.1", display: "Malignant neoplasm of upper lobe, bronchus or lung", text: "Non-small cell lung cancer" },
-    labs: { plt: 42, hgb: 8.9, wbc: 14.2, scr: 2.8 },
+    labs: { plt: 42, hgb: 8.9, wbc: 14.2, scr: 2.0 }, // CrCl ~18: apixaban "caution" zone (15–29), OpenEvidence review 4
     meds: [
       { id: "carboplatin", code: "40048", display: "carboplatin", text: "Carboplatin" },
-      { id: "pemetrexed", code: "258702", display: "pemetrexed", text: "Pemetrexed" },
+      { id: "pemetrexed", code: "68446", display: "pemetrexed", text: "Pemetrexed" },
       { id: "pembrolizumab", code: "1547545", display: "pembrolizumab", text: "Pembrolizumab" },
     ],
   },
@@ -249,7 +270,7 @@ const patients = [
     condition: { code: "C90.00", display: "Multiple myeloma not having achieved remission", text: "Multiple myeloma" },
     labs: { plt: 165, hgb: 9.5, wbc: 5.2, scr: 1.3 },
     meds: [
-      { id: "lenalidomide", code: "321191", display: "lenalidomide", text: "Lenalidomide" },
+      { id: "lenalidomide", code: "342369", display: "lenalidomide", text: "Lenalidomide" },
       { id: "dexamethasone", code: "3264", display: "dexamethasone", text: "Dexamethasone" },
       { id: "bortezomib", code: "358258", display: "bortezomib", text: "Bortezomib" },
     ],

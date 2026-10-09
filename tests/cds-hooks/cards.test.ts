@@ -76,11 +76,11 @@ describe("patient-view cards", () => {
     for (const c of cards) expect(c.summary.length).toBeLessThanOrEqual(140);
   });
 
-  it("James (major ibrutinib DDI): emits a critical interaction card", () => {
+  it("James (major itraconazole DDI): emits a critical interaction card", () => {
     const cards = buildPatientViewCards(patient(1));
     expect(cards.some((c) => c.indicator === "critical")).toBe(true);
     expect(
-      cards.some((c) => /ibrutinib/i.test(c.summary) || /ibrutinib/i.test(c.detail ?? "")),
+      cards.some((c) => /itraconazole/i.test(c.summary) || /itraconazole/i.test(c.detail ?? "")),
     ).toBe(true);
   });
 
@@ -119,7 +119,7 @@ describe("WS-4 two-channel alert model", () => {
   });
 
   it("critical cards carry an override-reason vocabulary; the summary card does not", () => {
-    const cards = buildPatientViewCards(patient(1)); // James: major ibrutinib DDI
+    const cards = buildPatientViewCards(patient(1)); // James: major itraconazole DDI
     const crit = cards.find((c) => c.indicator === "critical");
     expect(crit?.overrideReasons?.length).toBeGreaterThan(0);
     expect(crit?.overrideReasons?.map((r) => r.code)).toContain("data_inaccurate");
@@ -139,7 +139,7 @@ describe("WS-4 role tailoring", () => {
 });
 
 describe("order-select cards", () => {
-  it("ordering apixaban for a patient on ibrutinib flags a critical interaction", () => {
+  it("ordering apixaban for a patient on itraconazole flags a critical interaction", () => {
     const cards = buildOrderSelectCards(patient(1), [
       { rxnormCode: RXNORM.APIXABAN, display: "apixaban" },
     ]);

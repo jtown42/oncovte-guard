@@ -1,5 +1,10 @@
 # OncoVTE Guard — 8-Minute Live Demo Script
 
+> **SUPERSEDED (2026-10-09).** Rehearse from `submission/DEMO-SCRIPT.md` instead. This
+> early draft is kept for history only: its James beat relies on an ibrutinib interaction
+> that was wrong (MASTER-DOCUMENT F15), it cites "123 automated tests" (now 187), and its
+> opening line was never sourced.
+
 **Venue:** AMIA / HL7 FHIR App Competition (Student), live on stage, no Q&A.
 **Goal:** prove this is a *deterministic clinical reasoning engine* — not a chart
 viewer — exposed through SMART-on-FHIR and CDS Hooks.

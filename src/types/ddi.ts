@@ -49,6 +49,12 @@ export interface DDIDetail {
    * elsewhere.
    */
   evidenceAnchor?: DDIEvidenceAnchor;
+  /**
+   * Required on every `major` cell (OpenEvidence review 4): whether the
+   * perpetrator raises DOAC exposure (bleeding risk) or lowers it (loss of
+   * efficacy / thrombosis). The action is the same; the reason is opposite.
+   */
+  exposure?: "increased" | "decreased";
 }
 
 export type DDIInteractions = Record<DoacName, DDIDetail>;

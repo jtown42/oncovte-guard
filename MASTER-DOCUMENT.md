@@ -15,7 +15,7 @@
 - **Category:** AMIA / HL7 FHIR App Competition — **Student**.
 - **Live demo:** https://oncovte-guard.pages.dev · **SMART launch:** https://oncovte-guard.pages.dev/launch
 - **Source:** https://github.com/jtown42/oncovte-guard
-- **Verified state (live run, 2026-08-06):** `vitest run` → **15 files, 185/185 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
+- **Verified state (live run, 2026-10-09):** `vitest run` → **16 files, 207/207 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
 - **Companion docs:** `README.md` (orientation), `VERIFICATION.md` (rule→source→code→test audit), `ASSESSMENT.md` (reviewer verdict lens), `submission/SUBMISSION-FULL.md` (the actual entry text), `plan/errata-contract-reconciliation.md` (the authoritative contract).
 
 > ### If you are an outside reviewer or an evidence model, start here
@@ -51,7 +51,7 @@
 > larger type — §11.2) is **present in the working tree but not yet committed**, so the
 > **live site at oncovte-guard.pages.dev is behind `main`** and shows the prior styling.
 > **No clinical logic differs between the two** — the redesign touched only components,
-> `index.css`, `ui/format.ts`, and the Tailwind config; the 185 tests cover the engine and
+> `index.css`, `ui/format.ts`, and the Tailwind config; the 207 tests cover the engine and
 > pass identically on both.
 
 ---
@@ -87,7 +87,7 @@ cancer patient on systemic therapy**:
 2. **If yes, which anticoagulant is actually safe *for this patient right now*?** (renal function, drug–drug interactions with active chemotherapy, thrombocytopenia, hepatic function, and other contraindications.)
 
 The defining architectural claim: **this is not a dashboard that displays data — it is a
-clinical reasoning engine, proven by 185 automated tests, exposed through two EHR
+clinical reasoning engine, proven by 207 automated tests, exposed through two EHR
 surfaces.** All guideline logic lives in pure, framework-free TypeScript in `src/core/`.
 A SMART-on-FHIR dashboard (clinician *pull*), a CDS Hooks service (EHR *push*), and a
 standalone what-if demo all converge on **one seam**:
@@ -106,7 +106,7 @@ in isolation.
 **The single most important caveat** (repeat it to any reviewer, unprompted): the DDI
 knowledge base and clinical thresholds were **curated from supplied structured clinical
 input and published labeling**, encoded against an authoritative project contract. The
-185 tests prove the encoded rules are *applied faithfully and consistently*. They do
+207 tests prove the encoded rules are *applied faithfully and consistently*. They do
 **not** independently prove the underlying pharmacology is itself correct or current —
 that needs clinician/pharmacist sign-off for real use. The app says so everywhere.
 
@@ -158,7 +158,7 @@ src/
   core/         Clinical engines — pure, framework-free, deterministic, fully unit-tested
                 khorana-engine · ddi-checker · renal-dosing · contraindications ·
                 stale-lab · recommendation (orchestrator)
-  data/         Knowledge bases: ddi-knowledge-base.json (52 agents), icd10-cancer-map,
+  data/         Knowledge bases: ddi-knowledge-base.json (70 agents, v1.2.0), icd10-cancer-map,
                 doac-renal-thresholds, loinc-codes, rxnorm-codes
   types/        Shared domain contracts (camelCase; strict TS)
   fhir/         fhir-parser (R4 → PatientData) · smart-launch (OAuth2) ·
@@ -347,7 +347,7 @@ the thing under audit here — not the strength of the underlying medical litera
 | Nephrotoxic-chemo warning (cisplatin/carboplatin/methotrexate) | Clinical | **C** | Uncontroversial mechanistically; agent list is curator-scoped and non-exhaustive. |
 | Stale labs >30 days | — | **D** | **No clinical source claimed.** A defensible engineering convention, not a guideline. Do not defend it as evidence-based. |
 | DDI severity ranking (major>moderate>PD>minor>none>unknown) | ERRATA Issue 7 | **D** | Display/precedence logic, not medicine. |
-| Per-agent DDI severities (208 cells) | AHA 2022 statement; Hellfritzsch 2024; FDA labeling | **B/C** | **See §5.3 — the largest surface.** The 16 recommendation-changing `major` cells are now individually anchored (WS-3); the remaining non-major cells stay KB-level attested (they do not change a recommendation). |
+| Per-agent DDI severities (280 cells, KB v1.2.0) | AHA 2022 statement; Hellfritzsch 2024; FDA labeling | **B/C** | **See §5.3 — the largest surface.** The 14 recommendation-changing `major` cells (plus ibrutinib × dabigatran, reference-only) are individually anchored (WS-3; F15); the remaining non-major cells stay KB-level attested (they do not change a recommendation). |
 
 ### 5.3 The DDI knowledge base: what its provenance actually is
 
@@ -367,24 +367,24 @@ citation. Every one of the 52 agents carries the same one or two references. So:
 - The KB satisfies errata Issue 6 (a `sources` field exists and is populated) — **true**.
 - The KB does **not** let a reviewer trace *one specific severity cell* to *one specific
   supporting statement*. There is no page, table, or quotation anchor.
-- The `mechanism` strings carry **specific quantitative claims that are not individually
+- The `mechanism` strings carried **specific quantitative claims that were not individually
   cited** — e.g. ibrutinib: *"Strong dual CYP3A4 + P-gp inhibition increases apixaban AUC
-  ~100%"*. That "~100%" is presented to a clinician as fact and is traceable only to
-  "AHA 2022 / Hellfritzsch 2024" at the whole-KB level. **A reviewer cannot verify it from
-  this repo.** Neither can the author, without returning to the source.
+  ~100%"*. **That claim turned out to be wrong, not just unanchored** — ibrutinib is a
+  CYP3A4 substrate, and its DOAC interaction is pharmacodynamic. Corrected 2026-10-09 (F15).
 
-**Severity distribution across the 52 × 4 = 208 cells:** `none` 80 · `moderate` 56 ·
-`minor` 40 · `major` 16 · `pharmacodynamic` 16. The 16 `major` cells are the ones that
-actually change a recommendation — **those are the cells to audit first**, and they are a
-small, tractable set for a pharmacist to review in one sitting.
+**Severity distribution across the 52 × 4 = 208 cells (KB v1.1.0):** `none` 80 · `moderate` 55 ·
+`minor` 39 · `pharmacodynamic` 19 · `major` 15. The `major` cells on apixaban/rivaroxaban are
+the ones that actually change a recommendation — **those are the cells to audit first**, and
+they are a small, tractable set for a pharmacist to review in one sitting.
 
-**Those 16 cells are exactly 8 agents × the 2 prophylaxis DOACs** (apixaban, rivaroxaban),
+**The 14 recommendation-changing majors are exactly 7 agents × the 2 prophylaxis DOACs**
+(apixaban, rivaroxaban); the 15th major is ibrutinib × dabigatran (reference-only, F15),
 and they fall into two mechanistically clean groups — which is a point in the KB's favor,
 and checkable in one command (§13, step 9):
 
 | Group | Agents | Mechanism as encoded | Direction of harm |
 |---|---|---|---|
-| Strong dual CYP3A4 + P-gp **inhibitors** | ibrutinib, idelalisib, itraconazole, ketoconazole, posaconazole | Increased DOAC exposure | **Bleeding** |
+| Strong dual CYP3A4 + P-gp **inhibitors** | idelalisib, itraconazole, ketoconazole, posaconazole | Increased DOAC exposure | **Bleeding** |
 | Strong CYP3A4 **inducers** | enzalutamide, apalutamide, mitotane | Reduced DOAC levels | **Therapeutic failure / thrombosis** |
 
 This is the KB at its best: the majors are not a scattered list of one-off assertions —
@@ -424,7 +424,7 @@ Stated bluntly so nobody has to infer it:
   *list* is guideline-scaffolded (ACC 2026 / NCCN VTE-2); the numeric cut-points are curator
   choices; and *no bleeding score is computed on purpose* — the evidence does not support one
   for primary prophylaxis in this population.
-- **The engineering *is* the contribution.** The one-seam architecture, the 185 tests, the
+- **The engineering *is* the contribution.** The one-seam architecture, the 207 tests, the
   dual-surface coherence, and the traceability matrix are real, verifiable, and unusual for
   a student prototype. The clinical content is a *faithful encoding of a curated set* — the
   app's honest claim is **"provably consistent," not "independently validated."**
@@ -459,7 +459,7 @@ is why" is a stronger, more defensible answer than a fabricated c-0.6 number. Th
 
 ## 6. Knowledge bases & code sets
 
-- **`ddi-knowledge-base.json`** — **52** antineoplastic/supportive agents × 4-DOAC interaction profiles (**208 severity cells**: 80 none, 56 moderate, 40 minor, 16 major, 16 pharmacodynamic), camelCase, each entry carrying a `sources` array (errata Issue 6). Includes the four "special-notes" agents (doxorubicin 3639, vinblastine 11198, etoposide 4179, tamoxifen 10324). Scoped to its listed agents; anything else → `unknown` → "verify manually." **Read §5.3 before assessing this file:** its `sources` are a uniform KB-level attestation (AHA 2022 on all 52; Hellfritzsch 2024 on 49; FDA labeling on 3), **not** per-interaction citation — see F12. Each entry also carries `pgpEffect` / `cyp3a4Effect` class flags and free-text `notes`.
+- **`ddi-knowledge-base.json`** — **52** antineoplastic/supportive agents × 4-DOAC interaction profiles (**208 severity cells**: KB v1.1.0: 80 none, 55 moderate, 39 minor, 19 pharmacodynamic, 15 major), camelCase, each entry carrying a `sources` array (errata Issue 6). Includes the four "special-notes" agents (doxorubicin 3639, vinblastine 11198, etoposide 4179, tamoxifen 10324). Scoped to its listed agents; anything else → `unknown` → "verify manually." **Read §5.3 before assessing this file:** its `sources` are a uniform KB-level attestation (AHA 2022 on all 52; Hellfritzsch 2024 on 49; FDA labeling on 3), **not** per-interaction citation — see F12. Each entry also carries `pgpEffect` / `cyp3a4Effect` class flags and free-text `notes`.
 - **`icd10-cancer-map.ts`** — the classification rules in §4.1.
 - **`doac-renal-thresholds.ts`** — six-agent renal rules + NCCN prophylaxis dose strings (apixaban 2.5 mg PO BID; rivaroxaban 10 mg PO daily; enoxaparin/dalteparin regimens; dabigatran/edoxaban explicitly "Not an NCCN-supported ambulatory cancer VTE prophylaxis option").
 - **`rxnorm-codes.ts`** — DOAC, anticoagulant, antiplatelet, ESA, IMiD, and nephrotoxic sets used both by the FHIR parser (to derive flags) and the engine. **Contains a fixed latent bug + regression lock:** `10324` is **tamoxifen** (a SERM, in the DDI KB), **not** thalidomide (`10400`, the IMiD). Locked by `tests/data/rxnorm-codes.test.ts` so a tamoxifen patient is never falsely flagged `onIMiD`.
@@ -506,14 +506,19 @@ rendered verdict — **twice over:**
 
    | Launched patient | Live server data | Engine verdict (from the sandbox) |
    |---|---|---|
-   | **Maria** — C25.1 pancreatic | platelets 410, Hgb 9.2, WBC 8.5, nab-paclitaxel | **recommend** — apixaban + rivaroxaban; Khorana **5**; CrCl **115** |
+   | **Maria** — C25.1 pancreatic | platelets 410, Hgb 9.2, WBC 8.5, nab-paclitaxel | **recommend** — apixaban + rivaroxaban; Khorana **5**; CrCl **85** (adjusted body weight, F18; was 115) |
    | **James** — C83.1 lymphoma | ibrutinib + rituximab active | **recommend_lmwh** — both DOACs blocked by the ibrutinib **major** DDI → LMWH; Khorana **2**; CrCl **67** |
-   | **Dorothy** — C34.1 lung | platelets **42k**, creatinine high | **contraindicated** — severe thrombocytopenia (universal absolute); Khorana **3**; CrCl **13** severe |
+   | **Dorothy** — C34.1 lung | platelets **42k**, creatinine high | **contraindicated** — severe thrombocytopenia (universal absolute); Khorana **3**; CrCl **13** severe (bundle since changed to creatinine 2.0 → CrCl ~18, F18) |
+
+   > **F15 note (2026-10-09):** this run used James's pre-correction bundle (ibrutinib). The
+   > verdict was what the KB then encoded, but the ibrutinib entry itself was wrong. James now
+   > takes itraconazole (FDA-label "avoid" for both DOACs) and still lands on LMWH. **Re-run the
+   > sandbox launch with the new bundle before using a James sandbox screenshot on stage.**
 
 **What it proves.** Real, standards-native interoperability with the *reasoning intact*:
 OAuth2/PKCE, **US Core race/ethnicity** parsed from live resources, LOINC labs scored,
-RxNorm meds screened (the ibrutinib major DDI fired and drove the LMWH fallback on live
-data), Cockcroft-Gault computed from server values, and the stale-lab / provenance guards
+RxNorm meds screened (the major DDI fired and drove the LMWH fallback on live
+data — James was on ibrutinib at the time; see the F15 note below the table), Cockcroft-Gault computed from server values, and the stale-lab / provenance guards
 firing on server data. The **identical engine** proven on the five synthetic patients (§8)
 now demonstrably drives the **live SMART path** — the dual-surface "identical by
 construction" claim, shown rather than asserted.
@@ -544,9 +549,9 @@ generateRecommendation` pipeline. Test reference date pinned at `2026-06-10T12:0
 
 | # | Patient | Dx | Engine output (asserted) | Demonstrates |
 |---|---|---|---|---|
-| 1 | Maria Santos | C25.1 pancreas | Khorana **5 High**; apixaban + rivaroxaban preferred; CrCl ~**115** normal; nab-paclitaxel (686924) **minor**, non-blocking | `recommend` (clean high-risk) |
-| 2 | James Chen | C83.1 NHL | Khorana **2**; ibrutinib **major** on both DOACs → preferred empty → **enoxaparin + dalteparin** alternative; **no dabi/edox**; rituximab none | LMWH fallback (verdict word is still `recommend` — Finding F4) |
-| 3 | Dorothy Williams | C34.1 lung | Khorana **3 High** but platelets **42K** → `contraindicated` (universal absolute); CrCl **12.9** severe; carboplatin nephrotoxic warning | `contraindicated`; the on-stage platelet-flip demo (42K → ≥50K flips contraindicated → recommend) |
+| 1 | Maria Santos | C25.1 pancreas | Khorana **5 High**; apixaban + rivaroxaban preferred; CrCl ~**85** mild (adjusted body weight, F18); nab-paclitaxel (486610) **minor**, non-blocking | `recommend` (clean high-risk) |
+| 2 | James Chen | C83.1 NHL (+ B44.0 invasive pulmonary aspergillosis) | Khorana **2**; **itraconazole major** on both DOACs (FDA labeling; replaced ibrutinib 2026-10-09, F15) → preferred empty → **enoxaparin + dalteparin** alternative; **no dabi/edox**; rituximab none | LMWH fallback (verdict word is still `recommend` — Finding F4) |
+| 3 | Dorothy Williams | C34.1 lung | Khorana **3 High** but platelets **42K** → `contraindicated` (universal absolute); CrCl **18.1** severe (creatinine 2.0 since F18); carboplatin nephrotoxic warning | `contraindicated`; the on-stage platelet-flip demo (42K → ≥50K flips contraindicated → recommend) |
 | 4 | Robert Johnson | C18.4 colon | Khorana **0** → `not_indicated`; labs **stale** (>30d); bevacizumab **pharmacodynamic** | `not_indicated` + stale-lab guard |
 | 5 | Priya Patel | C90.00 myeloma | Khorana **excluded**; `onIMiD` true (lenalidomide); dexamethasone **moderate** | `excluded` (disease-specific pathway) |
 
@@ -592,7 +597,7 @@ generateRecommendation` pipeline. Test reference date pinned at `2026-06-10T12:0
 
 ## 10. Testing & verification
 
-**Live run (this document): `vitest run` → 15 files, 185 tests, all passing** in ~6 s.
+**Live run (this document): `vitest run` → 16 files, 207 tests, all passing** in ~6 s.
 `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) → 0 errors.
 `tsc && vite build` → succeeds (113 modules).
 
@@ -744,7 +749,7 @@ surfaced, found while writing this document.
 - **This does not make the KB wrong.** Both references are appropriate, on-topic secondary sources for DOAC–antineoplastic interactions, and the table is internally consistent. It makes the KB **unauditable at the cell level**, which is a different and more honest criticism than "the pharmacology may be wrong."
 - **Resolution (WS-3):** the **16 `major` cells** — the only cells that change a recommendation — now each carry a per-cell `evidenceAnchor` `{source, locator, claim}`. The inhibitor and inducer groups anchor to the AHA 2022 Scientific Statement **Table 3** (named in `plan/ddi-info.md` as the build source); the three azole antifungals anchor to the **FDA DOAC labeling "combined P-gp and strong CYP3A4 inhibitors"** drug-interaction subsection. A validation test (`tests/data/ddi-kb-provenance.test.ts`) now **fails** if any `major` cell loses its anchor, if a locator is a bare paper name, or if any mechanism states a digit-percentage magnitude without an anchor — making the gap structurally impossible to reintroduce. The KB root gained `kbVersion`, `lastReviewed` (a **curation** date, not clinician sign-off), and a `provenanceNote`; both are surfaced in the DDI matrix footer and the CDS card detail.
 - **Honest limit that remains:** the anchors point the reviewer to the right table/label subsection, but the *quantitative magnitudes* in mechanism strings (e.g. ibrutinib "~100% AUC") are **as reported in those secondary references, not independently re-derived** — the `provenanceNote` says exactly this. This is now auditable at the cell level; it is not the same as an original PK review.
-- **Do not describe the KB as "literature-sourced per agent."** Correct phrasing: "curated from two secondary references and applied consistently across 52 agents; the 16 recommendation-changing cells are individually anchored."
+- **Do not describe the KB as "literature-sourced per agent."** Correct phrasing: "curated from two secondary references and applied consistently across 52 agents; the 14 recommendation-changing cells are individually anchored." (Was 16 before the F15 ibrutinib correction.)
 
 ### F13 — The interface is unvalidated *(partially addressed — WS-4/WS-8)*
 - **Mitigations built (WS-4):** two-channel alerts (only critical interrupts; warning/info collapse to one card), role tailoring (pharmacist vs prescriber), fixed-vocabulary override capture, and a `/metrics` governance route (firing rate per 100 chart-opens, critical-to-total ratio, override rate by reason). These implement the evidence-based strategies the alert-fatigue literature names (tiering, role tailoring, override capture, continuous monitoring / Clickbusters).
@@ -772,6 +777,38 @@ progress). **F1, F6 (narrowed, WS-1.3), and F14 (re-anchored to NCCN VTE-D-5, WS
 
 ---
 
+### F15 — Ibrutinib DDI entry was pharmacologically wrong *(found and fixed 2026-10-09)*
+- **What was wrong:** the KB classed ibrutinib as a "strong dual CYP3A4 + P-gp inhibitor" that "increases apixaban AUC ~100%," rated **major (avoid, use LMWH)** for apixaban and rivaroxaban. Ibrutinib is a sensitive CYP3A4 **substrate** and at most a weak CYP3A4/P-gp inhibitor; no PK study supports the ~100% figure; its bleeding risk with anticoagulants is **pharmacodynamic** (BTK/Tec platelet inhibition). The 2025 ACC cardio-oncology guidance (Ganatra et al., JACC) makes factor Xa inhibitors **preferred** with ibrutinib and rates **dabigatran** the major interaction.
+- **How it was found:** an OpenEvidence review of the finalist talk (verbatim in `docs/OPENEVIDENCE-REVIEW-2.md`). F12 had already flagged the "~100%" as unverifiable; it was in fact wrong. The live demo's climax (James → LMWH) rested on this entry.
+- **Fix (KB v1.1.0):** ibrutinib → apixaban/rivaroxaban/edoxaban **pharmacodynamic**, dabigatran **major**, each anchored; `pgpEffect`/`cyp3a4Effect` → `minor_inhibitor`. James now takes **itraconazole** (named in the apixaban label's "combined P-gp and strong CYP3A4 inhibitors"; class-level avoid in the rivaroxaban label) for invasive pulmonary aspergillosis (B44.0 Condition added), so the LMWH-fallback demo is preserved on label-level evidence.
+- **Follow-on engine fix:** DDI alerts, the CDS card interaction line, and the DDI-card headline/tally now rank severity across the **prophylaxis DOACs only** (`prophylaxisSeverity`), so a dabigatran-only major (reference column) no longer raises "Major DOAC interaction … LMWH may be preferred." Ibrutinib now surfaces as "Additive bleeding risk" (warning) with DOACs still preferred.
+- **Locked by tests:** "Test 1b (regression)" in `ddi-checker.test.ts`; "regression (2026-10-09): ibrutinib does NOT block factor Xa inhibitors" in `recommendation.test.ts` (also asserts no critical alert); provenance test now expects 15 majors (14 prophylaxis + ibrutinib × dabigatran). 185 → 187 tests.
+- **Citations (resolved in OpenEvidence review 3, `docs/OPENEVIDENCE-REVIEW-3.md`):** Ganatra S, Barac A, Armenian S, et al., *2025 ACC Concise Clinical Guidance* (BTK, immune checkpoint and VEGF inhibitors), J Am Coll Cardiol, published online Feb 10 2026 — §4.1.5, Table 4, Figure 2; Imbruvica label §5.1, §7, §12.3. **Still open:** volume, pages and DOI were not retrievable — verify against JACC before printing on a slide.
+
+### F16 — LMWH fallback showed the pancreatic-cancer regimen to every patient *(found and fixed 2026-10-09)*
+- **What was wrong:** the LMWH options always showed enoxaparin 1 mg/kg daily ×3 months then 40 mg, and dalteparin 200 units/kg ×1 month then 150 units/kg. These come from NCCN VTE-B-2, whose footnote limits them to advanced/metastatic **pancreatic** cancer (CONKO-004 / FRAGEM). James (lymphoma) — the demo's climax screen — was shown a near-therapeutic pancreatic regimen.
+- **Fix:** LMWH dose is cancer-type aware. Default is the standard fixed prophylactic dose — **enoxaparin 40 mg SC daily, dalteparin 5,000 units SC daily**. The weight-based regimen is shown only when an active cancer condition is pancreatic (ICD-10 C25*), labelled "pancreatic-cancer regimen, NCCN VTE-B" (`recommendation.ts: PANCREATIC_LMWH_PRESENTATION`; renal table dose strings updated).
+- **Locked by tests:** "regression (2026-10-09): LMWH fallback uses fixed prophylactic doses outside pancreatic cancer" and "…pancreatic cancer keeps the weight-based LMWH regimen" in `recommendation.test.ts`. 187 → 189 tests.
+- **Still open (known limitation):** no LMWH adjustment at weight extremes (BMI ≥40; 25–50 kg) and no enoxaparin 30 mg option at CrCl <30 — the app follows NCCN's "avoid LMWH at CrCl <30".
+
+### F17 — 22 RxNorm codes were wrong or retired *(found and fixed 2026-10-09)*
+- **What was wrong:** while adding drugs from OpenEvidence review 4, every code was checked against RxNav. 16 of the 52 knowledge-base codes and 6 classification constants were wrong. Some pointed at a **different drug**: nab-paclitaxel's 686924 is carvedilol, ramucirumab's 1424911 is dabrafenib, apalutamide's 2049106 is encorafenib, dalteparin's 27340 is desflurane, epoetin alfa's 3521 is dipyridamole, and tucatinib/ribociclib used tablet (SCD) codes. Others were retired (idelalisib, enzalutamide, mitotane, nilotinib, lenvatinib, cabozantinib) or unknown (crizotinib, dabrafenib, pemetrexed, bleomycin); thalidomide, lenalidomide, pomalidomide and darbepoetin were wrong too.
+- **Why it mattered:** the synthetic bundles used the same wrong codes, so every test passed, but a real EHR sending the real code would get "unknown" — e.g. a real enzalutamide order would **not** block a DOAC, and a real lenalidomide order would not route to the myeloma/IMiD pathway.
+- **Fix:** all 22 replaced with RxNav-verified ingredient (IN/PIN) codes whose RxNav name matches the drug; bundles regenerated (Maria nab-paclitaxel 486610, Dorothy pemetrexed 68446, Priya lenalidomide 342369). Locked by "F17: RxNav-verified ingredient codes" in `rxnorm-codes.test.ts`.
+- **Lesson:** a test that uses the same code table as the code under test cannot catch a wrong code. Verify codes against the terminology server, by name.
+
+### F18 — OpenEvidence review 4 clinical audit *(applied 2026-10-09)*
+Full answer verbatim in `docs/OPENEVIDENCE-REVIEW-4.md`. Confirmed as coded: hepatic thresholds (exact match to NCCN VTE-D-5), Khorana sites, renal/LMWH avoid at CrCl <30, the 50k platelet floor, the duration wording, voriconazole × apixaban = moderate, and the 19 "none" agents. Changed:
+- **Interaction KB v1.2.0 (70 agents):** added rifampin, carbamazepine, phenytoin (major, label-named), clarithromycin (deliberate non-block), fluconazole, isavuconazonium, lorlatinib, venetoclax, lapatinib, carfilzomib, acalabrutinib, zanubrutinib, pirtobrutinib, sunitinib, sorafenib, pazopanib, axitinib, regorafenib. Tucatinib → major. Itraconazole × dabigatran → major. Doxorubicin, vinblastine, dexamethasone → minor. Idelalisib, enzalutamide and mitotane majors kept but now say they rest on expert guidance, not FDA label text.
+- **Inducers vs inhibitors:** every major cell now records `exposure` (increased/decreased). Inducer alerts say "lowers DOAC levels, risking loss of efficacy (clots), not bleeding".
+- **Cockcroft-Gault:** adjusted body weight at BMI ≥30 (Maria 115 → 85 mL/min; verdict unchanged).
+- **Apixaban:** avoid at CrCl <15; caution 15–29. Dorothy's bundle creatinine 2.8 → 2.0 (CrCl ~18) so her live what-if still lands on apixaban-with-caution.
+- **LMWH weight extremes:** BMI ≥40 → enoxaparin 40 mg q12h / dalteparin 7,500 units; ≤50 kg → enoxaparin 30 mg (20 mg ≤40 kg) / dalteparin 2,500 units.
+- **GI/GU caution** widened to C18–C20 and C65–C66. **CML (C92.1)** routed to the MPN exclusion.
+- **James:** mildly elevated, sub-threshold ALT 68 / AST 54 / bilirubin 0.9 added; itraconazole framed as oral step-down after voriconazole hepatotoxicity.
+- **Not yet done:** renal-conditional rivaroxaban avoid (cyclosporine, isavuconazonium at CrCl 15–80) is text-only; fondaparinux as the HIT fallback; Child-Pugh; dabigatran/edoxaban cells for the new agents are "unknown"; OpenEvidence's reference list [1]–[53] was again not returned.
+- **Locked by tests:** `tests/core/openevidence-review-4.test.ts` (13 tests) plus updated provenance and patient tests. 189 → 207 tests.
+
 ## 13. Clinical-accuracy audit checklist for a reviewer
 
 Use this to stress-test correctness in ~30 minutes:
@@ -787,11 +824,11 @@ Use this to stress-test correctness in ~30 minutes:
 
 **Then stress-test the *evidence*, which is the softer target (~20 more minutes):**
 
-9. **Audit the 16 `major` DDI cells** — the only cells that change a recommendation. List them, now with their per-cell anchor (WS-3):
+9. **Audit the 15 `major` DDI cells** — 14 change a recommendation (apixaban/rivaroxaban); ibrutinib × dabigatran is reference-only. List them, now with their per-cell anchor (WS-3):
    ```bash
    python -c "import json;kb=json.load(open('src/data/ddi-knowledge-base.json'));[print(e['agentName'],d,'|',v['mechanism'],'|',v.get('evidenceAnchor',{}).get('locator','NO ANCHOR')) for e in kb['agents'] for d,v in e['interactions'].items() if v['severity']=='major']"
    ```
-   Every row must show a locator (a table/section/label subsection), not "NO ANCHOR" — `tests/data/ddi-kb-provenance.test.ts` enforces this. Then ask the residual question the anchor can't answer: is each `mechanism`'s *quantitative magnitude* (e.g. ibrutinib "~100%") the value in that source? The `provenanceNote` states these are as-reported, not independently re-derived (F12).
+   Every row must show a locator (a table/section/label subsection), not "NO ANCHOR" — `tests/data/ddi-kb-provenance.test.ts` enforces this. Then ask the residual question the anchor can't answer: is each `mechanism`'s *quantitative magnitude* (the ibrutinib "~100%" was wrong and is gone — F15) the value in that source? The `provenanceNote` states these are as-reported, not independently re-derived (F12).
 10. **Confirm the provenance shape** — every agent cites the same 1–2 references, and read the root metadata:
     ```bash
     python -c "import json;from collections import Counter;kb=json.load(open('src/data/ddi-knowledge-base.json'));print('kbVersion',kb['kbVersion'],'| lastReviewed',kb['lastReviewed']);print(Counter(s for e in kb['agents'] for s in e['sources']))"
@@ -822,13 +859,13 @@ directions in `docs/DEMO-SCRIPT.md`.
 
 **The killer interaction (do this live):** load Dorothy (platelets 42K → **contraindicated**,
 red). In the what-if rail, raise platelets to ≥50K. The verdict **flips live** to
-`recommend` — apixaban preferred (caution) / rivaroxaban avoided, with the CrCl 12.9
+`recommend` — apixaban preferred (caution) / rivaroxaban avoided, with the CrCl ~18
 severe-renal alert persisting. This proves it's a real engine reacting to a real threshold,
 not a slideshow. Use **presentation mode** (`?present=true` or the top-bar toggle) to
 enlarge the verdict/score/CrCl for projection.
 
 **The three sentences that frame the whole project:**
-1. "This is a clinical reasoning engine, not a dashboard — 185 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
+1. "This is a clinical reasoning engine, not a dashboard — 207 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
 2. "Every rule traces guideline → source → code → test in our VERIFICATION document."
 3. "The knowledge base is curated and tested for faithful application — clinician sign-off is the explicit next step, and we say so."
 
@@ -858,7 +895,7 @@ Requires Node 18+.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit (strict)        → 0 errors
-npm test              # vitest run                    → 15 files, 185 tests pass
+npm test              # vitest run                    → 16 files, 207 tests pass
 npm run build         # tsc && vite build             → dist/ (113 modules)
 npm run dev           # standalone demo, 5 patients   → http://localhost:5173
 npm run preview       # serve the production build
@@ -993,4 +1030,4 @@ Supporting trials cited in the narrative (not epidemiology): **AVERT** (Carrier 
 
 *This document is a reference, not a substitute for the code. Where it and the source
 disagree, the source wins — and that disagreement is itself a finding worth filing.
-Last verified against a live test run of 185/185 passing.*
+Last verified against a live test run of 207/207 passing (2026-10-09).*

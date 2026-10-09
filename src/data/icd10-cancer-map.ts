@@ -43,8 +43,8 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
     label: "Multiple myeloma / plasma cell neoplasm",
   },
   {
-    // Acute leukemias (the ".0" acute forms + AML variants). Chronic leukemias
-    // (C91.1 CLL, C92.1 CML) are intentionally NOT excluded.
+    // Acute leukemias (the ".0" acute forms + AML variants). Chronic lymphocytic leukemia
+    // (C91.1) is intentionally NOT excluded; C92.1 CML is routed to the MPN rule below.
     prefixes: ["C91.0", "C92.0", "C92.4", "C92.5", "C92.6", "C92.A", "C93.0", "C94.0", "C95.0"],
     reason: "acute_leukemia",
     label: "Acute leukemia",
@@ -52,7 +52,9 @@ export const EXCLUSION_RULES: ExclusionRule[] = [
   {
     // Myeloproliferative neoplasms: D45 polycythemia vera, D47.1 chronic MPN,
     // D47.3 essential thrombocythemia, D47.4 primary myelofibrosis.
-    prefixes: ["D45", "D47.1", "D47.3", "D47.4"],
+    // C92.1 chronic myeloid leukemia is a WHO-classified MPN (carries a C-code),
+    // routed here per OpenEvidence review 4.
+    prefixes: ["D45", "D47.1", "D47.3", "D47.4", "C92.1"],
     reason: "mpn",
     label: "Myeloproliferative neoplasm",
   },

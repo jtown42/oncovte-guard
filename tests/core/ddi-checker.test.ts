@@ -13,13 +13,25 @@ import {
 } from "../../src/core/ddi-checker";
 
 describe("checkDDIs", () => {
-  it("Test 1: ibrutinib interacts across all DOACs", () => {
-    const r = checkDDIs({ rxnormCode: "1442981", display: "ibrutinib" });
+  it("Test 1: itraconazole (combined P-gp + strong CYP3A4 inhibitor) is major for both prophylaxis DOACs", () => {
+    const r = checkDDIs({ rxnormCode: "28031", display: "itraconazole" });
     expect(r.perDoac.apixaban.severity).toBe("major");
     expect(r.perDoac.rivaroxaban.severity).toBe("major");
-    expect(r.perDoac.dabigatran.severity).toBe("moderate");
-    expect(r.perDoac.edoxaban.severity).toBe("minor");
+    expect(r.perDoac.dabigatran.severity).toBe("major") // OpenEvidence review 4: P-gp inhibition; EU SmPC contraindicates;
+    expect(r.perDoac.edoxaban.severity).toBe("moderate");
     expect(r.worstSeverity).toBe("major");
+  });
+
+  it("Test 1b (regression, 2026-10-09): ibrutinib is pharmacodynamic for factor Xa inhibitors, major only for dabigatran", () => {
+    // Ibrutinib is a CYP3A4 substrate, not a strong inhibitor; its bleeding risk
+    // with anticoagulants is platelet-mediated. ACC 2025: factor Xa inhibitors
+    // preferred, dabigatran avoided. It must never block apixaban/rivaroxaban.
+    const r = checkDDIs({ rxnormCode: "1442981", display: "ibrutinib" });
+    expect(r.perDoac.apixaban.severity).toBe("pharmacodynamic");
+    expect(r.perDoac.rivaroxaban.severity).toBe("pharmacodynamic");
+    expect(r.perDoac.edoxaban.severity).toBe("pharmacodynamic");
+    expect(r.perDoac.dabigatran.severity).toBe("major");
+    expect(r.perDoac.apixaban.mechanism).not.toMatch(/strong/i);
   });
 
   it("Test 2: gemcitabine has no interactions", () => {
@@ -41,7 +53,7 @@ describe("checkDDIs", () => {
   });
 
   it("Test 4: enzalutamide (strong inducer) is major for apixaban/rivaroxaban", () => {
-    const r = checkDDIs({ rxnormCode: "1232107", display: "enzalutamide" });
+    const r = checkDDIs({ rxnormCode: "1307298", display: "enzalutamide" });
     expect(r.perDoac.apixaban.severity).toBe("major");
     expect(r.perDoac.rivaroxaban.severity).toBe("major");
     expect(r.perDoac.dabigatran.severity).toBe("minor");
@@ -49,13 +61,13 @@ describe("checkDDIs", () => {
     expect(r.worstSeverity).toBe("major");
   });
 
-  it("Test 5: dexamethasone is moderate for apixaban/rivaroxaban", () => {
+  it("Test 5: dexamethasone (antiemetic courses) is minor for all DOACs (OpenEvidence review 4)", () => {
     const r = checkDDIs({ rxnormCode: "3264", display: "dexamethasone" });
-    expect(r.perDoac.apixaban.severity).toBe("moderate");
-    expect(r.perDoac.rivaroxaban.severity).toBe("moderate");
+    expect(r.perDoac.apixaban.severity).toBe("minor");
+    expect(r.perDoac.rivaroxaban.severity).toBe("minor");
     expect(r.perDoac.dabigatran.severity).toBe("minor");
     expect(r.perDoac.edoxaban.severity).toBe("minor");
-    expect(r.worstSeverity).toBe("moderate");
+    expect(r.worstSeverity).toBe("minor");
   });
 
   it("Test 6: unknown RxNorm yields unknown for every DOAC", () => {
@@ -69,19 +81,19 @@ describe("checkDDIs", () => {
 });
 
 describe("special-notes agents (plan Part 3C)", () => {
-  it("doxorubicin (3639, strong P-gp inducer) is moderate for all DOACs", () => {
+  it("doxorubicin (3639; P-gp induction in vitro only) is minor for all DOACs", () => {
     const r = checkDDIs({ rxnormCode: "3639", display: "doxorubicin" });
-    expect(r.perDoac.apixaban.severity).toBe("moderate");
-    expect(r.perDoac.rivaroxaban.severity).toBe("moderate");
-    expect(r.perDoac.dabigatran.severity).toBe("moderate");
-    expect(r.perDoac.edoxaban.severity).toBe("moderate");
-    expect(r.worstSeverity).toBe("moderate");
+    expect(r.perDoac.apixaban.severity).toBe("minor");
+    expect(r.perDoac.rivaroxaban.severity).toBe("minor");
+    expect(r.perDoac.dabigatran.severity).toBe("minor");
+    expect(r.perDoac.edoxaban.severity).toBe("minor");
+    expect(r.worstSeverity).toBe("minor");
   });
 
-  it("vinblastine (11198, strong P-gp inducer) is moderate for all DOACs", () => {
+  it("vinblastine (11198; P-gp induction in vitro only) is minor for all DOACs", () => {
     const r = checkDDIs({ rxnormCode: "11198", display: "vinblastine" });
-    expect(r.worstSeverity).toBe("moderate");
-    expect(r.perDoac.apixaban.severity).toBe("moderate");
+    expect(r.worstSeverity).toBe("minor");
+    expect(r.perDoac.apixaban.severity).toBe("minor");
   });
 
   it("etoposide (4179, mild dual inhibitor) is minor for all DOACs", () => {
@@ -102,12 +114,12 @@ describe("getWorstDDIForDoac", () => {
   it("Test 7: aggregates the worst severity per DOAC across medications", () => {
     const results = [
       checkDDIs({ rxnormCode: "12574", display: "gemcitabine" }),
-      checkDDIs({ rxnormCode: "1442981", display: "ibrutinib" }),
+      checkDDIs({ rxnormCode: "28031", display: "itraconazole" }),
     ];
     expect(getWorstDDIForDoac(results, "apixaban")).toBe("major");
     expect(getWorstDDIForDoac(results, "rivaroxaban")).toBe("major");
-    expect(getWorstDDIForDoac(results, "dabigatran")).toBe("moderate");
-    expect(getWorstDDIForDoac(results, "edoxaban")).toBe("minor");
+    expect(getWorstDDIForDoac(results, "dabigatran")).toBe("major");
+    expect(getWorstDDIForDoac(results, "edoxaban")).toBe("moderate");
   });
 
   it("returns none for an empty result set", () => {

@@ -44,8 +44,8 @@ describe("scenarioToPatient flag derivation", () => {
     expect(p.onIMiD).toBe(false);
   });
 
-  it("derives onIMiD from lenalidomide (RxNorm 321191)", () => {
-    const p = scenarioToPatient({ ...BASE, medCodes: ["321191"] });
+  it("derives onIMiD from lenalidomide (RxNorm 342369)", () => {
+    const p = scenarioToPatient({ ...BASE, medCodes: ["342369"] });
     expect(p.onIMiD).toBe(true);
   });
 
@@ -92,13 +92,13 @@ describe("scenario edits drive the real recommendation", () => {
     expect(bleeding.preferredOptions).toHaveLength(0);
   });
 
-  it("ibrutinib on both DOACs forces the LMWH fallback (never dabi/edox)", () => {
+  it("itraconazole on both DOACs forces the LMWH fallback (never dabi/edox)", () => {
     // Pancreas (2) + raise to high-risk so prophylaxis is indicated.
     const p = scenarioToPatient({
       ...BASE,
       platelets: 400,
       wbc: 12,
-      medCodes: ["1442981"], // ibrutinib
+      medCodes: ["28031"], // itraconazole
     });
     const rec = generateRecommendation(p);
     expect(rec.khorana.totalScore).toBeGreaterThanOrEqual(2);

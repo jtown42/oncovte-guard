@@ -20,7 +20,7 @@ describe("DDI KB root metadata (WS-3)", () => {
     expect(KB.lastReviewed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(KB.provenanceNote.length).toBeGreaterThan(0);
     expect(Array.isArray(KB.agents)).toBe(true);
-    expect(KB.agents.length).toBe(52);
+    expect(KB.agents.length).toBe(70);
   });
 
   it("does NOT claim clinician validation or per-agent literature sourcing (honesty guard)", () => {
@@ -43,10 +43,37 @@ describe("Every major cell is individually anchored (WS-3)", () => {
     }
   }
 
-  it("has exactly 16 major cells (8 agents × apixaban/rivaroxaban)", () => {
-    expect(majorCells.length).toBe(16);
-    const doacs = new Set(majorCells.map((c) => c.doac));
-    expect([...doacs].sort()).toEqual(["apixaban", "rivaroxaban"]);
+  it("has 26 major cells: 22 recommendation-changing (11 agents × apixaban/rivaroxaban) + 4 reference-only", () => {
+    expect(majorCells.length).toBe(26);
+    const prophylaxis = majorCells.filter((c) => c.doac === "apixaban" || c.doac === "rivaroxaban");
+    expect(prophylaxis.length).toBe(22);
+    // Reference-only majors (dabigatran/edoxaban are never offered for prophylaxis).
+    const other = majorCells
+      .filter((c) => c.doac !== "apixaban" && c.doac !== "rivaroxaban")
+      .map((c) => `${c.agent}/${c.doac}`)
+      .sort();
+    expect(other).toEqual([
+      "Ibrutinib/dabigatran",
+      "Itraconazole/dabigatran",
+      "Rifampin/dabigatran",
+      "Rifampin/edoxaban",
+    ]);
+  });
+
+  it("every major cell states whether it raises or lowers DOAC exposure (OpenEvidence review 4)", () => {
+    for (const e of KB.agents) {
+      for (const doac of DOAC_NAMES) {
+        const det = e.interactions[doac];
+        if (det.severity !== "major") continue;
+        expect(["increased", "decreased"], `${e.agentName}/${doac}`).toContain(det.exposure);
+      }
+    }
+  });
+
+  it("clarithromycin is a deliberate non-block (both labels exempt it)", () => {
+    const c = KB.agents.find((e) => e.agentName === "Clarithromycin")!;
+    expect(c.interactions.apixaban.severity).not.toBe("major");
+    expect(c.interactions.rivaroxaban.severity).not.toBe("major");
   });
 
   it("every major cell has a non-empty evidenceAnchor {source, locator, claim}", () => {

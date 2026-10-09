@@ -66,8 +66,8 @@ service.
 | # | Patient | Pathway demonstrated |
 | --- | --- | --- |
 | 1 | Maria Santos | Pancreatic ca, Khorana **5 High** → apixaban + rivaroxaban; normal renal; nab-paclitaxel minor DDI |
-| 2 | James Chen | Lymphoma, Khorana **2** but **ibrutinib major DDI** → both DOACs blocked → **LMWH** (never dabi/edox) |
-| 3 | Dorothy Williams | Lung ca, Khorana **3** but **platelets 42 K** → absolute contraindication; CrCl **12.9** severe |
+| 2 | James Chen | Lymphoma + invasive aspergillosis, Khorana **2** but **itraconazole major DDI** (FDA labeling) → both DOACs blocked → **LMWH** (never dabi/edox) |
+| 3 | Dorothy Williams | Lung ca, Khorana **3** but **platelets 42 K** → absolute contraindication; CrCl **18** severe (apixaban "caution" zone) |
 | 4 | Robert Johnson | Colon ca, Khorana **0** → not indicated; **stale labs**; bevacizumab additive-bleeding flag |
 | 5 | Priya Patel | **Multiple myeloma** → Khorana excluded (disease-specific pathway); on IMiD |
 
@@ -158,7 +158,7 @@ resources inline.
 
 ## Testing
 
-`npm test` runs **185 tests** across the clinical engines, the FHIR parsing
+`npm test` runs **207 tests** across the clinical engines, the FHIR parsing
 layer, the end-to-end synthetic-patient pathways, and the CDS Hooks card
 builder. The engine suites encode the competition's authoritative
 [errata contract](plan/errata-contract-reconciliation.md) (e.g. Khorana max 6,

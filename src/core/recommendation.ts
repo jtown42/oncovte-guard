@@ -31,7 +31,7 @@ import {
   getCancerCategory,
   calculateKhoranaScore,
 } from "./khorana-engine";
-import { checkDDIs, getWorstDDIForDoac } from "./ddi-checker";
+import { checkDDIs, getWorstDDIForDoac, prophylaxisSeverity } from "./ddi-checker";
 import {
   assessRenalFunction,
   getRenalRecommendation,
@@ -63,18 +63,71 @@ const DOAC_PRESENTATION: Record<
     duration: "Up to 6 months, longer if VTE risk persists",
   },
   enoxaparin: {
+    dose: "40 mg",
+    route: "SC",
+    frequency: "daily",
+    duration: "Standard fixed prophylactic dose",
+  },
+  dalteparin: {
+    dose: "5,000 units",
+    route: "SC",
+    frequency: "daily",
+    duration: "Standard fixed prophylactic dose",
+  },
+};
+
+/**
+ * Weight-based LMWH regimens from NCCN VTE-B-2, whose footnote limits them to
+ * advanced/metastatic pancreatic cancer (CONKO-004 / FRAGEM). Every other
+ * patient gets the fixed doses above (2026-10-09, OpenEvidence review 3).
+ */
+const PANCREATIC_LMWH_PRESENTATION: Record<
+  string,
+  { dose: string; route: string; frequency: string; duration: string }
+> = {
+  enoxaparin: {
     dose: "1 mg/kg",
     route: "SC",
     frequency: "daily",
-    duration: "x3 months, then 40 mg SC daily",
+    duration: "x3 months, then 40 mg SC daily (pancreatic-cancer regimen, NCCN VTE-B)",
   },
   dalteparin: {
     dose: "200 units/kg",
     route: "SC",
     frequency: "daily",
-    duration: "x1 month, then 150 units/kg SC daily",
+    duration: "x1 month, then 150 units/kg SC daily (pancreatic-cancer regimen, NCCN VTE-B)",
   },
 };
+
+type Presentation = { dose: string; route: string; frequency: string; duration: string };
+
+/**
+ * Fixed-dose LMWH adjusted for weight extremes (NCCN VTE-B-1; OpenEvidence
+ * review 4). The pancreatic weight-based regimen self-adjusts, so it is left as is.
+ */
+function lmwhPresentation(
+  agent: (typeof LMWH_AGENTS)[number],
+  pancreatic: boolean,
+  weightKg: number | null,
+  bmi: number | null,
+): Presentation {
+  if (pancreatic) return PANCREATIC_LMWH_PRESENTATION[agent];
+  const base = DOAC_PRESENTATION[agent];
+  if (bmi != null && bmi >= 40) {
+    return agent === "enoxaparin"
+      ? { ...base, dose: "40 mg", frequency: "every 12 hours", duration: "Increased for BMI ≥40 (NCCN VTE-B-1)" }
+      : { ...base, dose: "7,500 units", duration: "Increased for BMI ≥40 (NCCN VTE-B-1)" };
+  }
+  if (weightKg != null && weightKg <= 50) {
+    if (agent === "dalteparin") {
+      return { ...base, dose: "2,500 units", duration: "Reduced for weight ≤50 kg (NCCN VTE-B-1)" };
+    }
+    return weightKg <= 40
+      ? { ...base, dose: "20 mg", duration: "Reduced for weight ≤40 kg (NCCN VTE-B-1)" }
+      : { ...base, dose: "30 mg", duration: "Reduced for weight 41–50 kg (NCCN VTE-B-1)" };
+  }
+  return base;
+}
 
 /** F8 (WS-5): user-facing copy when CrCl could not be computed (missing weight/creatinine). */
 const RENAL_UNAVAILABLE_REASON =
@@ -148,6 +201,9 @@ function buildLmwhOption(
   agent: (typeof LMWH_AGENTS)[number],
   renalResult: RenalResult,
   targetedAbsolute: Contraindication[],
+  pancreatic: boolean,
+  weightKg: number | null,
+  bmi: number | null,
 ): DOACOption {
   const renalRec = getRenalRecommendation(renalResult, agent);
   const renalStatus = renalRec?.recommendation ?? "avoid";
@@ -165,7 +221,7 @@ function buildLmwhOption(
       : (renalRec?.rationale ?? "Renal function precludes use.");
   }
 
-  const present = DOAC_PRESENTATION[agent];
+  const present = lmwhPresentation(agent, pancreatic, weightKg, bmi);
   return {
     name: agent,
     dose: present?.dose ?? "",
@@ -247,6 +303,7 @@ export function generateRecommendation(
           gender: patient.gender,
           serumCreatinine: patient.labs.serumCreatinine.value,
           bmi: patient.bmi,
+          heightCm: patient.heightCm,
           medications: patient.activeMedications.map((m) => ({
             rxnormCode: m.rxnormCode,
           })),
@@ -390,8 +447,11 @@ export function generateRecommendation(
   const referenceOptions = REFERENCE_DOACS.map((d) =>
     buildDoacOption(d, renalForOptions, ddiResults, targetedAbsolute),
   );
+  const pancreatic = patient.activeCancerConditions.some((c) =>
+    c.code.toUpperCase().startsWith("C25"),
+  );
   const lmwhOptions = LMWH_AGENTS.map((a) =>
-    buildLmwhOption(a, renalForOptions, targetedAbsolute),
+    buildLmwhOption(a, renalForOptions, targetedAbsolute, pancreatic, patient.weightKg, patient.bmi),
   );
 
   const preferredOptions: DOACOption[] = prophylaxisOptions.filter(
@@ -468,28 +528,46 @@ export function generateRecommendation(
   };
 }
 
+/**
+ * Major-interaction alert text. Inhibitors raise DOAC levels (bleeding);
+ * inducers lower them (loss of efficacy / thrombosis). OpenEvidence review 4:
+ * the action is the same, but the reason must not be conflated.
+ */
+function majorDetail(r: DDICheckResult): string {
+  const lowers = PROPHYLAXIS_DOACS.some(
+    (d) => r.perDoac[d].severity === "major" && r.perDoac[d].exposure === "decreased",
+  );
+  const why = lowers
+    ? "lowers DOAC levels, risking loss of efficacy (clots), not bleeding"
+    : "raises DOAC levels, increasing bleeding risk";
+  return `${r.medication} ${why}. Review the DDI matrix; LMWH may be preferred.`;
+}
+
 function appendDdiAlerts(results: DDICheckResult[], alerts: Alert[]): void {
   for (const r of results) {
-    if (r.worstSeverity === "major") {
+    // Rank by the prophylaxis DOACs only: a dabigatran/edoxaban-only finding is
+    // a reference-matrix detail, not an alert (see prophylaxisSeverity).
+    const severity = prophylaxisSeverity(r);
+    if (severity === "major") {
       alerts.push({
         level: "critical",
         title: `Major DOAC interaction: ${r.medication}`,
-        detail: `${r.medication} has a major interaction with one or more DOACs. Review the DDI matrix; LMWH may be preferred.`,
+        detail: majorDetail(r),
         source: "DOAC DDI knowledge base",
       });
-    } else if (r.worstSeverity === "moderate") {
+    } else if (severity === "moderate") {
       alerts.push({
         level: "warning",
         title: `Moderate DOAC interaction: ${r.medication}`,
         detail: `${r.medication} has a moderate interaction with one or more DOACs. Monitor closely.`,
         source: "DOAC DDI knowledge base",
       });
-    } else if (r.worstSeverity === "pharmacodynamic") {
+    } else if (severity === "pharmacodynamic") {
       alerts.push({
         level: "warning",
         title: `Additive bleeding risk: ${r.medication}`,
         detail: `${r.medication} contributes pharmacodynamic bleeding risk independent of DOAC levels. Counsel and monitor.`,
-        source: "AHA 2022 Scientific Statement",
+        source: "DOAC DDI knowledge base",
       });
     }
   }
@@ -529,6 +607,15 @@ function appendRenalAlerts(renal: RenalResult | null, alerts: Alert[]): void {
       detail:
         "An active nephrotoxic agent (e.g. cisplatin) may reduce CrCl. Recheck renal function during therapy.",
       source: "OncoVTE Guard",
+    });
+  }
+  if (renal.warnings.includes("adjusted_body_weight")) {
+    alerts.push({
+      level: "info",
+      title: "CrCl uses adjusted body weight (BMI ≥30)",
+      detail:
+        "Actual body weight overestimates Cockcroft-Gault clearance in obesity, so adjusted body weight (IBW + 0.4 × excess) is used.",
+      source: "Hart & Anderson 2018; KDIGO 2024",
     });
   }
   if (renal.warnings.includes("sarcopenia")) {

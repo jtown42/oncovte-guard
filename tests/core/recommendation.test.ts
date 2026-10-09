@@ -75,6 +75,12 @@ function patient(overrides: Partial<PatientData> = {}): PatientData {
   return merged;
 }
 
+const itraconazole: MedicationItem = {
+  rxnormCode: "28031",
+  display: "itraconazole",
+  status: "active",
+};
+
 const ibrutinib: MedicationItem = {
   rxnormCode: "1442981",
   display: "ibrutinib",
@@ -252,9 +258,9 @@ describe("generateRecommendation", () => {
 
   it("ERRATA Issue 4: major DDI on both DOACs -> LMWH fallback, no dabi/edox option", () => {
     const r = generateRecommendation(
-      patient({ activeMedications: [ibrutinib] }),
+      patient({ activeMedications: [itraconazole] }),
     );
-    // Apixaban + rivaroxaban both blocked by the major ibrutinib interaction.
+    // Apixaban + rivaroxaban both blocked by the major itraconazole interaction.
     expect(r.preferredOptions).toHaveLength(0);
     // LMWH offered as the alternative...
     const altNames = r.alternativeOptions.map((o) => o.name).sort();
@@ -265,6 +271,48 @@ describe("generateRecommendation", () => {
     );
     expect(offered).not.toContain("dabigatran");
     expect(offered).not.toContain("edoxaban");
+  });
+
+  it("regression (2026-10-09): ibrutinib does NOT block factor Xa inhibitors", () => {
+    // ACC 2025: factor Xa inhibitors are preferred with ibrutinib; the
+    // interaction is pharmacodynamic (bleeding), not a pharmacokinetic block.
+    const r = generateRecommendation(
+      patient({ activeMedications: [ibrutinib] }),
+    );
+    const preferred = r.preferredOptions.map((o) => o.name);
+    expect(preferred).toContain("apixaban");
+    expect(preferred).toContain("rivaroxaban");
+    // Its dabigatran-only "major" cell is reference-matrix detail: no critical
+    // alert, but the pharmacodynamic bleeding risk is surfaced as a warning.
+    expect(r.alerts.some((a) => a.level === "critical")).toBe(false);
+    expect(
+      r.alerts.some((a) => a.level === "warning" && /Additive bleeding risk: Ibrutinib/.test(a.title)),
+    ).toBe(true);
+  });
+
+  it("regression (2026-10-09): LMWH fallback uses fixed prophylactic doses outside pancreatic cancer", () => {
+    // NCCN VTE-B-2's weight-based regimens are footnoted to pancreatic cancer
+    // (CONKO-004 / FRAGEM); a lymphoma patient gets the standard fixed dose.
+    const r = generateRecommendation(
+      patient({
+        activeCancerConditions: [condition("C83.10", "Mantle cell lymphoma")],
+        activeMedications: [itraconazole],
+      }),
+    );
+    const enox = r.alternativeOptions.find((o) => o.name === "enoxaparin");
+    const dalt = r.alternativeOptions.find((o) => o.name === "dalteparin");
+    expect(enox?.dose).toBe("40 mg");
+    expect(dalt?.dose).toBe("5,000 units");
+    expect(`${enox?.dose} ${enox?.duration}`).not.toMatch(/kg/);
+  });
+
+  it("regression (2026-10-09): pancreatic cancer keeps the weight-based LMWH regimen", () => {
+    const r = generateRecommendation(patient({ activeMedications: [itraconazole] }));
+    const enox = r.alternativeOptions.find((o) => o.name === "enoxaparin");
+    const dalt = r.alternativeOptions.find((o) => o.name === "dalteparin");
+    expect(enox?.dose).toBe("1 mg/kg");
+    expect(dalt?.dose).toBe("200 units/kg");
+    expect(enox?.duration).toMatch(/pancreatic/);
   });
 
   it("ERRATA Issue 9: HIT blocks LMWH but DOACs remain the recommendation", () => {

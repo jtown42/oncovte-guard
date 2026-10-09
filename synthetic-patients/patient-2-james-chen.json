@@ -105,6 +105,54 @@
     },
     {
       "resource": {
+        "resourceType": "Condition",
+        "id": "condition-2-2",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "B44.0",
+              "display": "Invasive pulmonary aspergillosis"
+            }
+          ],
+          "text": "Invasive pulmonary aspergillosis"
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        }
+      }
+    },
+    {
+      "resource": {
         "resourceType": "Observation",
         "id": "obs-platelets-2",
         "status": "final",
@@ -254,6 +302,117 @@
     {
       "resource": {
         "resourceType": "Observation",
+        "id": "obs-alt-2",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1742-6",
+              "display": "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        },
+        "effectiveDateTime": "2026-05-30",
+        "valueQuantity": {
+          "value": 68,
+          "unit": "U/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "U/L"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-ast-2",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1920-8",
+              "display": "Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        },
+        "effectiveDateTime": "2026-05-30",
+        "valueQuantity": {
+          "value": 54,
+          "unit": "U/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "U/L"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-bilirubin-2",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1975-2",
+              "display": "Bilirubin.total [Mass/volume] in Serum or Plasma"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        },
+        "effectiveDateTime": "2026-05-30",
+        "valueQuantity": {
+          "value": 0.9,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
         "id": "obs-weight-2",
         "status": "final",
         "category": [
@@ -328,18 +487,18 @@
     {
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "medrx-ibrutinib-2",
+        "id": "medrx-itraconazole-2",
         "status": "active",
         "intent": "order",
         "medicationCodeableConcept": {
           "coding": [
             {
               "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
-              "code": "1442981",
-              "display": "ibrutinib"
+              "code": "28031",
+              "display": "itraconazole"
             }
           ],
-          "text": "Ibrutinib"
+          "text": "Itraconazole"
         },
         "subject": {
           "reference": "Patient/patient-2"
