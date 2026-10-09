@@ -506,14 +506,26 @@ rendered verdict — **twice over:**
 
    | Launched patient | Live server data | Engine verdict (from the sandbox) |
    |---|---|---|
-   | **Maria** — C25.1 pancreatic | platelets 410, Hgb 9.2, WBC 8.5, nab-paclitaxel | **recommend** — apixaban + rivaroxaban; Khorana **5**; CrCl **85** (adjusted body weight, F18; was 115) |
+   | **Maria** — C25.1 pancreatic | platelets 410, Hgb 9.2, WBC 8.5, nab-paclitaxel | **recommend** — apixaban + rivaroxaban; Khorana **5**; CrCl **115** (actual body weight at the time) |
    | **James** — C83.1 lymphoma | ibrutinib + rituximab active | **recommend_lmwh** — both DOACs blocked by the ibrutinib **major** DDI → LMWH; Khorana **2**; CrCl **67** |
-   | **Dorothy** — C34.1 lung | platelets **42k**, creatinine high | **contraindicated** — severe thrombocytopenia (universal absolute); Khorana **3**; CrCl **13** severe (bundle since changed to creatinine 2.0 → CrCl ~18, F18) |
+   | **Dorothy** — C34.1 lung | platelets **42k**, creatinine high | **contraindicated** — severe thrombocytopenia (universal absolute); Khorana **3**; CrCl **13** severe |
 
-   > **F15 note (2026-10-09):** this run used James's pre-correction bundle (ibrutinib). The
-   > verdict was what the KB then encoded, but the ibrutinib entry itself was wrong. James now
-   > takes itraconazole (FDA-label "avoid" for both DOACs) and still lands on LMWH. **Re-run the
-   > sandbox launch with the new bundle before using a James sandbox screenshot on stage.**
+   > **F15 note:** this 2026-09-10 run used James's pre-correction bundle (ibrutinib), whose
+   > interaction entry was wrong. Superseded by the re-run below.
+
+3. **Re-run, 2026-10-09 (after F15–F18).** All five corrected bundles were re-loaded into the
+   sandbox (FHIR transaction, `PUT`, every entry `201 Created`) and the live deployment was
+   EHR-launched again (Provider EHR Launch, OAuth2 + PKCE, practitioner login):
+
+   | Launched patient | Engine verdict from live sandbox data |
+   |---|---|
+   | **Maria** — C25.1 | **recommend** — apixaban + rivaroxaban; Khorana **5**; CrCl **85** (adjusted body weight); nab-paclitaxel recognised under its corrected code 486610 (minor); LMWH alternative shown with the pancreatic weight-based regimen |
+   | **James** — C83.1 + B44.0 | **recommend_lmwh** — itraconazole (28031) **major** on both DOACs, alert "raises DOAC levels, increasing bleeding risk"; enoxaparin **40 mg** / dalteparin **5,000 units** SC daily; Khorana **2**; CrCl **67**; sub-threshold ALT/AST read without firing the hepatic rule |
+   | **Dorothy** — C34.1 | **contraindicated** (platelets 42k); Khorana **3**; CrCl **18** — apixaban **caution**, rivaroxaban/LMWH **avoid** |
+
+   Screenshot: `docs/screenshots/sandbox-james-2026-10-09.png`. The stale-lab caution appears
+   because the bundles' lab dates (May–June 2026) are now >30 days old — the guard working as
+   designed, not a defect; use the standalone demo (no stale banner) on stage.
 
 **What it proves.** Real, standards-native interoperability with the *reasoning intact*:
 OAuth2/PKCE, **US Core race/ethnicity** parsed from live resources, LOINC labs scored,
@@ -553,7 +565,7 @@ generateRecommendation` pipeline. Test reference date pinned at `2026-06-10T12:0
 | 2 | James Chen | C83.1 NHL (+ B44.0 invasive pulmonary aspergillosis) | Khorana **2**; **itraconazole major** on both DOACs (FDA labeling; replaced ibrutinib 2026-10-09, F15) → preferred empty → **enoxaparin + dalteparin** alternative; **no dabi/edox**; rituximab none | LMWH fallback (verdict word is still `recommend` — Finding F4) |
 | 3 | Dorothy Williams | C34.1 lung | Khorana **3 High** but platelets **42K** → `contraindicated` (universal absolute); CrCl **18.1** severe (creatinine 2.0 since F18); carboplatin nephrotoxic warning | `contraindicated`; the on-stage platelet-flip demo (42K → ≥50K flips contraindicated → recommend) |
 | 4 | Robert Johnson | C18.4 colon | Khorana **0** → `not_indicated`; labs **stale** (>30d); bevacizumab **pharmacodynamic** | `not_indicated` + stale-lab guard |
-| 5 | Priya Patel | C90.00 myeloma | Khorana **excluded**; `onIMiD` true (lenalidomide); dexamethasone **moderate** | `excluded` (disease-specific pathway) |
+| 5 | Priya Patel | C90.00 myeloma | Khorana **excluded**; `onIMiD` true (lenalidomide, 342369); dexamethasone **minor** (F18) | `excluded` (disease-specific pathway) |
 
 > **Documented arithmetic discrepancy:** the plan's hand calc lists Maria's CrCl as 115.5;
 > the correct Cockcroft-Gault value for 95 kg is **~115.0**, which the engine computes and
