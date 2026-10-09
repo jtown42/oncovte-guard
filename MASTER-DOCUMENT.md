@@ -523,7 +523,7 @@ rendered verdict — **twice over:**
    | **James** — C83.1 + B44.0 | **recommend_lmwh** — itraconazole (28031) **major** on both DOACs, alert "raises DOAC levels, increasing bleeding risk"; enoxaparin **40 mg** / dalteparin **5,000 units** SC daily; Khorana **2**; CrCl **67**; sub-threshold ALT/AST read without firing the hepatic rule |
    | **Dorothy** — C34.1 | **contraindicated** (platelets 42k); Khorana **3**; CrCl **18** — apixaban **caution**, rivaroxaban/LMWH **avoid** |
 
-   Screenshot: `docs/screenshots/sandbox-james-2026-10-09.png`. The stale-lab caution appears
+   Screenshots: `docs/screenshots/sandbox-{maria,james,dorothy}-2026-10-09.png`. The stale-lab caution appears
    because the bundles' lab dates (May–June 2026) are now >30 days old — the guard working as
    designed, not a defect; use the standalone demo (no stale banner) on stage.
 
@@ -818,7 +818,8 @@ Full answer verbatim in `docs/OPENEVIDENCE-REVIEW-4.md`. Confirmed as coded: hep
 - **LMWH weight extremes:** BMI ≥40 → enoxaparin 40 mg q12h / dalteparin 7,500 units; ≤50 kg → enoxaparin 30 mg (20 mg ≤40 kg) / dalteparin 2,500 units.
 - **GI/GU caution** widened to C18–C20 and C65–C66. **CML (C92.1)** routed to the MPN exclusion.
 - **James:** mildly elevated, sub-threshold ALT 68 / AST 54 / bilirubin 0.9 added; itraconazole framed as oral step-down after voriconazole hepatotoxicity.
-- **Not yet done:** renal-conditional rivaroxaban avoid (cyclosporine, isavuconazonium at CrCl 15–80) is text-only; fondaparinux as the HIT fallback; Child-Pugh; dabigatran/edoxaban cells for the new agents are "unknown"; OpenEvidence's reference list [1]–[53] was again not returned.
+- **Apixaban <15 rationale (OpenEvidence follow-up):** NCCN VTE-B-2 says only "caution if CrCl <30"; the <15 avoid floor is the EMA SmPC rule (the FDA label has no renal adjustment). It is the more conservative encoding and is labelled as EMA-sourced.
+- **Not yet done:** renal-conditional rivaroxaban avoid (cyclosporine, isavuconazonium at CrCl 15–80) is text-only; fondaparinux as the HIT fallback (NCCN HIT-B lists DOACs and fondaparinux); Child-Pugh — **the one clinically meaningful gap: a cirrhotic patient with normal ALT/AST (Child-Pugh B by albumin, INR or ascites) currently passes the hepatic block**; dabigatran/edoxaban cells for the new agents are "unknown"; OpenEvidence's reference list [1]–[53] was again not returned.
 - **Locked by tests:** `tests/core/openevidence-review-4.test.ts` (13 tests) plus updated provenance and patient tests. 189 → 207 tests.
 
 ## 13. Clinical-accuracy audit checklist for a reviewer

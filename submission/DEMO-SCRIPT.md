@@ -126,17 +126,21 @@ avoid (OpenEvidence review 3). Never swap in voriconazole.*
 ## Slide 4 — Proof and honesty (6:10–7:00)
 
 **On screen:** Three-link chain (tests → traceability matrix → live behavior) + one SMART
-sandbox launch screenshot (**re-run the sandbox with the new James bundle first** — F15).
+sandbox launch screenshot (`docs/screenshots/sandbox-james-2026-10-09.png`, re-run after F15–F18).
 
 > "How do you know it's right? Three things. One: 207 automated tests check that the code
 > follows its rules — every threshold, every boundary. Two: a traceability matrix links every
 > rule to its guideline source, the exact code, and the test that proves it. Three: I launched
 > it from the public SMART Health IT sandbox, where it signed in with real OAuth, read live
-> FHIR data, and returned the right verdicts. And here's what I won't claim: it has never been
+> FHIR data, and returned the right verdicts. And when I checked every drug code against the
+> national RxNorm database, I found 22 wrong codes my own tests couldn't catch — because the
+> test data shared the same codes. In FHIR, the codes are the safety layer, so every code is
+> now checked against the national source. And here's what I won't claim: it has never been
 > used on a real patient. The honest headline is that it's provably *consistent* — not yet
 > clinically *validated*. My next step is to run it silently against real charts and compare
 > it to expert review."
 
+*The RxNorm line adds ~15 s; if running long, cut the CQL half-sentence below first.*
 *Optional half-sentence if time allows (pre-empts a FHIR purist on CQL):* "I wrote the
 rules as plain, tested code rather than CQL so every boundary could have its own test."
 

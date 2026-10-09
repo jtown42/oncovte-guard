@@ -39,8 +39,10 @@ export const SEVERE_CRCL_THRESHOLD = 30;
 
 /**
  * CrCl below which apixaban is avoided for prophylaxis (end-stage range).
- * Between 15 and 30 it stays "caution". AVERT excluded CrCl <30, and there is
- * no prophylaxis evidence at end-stage renal function (OpenEvidence review 4).
+ * Between 15 and 30 it stays "caution" (NCCN VTE-B-2). The <15 floor follows the
+ * EMA SmPC (dose reduction at 15–29, not recommended <15; the FDA label has no
+ * renal adjustment) — apixaban exposure rises steeply in advanced CKD and AVERT
+ * excluded CrCl <30 (OpenEvidence review 4 and follow-up).
  */
 export const APIXABAN_AVOID_CRCL_LT = 15;
 
@@ -61,7 +63,7 @@ function ruleFor(agent: AnticoagulantName, crcl: number): RuleOutput {
         return {
           recommendation: "avoid",
           rationale:
-            "CrCl <15 mL/min: no prophylaxis evidence at end-stage renal function — avoid.",
+            "CrCl <15 mL/min: avoid (EMA SmPC; no prophylaxis evidence at end-stage renal function).",
         };
       }
       return severe
