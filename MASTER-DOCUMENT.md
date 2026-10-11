@@ -523,7 +523,7 @@ rendered verdict — **twice over:**
    | **James** — C83.1 + B44.0 | **recommend_lmwh** — itraconazole (28031) **major** on both DOACs, alert "raises DOAC levels, increasing bleeding risk"; enoxaparin **40 mg** / dalteparin **5,000 units** SC daily; Khorana **2**; CrCl **67**; sub-threshold ALT/AST read without firing the hepatic rule |
    | **Dorothy** — C34.1 | **contraindicated** (platelets 42k); Khorana **3**; CrCl **18** — apixaban **caution**, rivaroxaban/LMWH **avoid** |
 
-   Screenshots: `docs/screenshots/sandbox-{maria,james,dorothy}-2026-10-09.png`. The stale-lab caution appears
+   Screenshots: `docs/screenshots/sandbox-{maria,james,dorothy}-2026-10-09.png`, plus `sandbox-james-2026-10-11.png` (re-run after the display pass; the sandbox had wiped uploaded data on 2026-10-10, so the bundles were re-uploaded first). The stale-lab caution appears
    because the bundles' lab dates (May–June 2026) are now >30 days old — the guard working as
    designed, not a defect; use the standalone demo (no stale banner) on stage.
 

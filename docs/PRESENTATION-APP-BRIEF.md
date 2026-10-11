@@ -149,7 +149,7 @@ Produce these and hand them back, named clearly:
 | 22-code regression test; five bundles committed | **Done** ("F17: RxNav-verified ingredient codes"). |
 | VERIFICATION.md current | **Done.** Rows added for F17, every F18 rule, and the card-source display. |
 | Live site, mobile, QR | **Done.** On phones the verdict now comes first, with a patient switcher above it (desktop unchanged). QR `talk-assets/06-qr-live-demo.png` decodes to `https://oncovte-guard.pages.dev/`. |
-| Fresh sandbox screenshots | `docs/screenshots/sandbox-{maria,james,dorothy}-2026-10-09.png` (current bundles); James re-captured after this pass. |
+| Fresh sandbox screenshots | `docs/screenshots/sandbox-james-2026-10-11.png` (after this pass, with the card sources and avoid reasons) plus `sandbox-{maria,james,dorothy}-2026-10-09.png`. **Note:** the public sandbox wiped uploaded data and its default practitioner on 2026-10-10. Bundles were re-uploaded on 2026-10-11, and the launch used encounter "NONE" with another practitioner. Re-upload before any future sandbox run. |
 | Stills + clip delivered | `talk-assets/01…06` (see below). |
 
 **Deliverables in `talk-assets/` (regenerate with `node scripts/capture-talk-assets.cjs`):**
