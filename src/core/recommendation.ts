@@ -129,6 +129,27 @@ function lmwhPresentation(
   return base;
 }
 
+/** Guideline basis shown on each option card (display only). */
+const OPTION_SOURCE: Record<string, string> = {
+  apixaban: "NCCN VTE-B-2 · AVERT trial",
+  rivaroxaban: "NCCN VTE-B-2 · CASSINI trial",
+  dabigatran: "NCCN VTE-B (reference only)",
+  edoxaban: "NCCN VTE-B (reference only)",
+};
+
+/**
+ * Card text for a DOAC removed by a major interaction: names the interacting
+ * drug(s) and whether the basis is FDA labeling or expert guidance (display only).
+ */
+function majorDdiReason(ddiResults: DDICheckResult[], doac: DoacName): string {
+  const hits = ddiResults.filter((r) => r.perDoac[doac].severity === "major");
+  if (hits.length === 0) return "Major drug-drug interaction with active therapy — avoid.";
+  const first = hits[0].perDoac[doac];
+  const basis = first.evidenceAnchor?.source.startsWith("FDA") ? "FDA labeling" : "expert guidance";
+  const names = hits.map((r) => r.medication).join(", ");
+  return `Avoid — ${names} interaction (${basis}). ${first.mechanism}.`;
+}
+
 /** F8 (WS-5): user-facing copy when CrCl could not be computed (missing weight/creatinine). */
 const RENAL_UNAVAILABLE_REASON =
   "Renal function not assessable — treated conservatively (obtain weight and serum creatinine).";
@@ -177,7 +198,7 @@ function buildDoacOption(
       : (renalRec?.rationale ?? "Renal function precludes use.");
     eligible = false;
   } else if (worstDDI === "major") {
-    ineligibleReason = "Major drug-drug interaction with active therapy — avoid.";
+    ineligibleReason = majorDdiReason(ddiResults, doac);
     eligible = false;
   }
 
@@ -193,6 +214,7 @@ function buildDoacOption(
     eligible,
     ineligibleReason,
     hasNccnProphylaxisIndication,
+    source: OPTION_SOURCE[doac],
   };
 }
 
@@ -233,6 +255,11 @@ function buildLmwhOption(
     eligible,
     ineligibleReason,
     hasNccnProphylaxisIndication: false,
+    source: pancreatic
+      ? "NCCN VTE-B-2 footnote · CONKO-004 / FRAGEM"
+      : present.duration.includes("VTE-B-1")
+        ? "NCCN VTE-B-1 (weight-adjusted dose)"
+        : "NCCN VTE-B-2",
   };
 }
 

@@ -12,7 +12,7 @@ inventory, and the exact commands to reproduce every result below.
 
 - **Verified on:** 2026-08-06
 - **Authoritative contract:** [`plan/errata-contract-reconciliation.md`](plan/errata-contract-reconciliation.md) (overrides `plan/ddi-info.md` on its 10 resolved issues), with one dated clinical-review supersession noted in §5 (risk-tier labels).
-- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **207 / 207 tests passing** (KB v1.2.0; 16 files)
+- **Status:** `tsc --noEmit` clean · `vite build` succeeds · **208 / 208 tests passing** (KB v1.2.0; 16 files)
 
 ---
 
@@ -21,7 +21,7 @@ inventory, and the exact commands to reproduce every result below.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit  → no errors
-npm test              # vitest run    → 16 files, 207 tests, all passing
+npm test              # vitest run    → 16 files, 208 tests, all passing
 npm run build         # tsc && vite build → dist/ (113 modules)
 npm run dev           # standalone demo (5 synthetic patients), http://localhost:5173
 npm run cds-server    # CDS Hooks service, http://localhost:3000/cds-services
@@ -37,7 +37,7 @@ running the cited test (`npx vitest run <path> -t "<test title>"`).
 | Gate | Command | Result |
 | --- | --- | --- |
 | Type safety | `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) | **0 errors** |
-| Unit + integration tests | `vitest run` | **16 files, 207 tests passed** |
+| Unit + integration tests | `vitest run` | **16 files, 208 tests passed** |
 | Production build | `tsc && vite build` | **113 modules transformed, built** |
 | Live render (manual) | `vite preview` + browser | All five pathways (recommend / LMWH-fallback / contraindicated / not-indicated / excluded) verified visually in the redesigned demo UI, including the live verdict flip and presentation mode (see `docs/screenshots/`) |
 
@@ -161,6 +161,19 @@ carries no advisory note".
 | `checkDDIs()` returns the **full per-DOAC shape** for all 4 DOACs | ERRATA Issue 7 | `ddi-checker.ts: checkDDIs` | "Test 1: itraconazole (combined P-gp + strong CYP3A4 inhibitor) is major for both prophylaxis DOACs" |
 | **F15 (2026-10-09):** ibrutinib is **pharmacodynamic** with apixaban/rivaroxaban/edoxaban and **major** only with dabigatran; it never blocks a factor Xa inhibitor | FDA ibrutinib labeling; 2025 ACC cardio-oncology guidance | `ddi-knowledge-base.json` (ibrutinib, KB v1.1.0) | "Test 1b (regression, 2026-10-09)…", "regression (2026-10-09): ibrutinib does NOT block factor Xa inhibitors" |
 | **F16 (2026-10-09):** LMWH fallback shows fixed prophylactic doses (enoxaparin 40 mg / dalteparin 5,000 units SC daily); the weight-based regimen only for pancreatic cancer (C25*) | NCCN VTE-B-2 footnote (weight-based regimens: pancreatic cancer data); ITAC 2022 | `recommendation.ts: PANCREATIC_LMWH_PRESENTATION`, `buildLmwhOption` | "regression (2026-10-09): LMWH fallback uses fixed prophylactic doses…", "…pancreatic cancer keeps the weight-based LMWH regimen" |
+| **F17:** every RxNorm code is the RxNav ingredient code whose name matches the drug (22 corrected) | NLM RxNav (RxNorm) | `ddi-knowledge-base.json`; `rxnorm-codes.ts`; `scenario.ts`; bundles via `gen-patients.cjs` | "F17: RxNav-verified ingredient codes" (`rxnorm-codes.test.ts`) |
+| **F18:** Cockcroft-Gault uses adjusted body weight (IBW + 0.4 × excess) at BMI ≥30 | Hart & Anderson 2018; KDIGO 2024 | `renal-dosing.ts: crclWeight` | "Maria: 85.3 mL/min with adjusted weight…", "BMI under 30 keeps actual weight" (`tests/core/openevidence-review-4.test.ts`) |
+| **F18:** apixaban avoid at CrCl <15; caution 15–29 | NCCN VTE-B-2 (caution <30); EMA SmPC (<15) | `doac-renal-thresholds.ts: APIXABAN_AVOID_CRCL_LT` | "boundaries" (apixaban 14.9 / 15 / 29.9 / 30) (`tests/core/openevidence-review-4.test.ts`) |
+| **F18:** LMWH dose at weight extremes (BMI ≥40: enoxaparin 40 mg q12h, dalteparin 7,500 units; ≤50 kg: enoxaparin 30 mg (20 mg ≤40 kg), dalteparin 2,500 units) | NCCN VTE-B-1 | `recommendation.ts: lmwhPresentation` | "BMI >= 40…", "weight 41–50 kg…" (`tests/core/openevidence-review-4.test.ts`) |
+| **F18:** GI/GU caution includes colorectal (C18–C20) and upper-tract urothelial (C65–C66) | NCCN VTE-D-5 | `contraindications.ts: GI_TRACT_PREFIXES` | "colorectal (C18) and upper-tract urothelial (C65) tumors raise the GI/GU caution" (`tests/core/openevidence-review-4.test.ts`) |
+| **F18:** CML (C92.1) routed to the MPN exclusion | NCCN VTE-2; WHO MPN classification | `icd10-cancer-map.ts: EXCLUSION_RULES` | "CML (C92.1x) is routed to the MPN exclusion" (`tests/core/openevidence-review-4.test.ts`) |
+| **F18:** rifampin, carbamazepine, phenytoin block both prophylaxis DOACs; clarithromycin does not | FDA apixaban §7.1–7.2, rivaroxaban §7.2–7.3 | `ddi-knowledge-base.json` (v1.2.0) | "rifampin, carbamazepine and phenytoin block both prophylaxis DOACs", "clarithromycin does not block a DOAC…" (`tests/core/openevidence-review-4.test.ts`) |
+| **F18:** tucatinib major (apixaban/rivaroxaban); itraconazole × dabigatran major | ACF 2026; Pradaxa label §7.1 / EU SmPC | `ddi-knowledge-base.json` | "tucatinib is now major…" (`tests/core/openevidence-review-4.test.ts`); "Test 1: itraconazole…" (`ddi-checker.test.ts`) |
+| **F18:** doxorubicin, vinblastine, dexamethasone downgraded to minor | Coumau & Csajka 2025; NCCN Antiemesis; Smythe 2022 | `ddi-knowledge-base.json` | "doxorubicin (3639; P-gp induction in vitro only) is minor", "vinblastine…", "Test 5: dexamethasone (antiemetic courses) is minor…" (`ddi-checker.test.ts`) |
+| **F18:** idelalisib, enzalutamide, mitotane majors labelled as expert guidance (not FDA label text) | AHA 2022 (Beavers et al.) | `ddi-knowledge-base.json` (`evidenceAnchor`, `notes`) | "every major cell has a non-empty evidenceAnchor…" (`ddi-kb-provenance.test.ts`) |
+| **F18:** every major cell states exposure direction; inducer alerts say "lowers DOAC levels … (clots)" | OpenEvidence review 4 (mechanism separation) | `types/ddi.ts: exposure`; `recommendation.ts: majorDetail` | "every major cell states whether it raises or lowers DOAC exposure…" (`ddi-kb-provenance.test.ts`); "inducer alerts say levels fall…" (`tests/core/openevidence-review-4.test.ts`) |
+| **F18:** BTK inhibitors (acalabrutinib, zanubrutinib, pirtobrutinib) and VEGF TKIs carry a pharmacodynamic bleeding flag | ACC 2025 (Ganatra); ACF 2026 | `ddi-knowledge-base.json` | "second-generation BTK inhibitors carry a pharmacodynamic bleeding flag" (`tests/core/openevidence-review-4.test.ts`) |
+| Option cards show their guideline source; a DOAC removed by a major interaction names the drug and the basis (FDA labeling / expert guidance) | display of the anchors above | `recommendation.ts: OPTION_SOURCE`, `majorDdiReason` | "presentation: cards carry a source; James's avoid reason names itraconazole and FDA labeling" (`tests/core/openevidence-review-4.test.ts`) |
 | Alerts and DDI headline rank severity across the **prophylaxis DOACs only** (dabigatran/edoxaban are reference columns) | NCCN (apixaban/rivaroxaban are the prophylaxis DOACs) | `ddi-checker.ts: prophylaxisSeverity`; `recommendation.ts: appendDdiAlerts`; `DDIMatrix.tsx: buildHeadline` | "regression (2026-10-09)…" (asserts no critical alert for ibrutinib) |
 | Severity rank: major > moderate > pharmacodynamic > minor > none > unknown | ERRATA Issue 7 | `ddi-checker.ts: SEVERITY_RANK / worseSeverity` | "orders major > moderate > pharmacodynamic > minor > none > unknown" |
 | Strong CYP3A4/P-gp inducer → **major** for apixaban/rivaroxaban | DOAC labeling | `ddi-knowledge-base.json` (e.g. enzalutamide) | "Test 4: enzalutamide…major for apixaban/rivaroxaban" |

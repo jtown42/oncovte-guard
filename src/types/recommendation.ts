@@ -39,6 +39,8 @@ export interface DOACOption {
   ineligibleReason: string | null;
   /** ERRATA Issue 4: true only for apixaban and rivaroxaban. */
   hasNccnProphylaxisIndication: boolean;
+  /** Guideline basis shown on the card (presentation; not used in any decision). */
+  source?: string;
 }
 
 export interface Alert {

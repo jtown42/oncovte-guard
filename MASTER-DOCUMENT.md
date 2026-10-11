@@ -15,7 +15,7 @@
 - **Category:** AMIA / HL7 FHIR App Competition — **Student**.
 - **Live demo:** https://oncovte-guard.pages.dev · **SMART launch:** https://oncovte-guard.pages.dev/launch
 - **Source:** https://github.com/jtown42/oncovte-guard
-- **Verified state (live run, 2026-10-09):** `vitest run` → **16 files, 207/207 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
+- **Verified state (live run, 2026-10-09):** `vitest run` → **16 files, 208/208 tests passing**; `tsc --noEmit` strict → clean; `vite build` → succeeds. Reproduce with the commands in §16.
 - **Companion docs:** `README.md` (orientation), `VERIFICATION.md` (rule→source→code→test audit), `ASSESSMENT.md` (reviewer verdict lens), `submission/SUBMISSION-FULL.md` (the actual entry text), `plan/errata-contract-reconciliation.md` (the authoritative contract).
 
 > ### If you are an outside reviewer or an evidence model, start here
@@ -51,7 +51,7 @@
 > larger type — §11.2) is **present in the working tree but not yet committed**, so the
 > **live site at oncovte-guard.pages.dev is behind `main`** and shows the prior styling.
 > **No clinical logic differs between the two** — the redesign touched only components,
-> `index.css`, `ui/format.ts`, and the Tailwind config; the 207 tests cover the engine and
+> `index.css`, `ui/format.ts`, and the Tailwind config; the 208 tests cover the engine and
 > pass identically on both.
 
 ---
@@ -87,7 +87,7 @@ cancer patient on systemic therapy**:
 2. **If yes, which anticoagulant is actually safe *for this patient right now*?** (renal function, drug–drug interactions with active chemotherapy, thrombocytopenia, hepatic function, and other contraindications.)
 
 The defining architectural claim: **this is not a dashboard that displays data — it is a
-clinical reasoning engine, proven by 207 automated tests, exposed through two EHR
+clinical reasoning engine, proven by 208 automated tests, exposed through two EHR
 surfaces.** All guideline logic lives in pure, framework-free TypeScript in `src/core/`.
 A SMART-on-FHIR dashboard (clinician *pull*), a CDS Hooks service (EHR *push*), and a
 standalone what-if demo all converge on **one seam**:
@@ -106,7 +106,7 @@ in isolation.
 **The single most important caveat** (repeat it to any reviewer, unprompted): the DDI
 knowledge base and clinical thresholds were **curated from supplied structured clinical
 input and published labeling**, encoded against an authoritative project contract. The
-207 tests prove the encoded rules are *applied faithfully and consistently*. They do
+208 tests prove the encoded rules are *applied faithfully and consistently*. They do
 **not** independently prove the underlying pharmacology is itself correct or current —
 that needs clinician/pharmacist sign-off for real use. The app says so everywhere.
 
@@ -424,7 +424,7 @@ Stated bluntly so nobody has to infer it:
   *list* is guideline-scaffolded (ACC 2026 / NCCN VTE-2); the numeric cut-points are curator
   choices; and *no bleeding score is computed on purpose* — the evidence does not support one
   for primary prophylaxis in this population.
-- **The engineering *is* the contribution.** The one-seam architecture, the 207 tests, the
+- **The engineering *is* the contribution.** The one-seam architecture, the 208 tests, the
   dual-surface coherence, and the traceability matrix are real, verifiable, and unusual for
   a student prototype. The clinical content is a *faithful encoding of a curated set* — the
   app's honest claim is **"provably consistent," not "independently validated."**
@@ -609,7 +609,7 @@ generateRecommendation` pipeline. Test reference date pinned at `2026-06-10T12:0
 
 ## 10. Testing & verification
 
-**Live run (this document): `vitest run` → 16 files, 207 tests, all passing** in ~6 s.
+**Live run (this document): `vitest run` → 16 files, 208 tests, all passing** in ~6 s.
 `tsc --noEmit` (strict, `noUnusedLocals`, `noImplicitReturns`) → 0 errors.
 `tsc && vite build` → succeeds (113 modules).
 
@@ -820,7 +820,7 @@ Full answer verbatim in `docs/OPENEVIDENCE-REVIEW-4.md`. Confirmed as coded: hep
 - **James:** mildly elevated, sub-threshold ALT 68 / AST 54 / bilirubin 0.9 added; itraconazole framed as oral step-down after voriconazole hepatotoxicity.
 - **Apixaban <15 rationale (OpenEvidence follow-up):** NCCN VTE-B-2 says only "caution if CrCl <30"; the <15 avoid floor is the EMA SmPC rule (the FDA label has no renal adjustment). It is the more conservative encoding and is labelled as EMA-sourced.
 - **Not yet done:** renal-conditional rivaroxaban avoid (cyclosporine, isavuconazonium at CrCl 15–80) is text-only; fondaparinux as the HIT fallback (NCCN HIT-B lists DOACs and fondaparinux); Child-Pugh — **the one clinically meaningful gap: a cirrhotic patient with normal ALT/AST (Child-Pugh B by albumin, INR or ascites) currently passes the hepatic block**; dabigatran/edoxaban cells for the new agents are "unknown"; the per-answer [N] numbering was not captured; a consolidated bibliography for all rounds is in `docs/REFERENCES.md`.
-- **Locked by tests:** `tests/core/openevidence-review-4.test.ts` (13 tests) plus updated provenance and patient tests. 189 → 207 tests.
+- **Locked by tests:** `tests/core/openevidence-review-4.test.ts` (13 tests) plus updated provenance and patient tests. 189 → 207 tests (208 after the 2026-10-11 presentation test).
 
 ## 13. Clinical-accuracy audit checklist for a reviewer
 
@@ -878,7 +878,7 @@ not a slideshow. Use **presentation mode** (`?present=true` or the top-bar toggl
 enlarge the verdict/score/CrCl for projection.
 
 **The three sentences that frame the whole project:**
-1. "This is a clinical reasoning engine, not a dashboard — 207 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
+1. "This is a clinical reasoning engine, not a dashboard — 208 tests prove it, and one seam feeds both a SMART app and a CDS Hooks service."
 2. "Every rule traces guideline → source → code → test in our VERIFICATION document."
 3. "The knowledge base is curated and tested for faithful application — clinician sign-off is the explicit next step, and we say so."
 
@@ -908,7 +908,7 @@ Requires Node 18+.
 ```bash
 npm install
 npm run typecheck     # tsc --noEmit (strict)        → 0 errors
-npm test              # vitest run                    → 16 files, 207 tests pass
+npm test              # vitest run                    → 16 files, 208 tests pass
 npm run build         # tsc && vite build             → dist/ (113 modules)
 npm run dev           # standalone demo, 5 patients   → http://localhost:5173
 npm run preview       # serve the production build
@@ -1043,4 +1043,4 @@ Supporting trials cited in the narrative (not epidemiology): **AVERT** (Carrier 
 
 *This document is a reference, not a substitute for the code. Where it and the source
 disagree, the source wins — and that disagreement is itself a finding worth filing.
-Last verified against a live test run of 207/207 passing (2026-10-09).*
+Last verified against a live test run of 208/208 passing (2026-10-09).*

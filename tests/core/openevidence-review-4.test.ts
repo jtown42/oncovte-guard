@@ -137,3 +137,16 @@ describe("James's bundle", () => {
     expect(r.verdictLabel).toBe("recommend_lmwh");
   });
 });
+
+describe("presentation alignment (talk script, 2026-10-11)", () => {
+  it("presentation: cards carry a source; James's avoid reason names itraconazole and FDA labeling", () => {
+    const m = generateRecommendation(maria());
+    for (const o of m.preferredOptions) expect(o.source, o.name).toMatch(/NCCN VTE-B-2/);
+    const j = generateRecommendation(james());
+    for (const name of ["apixaban", "rivaroxaban"]) {
+      const o = j.avoidOptions.find((x) => x.name === name)!;
+      expect(o.ineligibleReason).toMatch(/^Avoid — Itraconazole interaction \(FDA labeling\)/);
+    }
+    expect(j.alternativeOptions.find((o) => o.name === "enoxaparin")!.source).toBe("NCCN VTE-B-2");
+  });
+});

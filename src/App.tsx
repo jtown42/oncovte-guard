@@ -199,10 +199,11 @@ function StandaloneView() {
   };
 
   return (
-    <div className="lg:grid lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start lg:gap-4">
+    <div className="flex flex-col lg:grid lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start lg:gap-4">
       {/* Sticky control rail — the verdict on the right stays in view while
-          a slider is dragged. Stacks above the dashboard on narrow screens. */}
-      <aside className="mb-4 lg:sticky lg:top-4 lg:mb-0 lg:max-h-[calc(100vh-1.5rem)] lg:overflow-y-auto lg:pr-1">
+          a slider is dragged. On narrow screens (a phone from the talk's QR
+          code) the verdict comes first and the rail follows it. */}
+      <aside className="order-2 mt-4 lg:order-none lg:sticky lg:top-4 lg:mt-0 lg:max-h-[calc(100vh-1.5rem)] lg:overflow-y-auto lg:pr-1">
         <ScenarioEditor
           scenario={scenario}
           presets={roster.map((p) => ({ index: p.index, name: p.name }))}
@@ -214,7 +215,24 @@ function StandaloneView() {
           Synthetic data — no PHI. Every edit re-runs the real clinical engine.
         </p>
       </aside>
-      <div className="min-w-0">
+      <div className="order-1 min-w-0 lg:order-none">
+        {/* Phone-only patient switcher: the full rail sits below the verdict. */}
+        <div className="mb-3 flex flex-wrap gap-2 lg:hidden" aria-label="Example patients">
+          {roster.map((p) => (
+            <button
+              key={p.index}
+              type="button"
+              onClick={() => loadPreset(p.index)}
+              className={`rounded-md border px-3 py-1.5 text-sm font-medium ${
+                activePreset === p.index
+                  ? "border-clinical-brand bg-clinical-brand text-white"
+                  : "border-clinical-border bg-white text-clinical-ink"
+              }`}
+            >
+              {p.name.split(" ")[0]}
+            </button>
+          ))}
+        </div>
         <Dashboard patient={patient} />
       </div>
     </div>

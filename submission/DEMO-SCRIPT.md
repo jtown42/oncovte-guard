@@ -128,7 +128,7 @@ avoid (OpenEvidence review 3). Never swap in voriconazole.*
 **On screen:** Three-link chain (tests → traceability matrix → live behavior) + one SMART
 sandbox launch screenshot (`docs/screenshots/sandbox-james-2026-10-09.png`, re-run after F15–F18).
 
-> "How do you know it's right? Three things. One: 207 automated tests check that the code
+> "How do you know it's right? Three things. One: 208 automated tests check that the code
 > follows its rules — every threshold, every boundary. Two: a traceability matrix links every
 > rule to its guideline source, the exact code, and the test that proves it. Three: I launched
 > it from the public SMART Health IT sandbox, where it signed in with real OAuth, read live

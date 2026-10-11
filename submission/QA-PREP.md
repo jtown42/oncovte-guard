@@ -182,4 +182,4 @@ conformance or validation — only what I actually implemented."
 - Lung Khorana: OR ~1.1 vs ~3.2 elsewhere (van Es IPD; P-interaction 0.002).
 - Burden: VTE = second leading cause of death in cancer (after progression); risk ~4–7×;
   12-mo incidence ~3.7% overall, ~5.7% on systemic therapy (Lam 2026).
-- Engine: 207 tests, 15 files; 52 DDI agents × 4 DOACs; 5 terminal states; 5 synthetic patients.
+- Engine: 208 tests, 15 files; 52 DDI agents × 4 DOACs; 5 terminal states; 5 synthetic patients.

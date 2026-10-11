@@ -118,8 +118,9 @@ export function RecommendationPanel({
               <h2 className="verdict-hero">{heroLabel}</h2>
               {showOptions && regimen.length > 0 ? (
                 <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  {regimen.map((o) => (
+                  {regimen.map((o, i) => (
                     <span key={o.name} className="inline-flex items-baseline gap-2">
+                      {i > 0 && <span className="text-base text-clinical-muted">or</span>}
                       <span className="text-lg font-semibold capitalize text-clinical-ink">
                         {o.name}
                       </span>
@@ -354,6 +355,9 @@ function OptionRow({ o }: { o: DOACOption }) {
         </span>
       </div>
       {o.duration && <p className="text-sm text-clinical-muted">{o.duration}</p>}
+      {o.source && (
+        <p className="text-[0.82rem] font-medium text-clinical-inkSoft">Source: {o.source}</p>
+      )}
       <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.82rem] text-clinical-inkSoft">
         <span className="inline-flex items-center gap-1.5">
           <Dot tone={renalStatusTone(o.renalStatus)} />
@@ -384,7 +388,11 @@ function AvoidList({ options }: { options: DOACOption[] }) {
             key={o.name}
             className="grid gap-1 border-t border-clinical-hairline py-2.5 text-sm sm:grid-cols-[8rem_1fr] sm:gap-4"
           >
-            <span className="text-[0.95rem] font-semibold capitalize text-clinical-inkSoft">
+            <span
+              className={`text-[0.95rem] font-semibold capitalize text-clinical-inkSoft ${
+                o.hasNccnProphylaxisIndication ? "line-through decoration-2" : ""
+              }`}
+            >
               {o.name}
             </span>
             <span className="text-clinical-muted">
