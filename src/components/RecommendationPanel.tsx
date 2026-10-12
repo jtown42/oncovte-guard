@@ -87,15 +87,8 @@ function VerdictIcon({ action }: { action: OverallAction }) {
 
 export function RecommendationPanel({
   rec,
-  part = "all",
 }: {
   rec: ProphylaxisRecommendation;
-  /**
-   * "summary" = verdict hero + pathway strip; "details" = the option lists.
-   * The phone layout splits them so the editor sits right under a verdict
-   * whose height barely changes, instead of jumping when the options do.
-   */
-  part?: "all" | "summary" | "details";
 }) {
   const action = ACTION[rec.overallAction];
   const showOptions =
@@ -167,9 +160,6 @@ export function RecommendationPanel({
       )}
     </div>
   );
-
-  if (part === "details")
-    return <section className="card overflow-hidden">{body}</section>;
 
   return (
     <section className="card overflow-hidden shadow-hero">
@@ -247,7 +237,7 @@ export function RecommendationPanel({
                 <VerdictIcon action={rec.overallAction} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-base font-semibold leading-tight">
+                <span className="block text-base font-semibold leading-tight">
                   {heroLabel}
                 </span>
                 {showOptions && regimen.length > 0 && (
@@ -286,7 +276,7 @@ export function RecommendationPanel({
         </button>
       )}
 
-      {part === "all" && body}
+      {body}
     </section>
   );
 }

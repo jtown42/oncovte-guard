@@ -210,6 +210,7 @@ function initialPreset(roster: { index: number; name: string }[]): number {
 function StandaloneView() {
   const roster = useMemo(() => listSyntheticPatients(), []);
   const narrow = useNarrow();
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [first] = useState(() => initialPreset(roster));
   const [scenario, setScenario] = useState<Scenario>(() =>
     presetScenario(first),
@@ -234,69 +235,69 @@ function StandaloneView() {
   };
 
   const editor = (
-    <div id="edit" className="scroll-mt-4">
-      <ScenarioEditor
-        scenario={scenario}
-        presets={roster.map((p) => ({ index: p.index, name: p.name }))}
-        activePreset={activePreset}
-        onLoadPreset={loadPreset}
-        onChange={change}
-        showPresets={!narrow}
-      />
-    </div>
+    <ScenarioEditor
+      scenario={scenario}
+      presets={roster.map((p) => ({ index: p.index, name: p.name }))}
+      activePreset={activePreset}
+      onLoadPreset={loadPreset}
+      onChange={change}
+      showPresets={!narrow}
+    />
   );
 
   if (narrow) {
-    // Phone layout (the talk's QR code): a one-line orientation, a one-row
-    // patient switcher, the verdict, then the editor directly under it so a
-    // change and its result are one thumb-scroll apart. Same engine, same
-    // components as the wide layout — only the order differs.
+    // Phone layout (the talk's QR code): the controls come first so a visitor
+    // can change something the moment the page loads; the verdict stays in
+    // view through the pinned bar at the bottom (RecommendationPanel), and the
+    // full dashboard follows. Patients live in a pull-up sheet. Same engine,
+    // same components as the wide layout — only the order differs.
+    const current = sourceIndex;
     return (
       <div>
-        <p className="mb-3 text-sm leading-snug text-clinical-muted">
-          <span className="font-semibold text-clinical-ink">
-            Synthetic patients, no real data.
-          </span>{" "}
-          <a
-            href="#edit"
-            className="font-medium text-clinical-brand underline underline-offset-2"
+        <div className="mb-3 flex items-center gap-3">
+          <p className="min-w-0 flex-1 text-sm leading-snug text-clinical-muted">
+            <span className="font-semibold text-clinical-ink">
+              Synthetic patient.
+            </span>{" "}
+            Change anything — the verdict at the bottom updates live.
+            {activePreset !== null &&
+              roster[activePreset]?.name.startsWith("James") && (
+                <>
+                  {" "}
+                  Try removing{" "}
+                  <span className="font-medium text-clinical-ink">
+                    itraconazole
+                  </span>
+                  .
+                </>
+              )}
+          </p>
+          <button
+            type="button"
+            onClick={() => setSheetOpen(true)}
+            className="min-h-[44px] shrink-0 rounded-md border border-clinical-border bg-white px-3 text-sm font-medium text-clinical-ink"
+            aria-haspopup="dialog"
           >
-            Change anything below the verdict
-          </a>{" "}
-          and the real engine re-runs.
-          {activePreset !== null &&
-            roster[activePreset]?.name.startsWith("James") && (
-              <>
-                {" "}
-                Try removing{" "}
-                <span className="font-medium text-clinical-ink">
-                  itraconazole
-                </span>
-                .
-              </>
-            )}
-        </p>
-        <div
-          className="mb-3 grid grid-cols-5 gap-1.5"
-          aria-label="Example patients"
-        >
-          {roster.map((p) => (
-            <button
-              key={p.index}
-              type="button"
-              onClick={() => loadPreset(p.index)}
-              aria-pressed={activePreset === p.index}
-              className={`min-h-[44px] rounded-md border px-1 text-sm font-medium ${
-                activePreset === p.index
-                  ? "border-clinical-brand bg-clinical-brand text-white"
-                  : "border-clinical-border bg-white text-clinical-ink"
-              }`}
-            >
-              {p.name.split(" ")[0]}
-            </button>
-          ))}
+            {roster[current].name.split(" ")[0]}
+             ▾
+          </button>
         </div>
-        <Dashboard patient={patient} source={source} afterVerdict={editor} />
+        {editor}
+        <div className="mt-3">
+          <Dashboard patient={patient} source={source} />
+        </div>
+        {sheetOpen && (
+          <PatientSheet
+            roster={roster}
+            active={activePreset}
+            onPick={(i) => {
+              loadPreset(i);
+              setSheetOpen(false);
+              window.scrollTo({ top: 0 });
+            }}
+            onClose={() => setSheetOpen(false)}
+          />
+        )}
       </div>
     );
   }
@@ -313,6 +314,71 @@ function StandaloneView() {
       </aside>
       <div className="min-w-0">
         <Dashboard patient={patient} source={source} />
+      </div>
+    </div>
+  );
+}
+
+/** Phone-only pull-up list of the example patients. */
+function PatientSheet({
+  roster,
+  active,
+  onPick,
+  onClose,
+}: {
+  roster: { index: number; name: string }[];
+  active: number | null;
+  onPick: (index: number) => void;
+  onClose: () => void;
+}) {
+  const details = useMemo(
+    () =>
+      roster.map((r) => {
+        const p = presetPatient(r.index);
+        const dx = p.activeCancerConditions[0]?.display ?? "No active cancer";
+        return `${p.age} ${p.gender === "female" ? "F" : "M"} · ${dx}`;
+      }),
+    [roster],
+  );
+  return (
+    <div
+      className="fixed inset-0 z-40 flex items-end bg-black/40"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Example patients"
+    >
+      <div
+        className="w-full rounded-t-2xl bg-clinical-panel px-4 pb-6 pt-3 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-clinical-border" />
+        <p className="mb-2 text-sm font-semibold text-clinical-ink">
+          Example patients (synthetic)
+        </p>
+        <ul className="divide-y divide-clinical-hairline">
+          {roster.map((r, i) => (
+            <li key={r.index}>
+              <button
+                type="button"
+                onClick={() => onPick(r.index)}
+                className={`flex min-h-[56px] w-full flex-col justify-center px-2 text-left ${
+                  active === r.index
+                    ? "text-clinical-brand"
+                    : "text-clinical-ink"
+                }`}
+              >
+                <span className="text-base font-semibold">
+                  {r.name}
+                  {active === r.index && " ✓"}
+                </span>
+                <span className="text-sm text-clinical-muted">
+                  {details[i]}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
