@@ -174,3 +174,7 @@ OncoVTE Guard provides clinical decision support only and does not replace
 clinical judgment. Recommendations are based on NCCN VTE-B guidance and
 published DOAC drug-interaction literature; verify against the most current
 guidelines. All data shown in the demo is synthetic and contains no PHI.
+
+## License
+
+MIT. See [LICENSE](LICENSE). Research prototype, evaluated only on synthetic data; not for use with real patients.

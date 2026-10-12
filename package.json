@@ -1,6 +1,7 @@
 {
   "name": "oncovte-guard",
   "version": "1.0.0",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "description": "SMART-on-FHIR clinical decision support for cancer-associated VTE prophylaxis with DOAC-chemotherapy DDI checking",
