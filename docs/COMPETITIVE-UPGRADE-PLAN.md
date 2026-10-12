@@ -14,6 +14,8 @@
 - **Positioning: lead as a clinician.** The program lists Justin as MD, MPH, NYU Langone Health. In a field of engineers and ML entries, "a physician who encoded the decision he has to make, and made every step auditable" is the differentiator. The script rewrite (Wed) adds a first-person clinical framing in the opening and close. The engine stays the evidence.
 - **A design refinements** (from reading the code): the two equivalent options (apixaban *or* rivaroxaban; enoxaparin *or* dalteparin) are emitted as a `RequestGroup` with `selectionBehavior = exactly-one`, which `GuidanceResponse.result` points to. That's FHIR's own way of saying "pick one of these proposals," rather than inventing a single chosen agent the engine never picks.
 
+- **Status, end of Sun Oct 11: A is done, a day ahead of schedule** (commits dd4093a, 64afe14; deployed). Write-back with Provenance (item G) included; 224 tests; HL7 validator 7/7 bundles, 0 errors; sandbox round trip 9 in / 9 back; talk stills pixel-identical; slide images `talk-assets/07-james-fhir-output-panel.png` and `08-james-card-to-fhir.png`. **Next: B (Bulk Data panel screening).**
+
 ---
 
 ## 1. Where we stand, honestly
