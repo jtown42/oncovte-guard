@@ -174,11 +174,14 @@ function SmartView() {
 
 /* ---------- Standalone demo mode ---------- */
 
+/** Parse preset `index` from its FHIR bundle. */
+function presetPatient(index: number): PatientData {
+  return assemblePatientData(loadSyntheticPatient(index), getAsOfDate());
+}
+
 /** Load preset `index` and seed an editable scenario from it. */
 function presetScenario(index: number): Scenario {
-  return patientToScenario(
-    assemblePatientData(loadSyntheticPatient(index), getAsOfDate()),
-  );
+  return patientToScenario(presetPatient(index));
 }
 
 function StandaloneView() {
@@ -186,12 +189,17 @@ function StandaloneView() {
   const [scenario, setScenario] = useState<Scenario>(() => presetScenario(0));
   // The currently-loaded preset, or null once the user diverges ("custom").
   const [activePreset, setActivePreset] = useState<number | null>(0);
+  // The preset the scenario was seeded from (kept after edits), so the FHIR
+  // output can point at that patient's real source resources.
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const source = useMemo(() => presetPatient(sourceIndex), [sourceIndex]);
 
   const patient = useMemo(() => scenarioToPatient(scenario), [scenario]);
 
   const loadPreset = (index: number) => {
     setScenario(presetScenario(index));
     setActivePreset(index);
+    setSourceIndex(index);
   };
   const change = (patch: Partial<Scenario>) => {
     setScenario((s) => ({ ...s, ...patch }));
@@ -233,7 +241,7 @@ function StandaloneView() {
             </button>
           ))}
         </div>
-        <Dashboard patient={patient} />
+        <Dashboard patient={patient} source={source} />
       </div>
     </div>
   );

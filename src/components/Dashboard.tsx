@@ -10,8 +10,16 @@ import { RenalPanel } from "./RenalPanel";
 import { DDISummary } from "./DDIMatrix";
 import { ContraindicationPanel } from "./ContraindicationPanel";
 import { AlertList } from "./AlertList";
+import { FhirOutputPanel } from "./FhirOutputPanel";
 
-export function Dashboard({ patient }: { patient: PatientData }) {
+export function Dashboard({
+  patient,
+  source,
+}: {
+  patient: PatientData;
+  /** The patient as parsed from FHIR before what-if edits (FHIR output references only). */
+  source?: PatientData;
+}) {
   const rec = useMemo(() => generateRecommendation(patient), [patient]);
 
   return (
@@ -47,6 +55,8 @@ export function Dashboard({ patient }: { patient: PatientData }) {
       <DDISummary results={rec.ddiResults} />
 
       <ContraindicationPanel contraindications={rec.contraindications} />
+
+      <FhirOutputPanel patient={patient} rec={rec} source={source ?? patient} />
 
       <details className="present-hide rounded-card border border-clinical-hairline bg-clinical-bg text-xs leading-relaxed text-clinical-muted">
         <summary className="cursor-pointer px-4 py-3 text-base font-semibold">

@@ -470,7 +470,8 @@ is why" is a stronger, more defensible answer than a fabricated c-0.6 number. Th
 ## 7. FHIR / SMART / CDS Hooks conformance
 
 - **Release:** FHIR **R4 (4.0.1)**.
-- **Resources read:** Patient (read); Condition, Observation, MedicationRequest (search). Declared in `public/capability-statement.json` (R4 **client** CapabilityStatement, `kind: requirements`).
+- **Resources read:** Patient (read); Condition, Observation, MedicationRequest (search).
+- **Resources produced (F19):** GuidanceResponse, RiskAssessment, DetectedIssue, MedicationRequest (`draft`/`proposal`), RequestGroup, Device, Provenance — built in memory and shown in the app's "FHIR output" panel; written only to the public sandbox, from a script. Declared in `public/capability-statement.json` (R4 **client** CapabilityStatement, `kind: requirements`).
 - **Codings:** ICD-10-CM (`http://hl7.org/fhir/sid/icd-10-cm`), LOINC (labs/vitals), RxNorm (meds), US Core race/ethnicity extensions (`extractOmbDisplay`).
 - **Unit conversions in the parser:** weight lb→kg ×0.453592, height in→cm ×2.54.
 - **Resilience:** every parser returns `null` rather than throwing on missing data, so a sparse chart still yields a well-formed `PatientData`.
@@ -821,6 +822,19 @@ Full answer verbatim in `docs/OPENEVIDENCE-REVIEW-4.md`. Confirmed as coded: hep
 - **Apixaban <15 rationale (OpenEvidence follow-up):** NCCN VTE-B-2 says only "caution if CrCl <30"; the <15 avoid floor is the EMA SmPC rule (the FDA label has no renal adjustment). It is the more conservative encoding and is labelled as EMA-sourced.
 - **Not yet done:** renal-conditional rivaroxaban avoid (cyclosporine, isavuconazonium at CrCl 15–80) is text-only; fondaparinux as the HIT fallback (NCCN HIT-B lists DOACs and fondaparinux); Child-Pugh — **the one clinically meaningful gap: a cirrhotic patient with normal ALT/AST (Child-Pugh B by albumin, INR or ascites) currently passes the hepatic block**; dabigatran/edoxaban cells for the new agents are "unknown"; the per-answer [N] numbering was not captured; a consolidated bibliography for all rounds is in `docs/REFERENCES.md`.
 - **Locked by tests:** `tests/core/openevidence-review-4.test.ts` (13 tests) plus updated provenance and patient tests. 189 → 207 tests (208 after the 2026-10-11 presentation test).
+
+### F19 — FHIR output layer: the decision written back as standard FHIR *(added 2026-10-11)*
+- **Why:** the app read four FHIR resources and wrote nothing, so to a standards audience it looked like an app that consumes FHIR, not a FHIR-native CDS system. Several other finalists write resources back.
+- **What:** `src/fhir-output/build.ts` serializes the finished `ProphylaxisRecommendation` (it never recomputes or alters a decision):
+  - `GuidanceResponse` with the dashboard's verdict text; `result` points to the `RequestGroup`.
+  - `RiskAssessment`: Khorana score, `qualitativeRisk` (0 low, 1–2 moderate, ≥3 high, kept separate from the ≥2 decision), `basis` → the exact source Condition and lab Observations.
+  - One `DetectedIssue` per blocked prophylaxis agent (drug interaction uses v3-ActCode `DRG`; renal and contraindication findings use text plus a local code), each implicating the offending `MedicationRequest` or `Observation`; moderate issues for cautions on the remaining options; one per universal contraindication.
+  - Draft `MedicationRequest` proposals (RxNorm, the exact UI dose string), grouped in a `RequestGroup` with `selectionBehavior = exactly-one`, because the engine offers equivalent options and never picks one.
+  - The engine `Device` (app version + KB version) and a `Provenance` linking every generated resource to the engine and the source records.
+- **R4 reference rules shaped the links:** the validator rejected the first draft (`GuidanceResponse.reasonReference` and `MedicationRequest.reasonReference` may only point at Condition/Observation; a mitigation author must be a Practitioner). Proposals now cite the cancer Condition as `reasonReference` and the RiskAssessment/DetectedIssues as `supportingInformation`; the Provenance carries the run-level links.
+- **Parser change:** an optional `sourceRef` on labs, medications and conditions (provenance only; no engine reads it). Items edited in the what-if editor get display-only references.
+- **Verified:** 16 tests in `tests/fhir-output/build.test.ts` (resource set per verdict for all five patients, the James toggle, Dorothy at 55k, draft/proposal only); HL7 validator 7/7 bundles 0 errors (the only warnings: the local finding CodeSystem is unpublished); SMART sandbox transaction 9 in / 9 read back with references rewritten to server ids (`scripts/post-fhir-output.ts`). Talk stills re-captured and pixel-identical.
+- **Not done:** CDS Hooks `create` suggestions carrying the proposals; publishing the local CodeSystem; Epic sandbox (does not accept these writes).
 
 ## 13. Clinical-accuracy audit checklist for a reviewer
 
