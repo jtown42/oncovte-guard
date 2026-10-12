@@ -9,6 +9,7 @@
  * slider is dragged. The high-stakes drivers (platelets, creatinine, meds) lead;
  * stable demographics are tucked into a collapsible section to cut stage noise.
  */
+import { useRef, type PointerEvent } from "react";
 import {
   type Scenario,
   CANCER_OPTIONS,
@@ -293,6 +294,91 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * A range input that also follows a finger anywhere on its track. iOS Safari
+ * only drags a native slider by its thumb and ignores taps on the track, which
+ * makes the what-if sliders hard to use from a phone. A touch that moves
+ * mostly sideways (or a tap) sets the value; a mostly vertical swipe is left to
+ * the browser so the page still scrolls past the sliders.
+ */
+function Range({
+  min,
+  max,
+  step,
+  value,
+  disabled,
+  onChange,
+}: {
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  disabled?: boolean;
+  onChange: (v: number) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const gesture = useRef<{ x: number; y: number; dragging: boolean } | null>(null);
+  const decimals = (String(step).split(".")[1] ?? "").length;
+
+  const valueAt = (clientX: number) => {
+    const r = ref.current!.getBoundingClientRect();
+    const f = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+    const v = min + Math.round((f * (max - min)) / step) * step;
+    return Number(Math.min(max, Math.max(min, v)).toFixed(decimals));
+  };
+
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "touch" || disabled) return;
+    gesture.current = { x: e.clientX, y: e.clientY, dragging: false };
+  };
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const g = gesture.current;
+    if (!g) return;
+    if (!g.dragging) {
+      const dx = Math.abs(e.clientX - g.x);
+      const dy = Math.abs(e.clientY - g.y);
+      if (dx < 6 || dx < dy) return;
+      g.dragging = true;
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+    onChange(valueAt(e.clientX));
+  };
+  const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
+    const g = gesture.current;
+    gesture.current = null;
+    if (!g || g.dragging) return;
+    // A tap (no real movement) jumps to that point on the track.
+    if (Math.abs(e.clientX - g.x) < 6 && Math.abs(e.clientY - g.y) < 6) {
+      onChange(valueAt(e.clientX));
+    }
+  };
+
+  // On touch screens the native input ignores touches (CSS, pointer: coarse)
+  // and this wrapper interprets them, so a vertical scroll that starts on a
+  // slider never changes its value. Mouse and keyboard use the native input.
+  return (
+    <div
+      className="range-touch"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={() => (gesture.current = null)}
+    >
+      <input
+        ref={ref}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="range-clinical w-full disabled:opacity-40"
+      />
+    </div>
+  );
+}
+
 function NumberSlider({
   label,
   value,
@@ -319,15 +405,7 @@ function NumberSlider({
           <span className="text-sm font-normal text-clinical-muted">{unit}</span>
         </span>
       </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="range-clinical w-full"
-      />
+      <Range min={min} max={max} step={step} value={value} onChange={onChange} />
     </div>
   );
 }
@@ -378,15 +456,13 @@ function LabSlider({
           </button>
         </span>
       </div>
-      <input
-        type="range"
+      <Range
         min={min}
         max={max}
         step={step}
         value={present ? (value as number) : fallback}
         disabled={!present}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="range-clinical w-full disabled:opacity-40"
+        onChange={onChange}
       />
     </div>
   );

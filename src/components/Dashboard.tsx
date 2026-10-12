@@ -20,7 +20,7 @@ export function Dashboard({
   patient: PatientData;
   /** The patient as parsed from FHIR before what-if edits (FHIR output references only). */
   source?: PatientData;
-  /** Rendered right after the verdict and its alerts (the phone layout puts the editor here). */
+  /** Rendered right under the verdict summary (the phone layout puts the editor here). */
   afterVerdict?: ReactNode;
 }) {
   const rec = useMemo(() => generateRecommendation(patient), [patient]);
@@ -33,11 +33,19 @@ export function Dashboard({
           state (a universal contraindication turns the hero red), and the pathway
           strip narrates the safety/DDI story — so alerts follow the decision as
           considerations rather than competing with it for the first read. */}
-      <RecommendationPanel rec={rec} />
-
-      {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
-
-      {afterVerdict}
+      {afterVerdict ? (
+        <>
+          <RecommendationPanel rec={rec} part="summary" />
+          {afterVerdict}
+          {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
+          <RecommendationPanel rec={rec} part="details" />
+        </>
+      ) : (
+        <>
+          <RecommendationPanel rec={rec} />
+          {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
+        </>
+      )}
 
       {/* Everything below is the auditable evidence behind the decision above —
           subordinated by a quiet divider so the verdict clearly leads. */}

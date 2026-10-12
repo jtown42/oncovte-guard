@@ -28,7 +28,9 @@ import {
 
 /** A small severity dot — carries state without a filled chip. */
 function Dot({ tone }: { tone: Tone }) {
-  return <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${TONE_DOT[tone]}`} />;
+  return (
+    <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${TONE_DOT[tone]}`} />
+  );
 }
 
 /** Minimal stroke glyph per verdict — a clinical status mark, not an emoji. */
@@ -85,8 +87,15 @@ function VerdictIcon({ action }: { action: OverallAction }) {
 
 export function RecommendationPanel({
   rec,
+  part = "all",
 }: {
   rec: ProphylaxisRecommendation;
+  /**
+   * "summary" = verdict hero + pathway strip; "details" = the option lists.
+   * The phone layout splits them so the editor sits right under a verdict
+   * whose height barely changes, instead of jumping when the options do.
+   */
+  part?: "all" | "summary" | "details";
 }) {
   const action = ACTION[rec.overallAction];
   const showOptions =
@@ -107,14 +116,60 @@ export function RecommendationPanel({
   // copy of the verdict pins to the bottom of the screen so an edit and its
   // result stay visible together.
   const heroRef = useRef<HTMLDivElement>(null);
+  const crcl = rec.renal ? Math.round(rec.renal.crclMlMin) : null;
   const [heroVisible, setHeroVisible] = useState(true);
   useEffect(() => {
     const el = heroRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(([e]) => setHeroVisible(e.isIntersecting));
+    const io = new IntersectionObserver(([e]) =>
+      setHeroVisible(e.isIntersecting),
+    );
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  const body = (
+    <div className="card-body space-y-6">
+      {rec.staleLabWarning && (
+        <p className="rounded-md border-l-2 border-sev-caution bg-sev-cautionWash px-3 py-2 text-base text-sev-cautionInk">
+          <span className="font-semibold">Caution.</span> This decision uses
+          laboratory values older than 30 days ({rec.staleLabFields.join(", ")}
+          ). Please re-check before acting.
+        </p>
+      )}
+
+      {showOptions ? (
+        <>
+          <OptionGroup
+            heading="Preferred"
+            subheading="NCCN-supported ambulatory prophylaxis"
+            options={rec.preferredOptions}
+            emptyNote="No DOAC is currently appropriate — see alternatives."
+          />
+          {rec.alternativeOptions.length > 0 && (
+            <OptionGroup
+              heading="Alternative"
+              subheading={
+                rec.preferredOptions.length === 0
+                  ? "DOACs blocked — use LMWH (never dabigatran/edoxaban)"
+                  : "LMWH — NCCN-concordant alternative"
+              }
+              options={rec.alternativeOptions}
+            />
+          )}
+          <AvoidList options={rec.avoidOptions} />
+        </>
+      ) : (
+        <p className="text-sm text-clinical-muted">
+          No pharmacologic anticoagulant options are presented for this pathway.
+          Review the alerts and contraindications below.
+        </p>
+      )}
+    </div>
+  );
+
+  if (part === "details")
+    return <section className="card overflow-hidden">{body}</section>;
 
   return (
     <section className="card overflow-hidden shadow-hero">
@@ -136,13 +191,22 @@ export function RecommendationPanel({
               {showOptions && regimen.length > 0 ? (
                 <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   {regimen.map((o, i) => (
-                    <span key={o.name} className="inline-flex flex-wrap items-baseline gap-x-2">
-                      {i > 0 && <span className="text-base text-clinical-muted">or</span>}
+                    <span
+                      key={o.name}
+                      className="inline-flex flex-wrap items-baseline gap-x-2"
+                    >
+                      {i > 0 && (
+                        <span className="text-base text-clinical-muted">
+                          or
+                        </span>
+                      )}
                       <span className="text-lg font-semibold capitalize text-clinical-ink">
                         {o.name}
                       </span>
                       <span className="whitespace-nowrap font-mono text-sm tabular-nums text-clinical-inkSoft">
-                        {[o.dose, o.route, o.frequency].filter(Boolean).join(" ")}
+                        {[o.dose, o.route, o.frequency]
+                          .filter(Boolean)
+                          .join(" ")}
                       </span>
                     </span>
                   ))}
@@ -164,20 +228,25 @@ export function RecommendationPanel({
         <button
           type="button"
           onClick={() =>
-            heroRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+            heroRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            })
           }
           className="fixed inset-x-0 bottom-0 z-30 border-t border-clinical-border bg-clinical-panel text-left shadow-[0_-4px_12px_rgba(0,0,0,0.08)] lg:hidden"
           aria-label={`Current verdict: ${heroLabel}. Tap to scroll to it.`}
         >
           <Flash watch={rec.overallAction} tone={action.tone}>
-            <div className={`flex items-center gap-3 border-l-4 px-4 py-3 ${TONE_BANNER[action.tone]}`}>
+            <div
+              className={`flex items-center gap-3 border-l-4 px-4 py-3 ${TONE_BANNER[action.tone]}`}
+            >
               <span
                 className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white ${TONE_SOLID[action.tone]}`}
                 aria-hidden
               >
                 <VerdictIcon action={rec.overallAction} />
               </span>
-              <span className="min-w-0">
+              <span className="min-w-0 flex-1">
                 <span className="block truncate text-base font-semibold leading-tight">
                   {heroLabel}
                 </span>
@@ -192,48 +261,32 @@ export function RecommendationPanel({
                   </span>
                 )}
               </span>
+              {/* Live readouts, so a slider drag shows its effect even when the
+                  verdict itself doesn't flip. */}
+              <span className="shrink-0 text-right text-xs leading-tight text-clinical-muted">
+                <Flash watch={rec.khorana.totalScore} tone={action.tone}>
+                  <span className="block">
+                    Khorana{" "}
+                    <span className="font-mono text-sm font-semibold text-clinical-ink">
+                      {rec.khorana.totalScore}
+                    </span>
+                  </span>
+                </Flash>
+                <Flash watch={crcl ?? -1} tone={action.tone}>
+                  <span className="block">
+                    CrCl{" "}
+                    <span className="font-mono text-sm font-semibold text-clinical-ink">
+                      {crcl ?? "—"}
+                    </span>
+                  </span>
+                </Flash>
+              </span>
             </div>
           </Flash>
         </button>
       )}
 
-      <div className="card-body space-y-6">
-        {rec.staleLabWarning && (
-          <p className="rounded-md border-l-2 border-sev-caution bg-sev-cautionWash px-3 py-2 text-base text-sev-cautionInk">
-            <span className="font-semibold">Caution.</span> This decision uses
-            laboratory values older than 30 days ({rec.staleLabFields.join(", ")}
-            ). Please re-check before acting.
-          </p>
-        )}
-
-        {showOptions ? (
-          <>
-            <OptionGroup
-              heading="Preferred"
-              subheading="NCCN-supported ambulatory prophylaxis"
-              options={rec.preferredOptions}
-              emptyNote="No DOAC is currently appropriate — see alternatives."
-            />
-            {rec.alternativeOptions.length > 0 && (
-              <OptionGroup
-                heading="Alternative"
-                subheading={
-                  rec.preferredOptions.length === 0
-                    ? "DOACs blocked — use LMWH (never dabigatran/edoxaban)"
-                    : "LMWH — NCCN-concordant alternative"
-                }
-                options={rec.alternativeOptions}
-              />
-            )}
-            <AvoidList options={rec.avoidOptions} />
-          </>
-        ) : (
-          <p className="text-sm text-clinical-muted">
-            No pharmacologic anticoagulant options are presented for this
-            pathway. Review the alerts and contraindications below.
-          </p>
-        )}
-      </div>
+      {part === "all" && body}
     </section>
   );
 }
@@ -251,7 +304,12 @@ function StepMark({ tone }: { tone: Tone }) {
     strokeLinejoin: "round" as const,
     className: `${TONE_TEXT[tone]} shrink-0`,
   };
-  if (tone === "good") return <svg {...common}><path d="M20 6 9 17l-5-5" /></svg>;
+  if (tone === "good")
+    return (
+      <svg {...common}>
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    );
   if (tone === "danger")
     return (
       <svg {...common}>
@@ -282,14 +340,15 @@ function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
   const universal = rec.contraindications.absolute.find(
     (c) => c.appliesTo === "all",
   );
-  const inactive =
-    excluded || rec.overallAction === "not_indicated";
+  const inactive = excluded || rec.overallAction === "not_indicated";
 
   const steps: { label: string; value: string; note: string; tone: Tone }[] = [
     {
       label: "VTE risk",
       value: excluded ? "Excluded" : `Khorana ${rec.khorana.totalScore}`,
-      note: excluded ? "own pathway" : `${RISK_LABEL[rec.khorana.riskCategory]} risk`,
+      note: excluded
+        ? "own pathway"
+        : `${RISK_LABEL[rec.khorana.riskCategory]} risk`,
       tone: excluded
         ? "info"
         : rec.khorana.prophylaxisRecommended
@@ -316,7 +375,13 @@ function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
           : inactive
             ? "not assessed"
             : "no agent",
-      tone: preferredN ? "good" : altN ? "caution" : inactive ? "neutral" : "danger",
+      tone: preferredN
+        ? "good"
+        : altN
+          ? "caution"
+          : inactive
+            ? "neutral"
+            : "danger",
     },
     {
       label: "Decision",
@@ -347,7 +412,10 @@ function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
   return (
     <div className="grid grid-cols-2 gap-px border-y border-clinical-hairline bg-clinical-hairline sm:grid-cols-4">
       {steps.map((s) => (
-        <div key={s.label} className={`pathway-cell px-4 py-3 ${TONE_WASH[s.tone]}`}>
+        <div
+          key={s.label}
+          className={`pathway-cell px-4 py-3 ${TONE_WASH[s.tone]}`}
+        >
           <div className="flex items-center gap-1.5">
             <StepMark tone={s.tone} />
             <span className="pathway-label">{s.label}</span>
@@ -408,9 +476,13 @@ function OptionRow({ o }: { o: DOACOption }) {
           {[o.dose, o.route, o.frequency].filter(Boolean).join(" ")}
         </span>
       </div>
-      {o.duration && <p className="text-sm text-clinical-muted">{o.duration}</p>}
+      {o.duration && (
+        <p className="text-sm text-clinical-muted">{o.duration}</p>
+      )}
       {o.source && (
-        <p className="text-[0.82rem] font-medium text-clinical-inkSoft">Source: {o.source}</p>
+        <p className="text-[0.82rem] font-medium text-clinical-inkSoft">
+          Source: {o.source}
+        </p>
       )}
       <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.82rem] text-clinical-inkSoft">
         <span className="inline-flex items-center gap-1.5">
@@ -444,7 +516,9 @@ function AvoidList({ options }: { options: DOACOption[] }) {
           >
             <span
               className={`text-[0.95rem] font-semibold capitalize text-clinical-inkSoft ${
-                o.hasNccnProphylaxisIndication ? "line-through decoration-2" : ""
+                o.hasNccnProphylaxisIndication
+                  ? "line-through decoration-2"
+                  : ""
               }`}
             >
               {o.name}

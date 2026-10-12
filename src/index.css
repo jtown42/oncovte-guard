@@ -219,9 +219,15 @@
   textarea {
     font-size: 16px !important;
   }
-  /* A thumb-sized slider handle. */
+  /* A thumb-sized slider handle on a tall, finger-sized hit area: the visible
+     track is a 6px stripe painted through the middle of a 36px input. Sideways
+     drags go to the slider (see Range in ScenarioEditor); vertical ones scroll. */
   .range-clinical {
-    height: 6px;
+    height: 36px;
+    background: linear-gradient(#d8dedb, #d8dedb) center / 100% 6px no-repeat;
+  }
+  .range-touch {
+    touch-action: pan-y;
   }
   .range-clinical::-webkit-slider-thumb {
     width: 28px;
@@ -232,5 +238,11 @@
     width: 28px;
     height: 28px;
     border-radius: 6px;
+  }
+}
+@media (pointer: coarse) {
+  /* Touches go to the Range wrapper's gesture handling, not the native input. */
+  .range-clinical {
+    pointer-events: none;
   }
 }
