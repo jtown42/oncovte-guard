@@ -1,0 +1,478 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "timestamp": "2026-10-12T03:07:51.014Z",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:e8e520c7-2b98-4a66-890d-cabb8a70201a",
+      "resource": {
+        "resourceType": "GuidanceResponse",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Prophylaxis recommended — LMWH: Enoxaparin 40 mg SC daily or Dalteparin 5,000 units SC daily</p></div>"
+        },
+        "moduleUri": "https://oncovte-guard.pages.dev/fhir/modules/vte-prophylaxis",
+        "status": "success",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "occurrenceDateTime": "2026-10-12T03:07:51.014Z",
+        "performer": {
+          "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "note": [
+          {
+            "text": "Prophylaxis recommended — LMWH: Enoxaparin 40 mg SC daily or Dalteparin 5,000 units SC daily"
+          }
+        ],
+        "result": {
+          "reference": "urn:uuid:76817629-e7b4-4029-9b19-03a18a2cf5a1"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+      "resource": {
+        "resourceType": "Device",
+        "id": "oncovte-guard-engine",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.2.0.</p></div>"
+        },
+        "status": "active",
+        "deviceName": [
+          {
+            "name": "OncoVTE Guard Decision Engine",
+            "type": "user-friendly-name"
+          }
+        ],
+        "version": [
+          {
+            "type": {
+              "text": "software"
+            },
+            "value": "1.0.0"
+          },
+          {
+            "type": {
+              "text": "DOAC interaction knowledge base"
+            },
+            "value": "1.2.0"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:6a40335c-1f9b-4db2-91a9-832e6472ddc0",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Khorana 2 (intermediate). Non-Hodgkin lymphoma (+1); WBC &gt;11 ×10⁹/L (+1); total 2. Prophylaxis threshold is ≥2.</p></div>"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "occurrenceDateTime": "2026-10-12T03:07:51.014Z",
+        "performer": {
+          "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "code": {
+          "text": "Risk of cancer-associated venous thromboembolism"
+        },
+        "method": {
+          "text": "Khorana score"
+        },
+        "basis": [
+          {
+            "reference": "Condition/condition-2",
+            "display": "Mantle cell lymphoma"
+          },
+          {
+            "reference": "Observation/obs-platelets-2",
+            "display": "Platelets 195 10*3/uL"
+          },
+          {
+            "reference": "Observation/obs-hemoglobin-2",
+            "display": "Hemoglobin 11.8 g/dL"
+          },
+          {
+            "reference": "Observation/obs-wbc-2",
+            "display": "WBC 12.3 10*3/uL"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "text": "Venous thromboembolism"
+            },
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate likelihood"
+                }
+              ],
+              "text": "Khorana 2 (intermediate)"
+            },
+            "rationale": "Non-Hodgkin lymphoma (+1); WBC >11 ×10⁹/L (+1); total 2. Prophylaxis threshold is ≥2."
+          }
+        ],
+        "note": [
+          {
+            "text": "Khorana AA et al., Blood 2008; tiers per NCCN VTE-C. Tier informs the ≥2 decision; it is not an individual risk estimate."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:93c7c122-4766-4396-902a-1068048b02dc",
+      "resource": {
+        "resourceType": "DetectedIssue",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Apixaban: major drug interaction. Avoid — Itraconazole interaction (FDA labeling). Strong dual CYP3A4 + P-gp inhibition markedly increases apixaban exposure. Mitigation: Use Enoxaparin or Dalteparin.</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+              "code": "DRG",
+              "display": "Drug Interaction Alert"
+            }
+          ],
+          "text": "Apixaban: major drug interaction"
+        },
+        "severity": "high",
+        "patient": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "identifiedDateTime": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "implicated": [
+          {
+            "display": "Apixaban (candidate prophylaxis agent)"
+          },
+          {
+            "reference": "MedicationRequest/medrx-itraconazole-2",
+            "display": "Itraconazole"
+          }
+        ],
+        "detail": "Avoid — Itraconazole interaction (FDA labeling). Strong dual CYP3A4 + P-gp inhibition markedly increases apixaban exposure.",
+        "mitigation": [
+          {
+            "action": {
+              "text": "Use Enoxaparin or Dalteparin"
+            },
+            "date": "2026-10-12T03:07:51.014Z"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:dc534b06-8b9c-4167-968d-ef690142b508",
+      "resource": {
+        "resourceType": "DetectedIssue",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Rivaroxaban: major drug interaction. Avoid — Itraconazole interaction (FDA labeling). Strong dual CYP3A4 + P-gp inhibition markedly increases rivaroxaban exposure. Mitigation: Use Enoxaparin or Dalteparin.</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+              "code": "DRG",
+              "display": "Drug Interaction Alert"
+            }
+          ],
+          "text": "Rivaroxaban: major drug interaction"
+        },
+        "severity": "high",
+        "patient": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "identifiedDateTime": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "implicated": [
+          {
+            "display": "Rivaroxaban (candidate prophylaxis agent)"
+          },
+          {
+            "reference": "MedicationRequest/medrx-itraconazole-2",
+            "display": "Itraconazole"
+          }
+        ],
+        "detail": "Avoid — Itraconazole interaction (FDA labeling). Strong dual CYP3A4 + P-gp inhibition markedly increases rivaroxaban exposure.",
+        "mitigation": [
+          {
+            "action": {
+              "text": "Use Enoxaparin or Dalteparin"
+            },
+            "date": "2026-10-12T03:07:51.014Z"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:6b3a5cc3-f9c5-4274-8c72-eeee5e8d6059",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Draft proposal, not an order: Enoxaparin 40 mg SC daily.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "requester": {
+          "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "67108",
+              "display": "enoxaparin"
+            }
+          ],
+          "text": "Enoxaparin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "Enoxaparin 40 mg SC daily"
+          }
+        ],
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-2",
+            "display": "Mantle cell lymphoma"
+          }
+        ],
+        "supportingInformation": [
+          {
+            "reference": "urn:uuid:6a40335c-1f9b-4db2-91a9-832e6472ddc0"
+          },
+          {
+            "reference": "urn:uuid:93c7c122-4766-4396-902a-1068048b02dc"
+          },
+          {
+            "reference": "urn:uuid:dc534b06-8b9c-4167-968d-ef690142b508"
+          }
+        ],
+        "note": [
+          {
+            "text": "Source: NCCN VTE-B-2. Standard fixed prophylactic dose."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:39d95e1f-69cc-409c-8898-8e4dd88de0ce",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Draft proposal, not an order: Dalteparin 5,000 units SC daily.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "requester": {
+          "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "67109",
+              "display": "dalteparin"
+            }
+          ],
+          "text": "Dalteparin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "Dalteparin 5,000 units SC daily"
+          }
+        ],
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-2",
+            "display": "Mantle cell lymphoma"
+          }
+        ],
+        "supportingInformation": [
+          {
+            "reference": "urn:uuid:6a40335c-1f9b-4db2-91a9-832e6472ddc0"
+          },
+          {
+            "reference": "urn:uuid:93c7c122-4766-4396-902a-1068048b02dc"
+          },
+          {
+            "reference": "urn:uuid:dc534b06-8b9c-4167-968d-ef690142b508"
+          }
+        ],
+        "note": [
+          {
+            "text": "Source: NCCN VTE-B-2. Standard fixed prophylactic dose."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:76817629-e7b4-4029-9b19-03a18a2cf5a1",
+      "resource": {
+        "resourceType": "RequestGroup",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Choose one: Enoxaparin 40 mg SC daily or Dalteparin 5,000 units SC daily.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "action": [
+          {
+            "title": "Prophylactic anticoagulant (choose one)",
+            "selectionBehavior": "exactly-one",
+            "action": [
+              {
+                "title": "Enoxaparin 40 mg SC daily",
+                "resource": {
+                  "reference": "urn:uuid:6b3a5cc3-f9c5-4274-8c72-eeee5e8d6059"
+                }
+              },
+              {
+                "title": "Dalteparin 5,000 units SC daily",
+                "resource": {
+                  "reference": "urn:uuid:39d95e1f-69cc-409c-8898-8e4dd88de0ce"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:47d4747b-de61-46a4-9f6a-dd4c46df7f93",
+      "resource": {
+        "resourceType": "Provenance",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.2.0) from 5 source record(s).</p></div>"
+        },
+        "target": [
+          {
+            "reference": "urn:uuid:e8e520c7-2b98-4a66-890d-cabb8a70201a"
+          },
+          {
+            "reference": "urn:uuid:6a40335c-1f9b-4db2-91a9-832e6472ddc0"
+          },
+          {
+            "reference": "urn:uuid:93c7c122-4766-4396-902a-1068048b02dc"
+          },
+          {
+            "reference": "urn:uuid:dc534b06-8b9c-4167-968d-ef690142b508"
+          },
+          {
+            "reference": "urn:uuid:6b3a5cc3-f9c5-4274-8c72-eeee5e8d6059"
+          },
+          {
+            "reference": "urn:uuid:39d95e1f-69cc-409c-8898-8e4dd88de0ce"
+          },
+          {
+            "reference": "urn:uuid:76817629-e7b4-4029-9b19-03a18a2cf5a1"
+          }
+        ],
+        "recorded": "2026-10-12T03:07:51.014Z",
+        "agent": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "author",
+                  "display": "Author"
+                }
+              ]
+            },
+            "who": {
+              "reference": "urn:uuid:4916b7ba-2dfb-4c84-a204-1f3e06e9a400",
+              "display": "OncoVTE Guard Decision Engine"
+            }
+          }
+        ],
+        "entity": [
+          {
+            "role": "source",
+            "what": {
+              "reference": "Condition/condition-2",
+              "display": "Mantle cell lymphoma"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-platelets-2",
+              "display": "Platelets 195 10*3/uL"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-hemoglobin-2",
+              "display": "Hemoglobin 11.8 g/dL"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-wbc-2",
+              "display": "WBC 12.3 10*3/uL"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "MedicationRequest/medrx-itraconazole-2",
+              "display": "Itraconazole"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

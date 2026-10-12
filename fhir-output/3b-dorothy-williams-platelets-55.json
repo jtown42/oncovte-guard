@@ -1,0 +1,489 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "timestamp": "2026-10-12T03:07:51.014Z",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:cf1ea56b-0559-40b6-8575-49f9cf32ec24",
+      "resource": {
+        "resourceType": "GuidanceResponse",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Prophylaxis recommended: Apixaban 2.5 mg PO BID</p></div>"
+        },
+        "moduleUri": "https://oncovte-guard.pages.dev/fhir/modules/vte-prophylaxis",
+        "status": "success",
+        "subject": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "occurrenceDateTime": "2026-10-12T03:07:51.014Z",
+        "performer": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "note": [
+          {
+            "text": "Prophylaxis recommended: Apixaban 2.5 mg PO BID"
+          }
+        ],
+        "result": {
+          "reference": "urn:uuid:a095ee1f-5a3e-4d56-a0b2-7d5a9a198e13"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+      "resource": {
+        "resourceType": "Device",
+        "id": "oncovte-guard-engine",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.2.0.</p></div>"
+        },
+        "status": "active",
+        "deviceName": [
+          {
+            "name": "OncoVTE Guard Decision Engine",
+            "type": "user-friendly-name"
+          }
+        ],
+        "version": [
+          {
+            "type": {
+              "text": "software"
+            },
+            "value": "1.0.0"
+          },
+          {
+            "type": {
+              "text": "DOAC interaction knowledge base"
+            },
+            "value": "1.2.0"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d2811cd0-fdb3-4a37-8190-e403aea282e4",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Khorana 3 (high). Lung cancer (+1); hemoglobin &lt;10 g/dL (+1); WBC &gt;11 ×10⁹/L (+1); total 3. Prophylaxis threshold is ≥2.</p></div>"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "occurrenceDateTime": "2026-10-12T03:07:51.014Z",
+        "performer": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "code": {
+          "text": "Risk of cancer-associated venous thromboembolism"
+        },
+        "method": {
+          "text": "Khorana score"
+        },
+        "basis": [
+          {
+            "reference": "Condition/condition-3",
+            "display": "Malignant neoplasm of upper lobe, bronchus or lung"
+          },
+          {
+            "display": "Platelets 55 (not from a source record)"
+          },
+          {
+            "reference": "Observation/obs-hemoglobin-3",
+            "display": "Hemoglobin 8.9 g/dL"
+          },
+          {
+            "reference": "Observation/obs-wbc-3",
+            "display": "WBC 14.2 10*3/uL"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "text": "Venous thromboembolism"
+            },
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "high",
+                  "display": "High likelihood"
+                }
+              ],
+              "text": "Khorana 3 (high)"
+            },
+            "rationale": "Lung cancer (+1); hemoglobin <10 g/dL (+1); WBC >11 ×10⁹/L (+1); total 3. Prophylaxis threshold is ≥2."
+          }
+        ],
+        "note": [
+          {
+            "text": "Khorana AA et al., Blood 2008; tiers per NCCN VTE-C. Tier informs the ≥2 decision; it is not an individual risk estimate."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:a28b1d6f-7915-45f5-be44-649225da1c08",
+      "resource": {
+        "resourceType": "DetectedIssue",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Rivaroxaban: avoid at this renal function. Avoid at CrCl &lt;30 mL/min (NCCN VTE-B). Mitigation: Use Apixaban.</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "https://oncovte-guard.pages.dev/fhir/CodeSystem/finding",
+              "code": "renal_avoid"
+            }
+          ],
+          "text": "Rivaroxaban: avoid at this renal function"
+        },
+        "severity": "high",
+        "patient": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "identifiedDateTime": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "implicated": [
+          {
+            "display": "Rivaroxaban (candidate prophylaxis agent)"
+          },
+          {
+            "reference": "Observation/obs-creatinine-3",
+            "display": "Serum creatinine 2 mg/dL"
+          }
+        ],
+        "detail": "Avoid at CrCl <30 mL/min (NCCN VTE-B).",
+        "mitigation": [
+          {
+            "action": {
+              "text": "Use Apixaban"
+            },
+            "date": "2026-10-12T03:07:51.014Z"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:86695541-b017-4568-8c10-6d303a6eed19",
+      "resource": {
+        "resourceType": "DetectedIssue",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Enoxaparin: avoid at this renal function. Avoid LMWH at CrCl &lt;30 mL/min (NCCN VTE-B). Mitigation: Use Apixaban.</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "https://oncovte-guard.pages.dev/fhir/CodeSystem/finding",
+              "code": "renal_avoid"
+            }
+          ],
+          "text": "Enoxaparin: avoid at this renal function"
+        },
+        "severity": "high",
+        "patient": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "identifiedDateTime": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "implicated": [
+          {
+            "display": "Enoxaparin (candidate prophylaxis agent)"
+          },
+          {
+            "reference": "Observation/obs-creatinine-3",
+            "display": "Serum creatinine 2 mg/dL"
+          }
+        ],
+        "detail": "Avoid LMWH at CrCl <30 mL/min (NCCN VTE-B).",
+        "mitigation": [
+          {
+            "action": {
+              "text": "Use Apixaban"
+            },
+            "date": "2026-10-12T03:07:51.014Z"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:dd7e49cf-7104-46e8-b4d3-719f98a96eb8",
+      "resource": {
+        "resourceType": "DetectedIssue",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Dalteparin: avoid at this renal function. Avoid LMWH at CrCl &lt;30 mL/min (NCCN VTE-B). Mitigation: Use Apixaban.</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "https://oncovte-guard.pages.dev/fhir/CodeSystem/finding",
+              "code": "renal_avoid"
+            }
+          ],
+          "text": "Dalteparin: avoid at this renal function"
+        },
+        "severity": "high",
+        "patient": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "identifiedDateTime": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "implicated": [
+          {
+            "display": "Dalteparin (candidate prophylaxis agent)"
+          },
+          {
+            "reference": "Observation/obs-creatinine-3",
+            "display": "Serum creatinine 2 mg/dL"
+          }
+        ],
+        "detail": "Avoid LMWH at CrCl <30 mL/min (NCCN VTE-B).",
+        "mitigation": [
+          {
+            "action": {
+              "text": "Use Apixaban"
+            },
+            "date": "2026-10-12T03:07:51.014Z"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:af7a1820-c718-4f54-95c9-53b6fdabd4c2",
+      "resource": {
+        "resourceType": "DetectedIssue",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Apixaban: use with caution at this renal function. CrCl 15–29 mL/min: limited data (patients with CrCl &lt;30 were excluded from prophylaxis trials). Use with caution.</p></div>"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "https://oncovte-guard.pages.dev/fhir/CodeSystem/finding",
+              "code": "renal_caution"
+            }
+          ],
+          "text": "Apixaban: use with caution at this renal function"
+        },
+        "severity": "moderate",
+        "patient": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "identifiedDateTime": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "implicated": [
+          {
+            "display": "Apixaban (proposed)"
+          },
+          {
+            "reference": "Observation/obs-creatinine-3",
+            "display": "Serum creatinine 2 mg/dL"
+          }
+        ],
+        "detail": "CrCl 15–29 mL/min: limited data (patients with CrCl <30 were excluded from prophylaxis trials). Use with caution."
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:f26861a8-9698-4694-bdf0-3f525900b86e",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Draft proposal, not an order: Apixaban 2.5 mg PO BID.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "requester": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "1364430",
+              "display": "apixaban"
+            }
+          ],
+          "text": "Apixaban"
+        },
+        "dosageInstruction": [
+          {
+            "text": "Apixaban 2.5 mg PO BID"
+          }
+        ],
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-3",
+            "display": "Malignant neoplasm of upper lobe, bronchus or lung"
+          }
+        ],
+        "supportingInformation": [
+          {
+            "reference": "urn:uuid:d2811cd0-fdb3-4a37-8190-e403aea282e4"
+          }
+        ],
+        "note": [
+          {
+            "text": "Source: NCCN VTE-B-2 · AVERT trial. Up to 6 months, longer if VTE risk persists."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:a095ee1f-5a3e-4d56-a0b2-7d5a9a198e13",
+      "resource": {
+        "resourceType": "RequestGroup",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Choose one: Apixaban 2.5 mg PO BID.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-3",
+          "display": "Dorothy Williams"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "action": [
+          {
+            "title": "Prophylactic anticoagulant (choose one)",
+            "selectionBehavior": "exactly-one",
+            "action": [
+              {
+                "title": "Apixaban 2.5 mg PO BID",
+                "resource": {
+                  "reference": "urn:uuid:f26861a8-9698-4694-bdf0-3f525900b86e"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:21af2e4e-d012-4d25-ba0d-3b86cbb018ed",
+      "resource": {
+        "resourceType": "Provenance",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.2.0) from 4 source record(s).</p></div>"
+        },
+        "target": [
+          {
+            "reference": "urn:uuid:cf1ea56b-0559-40b6-8575-49f9cf32ec24"
+          },
+          {
+            "reference": "urn:uuid:d2811cd0-fdb3-4a37-8190-e403aea282e4"
+          },
+          {
+            "reference": "urn:uuid:a28b1d6f-7915-45f5-be44-649225da1c08"
+          },
+          {
+            "reference": "urn:uuid:86695541-b017-4568-8c10-6d303a6eed19"
+          },
+          {
+            "reference": "urn:uuid:dd7e49cf-7104-46e8-b4d3-719f98a96eb8"
+          },
+          {
+            "reference": "urn:uuid:af7a1820-c718-4f54-95c9-53b6fdabd4c2"
+          },
+          {
+            "reference": "urn:uuid:f26861a8-9698-4694-bdf0-3f525900b86e"
+          },
+          {
+            "reference": "urn:uuid:a095ee1f-5a3e-4d56-a0b2-7d5a9a198e13"
+          }
+        ],
+        "recorded": "2026-10-12T03:07:51.014Z",
+        "agent": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "author",
+                  "display": "Author"
+                }
+              ]
+            },
+            "who": {
+              "reference": "urn:uuid:d4859ed0-9840-47aa-ac8d-d6fda048af87",
+              "display": "OncoVTE Guard Decision Engine"
+            }
+          }
+        ],
+        "entity": [
+          {
+            "role": "source",
+            "what": {
+              "reference": "Condition/condition-3",
+              "display": "Malignant neoplasm of upper lobe, bronchus or lung"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-hemoglobin-3",
+              "display": "Hemoglobin 8.9 g/dL"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-wbc-3",
+              "display": "WBC 14.2 10*3/uL"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-creatinine-3",
+              "display": "Serum creatinine 2 mg/dL"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

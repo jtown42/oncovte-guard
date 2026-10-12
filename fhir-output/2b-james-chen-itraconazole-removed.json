@@ -1,0 +1,355 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "timestamp": "2026-10-12T03:07:51.014Z",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:b0e97b0f-a98b-4226-be30-1fb867523691",
+      "resource": {
+        "resourceType": "GuidanceResponse",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily</p></div>"
+        },
+        "moduleUri": "https://oncovte-guard.pages.dev/fhir/modules/vte-prophylaxis",
+        "status": "success",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "occurrenceDateTime": "2026-10-12T03:07:51.014Z",
+        "performer": {
+          "reference": "urn:uuid:da205c87-634b-47aa-891f-833d3074a810",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "note": [
+          {
+            "text": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily"
+          }
+        ],
+        "result": {
+          "reference": "urn:uuid:e1144e8c-0466-4ae1-a27b-4e980709daf5"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:da205c87-634b-47aa-891f-833d3074a810",
+      "resource": {
+        "resourceType": "Device",
+        "id": "oncovte-guard-engine",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.2.0.</p></div>"
+        },
+        "status": "active",
+        "deviceName": [
+          {
+            "name": "OncoVTE Guard Decision Engine",
+            "type": "user-friendly-name"
+          }
+        ],
+        "version": [
+          {
+            "type": {
+              "text": "software"
+            },
+            "value": "1.0.0"
+          },
+          {
+            "type": {
+              "text": "DOAC interaction knowledge base"
+            },
+            "value": "1.2.0"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:65a20dab-f4ee-495f-bbfa-a9f1aab64d05",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Khorana 2 (intermediate). Non-Hodgkin lymphoma (+1); WBC &gt;11 ×10⁹/L (+1); total 2. Prophylaxis threshold is ≥2.</p></div>"
+        },
+        "status": "final",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "occurrenceDateTime": "2026-10-12T03:07:51.014Z",
+        "performer": {
+          "reference": "urn:uuid:da205c87-634b-47aa-891f-833d3074a810",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "code": {
+          "text": "Risk of cancer-associated venous thromboembolism"
+        },
+        "method": {
+          "text": "Khorana score"
+        },
+        "basis": [
+          {
+            "reference": "Condition/condition-2",
+            "display": "Non-Hodgkin lymphoma"
+          },
+          {
+            "reference": "Observation/obs-platelets-2",
+            "display": "Platelets 195 10*3/uL"
+          },
+          {
+            "reference": "Observation/obs-hemoglobin-2",
+            "display": "Hemoglobin 11.8 g/dL"
+          },
+          {
+            "reference": "Observation/obs-wbc-2",
+            "display": "WBC 12.3 10*3/uL"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "text": "Venous thromboembolism"
+            },
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate likelihood"
+                }
+              ],
+              "text": "Khorana 2 (intermediate)"
+            },
+            "rationale": "Non-Hodgkin lymphoma (+1); WBC >11 ×10⁹/L (+1); total 2. Prophylaxis threshold is ≥2."
+          }
+        ],
+        "note": [
+          {
+            "text": "Khorana AA et al., Blood 2008; tiers per NCCN VTE-C. Tier informs the ≥2 decision; it is not an individual risk estimate."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:791cf069-5233-4071-83a4-f838a88b3820",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Draft proposal, not an order: Apixaban 2.5 mg PO BID.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "requester": {
+          "reference": "urn:uuid:da205c87-634b-47aa-891f-833d3074a810",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "1364430",
+              "display": "apixaban"
+            }
+          ],
+          "text": "Apixaban"
+        },
+        "dosageInstruction": [
+          {
+            "text": "Apixaban 2.5 mg PO BID"
+          }
+        ],
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-2",
+            "display": "Non-Hodgkin lymphoma"
+          }
+        ],
+        "supportingInformation": [
+          {
+            "reference": "urn:uuid:65a20dab-f4ee-495f-bbfa-a9f1aab64d05"
+          }
+        ],
+        "note": [
+          {
+            "text": "Source: NCCN VTE-B-2 · AVERT trial. Up to 6 months, longer if VTE risk persists."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:efff7bd0-bdcb-4f15-9232-7cc98006680c",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Draft proposal, not an order: Rivaroxaban 10 mg PO daily.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "requester": {
+          "reference": "urn:uuid:da205c87-634b-47aa-891f-833d3074a810",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "1114195",
+              "display": "rivaroxaban"
+            }
+          ],
+          "text": "Rivaroxaban"
+        },
+        "dosageInstruction": [
+          {
+            "text": "Rivaroxaban 10 mg PO daily"
+          }
+        ],
+        "reasonReference": [
+          {
+            "reference": "Condition/condition-2",
+            "display": "Non-Hodgkin lymphoma"
+          }
+        ],
+        "supportingInformation": [
+          {
+            "reference": "urn:uuid:65a20dab-f4ee-495f-bbfa-a9f1aab64d05"
+          }
+        ],
+        "note": [
+          {
+            "text": "Source: NCCN VTE-B-2 · CASSINI trial. Up to 6 months, longer if VTE risk persists."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:e1144e8c-0466-4ae1-a27b-4e980709daf5",
+      "resource": {
+        "resourceType": "RequestGroup",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Choose one: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily.</p></div>"
+        },
+        "status": "draft",
+        "intent": "proposal",
+        "subject": {
+          "reference": "Patient/patient-2",
+          "display": "James Chen"
+        },
+        "authoredOn": "2026-10-12T03:07:51.014Z",
+        "author": {
+          "reference": "urn:uuid:da205c87-634b-47aa-891f-833d3074a810",
+          "display": "OncoVTE Guard Decision Engine"
+        },
+        "action": [
+          {
+            "title": "Prophylactic anticoagulant (choose one)",
+            "selectionBehavior": "exactly-one",
+            "action": [
+              {
+                "title": "Apixaban 2.5 mg PO BID",
+                "resource": {
+                  "reference": "urn:uuid:791cf069-5233-4071-83a4-f838a88b3820"
+                }
+              },
+              {
+                "title": "Rivaroxaban 10 mg PO daily",
+                "resource": {
+                  "reference": "urn:uuid:efff7bd0-bdcb-4f15-9232-7cc98006680c"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:123b5c81-44b6-482b-8aab-4ab49c265e1e",
+      "resource": {
+        "resourceType": "Provenance",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.2.0) from 4 source record(s).</p></div>"
+        },
+        "target": [
+          {
+            "reference": "urn:uuid:b0e97b0f-a98b-4226-be30-1fb867523691"
+          },
+          {
+            "reference": "urn:uuid:65a20dab-f4ee-495f-bbfa-a9f1aab64d05"
+          },
+          {
+            "reference": "urn:uuid:791cf069-5233-4071-83a4-f838a88b3820"
+          },
+          {
+            "reference": "urn:uuid:efff7bd0-bdcb-4f15-9232-7cc98006680c"
+          },
+          {
+            "reference": "urn:uuid:e1144e8c-0466-4ae1-a27b-4e980709daf5"
+          }
+        ],
+        "recorded": "2026-10-12T03:07:51.014Z",
+        "agent": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "author",
+                  "display": "Author"
+                }
+              ]
+            },
+            "who": {
+              "reference": "urn:uuid:da205c87-634b-47aa-891f-833d3074a810",
+              "display": "OncoVTE Guard Decision Engine"
+            }
+          }
+        ],
+        "entity": [
+          {
+            "role": "source",
+            "what": {
+              "reference": "Condition/condition-2",
+              "display": "Non-Hodgkin lymphoma"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-platelets-2",
+              "display": "Platelets 195 10*3/uL"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-hemoglobin-2",
+              "display": "Hemoglobin 11.8 g/dL"
+            }
+          },
+          {
+            "role": "source",
+            "what": {
+              "reference": "Observation/obs-wbc-2",
+              "display": "WBC 12.3 10*3/uL"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -12,18 +12,24 @@ export interface LabValue {
   date: string; // ISO date
   loincCode: string;
   isStale: boolean; // >30 days old
+  /** Source FHIR resource ("Observation/<id>"); provenance only, never read by the engines. */
+  sourceRef?: string;
 }
 
 export interface MedicationItem {
   rxnormCode: string;
   display: string;
   status: string;
+  /** Source FHIR resource ("MedicationRequest/<id>"); provenance only, never read by the engines. */
+  sourceRef?: string;
 }
 
 export interface CancerConditionItem {
   code: string; // ICD-10-CM
   display: string;
   category: CancerCategory;
+  /** Source FHIR resource ("Condition/<id>"); provenance only, never read by the engines. */
+  sourceRef?: string;
 }
 
 export interface PatientLabs {

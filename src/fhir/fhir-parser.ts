@@ -118,6 +118,11 @@ function resources<T extends FhirResource>(
     .filter((r): r is T => !!r && r.resourceType === resourceType);
 }
 
+/** Provenance pointer to the source resource, when it has a server id. */
+function ref(r: FhirResource): { sourceRef?: string } {
+  return r.id ? { sourceRef: `${r.resourceType}/${r.id}` } : {};
+}
+
 export function parseConditions(bundle: Bundle): CancerConditionItem[] {
   const conditions = resources<Condition>(bundle, "Condition");
   const out: CancerConditionItem[] = [];
@@ -126,7 +131,12 @@ export function parseConditions(bundle: Bundle): CancerConditionItem[] {
     const code = coding?.code;
     if (!code || !isCancerCode(code)) continue;
     const display = coding?.display ?? c.code?.text ?? code;
-    out.push({ code, display, category: classifyIcd10(code).category });
+    out.push({
+      code,
+      display,
+      category: classifyIcd10(code).category,
+      ...ref(c),
+    });
   }
   return out;
 }
@@ -172,6 +182,7 @@ export function parseLatestLab(
     date,
     loincCode,
     isStale: isLabStale(date, now),
+    ...ref(latest),
   };
 }
 
@@ -206,6 +217,7 @@ export function parseMedications(bundle: Bundle): MedicationItem[] {
       rxnormCode: coding.code,
       display: coding.display ?? r.medicationCodeableConcept?.text ?? coding.code,
       status: r.status ?? "unknown",
+      ...ref(r),
     });
   }
   return out;
