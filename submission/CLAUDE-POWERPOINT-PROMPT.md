@@ -115,9 +115,9 @@ So here's the idea behind the whole app. Clinical guidelines are written for hum
 
 **Speaker notes:** "Here's how it uses FHIR. FHIR gives an app standardized records: a Condition for each diagnosis, an Observation for each lab, a MedicationRequest for each active drug, and the Patient. The app reads exactly those four, read-only, and it's strict about meaning — a diagnosis only from a coded Condition, a lab only from a coded Observation, and a stopped drug can't change the advice.
 
-It connects two ways. SMART App Launch, when a clinician opens it inside the chart. And CDS Hooks, when the EHR calls the same engine automatically at a workflow event — a chart opening, or a chemo order being signed.
+It connects two ways. SMART App Launch, when a clinician opens it inside the chart. And CDS Hooks, when the EHR calls the same engine automatically at a workflow event — a chart opening, or a new drug order being entered.
 
-Both doors feed one normalizer and one decision function. No clinical logic lives anywhere else, so the dashboard and the EHR alert can't disagree.
+Both doors run through the same normalizer and the same engine, so the dashboard and the EHR alert can't disagree.
 
 And the output is FHIR too. Structured FHIR in, structured FHIR out. I'll show you what that means with a real patient."
 
@@ -134,13 +134,13 @@ And the output is FHIR too. Structured FHIR in, structured FHIR out. I'll show y
 **The most important slide.** The headline sits at the top. The **starting still and the video are exactly the same size and position, stacked**, with the video above the still.
 **On slide:**
 - Headline: **James — one medication changes the decision**
-- Small caption: *72 · relapsed lymphoma · on itraconazole*
+- Small caption: *72 · lymphoma · on itraconazole*
 - `02-james-lmwh-start.png`, visible on entry. Optional callouts: **"LMWH recommended"** (verdict) and **"Avoid — itraconazole interaction"** (struck-through rows).
 - `05-james-toggle.mp4`: **embedded** (Insert → Video → This Device), **Start: On Click**, no loop, no audio, poster frame = first frame.
 - Any on-slide wording about the result says **"LMWH"** or **"enoxaparin or dalteparin,"** matching the screenshot.
 - No other animation.
 
-**Speaker notes:** "James is 72, with relapsed lymphoma, and he's taking itraconazole for a serious fungal infection. His risk qualifies him for prophylaxis.
+**Speaker notes:** "James is 72, with lymphoma, and he's taking itraconazole for a serious fungal infection. His risk qualifies him for prophylaxis.
 
 The engine checks every drug he's on against every blood thinner. It catches that itraconazole strongly inhibits CYP3A4 and P-gp, so the drug labeling says to avoid both oral options. Detecting that is only half the problem — the engine then evaluates what's left and recommends an injectable heparin, and shows exactly why each pill was ruled out.
 
@@ -152,7 +152,7 @@ The engine checks every drug he's on against every blood thinner. It catches tha
 
 ### Slide 7 — James's decision, written back as FHIR (3:50–4:20)
 **Layout:** `08-james-card-to-fhir.png` **full-bleed**. It's a finished slide (headline, what the clinician sees, the DetectedIssue JSON, footers). Add nothing on top.
-**Speaker notes:** "And here's that decision as FHIR. Each blocked drug becomes a DetectedIssue that points at the exact medication order that caused it — here, his itraconazole. The risk score becomes a RiskAssessment that points at the lab results it used. The recommendation becomes a draft proposal, never a signed order, and a Provenance record ties it all to the engine version. Every bundle passes the official HL7 validator, and it round-trips through a public FHIR server."
+**Speaker notes:** "And here's that decision as FHIR. Each blocked drug becomes a DetectedIssue that points at the exact medication order that caused it — here, his itraconazole. The risk score becomes a RiskAssessment that points at the lab results it used. The recommendation becomes a draft proposal, never a signed order, and a Provenance record ties it all to the engine version. Every demo bundle passes the official HL7 validator, and it round-trips through a public FHIR server."
 
 ---
 
