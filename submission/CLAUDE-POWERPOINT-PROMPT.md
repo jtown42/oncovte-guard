@@ -1,280 +1,213 @@
-# Prompt for Claude in PowerPoint — OncoVTE Guard AMIA deck
+# Prompt for Claude in PowerPoint — OncoVTE Guard AMIA deck (v2)
 
-> **How to use:** Open the **AMIA 2026 speaker template** in PowerPoint first, so Claude builds inside its theme. Then paste everything below the line into Claude. Insert the images and the video yourself when Claude asks for them; the files are in `talk-assets/`.
+> **How to use:** open the **AMIA 2026 speaker template** in PowerPoint first. Paste everything below the line into Claude. Insert the images and the video yourself when Claude leaves placeholders; the files are in `talk-assets/`.
+> v2 (2026-10-12) matches `submission/FINAL-TALK-SCRIPT.md` v2: 11 slides, with the new FHIR write-back slide (7) and panel slide (8), and Dorothy moved to a hidden slide 11.
 
 ---
 
 ## Role and goal
 
-You are building the slide deck for an **8-minute finalist talk at the AMIA 2026 / HL7 FHIR App Competition** (Dallas, Nov 10, 2026). There is no Q&A, and the audience votes for their top 3 apps at the end of the session. The app is **OncoVTE Guard**: FHIR-native clinical decision support for preventing blood clots (venous thromboembolism, VTE) in patients with cancer.
+You are building the slide deck for an **8-minute finalist talk at the AMIA 2026 / HL7 FHIR App Competition** (no Q&A; the audience votes for its top 3 apps at the end). The app is **OncoVTE Guard**: FHIR-native clinical decision support for preventing blood clots (VTE) in patients with cancer.
 
-The audience is informaticians, FHIR developers and clinicians. The talk is **an argument, not a product tour**. The deck has to make one idea stick until the vote:
+The audience is informaticians, FHIR developers and clinicians, and it rewards real FHIR depth. The talk is **an argument, not a product tour**. Two ideas must stick until the vote:
 
 > **GUIDELINE → RULE → CODE → TEST → DECISION**
+> **Structured FHIR in, structured FHIR out.**
 
-**Thesis (the whole talk in two sentences):** Clinical guidelines are written for humans, but implementing them reliably in software is hard. OncoVTE Guard makes that implementation explicit: every recommendation traces from a guideline, to executable logic, to an automated test, and when one treatment is ruled out, the engine evaluates the remaining options.
+**Thesis:** Clinical guidelines are written for humans, but implementing them reliably in software is hard. OncoVTE Guard makes that implementation explicit: every recommendation traces from a guideline, to executable logic, to an automated test, and when one treatment is ruled out, the engine evaluates the remaining options.
 
-The script is **frozen**. Use the on-slide text below exactly; don't add claims, statistics or wording. Put the spoken text for each slide into that slide's **speaker notes** word for word.
+The script is **frozen**. Use the on-slide text below exactly; don't add claims, statistics or wording. Put the spoken text for each slide into its **speaker notes** word for word.
 
 ## Hard constraints
 
-1. **Use the AMIA template** that is open: its theme, fonts, title/disclosure layouts and logo rules. Don't replace the master. Logos go on the title slide only (an academic logo is allowed there).
-2. **16:9 widescreen.** It will be shown on a projector in a large hall from a provided **Windows PC with no internet**.
-3. **Fonts:** use only the template fonts, or Windows-safe ones (Calibri, Segoe UI, Arial). No web fonts and nothing Mac-only, because they get substituted on Windows.
-4. **Legibility from the back of the room:** body text 24 pt minimum, headlines 36–44 pt, and the chain 40 pt or larger. Keep to about 25 words of on-slide text per slide; the speaker carries the detail.
-5. **Few words, lots of space.** This deck should look calm and confident, not dense. No clip art, stock photos, emoji, or decorative icons that add nothing.
-6. **Animations:** only the builds listed below, using plain **Appear** or a quick **Fade**. No flying, spinning or bouncing, and no slide transitions beyond Fade or none.
-7. **Never link media; embed it.** The video must be embedded in the file (see Slide 6).
-8. **Synthetic data only.** Don't invent patient details beyond what's written here.
-9. **Don't call any blood thinner "safe".** Use "recommended," "eligible," or "appropriate remaining option."
+1. **Use the open AMIA template:** its theme, fonts, title/disclosure layouts and logo rules. Don't replace the master.
+2. **16:9.** It will be projected in a large hall from a provided **Windows PC with no internet**. Slides can't be changed on site.
+3. **Fonts:** template fonts or Windows-safe ones (Calibri, Segoe UI, Arial, Consolas for code). No web or Mac-only fonts.
+4. **Legibility:** body text 24 pt minimum, headlines 36–44 pt, the chain 40 pt or larger, footnotes at least 12 pt. Keep to about 25 words of on-slide text per slide, not counting the image slides.
+5. **Calm and spacious.** No clip art, stock photos, emoji or decorative icons.
+6. **Animations:** only the builds listed, using plain Appear or a quick Fade. Transitions: Fade or none.
+7. **The video must be embedded, never linked** (slide 6).
+8. **No credentials or personal background anywhere** beyond the name and institution on the title slide. Never call a blood thinner "safe"; use "recommended," "eligible," or "appropriate remaining option."
+9. **Never imply real patients or a real population.** Patients are synthetic; the panel on slide 8 is synthetic and labeled as such.
 
 ## Visual system
 
-Work within the template. Where it leaves choices open:
+- **Palette:** teal-green `#2F6B57` (primary accent), dark green-black `#1F3D33` (headings), pale green `#EEF4F1` (callout fills), and a white background. Muted red `#B03A2E` **only** for "ruled out / avoid"; amber `#B7791F` **only** for "caution." Never use color alone; always pair it with a word.
+- **The chain motif** `GUIDELINE → RULE → CODE → TEST → DECISION`: rounded teal boxes or chevrons, white bold all-caps text, arrows between them. Draw it the same way on slides 3, 9 and 10.
+- **FHIR resource names** (Patient, Condition, DetectedIssue, …) appear as small rounded "chips" in Consolas on a pale green fill, styled the same everywhere (slides 4 and 9).
+- **Screenshots and slide images** are 16:9 (3840×2160). Show them as large as possible and never stretch them. Slides 7 and 8 are complete, designed slide images: place them full-bleed and add nothing on top except the slide number.
+- **Callouts on screenshots:** a 3 pt teal rounded rectangle plus a pill label of at most 6 words. At most 3 per screenshot.
 
-- **Palette:** deep teal-green `#2F6B57` as the primary accent (the app's color), dark green-black `#1F3D33` for headings, pale green `#EEF4F1` for callout fills, and white or off-white backgrounds. Use a muted red `#B03A2E` **only** for "ruled out / avoid" and amber `#B7791F` **only** for "caution." Never use color as the only signal; pair it with a word.
-- **The chain motif** `GUIDELINE → RULE → CODE → TEST → DECISION` is the visual signature. Draw it the same way every time it appears (Slides 3, 8 and 9): a row of rounded boxes or chevrons in teal with white bold all-caps text and arrows between them. Where only part of the chain appears (Slide 8 uses SOURCE → RULE → CODE → TEST), keep the same style.
-- **Screenshots** are 16:9 (3840×2160). Show them as large as possible: full width under a short headline, or full-bleed with a semi-transparent caption bar. Never crop out the verdict, and don't stretch them. Add a thin 1 px neutral border if they sit on white.
-- **Annotation callouts on screenshots:** a teal rounded rectangle outline (3 pt) around the region plus a short label of at most 6 words in a teal pill. Use at most 2–3 callouts per screenshot.
-- **Footnotes/citations:** 12–14 pt, gray, bottom-left. **Slide numbers** bottom-right if the template supports them.
+## Assets (I insert these; leave labeled placeholders sized and positioned correctly)
 
-## Assets (I will insert these; leave clearly labeled placeholders)
-
-| File (in `talk-assets/`) | Use on |
+| File (in `talk-assets/`) | Slide |
 |---|---|
-| `01-maria-recommend.png` | Slide 5 |
-| `02-james-lmwh-start.png` | Slide 6 (starting still) |
-| `05-james-toggle.mp4` (14.5 s, silent, H.264, 1920×1080) | Slide 6 (embedded video) |
-| `03-dorothy-42k-contraindicated.png` | Slide 7 (left) |
-| `04-dorothy-55k-apixaban-caution.png` | Slide 7 (right) |
-| `06-qr-live-demo.png` (opens https://oncovte-guard.pages.dev/) | Slide 9 |
+| `01-maria-recommend.png` | 5 |
+| `02-james-lmwh-start.png` | 6 (starting still) |
+| `05-james-toggle.mp4` (14.5 s, silent, H.264) | 6 (embedded video, on top of the still) |
+| `08-james-card-to-fhir.png` (complete slide image) | 7, full-bleed |
+| `09-panel-worklist.png` (complete slide image) | 8, full-bleed |
+| `06-qr-live-demo.png` (opens https://oncovte-guard.pages.dev/) | 10 |
+| `03-dorothy-42k-contraindicated.png`, `04-dorothy-55k-apixaban-caution.png` | 11 (hidden) |
 
-If you can't insert a file directly, add a placeholder rectangle of the right size and position labeled `[INSERT 02-james-lmwh-start.png]`, and keep building.
+If you can't insert a file, add a placeholder rectangle labeled `[INSERT 08-james-card-to-fhir.png — full bleed]` and keep going.
 
 ## Slide-by-slide
 
-There are **9 slides**. Slide 7 (Dorothy) is a backup that is skipped in the normal run, so it must make sense on its own and not break the flow from 6 to 8. Mark it in its speaker notes as `BACKUP — skip unless running short`.
-
-Times are cumulative, for the speaker's reference. Put them at the top of each slide's notes.
+Put the cumulative time at the top of each slide's speaker notes.
 
 ---
 
-### Slide 1 — Title  (0:00–0:20)
-
+### Slide 1 — Title (0:00–0:15)
 **Layout:** AMIA title layout.
-
 **On slide:**
-- Title: **OncoVTE Guard**
-- Subtitle: **FHIR-native decision support for cancer-associated VTE prophylaxis**
-- Presenter: **Justin Chestang** · [built at [school]; now PGY-1, [program]] (leave the brackets for me to fill in)
-- **2026 AMIA / HL7 FHIR App Competition**
-- Small supporting stat in a corner, about 14–16 pt, gray: *Only ~6 in 10 high-risk patients receive prophylaxis* (Holmes et al., *JCO Oncology Practice* 2026)
+- **OncoVTE Guard**
+- **FHIR-native decision support for cancer-associated VTE prophylaxis**
+- Justin Chestang · NYU Langone Health
+- 2026 AMIA / HL7 FHIR App Competition
+- Small gray corner stat, 14–16 pt: *Only ~6 in 10 high-risk patients receive prophylaxis, even in a dedicated program* (Holmes et al., *JCO Oncology Practice* 2026)
 
-**Speaker notes:**
-"We know how to prevent many blood clots in high-risk patients with cancer, but prophylaxis remains underused. Part of the challenge is that this isn't one decision — it's risk, bleeding, kidney function, drug interactions, and contraindications, all at once. I built OncoVTE Guard to do that reasoning from the EHR, on FHIR, and show exactly how it got there."
+**Speaker notes:** "We know how to prevent many blood clots in patients with cancer, but prophylaxis is still underused — partly because it isn't one decision. It's risk, bleeding, kidney function, drug interactions and contraindications, all at once. OncoVTE Guard does that reasoning from the EHR, on FHIR, and shows exactly how it got there."
 
 ---
 
-### Slide 2 — Disclosure  (0:20–0:30)
-
-**Layout:** the AMIA disclosure layout, if the template has one.
-
-**On slide:**
-- **Disclosures**
-- No financial relationships to disclose
-- Student project · synthetic data only · not used on real patients
-
-**Speaker notes:**
-"Quick disclosure: I have no financial relationships to report. OncoVTE Guard is a student project. It runs entirely on synthetic data and has never touched a real patient."
+### Slide 2 — Disclosure (0:15–0:25)
+**Layout:** the AMIA disclosure layout, if there is one.
+**On slide:** **Disclosures** · No financial relationships to disclose · Student project · synthetic data only · not used on real patients
+**Speaker notes:** "Quick disclosure: no financial relationships. This is a student project. It runs entirely on synthetic data and has never touched a real patient."
 
 ---
 
-### Slide 3 — The problem → the thesis  (0:30–1:35)
-
-**Layout:** a headline, then lines that **build one at a time on click**. The final reveal is the chain, large, across the full width.
-
-**On slide (each bullet is one build step):**
-1. VTE: major preventable morbidity and mortality in cancer
-2. Prevention works — pooled AVERT + CASSINI cut overall VTE risk ~half in higher-risk patients
-3. But prescribing safely means combining **5 things at once**:
-   risk score · bleeding risk · kidney function · drug interactions · contraindications
-   (show these five as a row of small labeled tiles, not a bullet list)
-4. Wrong one way → **clot**. Other way → **bleed**.
-5. *(Reveal. Dim steps 1–4 to about 40% opacity, or move them to a new section of the slide.)*
-   **The challenge isn't just making a recommendation.**
-   **It's making the reasoning inspectable and testable.**
-6. *(Final reveal: the chain motif, large)* **GUIDELINE → RULE → CODE → TEST → DECISION**
+### Slide 3 — The problem → the thesis (0:25–1:05)
+**Layout:** a headline, then builds one line at a time. Finish with the chain, large, across the full width.
+**On slide (one build step each):**
+1. Prevention works — but prescribing it safely means resolving **5 things at once**:
+   a row of five small tiles: **risk score · bleeding risk · kidney function · drug interactions · contraindications**
+2. One interacting drug can rule out **both** oral options. Kidney function narrows what's left.
+3. Wrong one way → **clot**. Other way → **bleed**.
+4. *(dim steps 1–3 to ~40%)* **The challenge isn't making a recommendation. It's making the reasoning inspectable and testable.**
+5. **GUIDELINE → RULE → CODE → TEST → DECISION** (chain motif)
 
 **Footnote:** ITAC 2022; pooled AVERT + CASSINI, overall VTE RR 0.56
 
-**Speaker notes:**
-"Here's why that question is hard. In cancer, blood clots are a major and preventable source of illness and death. And we *can* prevent them — pooled data from the AVERT and CASSINI trials cut overall clotting risk by nearly half in higher-risk patients.
+**Speaker notes:** "Prevention works — the AVERT and CASSINI trials showed that. The hard part is prescribing it safely, because five things have to be resolved at once: a risk score, bleeding risk, kidney function, drug interactions, and contraindications. One interacting drug can rule out both oral options; kidney function narrows what's left. Get it wrong one way, the patient clots. The other way, she bleeds.
 
-But to prescribe safely, you have to combine five things at once: a risk score, bleeding risk, kidney function, how the chemo interacts with the blood thinner, and contraindications. Get it wrong one way, the patient clots. The other way, she bleeds.
-
-So this is the idea behind the whole app. Clinical guidelines are written for humans, but implementing them reliably in software is hard. OncoVTE Guard makes that implementation explicit: every recommendation traces from a guideline, to a rule, to the code that runs it, to an automated test — and when one treatment is ruled out, the engine evaluates the remaining options. Everything I show you from here backs up that sentence."
+So here's the idea behind the whole app. Clinical guidelines are written for humans, but implementing them reliably in software is hard. OncoVTE Guard makes that implementation explicit: every recommendation traces from a guideline, to a rule, to the code that runs it, to an automated test — and when one treatment is ruled out, the engine evaluates the remaining options."
 
 ---
 
-### Slide 4 — How it uses FHIR: two doors, one engine  (1:35–2:55)
-
-**Layout:** **one diagram, built as native PowerPoint shapes** (not an image), so the text stays sharp. Read left to right:
+### Slide 4 — FHIR: two doors, one engine (1:05–2:15)
+**Layout:** one diagram built from **native PowerPoint shapes** (not an image), reading left to right:
 
 ```
- [ Clinician opens app ]            ┐
- [   SMART App Launch   ]  ───────► │
-                                     ├──►  [ Normalizer ] ──► [ ONE engine ] ──► [ One verdict + its source ]
- [ EHR invokes at a workflow event ] │
- [        CDS Hooks         ] ─────► ┘
+ IN (read-only)              DOORS                         OUT
+ [Patient]            [SMART App Launch]  ─┐
+ [Condition]     ──►   clinician opens it   ├──► [ ONE engine ] ──►  [GuidanceResponse]
+ [Observation]        [CDS Hooks]         ─┘                         [RiskAssessment]
+ [MedicationRequest]   EHR invokes it                                [DetectedIssue]
+                                                                     [MedicationRequest · draft]
+                                                                     [Provenance]
 ```
-
 - Headline: **Two doors, one engine**
-- Make the two "door" boxes visually equal, stacked on the left. Their arrows converge on one prominent "ONE engine" box in teal. The output box on the right reads "One verdict + its source."
-- Underneath, a strip of four labeled chips: **Reads 4 FHIR resources (read-only): Patient · Condition · Observation · MedicationRequest**
-- Optional small gray caption under the engine: *No clinical logic anywhere else — the dashboard and the EHR alert can't disagree.*
-- Build: the diagram can appear all at once. If you animate it, use two steps: the doors, then the engine plus output.
+- The left and right columns are resource chips. The engine box is the most prominent element (teal fill).
+- Caption under the diagram, 28 pt: ***Structured FHIR in, structured FHIR out.***
+- Optional build in 2 steps: (1) inputs, doors and engine; (2) the output column plus the caption.
 
-**Speaker notes:**
-"First, how it reads the chart. OncoVTE Guard gets its patient data through FHIR — the standard used by modern EHR APIs to expose structured clinical information to applications.
+**Speaker notes:** "Here's how it uses FHIR. FHIR gives an app standardized records: a Condition for each diagnosis, an Observation for each lab, a MedicationRequest for each active drug, and the Patient. The app reads exactly those four, read-only, and it's strict about meaning — a diagnosis only from a coded Condition, a lab only from a coded Observation, and a stopped drug can't change the advice.
 
-FHIR hands an app standardized records: a *Condition* for each diagnosis, an *Observation* for each lab, a *MedicationRequest* for each active drug, and a *Patient* for age and sex. My app reads exactly those four, read-only — it never writes to the chart. And it's strict about meaning: it takes a diagnosis only from a coded Condition and a lab only from a coded Observation, so a procedure can't be read as a diagnosis, and a stopped drug can't change the advice.
+It connects two ways. SMART App Launch, when a clinician opens it inside the chart. And CDS Hooks, when the EHR calls the same engine automatically at a workflow event — a chart opening, or a chemo order being signed.
 
-It connects two ways. One: SMART App Launch — the clinician opens it inside the chart, and the record authorizes it the way a website authorizes a 'sign in with Google' app. Two: CDS Hooks, which allows the same engine to be invoked automatically at a workflow event — a chart opening, or a chemo order being signed — and to return an advice card.
+Both doors feed one normalizer and one decision function. No clinical logic lives anywhere else, so the dashboard and the EHR alert can't disagree.
 
-Here's the part that matters for this room, and it's the same point I just made with the chain. Both paths feed one normalizer, which builds one patient object, which goes to one decision function. No clinical logic lives anywhere else — so the dashboard and the EHR alert can't disagree, by construction. One engine, two doors."
+And the output is FHIR too. Structured FHIR in, structured FHIR out. I'll show you what that means with a real patient."
 
 ---
 
-### Slide 5 — Demo: Maria (the clean case)  (2:55–3:30)
-
-**Layout:** short headline, then the screenshot as large as possible.
-
-**On slide:**
-- Headline: **Watch it reason — Maria**
-- Subhead (small): *Synthetic patient · real output from the app, not a mock-up*
-- Screenshot: `01-maria-recommend.png`
-- Callouts (at most 3):
-  - around the risk score: **"Risk score 5"**
-  - around the verdict: **"Apixaban or rivaroxaban"**
-  - around a card's "Source:" line: **"Guideline source on every card"**
-
-**Speaker notes:**
-"Let me show you the engine reasoning through two synthetic patients. These are real outputs from the application — not mock-ups.
-
-Maria has pancreatic cancer. Her risk score is 5. The engine checks interactions, renal function and platelets; nothing rules out the oral options, so it recommends apixaban or rivaroxaban, with the guideline source shown on screen."
+### Slide 5 — Maria (2:15–2:35)
+**Layout:** short headline; the screenshot as large as possible.
+**On slide:** Headline **Watch it reason — Maria** · subhead *Synthetic patient · real output from the app* · `01-maria-recommend.png` · callouts: **"Risk score 5"** (score), **"Apixaban or rivaroxaban"** (verdict), **"Guideline source on every card"** (a card's Source line).
+**Speaker notes:** "Two synthetic patients — real output from the app, not mock-ups. Maria has pancreatic cancer and a risk score of 5. Nothing rules out the oral options, so it recommends apixaban or rivaroxaban, with the guideline source on every card."
 
 ---
 
-### Slide 6 — Demo: James (the one slide with motion)  (3:30–4:50)
-
-This is the most important slide in the deck. Build it carefully.
-
-**Layout:** the headline at the top, with the **starting still and the video in the same position and size**, stacked exactly on top of each other. When the video starts it should look as if the still has come to life.
-
+### Slide 6 — James: one drug changes the decision (2:35–3:50)
+**The most important slide.** The headline sits at the top. The **starting still and the video are exactly the same size and position, stacked**, with the video above the still.
 **On slide:**
 - Headline: **James — one medication changes the decision**
-- Bottom (or a slim side panel), small caption: *72 · relapsed mantle cell lymphoma · on itraconazole*
-- Starting still: `02-james-lmwh-start.png`, visible when the slide opens. Optional callouts on the still:
-  - around the verdict: **"LMWH recommended"**
-  - around the struck-through oral cards: **"Avoid — itraconazole interaction (FDA labeling)"**
-- Video: `05-james-toggle.mp4`. **Embed it** (Insert → Video → This Device; never link it), with the same size and position as the still and placed above it.
-  - Playback: **Start: On Click**. No audio (the clip is silent). Don't loop. Don't use "hide while not playing" if that would show a blank frame; the still underneath covers the frame before playback.
-  - Set the poster frame to the first frame so nothing flashes.
-  - If you can't insert video, leave a placeholder labeled `[EMBED 05-james-toggle.mp4 here — On Click]` and tell me in your summary.
-- No other animation on this slide.
+- Small caption: *72 · relapsed lymphoma · on itraconazole*
+- `02-james-lmwh-start.png`, visible on entry. Optional callouts: **"LMWH recommended"** (verdict) and **"Avoid — itraconazole interaction"** (struck-through rows).
+- `05-james-toggle.mp4`: **embedded** (Insert → Video → This Device), **Start: On Click**, no loop, no audio, poster frame = first frame.
+- Any on-slide wording about the result says **"LMWH"** or **"enoxaparin or dalteparin,"** matching the screenshot.
+- No other animation.
 
-Note: the app shows **"Enoxaparin or Dalteparin."** Any on-slide text about the LMWH result must say **"LMWH (enoxaparin or dalteparin)"** or just **"LMWH,"** so it matches the screenshot.
+**Speaker notes:** "James is 72, with relapsed lymphoma, and he's taking itraconazole for a serious fungal infection. His risk qualifies him for prophylaxis.
 
-**Speaker notes:**
-"James is 72 with relapsed lymphoma. He's also taking itraconazole for a serious fungal infection, and his VTE risk qualifies him for prophylaxis.
+The engine checks every drug he's on against every blood thinner. It catches that itraconazole strongly inhibits CYP3A4 and P-gp, so the drug labeling says to avoid both oral options. Detecting that is only half the problem — the engine then evaluates what's left and recommends an injectable heparin, and shows exactly why each pill was ruled out.
 
-But watch the engine work through his meds. It checks every drug he's on against every blood thinner — and it catches that itraconazole strongly inhibits CYP3A4 and P-gp, so the drug labeling tells us to avoid *both* oral options in this setting. Detecting the interaction is only half the problem. The engine then evaluates the remaining options and selects an injectable heparin, enoxaparin — and tells you exactly why each pill was ruled out.
+[CLICK — play the clip.] Watch one thing. Remove itraconazole — the oral options come back. Add it back — we're back to the injectable. Same patient, one medication changed, different recommendation. The whole decision is re-evaluated every time.
 
-[CLICK — play the clip. Narrate calmly across it:]
-
-Watch one thing. Remove itraconazole — the oral options return. Add it back — we're back to enoxaparin. Same patient. One medication changed. Different recommendation.
-
-[Pause.]
-
-The entire decision is re-evaluated each time.
-
-[IF THE VIDEO WON'T PLAY: the still is already up. Say: 'If I take the itraconazole off his list, the engine re-runs and the oral options come back; add it again, back to the injectable.' Move on.]"
+[IF THE VIDEO WON'T PLAY: 'If I take itraconazole off his list, the engine re-runs and the oral options come back; add it again, and it's back to the injectable.']"
 
 ---
 
-### Slide 7 — Dorothy (BACKUP, skipped by default)
-
-**Layout:** two screenshots side by side, the same size, with an arrow between them labeled **"Platelets 42k → 55k."**
-
-**On slide:**
-- Headline: **Dorothy — it reasons about degree**
-- Left: `03-dorothy-42k-contraindicated.png`, labeled underneath **"42,000 → Contraindicated"** (red)
-- Right: `04-dorothy-55k-apixaban-caution.png`, labeled underneath **"55,000 → Apixaban with caution; rivaroxaban and LMWH avoided"** (amber)
-- Small caption: *Lung cancer · severe kidney impairment (CrCl ≈ 18)*
-
-**Speaker notes:**
-"BACKUP — skip unless running short (under ~7:00).
-
-One more, quickly. Dorothy has lung cancer and platelets of 42,000 — too low to anticoagulate, so: contraindicated. Raise her platelets past 50,000 and the verdict changes — but not to a simple yes. Her kidneys are severely impaired, so the engine allows one pill *with caution* and rules the others out. It reasons about degree — the difference between 'appropriate' and 'appropriate, with conditions.'"
-
-**Also:** hide this slide (Slide Show → Hide Slide) so the default run goes from 6 to 8, and tell me you did. I can unhide it.
+### Slide 7 — James's decision, written back as FHIR (3:50–4:20)
+**Layout:** `08-james-card-to-fhir.png` **full-bleed**. It's a finished slide (headline, what the clinician sees, the DetectedIssue JSON, footers). Add nothing on top.
+**Speaker notes:** "And here's that decision as FHIR. Each blocked drug becomes a DetectedIssue that points at the exact medication order that caused it — here, his itraconazole. The risk score becomes a RiskAssessment that points at the lab results it used. The recommendation becomes a draft proposal, never a signed order, and a Provenance record ties it all to the engine version. Every bundle passes the official HL7 validator, and it round-trips through a public FHIR server."
 
 ---
 
-### Slide 8 — Proof and honesty  (4:50–6:35)
+### Slide 8 — Same engine, whole panel (4:20–4:50) — first to cut
+**Layout:** `09-panel-worklist.png` **full-bleed** (a finished slide, already labeled "synthetic panel"). Add nothing on top.
+**Speaker notes:** "Because it's FHIR in and FHIR out, the same engine can run across a whole clinic panel through Bulk Data export. Here, on a synthetic panel I generated, it produces a worklist: patients who meet the guideline threshold with no anticoagulant on file. That's the underuse problem, at the population level.
 
-**Layout:** a top line, then two equal panels side by side, then a limits strip at the bottom. Build in 3 + 1 steps.
-
-**On slide:**
-- **Top line (appears with the slide):** *Clinical software only matters if you can trust **how** it reaches the answer.*
-- **Build 1, left panel: the boundary example, large:**
-  - **349 ×10⁹/L → 0 points**
-  - **350 ×10⁹/L → +1 point**
-  - small caption: *Platelet threshold in the risk score — both sides tested*
-- **Build 2, right panel: the chain motif:** **SOURCE → RULE → CODE → TEST**
-  - small caption: *Every clinical rule linked to its guideline, its code, and its test*
-- **Build 3:** one line: **Evaluates the remaining options, not just a red alert**
-- **Build 4, limits strip:** a quiet, full-width pale band, not red and not a warning style: *Prototype · synthetic data only · interaction table needs pharmacist review*
-- **Small corner badge (always visible):** **208 automated tests**
-
-**Speaker notes:**
-"Now — why trust it? Clinical software only matters if you can trust how it reaches the answer, so I built verification into the architecture. The tests I care about most check the exact decision boundaries — the points where the recommendation flips. A platelet count of 350 adds a risk point; 349 doesn't — and both are tested, because that's precisely where a quiet bug would change a recommendation. Every clinical rule is linked to its guideline source, the code that implements it, and a test that checks its behavior. And what you just watched is part of that: it evaluates the remaining options instead of firing a red alert.
-
-Let me be honest about the limits. This is still a prototype. It's only been evaluated on synthetic data, and the medication-interaction knowledge base still needs independent pharmacist validation. The next step is silent-mode validation on real charts, compared against expert review.
-
-[OPTIONAL, only if under 7:10: 'While building it I found 22 drug codes pointing at the wrong medication — one chemo code was actually a blood-pressure pill. My own tests missed it because the test data shared the codes. That's exactly why terminology needs outside validation.']"
+[FIRST CUT: if the timed run is over ~7:15, hide this slide.]"
 
 ---
 
-### Slide 9 — The ask  (6:35–7:10; stays up through applause)
-
-**Layout:** left two-thirds is a vertical flow; right third is a **large QR code**, at least 9 cm / 3.5 in square, with a white quiet zone around it.
-
+### Slide 9 — Proof and honesty (4:50–6:25)
+**Layout:** a top line; two equal panels; a FHIR line; a limits strip; a "next" line. Build 3 + 1.
 **On slide:**
-- Vertical flow (same chain styling, stacked):
-  - **PATIENT DATA**
-  - ↓
-  - **GUIDELINE → RULE → CODE → TEST**
-  - ↓
-  - **EXPLAINABLE DECISION**
-- QR: `06-qr-live-demo.png`, with the caption under it: **Try it live: oncovte-guard.pages.dev**
-- Bottom: **Vote for us** (confident and clear, not shouty)
-- No animation. Everything is visible as soon as the slide appears.
+- Top line (with the slide): *Clinical software only matters if you can trust **how** it reaches the answer.*
+- Build 1, left panel, large: **349 ×10⁹/L → 0 points** / **350 ×10⁹/L → +1 point** · caption *Platelet threshold — both sides tested*
+- Build 2, right panel: chain motif **SOURCE → RULE → CODE → TEST** · caption *Every clinical rule linked to its guideline, code and test*
+- Build 3: **FHIR output validated against R4 (HL7 validator: 0 errors)**
+- Build 4: a quiet pale full-width strip (not a warning style): *Prototype · synthetic data only · interaction table needs pharmacist review · diagnoses must be ICD-10-coded today*, and under it, small: *Next: silent-mode validation on real charts · SNOMED CT support · CDS Hooks order suggestions*
+- Small corner badge, always visible: **229 automated tests**
 
-**Speaker notes:**
-"OncoVTE Guard turns structured EHR data and clinical guidance into an inspectable, patient-specific decision. Every clinical rule is traceable from its source, to its implementation, to its test. And when one treatment option is ruled out, the engine reevaluates what remains. If that's the kind of FHIR application you'd like to see move forward, I'd be grateful for your vote. The app is live — scan the code and try it yourself. Thank you.
+**Speaker notes:** "Why trust it? I built verification into the architecture. The tests I care about most check the exact points where a recommendation flips. A platelet count of 350 adds a risk point; 349 doesn't — and both are tested, because that's precisely where a quiet bug would change the advice. Every clinical rule is linked to its guideline source, the code that implements it, and a test that checks its behavior.
 
-[Leave this slide up through applause. Eye contact on 'Thank you.']"
+Now the limits. It's a prototype, evaluated only on synthetic data. The interaction table still needs independent pharmacist review. And today it reads diagnoses coded in ICD-10 — supporting SNOMED is next, along with silent-mode validation on real charts compared against expert review.
+
+[OPTIONAL, only if under 7:00: 'While building it, I found 22 drug codes pointing at the wrong medication — one chemo code was actually a blood-pressure pill. My own tests missed it, because the test data shared the codes. That's exactly why terminology needs outside validation.']"
+
+---
+
+### Slide 10 — The ask (6:25–7:05; stays up through applause)
+**Layout:** the left two-thirds is a vertical flow in the chain style; the right third is a **large QR code**, at least 9 cm / 3.5 in, with a white quiet zone.
+**On slide:**
+- **PATIENT DATA (FHIR)** ↓ **GUIDELINE → RULE → CODE → TEST** ↓ **EXPLAINABLE DECISION (FHIR)**
+- QR `06-qr-live-demo.png`, captioned **Try it live: oncovte-guard.pages.dev**
+- **Vote for us**
+- No animation.
+
+**Speaker notes:** "OncoVTE Guard turns structured EHR data and clinical guidance into an inspectable, patient-specific decision — and hands that decision back as standard FHIR. Every clinical rule is traceable from its source, to its implementation, to its test. And when one treatment is ruled out, the engine re-evaluates what remains. If that's the kind of FHIR application you'd like to see move forward, I'd be grateful for your vote. The app is live — scan the code and try it yourself. Thank you."
+
+---
+
+### Slide 11 — Dorothy (HIDDEN backup)
+**Layout:** two equal screenshots side by side, with an arrow between them labeled **"Platelets 42k → 55k."** Headline **Dorothy — it reasons about degree** · left `03-…` labeled **"42,000 → Contraindicated"** (red) · right `04-…` labeled **"55,000 → Apixaban with caution; rivaroxaban and LMWH avoided"** (amber) · caption *Lung cancer · severe kidney impairment (CrCl ≈ 18)*.
+**Hide this slide** (Slide Show → Hide Slide).
+**Speaker notes:** "BACKUP — only if running very short. One more. Dorothy has lung cancer and platelets of 42,000 — too low to anticoagulate, so: contraindicated. Raise her platelets past 50,000 and the verdict changes, but not to a simple yes. Her kidneys are severely impaired, so the engine allows one pill with caution and rules out the others. It reasons about degree."
 
 ---
 
 ## Before you finish, check and report
-
-1. All 9 slides exist in order. Slide 7 is hidden.
-2. The on-slide text matches this prompt exactly. Nothing was added: no extra stats, claims, or "safe."
+1. 11 slides in order; slide 11 hidden.
+2. On-slide text matches this prompt exactly: no added stats, claims, credentials, or "safe."
 3. Every slide's speaker notes contain the spoken text above, word for word.
-4. The chain motif is styled the same way on Slides 3, 8 and 9.
-5. Slide 6: the still and the video are exactly the same size and position, and the video is **embedded** and set to **On Click**. If not, say so.
-6. Body text is at least 24 pt and footnotes at least 12 pt. Nothing overflows its box, and no text sits on top of a screenshot's verdict.
-7. Only template and Windows-safe fonts are used.
-8. List every placeholder I still need to fill: images, video, and my school/program.
+4. The chain motif is the same on slides 3, 9 and 10, and the FHIR chips are the same on slides 4 and 9.
+5. Slide 6: the still and the video are the same size and position, and the video is **embedded**, **On Click**.
+6. Slides 7 and 8 are full-bleed images with nothing layered on top.
+7. Text is at least 24 pt (footnotes at least 12 pt), nothing overflows, and no text covers a screenshot's verdict.
+8. Only template or Windows-safe fonts are used.
+9. List every placeholder I still need to fill.
