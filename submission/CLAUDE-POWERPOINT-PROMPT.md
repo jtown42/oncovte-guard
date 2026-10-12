@@ -65,7 +65,7 @@ Put the cumulative time at the top of each slide's speaker notes.
 - **FHIR-native decision support for cancer-associated VTE prophylaxis**
 - Justin Chestang · NYU Langone Health
 - 2026 AMIA / HL7 FHIR App Competition
-- Small gray corner stat, 14–16 pt: *Only ~6 in 10 high-risk patients receive prophylaxis, even in a dedicated program* (Holmes et al., *JCO Oncology Practice* 2026)
+- Small gray corner stat, 14–16 pt: *Even in a dedicated prevention program, only ~6 in 10 high-risk patients received prophylaxis* (Holmes et al., *JCO Oncology Practice* 2026)
 
 **Speaker notes:** "We know how to prevent many blood clots in patients with cancer, but prophylaxis is still underused — partly because it isn't one decision. It's risk, bleeding, kidney function, drug interactions and contraindications, all at once. OncoVTE Guard does that reasoning from the EHR, on FHIR, and shows exactly how it got there."
 
@@ -90,7 +90,7 @@ Put the cumulative time at the top of each slide's speaker notes.
 
 **Footnote:** ITAC 2022; pooled AVERT + CASSINI, overall VTE RR 0.56
 
-**Speaker notes:** "Prevention works — the AVERT and CASSINI trials showed that. The hard part is prescribing it safely, because five things have to be resolved at once: a risk score, bleeding risk, kidney function, drug interactions, and contraindications. One interacting drug can rule out both oral options; kidney function narrows what's left. Get it wrong one way, the patient clots. The other way, she bleeds.
+**Speaker notes:** "Prevention works — pooled AVERT and CASSINI data roughly halved VTE in higher-risk patients. The hard part is prescribing it safely, because five things have to be resolved at once: a risk score, bleeding risk, kidney function, drug interactions, and contraindications. One interacting drug can rule out both oral options; kidney function narrows what's left. Get it wrong one way, the patient clots. The other way, she bleeds.
 
 So here's the idea behind the whole app. Clinical guidelines are written for humans, but implementing them reliably in software is hard. OncoVTE Guard makes that implementation explicit: every recommendation traces from a guideline, to a rule, to the code that runs it, to an automated test — and when one treatment is ruled out, the engine evaluates the remaining options."
 

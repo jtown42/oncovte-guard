@@ -48,13 +48,13 @@
 - FHIR-native decision support for cancer-associated VTE prophylaxis
 - Justin Chestang · NYU Langone Health
 - 2026 AMIA / HL7 FHIR App Competition
-- *(small corner stat: only ~6 in 10 high-risk patients receive prophylaxis, even in a dedicated program — Holmes et al., JCO Oncology Practice 2026)*
+- *(small corner stat: Even in a dedicated prevention program, only ~6 in 10 high-risk patients received prophylaxis — Holmes et al., JCO Oncology Practice 2026)*
 
 **Say:**
 
 > "We know how to prevent many blood clots in patients with cancer, but prophylaxis is still underused — partly because it isn't one decision. It's risk, bleeding, kidney function, drug interactions and contraindications, all at once. OncoVTE Guard does that reasoning from the EHR, on FHIR, and shows exactly how it got there."
 
-**Delivery note:** Calm and evidence-first. The underuse number lives on the slide, not in your mouth. No credentials or personal background; your name and institution on the slide are enough.
+**Delivery note:** Calm and evidence-first. The underuse number lives on the slide, not in your mouth. Holmes defined "high-risk" as a Khorana *or* PROTECHT score ≥3 (573 patients, 59% treated), so never tie that number to the app's ≥2 threshold; ≥2 is the trial and guideline threshold (AVERT, CASSINI, ITAC, NCCN, ASCO). No credentials or personal background; your name and institution on the slide are enough.
 
 ---
 
@@ -86,11 +86,11 @@
 
 **Say:**
 
-> "Prevention works — the AVERT and CASSINI trials showed that. The hard part is prescribing it safely, because five things have to be resolved at once: a risk score, bleeding risk, kidney function, drug interactions, and contraindications. One interacting drug can rule out both oral options; kidney function narrows what's left. Get it wrong one way, the patient clots. The other way, she bleeds.
+> "Prevention works — pooled AVERT and CASSINI data roughly halved VTE in higher-risk patients. The hard part is prescribing it safely, because five things have to be resolved at once: a risk score, bleeding risk, kidney function, drug interactions, and contraindications. One interacting drug can rule out both oral options; kidney function narrows what's left. Get it wrong one way, the patient clots. The other way, she bleeds.
 >
 > So here's the idea behind the whole app. Clinical guidelines are written for humans, but implementing them reliably in software is hard. OncoVTE Guard makes that implementation explicit: every recommendation traces from a guideline, to a rule, to the code that runs it, to an automated test — and when one treatment is ruled out, the engine evaluates the remaining options."
 
-**Delivery note:** This is shorter than v1 on purpose. Don't explain the risk score; the hard part is the collision, and James will show it. Reveal the chain last and let it sit for a beat.
+**Delivery note:** "Pooled … roughly halved" is deliberate: CASSINI's intention-to-treat primary endpoint alone wasn't significant (OpenEvidence round 5), so don't say the trials each "showed" it. This is shorter than v1 on purpose. Don't explain the risk score; the hard part is the collision, and James will show it. Reveal the chain last and let it sit for a beat.
 
 ---
 
@@ -230,16 +230,18 @@
 5. **Thursday decision:** if the timed run is over ~7:15, hide slide 8 (panel).
 6. **At the venue:** arrive 15 min early, click through the whole deck once on the provided PC, check the clip plays.
 
-## Verify before upload
-- Holmes et al., *JCO Oncology Practice* 2026: the "~6 in 10" / 59% figure (slide 1).
-- Pooled AVERT + CASSINI "RR 0.56" (slide 3 footnote).
-- Both are flagged in `docs/PRESENTATION-APP-BRIEF.md`; neither is yet in `docs/REFERENCES.md`.
+## Evidence check (OpenEvidence round 5, 2026-10-12): all clinical claims confirmed
+- Holmes 2026: real; 340 of 573 (59%) high-risk patients treated in the Vermont prevention program; "high-risk" = Khorana or PROTECHT ≥3. PMID 41941694, doi:10.1200/OP-25-01211.
+- Pooled AVERT + CASSINI overall VTE RR 0.56 (95% CI 0.35–0.89): correct, as reported in ITAC 2022 (Farge et al., *Lancet Oncol* 2022;23:e334–e347).
+- Label "avoid" for itraconazole with apixaban 2.5 mg BID and rivaroxaban; Khorana ≥350 boundary; Maria's score of 5; Dorothy's renal and platelet calls: all confirmed.
+- Wording changed: slide 1 corner stat; slide 3 "pooled … roughly halved"; the fixed-dose LMWH card source now reads "NCCN VTE-B-2 (agent) · VTE-B-1 (standard dose)", because VTE-B-2's printed LMWH doses are the pancreatic weight-based ones.
+- Full answer: `docs/OPENEVIDENCE-FACTCHECK-5.md`; references: `docs/REFERENCES.md`.
 
 ## If something goes wrong on stage
 - **The clip won't play:** the still is up; describe the toggle in words (slide 6 has the line) and move on.
 - **Clicker or slide fails:** everything else is a static image; describe it and keep going.
 - **Lost your place:** every slide is self-contained; pick up the next line.
-- **Running long:** skip slide 8, then the "sign in" style asides, then trim Maria to one sentence.
+- **Running long:** skip slide 8, then trim Maria to one sentence.
 - **Running short:** add the 22-codes line on slide 9; only then consider unhiding Dorothy.
 
 ## Do not cut

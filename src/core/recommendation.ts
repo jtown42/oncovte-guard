@@ -259,7 +259,9 @@ function buildLmwhOption(
       ? "NCCN VTE-B-2 footnote · CONKO-004 / FRAGEM"
       : present.duration.includes("VTE-B-1")
         ? "NCCN VTE-B-1 (weight-adjusted dose)"
-        : "NCCN VTE-B-2",
+        : // VTE-B-2 lists the LMWH agents; its printed doses are the pancreatic
+          // weight-based ones, so the fixed dose cites VTE-B-1 (OpenEvidence round 5).
+          "NCCN VTE-B-2 (agent) · VTE-B-1 (standard dose)",
   };
 }
 

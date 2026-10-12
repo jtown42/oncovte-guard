@@ -147,6 +147,6 @@ describe("presentation alignment (talk script, 2026-10-11)", () => {
       const o = j.avoidOptions.find((x) => x.name === name)!;
       expect(o.ineligibleReason).toMatch(/^Avoid — Itraconazole interaction \(FDA labeling\)/);
     }
-    expect(j.alternativeOptions.find((o) => o.name === "enoxaparin")!.source).toBe("NCCN VTE-B-2");
+    expect(j.alternativeOptions.find((o) => o.name === "enoxaparin")!.source).toBe("NCCN VTE-B-2 (agent) · VTE-B-1 (standard dose)");
   });
 });

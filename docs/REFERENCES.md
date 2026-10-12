@@ -89,3 +89,23 @@ The follow-up answer's own four references are listed at the end of
 - **Unconfirmed identifier:** The 2025 ACC Concise Clinical Guidance (Ganatra et al.) volume, page range, and DOI remain unconfirmed; it was indexed as online-ahead-of-print. Do not transcribe a fabricated identifier.
 - **Retrieved DOIs:** KDIGO 2024 (10.1016/j.kint.2023.10.018) and the THSNA 2024 proceedings (10.1002/ajh.27535) are the only DOIs confirmed retrieved across the audit rounds.
 - **NCCN:** content is licensed — cite by name and page code only; do not reproduce tables or algorithm text.
+
+---
+
+## Added from OpenEvidence round 5 (talk fact-check, 2026-10-12)
+
+These back the claims in the v2 talk (`submission/FINAL-TALK-SCRIPT.md`). Identifiers are as OpenEvidence gave them. The full answer is in `docs/OPENEVIDENCE-FACTCHECK-5.md`.
+
+- Holmes CE, Martin KA, Devine D, et al. "Impact of Venous Thrombosis Prevention in Ambulatory Oncology: Importance of Guideline Adherence." *JCO Oncology Practice.* 2026 (epub 6 April 2026):OP2501211. doi:10.1200/OP-25-01211. PMID 41941694. [Title slide: 340/573 (59%) high-risk patients treated in a multidisciplinary prevention program (Vermont, 2016–2021); high-risk = Khorana or PROTECHT ≥3.]
+- Farge D, Frere C, Connors JM, et al. "2022 International Clinical Practice Guidelines for the Treatment and Prophylaxis of Venous Thromboembolism in Patients With Cancer, Including Patients With COVID-19." *Lancet Oncol.* 2022;23(7):e334–e347. doi:10.1016/S1470-2045(22)00160-7. [Slide 3 footnote: DOAC primary prophylaxis at Khorana ≥2 (grade 1B); pooled AVERT + CASSINI overall VTE RR 0.56 (95% CI 0.35–0.89), ITT, 6 months. Its LMWH 1A recommendation is pancreatic-specific.]
+- Alikhan R, Gomez K, Maraveyas A, et al. "Cancer-associated venous thrombosis in adults (second edition): A British Society for Haematology Guideline." *Br J Haematol.* 2024;205(1):71–87. doi:10.1111/bjh.19414. [Pooled AVERT + CASSINI corroboration; CASSINI ITT HR 0.66 (0.40–1.09), on-treatment HR 0.40 (0.20–0.80).]
+- Key NS, Khorana AA, Kuderer NM, et al. "Venous Thromboembolism Prophylaxis and Treatment in Patients With Cancer: ASCO Guideline Update." *J Clin Oncol.* 2023;41(16):3063–3071. doi:10.1200/JCO.23.00294.
+- Kuderer NM, Desai A, Lustberg MB, Lyman GH. "Mitigating acute chemotherapy-associated adverse events in patients with cancer." *Nat Rev Clin Oncol.* 2022;19(11):681–697. doi:10.1038/s41571-022-00685-3.
+- Khorana AA, Mackman N, Falanga A, et al. "Cancer-associated venous thromboembolism." *Nat Rev Dis Primers.* 2022;8(1):11. doi:10.1038/s41572-022-00336-y. [Khorana criteria, Table 2: platelets ≥350 ×10⁹/L.]
+- Di Leo G, Bordonaro CA, Capodanno D. "Antithrombotic therapy for cancer-associated venous thromboembolism." *Clin Res Cardiol.* 2026. doi:10.1007/s00392-026-02872-z.
+- Butera E, Wang TF, Pola R, Carrier M. "Implementation Failure: Thromboprophylaxis in Ambulatory Patients With Cancer." *Hematology Am Soc Hematol Educ Program.* 2025;2025(1):72–79. doi:10.1182/hematology.2025000689.
+- Wessler JD, Grip LT, Mendell J, Giugliano RP. "The P-Glycoprotein Transport System and Cardiovascular Drugs." *J Am Coll Cardiol.* 2013;61(25):2495–2502. doi:10.1016/j.jacc.2013.02.058.
+- Byon W, Garonzik S, Boyd RA, Frost CE. "Apixaban: A Clinical Pharmacokinetic and Pharmacodynamic Review." *Clin Pharmacokinet.* 2019;58(10):1265–1279. doi:10.1007/s40262-019-00775-z.
+- FDA labels: Eliquis (apixaban), updated 2024-05-23, §2.5 and §7.1 (avoid combined strong CYP3A4 + P-gp inhibitors such as itraconazole in patients on 2.5 mg BID); Xarelto (rivaroxaban), updated 2026-09-10, §7.2–7.3; enoxaparin sodium, updated 2026-02-04, §2.3 and §8.7 (30 mg daily at CrCl <30).
+- National Comprehensive Cancer Network. *Cancer-Associated Venous Thromboembolic Disease*, v1.2026 (updated 2026-05-05): VTE-A, VTE-B-1, VTE-B-2, VTE-C.
+- Supporting reviews cited only for figures: Willems RAL et al., *Cancer Med* 2026; Jalaber E et al., *J Thromb Thrombolysis* 2025;58(5):646–656, doi:10.1007/s11239-025-03085-3; Zhu Y et al., *Eur J Haematol* 2026;116(5):512–521, doi:10.1111/ejh.70130; Montomoli M et al., *Drugs* 2024;84(10):1199–1218, doi:10.1007/s40265-024-02077-6.
