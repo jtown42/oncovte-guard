@@ -204,3 +204,33 @@
 .present .present-hide {
   display: none;
 }
+
+/* Phones (the talk's QR code). Present mode is a wide-screen feature, so these
+   never touch the stage stills. */
+@media (max-width: 639.98px) {
+  .verdict-hero {
+    font-size: 1.6rem;
+  }
+}
+@media (max-width: 1023.98px) {
+  /* iOS Safari zooms the page when a focused field's text is under 16px. */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  /* A thumb-sized slider handle. */
+  .range-clinical {
+    height: 6px;
+  }
+  .range-clinical::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+  .range-clinical::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+}

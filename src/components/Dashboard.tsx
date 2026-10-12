@@ -1,5 +1,5 @@
 /** Full CDS dashboard for one patient: banner, recommendation, and detail cards. */
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import type { PatientData } from "../types/patient";
 import { generateRecommendation } from "../core/recommendation";
 import { PatientBanner } from "./PatientBanner";
@@ -15,10 +15,13 @@ import { FhirOutputPanel } from "./FhirOutputPanel";
 export function Dashboard({
   patient,
   source,
+  afterVerdict,
 }: {
   patient: PatientData;
   /** The patient as parsed from FHIR before what-if edits (FHIR output references only). */
   source?: PatientData;
+  /** Rendered right after the verdict and its alerts (the phone layout puts the editor here). */
+  afterVerdict?: ReactNode;
 }) {
   const rec = useMemo(() => generateRecommendation(patient), [patient]);
 
@@ -33,6 +36,8 @@ export function Dashboard({
       <RecommendationPanel rec={rec} />
 
       {rec.alerts.length > 0 && <AlertList alerts={rec.alerts} />}
+
+      {afterVerdict}
 
       {/* Everything below is the auditable evidence behind the decision above —
           subordinated by a quiet divider so the verdict clearly leads. */}

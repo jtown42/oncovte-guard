@@ -8,6 +8,7 @@ import type {
   ProphylaxisRecommendation,
 } from "../types/recommendation";
 import type { OverallAction } from "../types/recommendation";
+import { useEffect, useRef, useState } from "react";
 import { Flash } from "./Flash";
 import {
   ACTION,
@@ -102,14 +103,30 @@ export function RecommendationPanel({
     ? rec.preferredOptions
     : rec.alternativeOptions;
 
+  // Phones: when the hero scrolls away (the editor sits below it), a compact
+  // copy of the verdict pins to the bottom of the screen so an edit and its
+  // result stay visible together.
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [heroVisible, setHeroVisible] = useState(true);
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setHeroVisible(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <section className="card overflow-hidden shadow-hero">
       {/* Hero banner — flashes on every verdict change so the flip lands on stage. */}
       <Flash watch={rec.overallAction} tone={action.tone}>
-        <div className={`border-l-4 px-6 py-5 ${TONE_BANNER[action.tone]}`}>
-          <div className="flex items-start gap-4">
+        <div
+          ref={heroRef}
+          className={`border-l-4 px-4 py-4 sm:px-6 sm:py-5 ${TONE_BANNER[action.tone]}`}
+        >
+          <div className="flex items-start gap-3 sm:gap-4">
             <span
-              className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white ${TONE_SOLID[action.tone]}`}
+              className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white sm:h-11 sm:w-11 ${TONE_SOLID[action.tone]}`}
               aria-hidden
             >
               <VerdictIcon action={rec.overallAction} />
@@ -119,12 +136,12 @@ export function RecommendationPanel({
               {showOptions && regimen.length > 0 ? (
                 <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   {regimen.map((o, i) => (
-                    <span key={o.name} className="inline-flex items-baseline gap-2">
+                    <span key={o.name} className="inline-flex flex-wrap items-baseline gap-x-2">
                       {i > 0 && <span className="text-base text-clinical-muted">or</span>}
                       <span className="text-lg font-semibold capitalize text-clinical-ink">
                         {o.name}
                       </span>
-                      <span className="font-mono text-sm tabular-nums text-clinical-inkSoft">
+                      <span className="whitespace-nowrap font-mono text-sm tabular-nums text-clinical-inkSoft">
                         {[o.dose, o.route, o.frequency].filter(Boolean).join(" ")}
                       </span>
                     </span>
@@ -142,6 +159,43 @@ export function RecommendationPanel({
 
       {/* The decision pathway — the engine's fixed pipeline, told in one glance. */}
       <PathwayStrip rec={rec} />
+
+      {!heroVisible && (
+        <button
+          type="button"
+          onClick={() =>
+            heroRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+          }
+          className="fixed inset-x-0 bottom-0 z-30 border-t border-clinical-border bg-clinical-panel text-left shadow-[0_-4px_12px_rgba(0,0,0,0.08)] lg:hidden"
+          aria-label={`Current verdict: ${heroLabel}. Tap to scroll to it.`}
+        >
+          <Flash watch={rec.overallAction} tone={action.tone}>
+            <div className={`flex items-center gap-3 border-l-4 px-4 py-3 ${TONE_BANNER[action.tone]}`}>
+              <span
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white ${TONE_SOLID[action.tone]}`}
+                aria-hidden
+              >
+                <VerdictIcon action={rec.overallAction} />
+              </span>
+              <span className="min-w-0">
+                <span className="block truncate text-base font-semibold leading-tight">
+                  {heroLabel}
+                </span>
+                {showOptions && regimen.length > 0 && (
+                  <span className="block truncate text-sm text-clinical-inkSoft">
+                    {regimen.map((o, i) => (
+                      <span key={o.name}>
+                        {i > 0 && " or "}
+                        <span className="capitalize">{o.name}</span>
+                      </span>
+                    ))}
+                  </span>
+                )}
+              </span>
+            </div>
+          </Flash>
+        </button>
+      )}
 
       <div className="card-body space-y-6">
         {rec.staleLabWarning && (
@@ -291,7 +345,7 @@ function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-px border-y border-clinical-hairline bg-clinical-hairline sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-px border-y border-clinical-hairline bg-clinical-hairline sm:grid-cols-4">
       {steps.map((s) => (
         <div key={s.label} className={`pathway-cell px-4 py-3 ${TONE_WASH[s.tone]}`}>
           <div className="flex items-center gap-1.5">

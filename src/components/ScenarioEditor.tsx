@@ -27,6 +27,8 @@ interface ScenarioEditorProps {
   activePreset: number | null;
   onLoadPreset: (index: number) => void;
   onChange: (patch: Partial<Scenario>) => void;
+  /** Show the preset chips (off on phones, which have their own switcher row). */
+  showPresets?: boolean;
 }
 
 export function ScenarioEditor({
@@ -35,6 +37,7 @@ export function ScenarioEditor({
   activePreset,
   onLoadPreset,
   onChange,
+  showPresets = true,
 }: ScenarioEditorProps) {
   return (
     <section className="card overflow-hidden">
@@ -50,6 +53,8 @@ export function ScenarioEditor({
         </p>
       </div>
 
+      {showPresets && (
+        <>
       {/* Preset chips — primary navigation between the demo scenarios. */}
       <div className="border-b border-clinical-hairline bg-clinical-bg px-4 py-3">
         <span className="mb-2 block text-sm font-medium text-clinical-muted">
@@ -76,6 +81,9 @@ export function ScenarioEditor({
           )}
         </div>
       </div>
+
+        </>
+      )}
 
       <div className="space-y-4 px-4 py-4">
         <Field label="Cancer diagnosis (ICD-10)">
@@ -448,7 +456,7 @@ function MedPicker({
             {medLabel(code)}
             <button
               onClick={() => remove(code)}
-              className="flex h-4 w-4 items-center justify-center rounded-full text-clinical-muted hover:bg-sev-dangerWash hover:text-sev-danger"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-clinical-muted hover:bg-sev-dangerWash hover:text-sev-danger lg:h-4 lg:w-4 lg:text-sm"
               aria-label={`Remove ${medLabel(code)}`}
             >
               ×

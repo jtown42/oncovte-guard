@@ -25,6 +25,7 @@ import {
 import { initSmartClient } from "./fhir/smart-launch";
 import { fetchPatientData } from "./fhir/fhir-client";
 import { getAsOfDate } from "./ui/asof";
+import { useNarrow, NARROW_QUERY } from "./ui/useNarrow";
 
 type Mode = "smart" | "standalone";
 
@@ -65,7 +66,7 @@ export function App() {
     <div className={`min-h-screen ${present ? "present" : ""}`}>
       <TopBar mode={mode} present={present} onTogglePresent={togglePresent} />
       <main
-        className={`mx-auto px-4 py-4 ${mode === "standalone" ? "max-w-7xl" : "max-w-6xl"}`}
+        className={`mx-auto px-4 pb-24 pt-4 lg:pb-4 ${mode === "standalone" ? "max-w-7xl" : "max-w-6xl"}`}
       >
         {mode === "smart" ? <SmartView /> : <StandaloneView />}
       </main>
@@ -113,7 +114,7 @@ function TopBar({
         </div>
         <button
           onClick={onTogglePresent}
-          className={`ml-auto rounded-sm px-2.5 py-1 text-xs font-medium transition ${
+          className={`ml-auto hidden rounded-sm px-2.5 py-1 text-xs font-medium transition lg:inline-block ${
             present
               ? "bg-clinical-brand text-white"
               : "border border-clinical-border text-clinical-muted hover:border-clinical-brand hover:text-clinical-brand"
@@ -123,7 +124,7 @@ function TopBar({
         >
           {present ? "Exit presentation" : "Presentation mode"}
         </button>
-        <span className="present-hide rounded-sm border border-clinical-hairline bg-clinical-bg px-2.5 py-1 text-xs font-medium text-clinical-muted">
+        <span className="present-hide ml-auto rounded-sm border border-clinical-hairline lg:ml-0 bg-clinical-bg px-2.5 py-1 text-xs font-medium text-clinical-muted">
           {mode === "smart" ? "SMART-on-FHIR" : "Standalone demo"}
         </span>
       </div>
@@ -161,7 +162,8 @@ function SmartView() {
     };
   }, []);
 
-  if (state.kind === "loading") return <Centered>Loading patient data…</Centered>;
+  if (state.kind === "loading")
+    return <Centered>Loading patient data…</Centered>;
   if (state.kind === "error")
     return (
       <Centered>
@@ -184,14 +186,39 @@ function presetScenario(index: number): Scenario {
   return patientToScenario(presetPatient(index));
 }
 
+/**
+ * Which preset to open first: `?patient=<first name>` if given, otherwise
+ * James on a phone (the QR code from the talk lands on the story the audience
+ * just heard) and Maria on a wide screen.
+ */
+function initialPreset(roster: { index: number; name: string }[]): number {
+  if (typeof window === "undefined") return 0;
+  const want = new URLSearchParams(window.location.search).get("patient");
+  if (want) {
+    const hit = roster.find(
+      (p) => p.name.split(" ")[0].toLowerCase() === want.toLowerCase(),
+    );
+    if (hit) return hit.index;
+  }
+  if (window.matchMedia(NARROW_QUERY).matches) {
+    const james = roster.find((p) => p.name.startsWith("James"));
+    if (james) return james.index;
+  }
+  return 0;
+}
+
 function StandaloneView() {
   const roster = useMemo(() => listSyntheticPatients(), []);
-  const [scenario, setScenario] = useState<Scenario>(() => presetScenario(0));
+  const narrow = useNarrow();
+  const [first] = useState(() => initialPreset(roster));
+  const [scenario, setScenario] = useState<Scenario>(() =>
+    presetScenario(first),
+  );
   // The currently-loaded preset, or null once the user diverges ("custom").
-  const [activePreset, setActivePreset] = useState<number | null>(0);
+  const [activePreset, setActivePreset] = useState<number | null>(first);
   // The preset the scenario was seeded from (kept after edits), so the FHIR
   // output can point at that patient's real source resources.
-  const [sourceIndex, setSourceIndex] = useState(0);
+  const [sourceIndex, setSourceIndex] = useState(first);
   const source = useMemo(() => presetPatient(sourceIndex), [sourceIndex]);
 
   const patient = useMemo(() => scenarioToPatient(scenario), [scenario]);
@@ -206,32 +233,60 @@ function StandaloneView() {
     setActivePreset(null);
   };
 
-  return (
-    <div className="flex flex-col lg:grid lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start lg:gap-4">
-      {/* Sticky control rail — the verdict on the right stays in view while
-          a slider is dragged. On narrow screens (a phone from the talk's QR
-          code) the verdict comes first and the rail follows it. */}
-      <aside className="order-2 mt-4 lg:order-none lg:sticky lg:top-4 lg:mt-0 lg:max-h-[calc(100vh-1.5rem)] lg:overflow-y-auto lg:pr-1">
-        <ScenarioEditor
-          scenario={scenario}
-          presets={roster.map((p) => ({ index: p.index, name: p.name }))}
-          activePreset={activePreset}
-          onLoadPreset={loadPreset}
-          onChange={change}
-        />
-        <p className="present-hide mt-3 px-1 text-xs text-clinical-muted">
-          Synthetic data — no PHI. Every edit re-runs the real clinical engine.
+  const editor = (
+    <div id="edit" className="scroll-mt-4">
+      <ScenarioEditor
+        scenario={scenario}
+        presets={roster.map((p) => ({ index: p.index, name: p.name }))}
+        activePreset={activePreset}
+        onLoadPreset={loadPreset}
+        onChange={change}
+        showPresets={!narrow}
+      />
+    </div>
+  );
+
+  if (narrow) {
+    // Phone layout (the talk's QR code): a one-line orientation, a one-row
+    // patient switcher, the verdict, then the editor directly under it so a
+    // change and its result are one thumb-scroll apart. Same engine, same
+    // components as the wide layout — only the order differs.
+    return (
+      <div>
+        <p className="mb-3 text-sm leading-snug text-clinical-muted">
+          <span className="font-semibold text-clinical-ink">
+            Synthetic patients, no real data.
+          </span>{" "}
+          <a
+            href="#edit"
+            className="font-medium text-clinical-brand underline underline-offset-2"
+          >
+            Change anything below the verdict
+          </a>{" "}
+          and the real engine re-runs.
+          {activePreset !== null &&
+            roster[activePreset]?.name.startsWith("James") && (
+              <>
+                {" "}
+                Try removing{" "}
+                <span className="font-medium text-clinical-ink">
+                  itraconazole
+                </span>
+                .
+              </>
+            )}
         </p>
-      </aside>
-      <div className="order-1 min-w-0 lg:order-none">
-        {/* Phone-only patient switcher: the full rail sits below the verdict. */}
-        <div className="mb-3 flex flex-wrap gap-2 lg:hidden" aria-label="Example patients">
+        <div
+          className="mb-3 grid grid-cols-5 gap-1.5"
+          aria-label="Example patients"
+        >
           {roster.map((p) => (
             <button
               key={p.index}
               type="button"
               onClick={() => loadPreset(p.index)}
-              className={`rounded-md border px-3 py-1.5 text-sm font-medium ${
+              aria-pressed={activePreset === p.index}
+              className={`min-h-[44px] rounded-md border px-1 text-sm font-medium ${
                 activePreset === p.index
                   ? "border-clinical-brand bg-clinical-brand text-white"
                   : "border-clinical-border bg-white text-clinical-ink"
@@ -241,6 +296,22 @@ function StandaloneView() {
             </button>
           ))}
         </div>
+        <Dashboard patient={patient} source={source} afterVerdict={editor} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-[20rem_minmax(0,1fr)] items-start gap-4">
+      {/* Sticky control rail — the verdict on the right stays in view while
+          a slider is dragged. */}
+      <aside className="sticky top-4 max-h-[calc(100vh-1.5rem)] overflow-y-auto pr-1">
+        {editor}
+        <p className="present-hide mt-3 px-1 text-xs text-clinical-muted">
+          Synthetic data — no PHI. Every edit re-runs the real clinical engine.
+        </p>
+      </aside>
+      <div className="min-w-0">
         <Dashboard patient={patient} source={source} />
       </div>
     </div>
