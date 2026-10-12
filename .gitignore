@@ -11,3 +11,6 @@ npm-debug.log*
 
 # Scratch screenshots at repo root (real ones live in docs/screenshots/)
 /*.png
+
+# Bulk Data downloads (public server NDJSON); the summaries next to them are kept
+panel-screen-output/export-*/

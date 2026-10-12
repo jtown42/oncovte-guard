@@ -1,0 +1,368 @@
+{
+  "source": "synthetic-panel",
+  "screened": 40,
+  "withCancer": 40,
+  "rows": [
+    {
+      "patient": "Grace Walsh",
+      "id": "panel-27",
+      "cancer": "Malignant neoplasm of stomach",
+      "khorana": 5,
+      "verdict": "Recommended with cautions: Apixaban 2.5 mg PO BID",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Keiko Kim",
+      "id": "panel-11",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 4,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Tara Silva",
+      "id": "panel-20",
+      "cancer": "Malignant neoplasm of head of pancreas",
+      "khorana": 4,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Ben Evans",
+      "id": "panel-22",
+      "cancer": "Malignant neoplasm of sigmoid colon",
+      "khorana": 3,
+      "verdict": "Recommended with cautions: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Elena Novak",
+      "id": "panel-25",
+      "cancer": "Malignant neoplasm of head of pancreas",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Hector Brooks",
+      "id": "panel-08",
+      "cancer": "Malignant neoplasm of head of pancreas",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Rosa Lopez",
+      "id": "panel-18",
+      "cancer": "Malignant neoplasm of head of pancreas",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Rosa Mensah",
+      "id": "panel-38",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Ana Brooks",
+      "id": "panel-21",
+      "cancer": "Diffuse large B-cell lymphoma",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Carla Garcia",
+      "id": "panel-03",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "David Jensen",
+      "id": "panel-04",
+      "cancer": "Diffuse large B-cell lymphoma",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Elena Mensah",
+      "id": "panel-05",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Frank Patel",
+      "id": "panel-06",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Frank Reyes",
+      "id": "panel-26",
+      "cancer": "Malignant neoplasm of stomach",
+      "khorana": 2,
+      "verdict": "Recommended with cautions: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Hector Cohen",
+      "id": "panel-28",
+      "cancer": "Malignant neoplasm of breast",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Luis Novak",
+      "id": "panel-12",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Luis Okafor",
+      "id": "panel-32",
+      "cancer": "Malignant neoplasm of head of pancreas",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Quinn Ito",
+      "id": "panel-17",
+      "cancer": "Malignant neoplasm of head of pancreas",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Sam Okafor",
+      "id": "panel-19",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": false,
+      "flagged": true
+    },
+    {
+      "patient": "Ana Alvarez",
+      "id": "panel-01",
+      "cancer": "Malignant neoplasm of ovary",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended — LMWH: Enoxaparin 40 mg SC daily or Dalteparin 5,000 units SC daily",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Jamal Hughes",
+      "id": "panel-10",
+      "cancer": "Malignant neoplasm of breast",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Nora Alvarez",
+      "id": "panel-34",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Sam Patel",
+      "id": "panel-39",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 3,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Grace Tran",
+      "id": "panel-07",
+      "cancer": "Malignant neoplasm of ovary",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Irene Evans",
+      "id": "panel-09",
+      "cancer": "Malignant neoplasm of ovary",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Mei Reyes",
+      "id": "panel-13",
+      "cancer": "Diffuse large B-cell lymphoma",
+      "khorana": 2,
+      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Ben Diaz",
+      "id": "panel-02",
+      "cancer": "Malignant neoplasm of ovary",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    },
+    {
+      "patient": "Carla Hughes",
+      "id": "panel-23",
+      "cancer": "Malignant neoplasm of breast",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Irene Fischer",
+      "id": "panel-29",
+      "cancer": "Malignant neoplasm of breast",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    },
+    {
+      "patient": "Jamal Ito",
+      "id": "panel-30",
+      "cancer": "Malignant neoplasm of sigmoid colon",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Mei Silva",
+      "id": "panel-33",
+      "cancer": "Malignant neoplasm of ovary",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    },
+    {
+      "patient": "Nora Walsh",
+      "id": "panel-14",
+      "cancer": "Malignant neoplasm of sigmoid colon",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Paula Fischer",
+      "id": "panel-16",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    },
+    {
+      "patient": "Paula Garcia",
+      "id": "panel-36",
+      "cancer": "Malignant neoplasm of breast",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    },
+    {
+      "patient": "Tara Tran",
+      "id": "panel-40",
+      "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
+      "khorana": 1,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    },
+    {
+      "patient": "David Kim",
+      "id": "panel-24",
+      "cancer": "Malignant neoplasm of sigmoid colon",
+      "khorana": 0,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Keiko Lopez",
+      "id": "panel-31",
+      "cancer": "Malignant neoplasm of sigmoid colon",
+      "khorana": 0,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Omar Cohen",
+      "id": "panel-15",
+      "cancer": "Malignant neoplasm of breast",
+      "khorana": 0,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    },
+    {
+      "patient": "Omar Diaz",
+      "id": "panel-35",
+      "cancer": "Malignant neoplasm of prostate",
+      "khorana": 0,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": true,
+      "flagged": false
+    },
+    {
+      "patient": "Quinn Jensen",
+      "id": "panel-37",
+      "cancer": "Malignant neoplasm of sigmoid colon",
+      "khorana": 0,
+      "verdict": "Routine prophylaxis not indicated",
+      "onAnticoagulant": false,
+      "flagged": false
+    }
+  ],
+  "flagged": 19
+}

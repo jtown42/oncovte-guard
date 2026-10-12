@@ -1,0 +1,7 @@
+{
+  "source": "https://bulk-data.smarthealthit.org/fhir",
+  "screened": 100,
+  "withCancer": 0,
+  "flagged": 0,
+  "rows": []
+}

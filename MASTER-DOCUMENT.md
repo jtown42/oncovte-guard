@@ -836,6 +836,14 @@ Full answer verbatim in `docs/OPENEVIDENCE-REVIEW-4.md`. Confirmed as coded: hep
 - **Verified:** 16 tests in `tests/fhir-output/build.test.ts` (resource set per verdict for all five patients, the James toggle, Dorothy at 55k, draft/proposal only); HL7 validator 7/7 bundles 0 errors (the only warnings: the local finding CodeSystem is unpublished); SMART sandbox transaction 9 in / 9 read back with references rewritten to server ids (`scripts/post-fhir-output.ts`). Talk stills re-captured and pixel-identical.
 - **Not done:** CDS Hooks `create` suggestions carrying the proposals; publishing the local CodeSystem; Epic sandbox (does not accept these writes).
 
+### F20 — Panel screening over FHIR Bulk Data *(added 2026-10-11)*
+- **Why:** the underuse problem (Holmes 2026: 59% of high-risk patients treated even inside a structured program) is a population problem; a point-of-care tool only helps the patient whose chart is open.
+- **What:** `src/panel/screen.ts` groups a Bulk Data export (NDJSON per resource type) by patient, runs each through the same parser and `generateRecommendation`, and builds a worklist. The only logic outside the engine is the worklist filter: flagged = an eligible agent is recommended AND there is no active anticoagulant order (apixaban, rivaroxaban, dabigatran, edoxaban, enoxaparin, dalteparin, heparin, warfarin by RxNorm). `scripts/panel-screen.ts --export <base>` runs a real `$export` kick-off, polls, downloads, and screens.
+- **Public reference server (bulk-data.smarthealthit.org, 2026-10-12):** export succeeded (100 patients, ~19,000 resources). **0 of 100 were assessed:** all 639 Conditions are SNOMED CT-coded, and the parser accepts ICD-10-CM only. Only 4 of the 100 had a cancer at all (breast, prostate). See the SNOMED gap below.
+- **Synthetic panel:** `scripts/gen-panel.ts` (seeded, 40 patients, ICD-10-CM, KB-verified RxNorm codes, ~30% already anticoagulated) → 40 screened, 19 flagged. **That count reflects the generator's distributions, not a population;** the slide (`talk-assets/09-panel-worklist.png`) says so.
+- **Verified:** 5 tests in `tests/panel/screen.test.ts`.
+- **Known gap made visible — SNOMED CT:** a SNOMED-coded cancer Condition is not recognized, so the patient is skipped (no recommendation, no false one). Most non-US EHRs and Synthea code problems in SNOMED. Fix (roadmap): a curated SNOMED → Khorana-category map, reviewed clinically, or terminology-server translation ($translate) to ICD-10-CM.
+
 ## 13. Clinical-accuracy audit checklist for a reviewer
 
 Use this to stress-test correctness in ~30 minutes:
