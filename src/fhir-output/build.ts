@@ -334,7 +334,8 @@ export function buildFhirOutput(
       (c) => Array.isArray(c.appliesTo) && c.appliesTo.includes(o.name as never) && c.detail === o.ineligibleReason,
     );
     let r: Reference;
-    if (o.ineligibleReason.startsWith("Avoid —") && (o.worstDDI === "major" || o.worstDDI === "moderate")) {
+    const labelRule = o.ineligibleReason.startsWith("Not automatically recommended —");
+    if ((o.ineligibleReason.startsWith("Avoid —") && o.worstDDI === "major") || (labelRule && o.worstDDI === "moderate")) {
       // Major interactions, plus the rivaroxaban combined-moderate label rule
       // (its offenders are the moderate interactions named in the reason).
       const sev = o.worstDDI;

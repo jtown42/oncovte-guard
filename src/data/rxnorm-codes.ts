@@ -81,7 +81,7 @@ export const ANTICOAGULANT_RXNORM = new Set<string>([
 
 /**
  * Systemic corticosteroids that set the bleeding-panel flag automatically
- * (Vedovati HR 2.69). Hydrocortisone is left out: it is usually physiologic
+ * (a review prompt; observational evidence, Vedovati 2025). Hydrocortisone is left out: it is usually physiologic
  * replacement. Codes verified on RxNav 2026-10-31.
  */
 export const CORTICOSTEROID_RXNORM = new Set<string>([
@@ -91,20 +91,21 @@ export const CORTICOSTEROID_RXNORM = new Set<string>([
 ]);
 
 /**
- * Combined P-gp + moderate CYP3A4 inhibitors in the knowledge base. The
+ * Individually reviewed combined P-gp + moderate CYP3A inhibitors. The
  * rivaroxaban label (section 7.2) says not to use rivaroxaban with these at
  * CrCl 15 to <80 mL/min unless the benefit justifies the risk; apixaban's label
- * has no such statement (OpenEvidence rules review, 2026-10-31).
+ * has no such statement. This is a reviewed list, not derived from the KB's
+ * enzyme fields (OpenEvidence follow-up, 2026-10-31). Deliberately NOT here:
+ * aprepitant (EMEND 12.3: P-gp interaction unlikely; no digoxin interaction),
+ * abiraterone (P-gp inhibition in vitro only), ceritinib (a strong CYP3A
+ * inhibitor clinically; needs its own review).
  */
 export const RIVAROXABAN_COMBINED_MODERATE_RXNORM = new Set<string>([
-  "3008", // cyclosporine
-  "1608322", // isavuconazonium
-  "282388", // imatinib
-  "662281", // nilotinib
-  "1148495", // crizotinib
-  "1535457", // ceritinib
-  "358255", // aprepitant
-  "1100072", // abiraterone
+  "1148495", // crizotinib — XALKORI 12.3: CYP3A and P-gp inhibition
+  "1608322", // isavuconazonium — CRESEMBA 12.3: moderate CYP3A, P-gp inhibition
+  "662281", // nilotinib — TASIGNA 12.3: moderate CYP3A (repeat dosing), P-gp
+  "282388", // imatinib — Gleevec label (CYP3A) + transporter studies (Dohse 2010)
+  "3008", // cyclosporine — P-gp inhibitor; rivaroxaban PK study (Brings 2019)
 ]);
 
 /** CrCl band (mL/min) where that rivaroxaban rule applies: 15 to <80. */

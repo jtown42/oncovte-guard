@@ -13,7 +13,7 @@
  *     anemia/thrombocytopenia/anorexia/vomiting).
  *   - NCCN VTE-2 footnote — gastric/gastroesophageal tumors are at increased
  *     hemorrhage risk with DOACs (prefer LMWH).
- *   - Vedovati et al. — systemic corticosteroids (HR 2.69).
+ *   - Vedovati et al. — systemic corticosteroids (observational cancer-VTE treatment cohort).
  *   - ONCO-DOAC BLEED / ACCP — prior major bleeding; concurrent antiplatelet/NSAID.
  */
 
@@ -200,8 +200,10 @@ export function assessBleedingRisk(
     factors.push({
       key: "systemic_corticosteroid",
       label: "Systemic corticosteroids",
-      detail: "Systemic corticosteroids increase bleeding risk (Vedovati et al., HR 2.69).",
-      source: "Vedovati et al.",
+      // Observational, treatment-cohort evidence; a review prompt, never a block.
+      detail:
+        "Systemic corticosteroid detected. Review dose, duration, and other bleeding risks.",
+      source: "Vedovati et al. 2025 (observational cancer-VTE treatment cohort)",
       prefersLmwh: false,
     });
   }

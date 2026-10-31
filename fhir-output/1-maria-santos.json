@@ -1,10 +1,10 @@
 {
   "resourceType": "Bundle",
   "type": "collection",
-  "timestamp": "2026-10-31T15:39:24.287Z",
+  "timestamp": "2026-10-31T16:07:48.965Z",
   "entry": [
     {
-      "fullUrl": "urn:uuid:77cc5a64-03e2-4901-9f38-c616ab169573",
+      "fullUrl": "urn:uuid:d2b4cd0c-d06b-4ca6-a209-d66da0d6a7c7",
       "resource": {
         "resourceType": "GuidanceResponse",
         "text": {
@@ -17,9 +17,9 @@
           "reference": "Patient/patient-1",
           "display": "Maria Santos"
         },
-        "occurrenceDateTime": "2026-10-31T15:39:24.287Z",
+        "occurrenceDateTime": "2026-10-31T16:07:48.965Z",
         "performer": {
-          "reference": "urn:uuid:db0dcf43-ccdb-441f-b3c7-97cca411fc90",
+          "reference": "urn:uuid:f8b0064c-16e4-4915-9892-fbee36c694b7",
           "display": "OncoVTE Guard Decision Engine"
         },
         "note": [
@@ -28,18 +28,18 @@
           }
         ],
         "result": {
-          "reference": "urn:uuid:d8c3dcae-2d78-41f0-9a9a-40ca2f215d94"
+          "reference": "urn:uuid:cb433d9a-ed25-41e7-86f1-8e79a097f204"
         }
       }
     },
     {
-      "fullUrl": "urn:uuid:db0dcf43-ccdb-441f-b3c7-97cca411fc90",
+      "fullUrl": "urn:uuid:f8b0064c-16e4-4915-9892-fbee36c694b7",
       "resource": {
         "resourceType": "Device",
         "id": "oncovte-guard-engine",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.3.1.</p></div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.3.2.</p></div>"
         },
         "status": "active",
         "deviceName": [
@@ -59,13 +59,13 @@
             "type": {
               "text": "DOAC interaction knowledge base"
             },
-            "value": "1.3.1"
+            "value": "1.3.2"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:c90427bd-196f-4c92-88ee-8384188568ab",
+      "fullUrl": "urn:uuid:c752d4f7-cd40-4351-bd9f-2cfdb78d5b5b",
       "resource": {
         "resourceType": "RiskAssessment",
         "text": {
@@ -77,9 +77,9 @@
           "reference": "Patient/patient-1",
           "display": "Maria Santos"
         },
-        "occurrenceDateTime": "2026-10-31T15:39:24.287Z",
+        "occurrenceDateTime": "2026-10-31T16:07:48.965Z",
         "performer": {
-          "reference": "urn:uuid:db0dcf43-ccdb-441f-b3c7-97cca411fc90",
+          "reference": "urn:uuid:f8b0064c-16e4-4915-9892-fbee36c694b7",
           "display": "OncoVTE Guard Decision Engine"
         },
         "code": {
@@ -132,7 +132,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:2d31625d-66aa-4b98-a649-1293add20b56",
+      "fullUrl": "urn:uuid:af4d6e75-1c00-48b2-9c5b-8771af16e1b6",
       "resource": {
         "resourceType": "MedicationRequest",
         "text": {
@@ -145,9 +145,9 @@
           "reference": "Patient/patient-1",
           "display": "Maria Santos"
         },
-        "authoredOn": "2026-10-31T15:39:24.287Z",
+        "authoredOn": "2026-10-31T16:07:48.965Z",
         "requester": {
-          "reference": "urn:uuid:db0dcf43-ccdb-441f-b3c7-97cca411fc90",
+          "reference": "urn:uuid:f8b0064c-16e4-4915-9892-fbee36c694b7",
           "display": "OncoVTE Guard Decision Engine"
         },
         "medicationCodeableConcept": {
@@ -173,7 +173,7 @@
         ],
         "supportingInformation": [
           {
-            "reference": "urn:uuid:c90427bd-196f-4c92-88ee-8384188568ab"
+            "reference": "urn:uuid:c752d4f7-cd40-4351-bd9f-2cfdb78d5b5b"
           }
         ],
         "note": [
@@ -184,7 +184,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:c2b223b4-d301-44a1-b211-e70f23a2c01a",
+      "fullUrl": "urn:uuid:6632dac4-566a-453a-b589-1f4ec5d1f0b0",
       "resource": {
         "resourceType": "MedicationRequest",
         "text": {
@@ -197,9 +197,9 @@
           "reference": "Patient/patient-1",
           "display": "Maria Santos"
         },
-        "authoredOn": "2026-10-31T15:39:24.287Z",
+        "authoredOn": "2026-10-31T16:07:48.965Z",
         "requester": {
-          "reference": "urn:uuid:db0dcf43-ccdb-441f-b3c7-97cca411fc90",
+          "reference": "urn:uuid:f8b0064c-16e4-4915-9892-fbee36c694b7",
           "display": "OncoVTE Guard Decision Engine"
         },
         "medicationCodeableConcept": {
@@ -225,7 +225,7 @@
         ],
         "supportingInformation": [
           {
-            "reference": "urn:uuid:c90427bd-196f-4c92-88ee-8384188568ab"
+            "reference": "urn:uuid:c752d4f7-cd40-4351-bd9f-2cfdb78d5b5b"
           }
         ],
         "note": [
@@ -236,7 +236,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:d8c3dcae-2d78-41f0-9a9a-40ca2f215d94",
+      "fullUrl": "urn:uuid:cb433d9a-ed25-41e7-86f1-8e79a097f204",
       "resource": {
         "resourceType": "RequestGroup",
         "text": {
@@ -249,9 +249,9 @@
           "reference": "Patient/patient-1",
           "display": "Maria Santos"
         },
-        "authoredOn": "2026-10-31T15:39:24.287Z",
+        "authoredOn": "2026-10-31T16:07:48.965Z",
         "author": {
-          "reference": "urn:uuid:db0dcf43-ccdb-441f-b3c7-97cca411fc90",
+          "reference": "urn:uuid:f8b0064c-16e4-4915-9892-fbee36c694b7",
           "display": "OncoVTE Guard Decision Engine"
         },
         "action": [
@@ -262,13 +262,13 @@
               {
                 "title": "Apixaban 2.5 mg PO BID",
                 "resource": {
-                  "reference": "urn:uuid:2d31625d-66aa-4b98-a649-1293add20b56"
+                  "reference": "urn:uuid:af4d6e75-1c00-48b2-9c5b-8771af16e1b6"
                 }
               },
               {
                 "title": "Rivaroxaban 10 mg PO daily",
                 "resource": {
-                  "reference": "urn:uuid:c2b223b4-d301-44a1-b211-e70f23a2c01a"
+                  "reference": "urn:uuid:6632dac4-566a-453a-b589-1f4ec5d1f0b0"
                 }
               }
             ]
@@ -277,31 +277,31 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:18d65b15-33e5-45f4-b91e-009b922d5e7a",
+      "fullUrl": "urn:uuid:cf4f0a92-5bfe-4095-b6a9-19676218b360",
       "resource": {
         "resourceType": "Provenance",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.3.1) from 4 source record(s).</p></div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.3.2) from 4 source record(s).</p></div>"
         },
         "target": [
           {
-            "reference": "urn:uuid:77cc5a64-03e2-4901-9f38-c616ab169573"
+            "reference": "urn:uuid:d2b4cd0c-d06b-4ca6-a209-d66da0d6a7c7"
           },
           {
-            "reference": "urn:uuid:c90427bd-196f-4c92-88ee-8384188568ab"
+            "reference": "urn:uuid:c752d4f7-cd40-4351-bd9f-2cfdb78d5b5b"
           },
           {
-            "reference": "urn:uuid:2d31625d-66aa-4b98-a649-1293add20b56"
+            "reference": "urn:uuid:af4d6e75-1c00-48b2-9c5b-8771af16e1b6"
           },
           {
-            "reference": "urn:uuid:c2b223b4-d301-44a1-b211-e70f23a2c01a"
+            "reference": "urn:uuid:6632dac4-566a-453a-b589-1f4ec5d1f0b0"
           },
           {
-            "reference": "urn:uuid:d8c3dcae-2d78-41f0-9a9a-40ca2f215d94"
+            "reference": "urn:uuid:cb433d9a-ed25-41e7-86f1-8e79a097f204"
           }
         ],
-        "recorded": "2026-10-31T15:39:24.287Z",
+        "recorded": "2026-10-31T16:07:48.965Z",
         "agent": [
           {
             "type": {
@@ -314,7 +314,7 @@
               ]
             },
             "who": {
-              "reference": "urn:uuid:db0dcf43-ccdb-441f-b3c7-97cca411fc90",
+              "reference": "urn:uuid:f8b0064c-16e4-4915-9892-fbee36c694b7",
               "display": "OncoVTE Guard Decision Engine"
             }
           }

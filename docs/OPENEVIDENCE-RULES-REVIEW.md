@@ -229,6 +229,15 @@ OpenEvidence answered Parts A and B together, plus a separate severe-anemia answ
 - **Fluconazole** is a moderate warning for apixaban too (KB v1.3.1); nothing is blocked.
 - Tests: 254. All talk images re-captured and pixel-identical, so the deck didn't change.
 
+**Middle-step cleanup (OpenEvidence follow-up, same day):** OpenEvidence approved a narrower patch than the one first shipped.
+- The rivaroxaban list is now an **individually reviewed** set: crizotinib, isavuconazonium, nilotinib (label §12.3), imatinib and cyclosporine (label plus PK/transporter studies). **Removed:** aprepitant (EMEND §12.3: P-gp interaction unlikely; no digoxin interaction), abiraterone (P-gp inhibition in vitro only), ceritinib (a strong CYP3A inhibitor clinically; needs its own review).
+- The card no longer says "Avoid". It now reads "Not automatically recommended — … rivaroxaban labeling advises against use unless the potential benefit justifies the risk; requires individualized benefit–risk review." FHIR output still codes it as DRG.
+- Steroid factor text: "Systemic corticosteroid detected. Review dose, duration, and other bleeding risks." (observational, treatment-cohort evidence; never blocks).
+- Fluconazole + apixaban (KB v1.3.2): "possible increased bleeding risk; clinical evidence is mixed" (Holt 2022 association; Cid 2022 none after adjustment; Rohr 2022 no significant PK change). Editorial severity, not FDA-assigned; no exposure claim.
+- New tests: CrCl boundary (fires at 79.9 and 15, not at exactly 80 or below 15; no fire when renal data are missing) and non-activation for aprepitant, abiraterone, ceritinib and ribociclib. 256 tests.
+- All five demo patients' full outputs inspected, not just screenshots: verdicts, options and interaction ratings unchanged; Priya's bleeding panel gains the steroid factor. All talk images re-captured and pixel-identical.
+- Ceritinib (strong CYP3A inhibition vs its "moderate" KB entry) is queued for Tier 2.
+
 **Deferred to after Nov 10 (Tier 2):**
 - One precedence rule for interactions (label > ASCO class statement > reviews); voriconazole → major under ASCO's wording.
 - Rivaroxaban conditional block with combined P-gp + moderate CYP3A inhibitors at CrCl 15 to <80 (cyclosporine, isavuconazonium, imatinib, nilotinib, crizotinib, ceritinib, aprepitant, abiraterone, erythromycin, verapamil, diltiazem).

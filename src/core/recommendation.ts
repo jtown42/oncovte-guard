@@ -169,7 +169,7 @@ function majorDdiReason(ddiResults: DDICheckResult[], doac: DoacName): string {
  * CrCl 15 to <80 — do not use unless the benefit justifies the risk. Returns
  * the card text when the rule applies, else null. Apixaban is unaffected.
  */
-function rivaroxabanCombinedModerate(
+export function rivaroxabanCombinedModerate(
   ddiResults: DDICheckResult[],
   renal: RenalResult,
 ): string | null {
@@ -181,8 +181,11 @@ function rivaroxabanCombinedModerate(
   const hits = ddiResults.filter((r) => RIVAROXABAN_COMBINED_MODERATE_RXNORM.has(r.rxnormCode));
   if (hits.length === 0) return null;
   const names = hits.map((r) => r.medication).join(", ");
-  return `Avoid — ${names} interaction (FDA labeling). Combined P-gp and moderate CYP3A inhibition at CrCl 15–79 mL/min (CrCl ${Math.round(crcl)}): rivaroxaban labeling advises against use unless the benefit justifies the risk.`;
+  return `${NOT_AUTO} — ${names} with CrCl ${Math.round(crcl)} mL/min (15–79): combined P-gp and moderate CYP3A inhibition. Rivaroxaban labeling advises against use unless the potential benefit justifies the risk; requires individualized benefit–risk review.`;
 }
+
+/** Card prefix for the rivaroxaban label rule (shared with the FHIR output). */
+export const NOT_AUTO = "Not automatically recommended";
 
 /** F8 (WS-5): user-facing copy when CrCl could not be computed (missing weight/creatinine). */
 const RENAL_UNAVAILABLE_REASON =

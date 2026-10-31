@@ -1,7 +1,7 @@
 {
-  "kbVersion": "1.3.1",
+  "kbVersion": "1.3.2",
   "lastReviewed": "2026-10-31",
-  "provenanceNote": "Curated from two secondary references — the AHA 2022 Scientific Statement (Table 3) and Hellfritzsch et al. 2024 (100 agents evaluated) — plus FDA DOAC labeling, and applied consistently across the original 52 agents; the ibrutinib entry was re-sourced in v1.1.0 to its FDA labeling and the 2025 ACC cardio-oncology guidance. v1.2.0 (OpenEvidence review 4) corrected 16 RxNorm codes, re-rated 8 agents and added 18 agents (70 total); new reference-only cells not yet reviewed are rated unknown. The per-agent `sources` array is a KB-level attestation, not per-interaction citation. All `major` cells are individually anchored via `evidenceAnchor`: the 22 recommendation-changing cells (11 agents × apixaban/rivaroxaban) plus 4 reference-only dabigatran/edoxaban cells. Each major cell states its `exposure` direction (increased = bleeding risk; decreased = loss of efficacy). Several majors rest on expert guidance rather than FDA label text (idelalisib, enzalutamide, mitotane, tucatinib), and say so. Quantitative magnitudes in `mechanism` strings are as reported in these secondary references, not independently re-derived. `lastReviewed` is the author curation date and does NOT denote clinician validation (F13). Not for clinical use without pharmacist/clinician sign-off. v1.3.0 (OpenEvidence rules review, 2026-10-31) added acyclovir, allopurinol and ondansetron as supportive-care agents rated none for apixaban and rivaroxaban (dabigatran/edoxaban left unknown). v1.3.1: fluconazole rated moderate (warning) for apixaban, matching rivaroxaban.",
+  "provenanceNote": "Curated from two secondary references — the AHA 2022 Scientific Statement (Table 3) and Hellfritzsch et al. 2024 (100 agents evaluated) — plus FDA DOAC labeling, and applied consistently across the original 52 agents; the ibrutinib entry was re-sourced in v1.1.0 to its FDA labeling and the 2025 ACC cardio-oncology guidance. v1.2.0 (OpenEvidence review 4) corrected 16 RxNorm codes, re-rated 8 agents and added 18 agents (70 total); new reference-only cells not yet reviewed are rated unknown. The per-agent `sources` array is a KB-level attestation, not per-interaction citation. All `major` cells are individually anchored via `evidenceAnchor`: the 22 recommendation-changing cells (11 agents × apixaban/rivaroxaban) plus 4 reference-only dabigatran/edoxaban cells. Each major cell states its `exposure` direction (increased = bleeding risk; decreased = loss of efficacy). Several majors rest on expert guidance rather than FDA label text (idelalisib, enzalutamide, mitotane, tucatinib), and say so. Quantitative magnitudes in `mechanism` strings are as reported in these secondary references, not independently re-derived. `lastReviewed` is the author curation date and does NOT denote clinician validation (F13). Not for clinical use without pharmacist/clinician sign-off. v1.3.0 (OpenEvidence rules review, 2026-10-31) added acyclovir, allopurinol and ondansetron as supportive-care agents rated none for apixaban and rivaroxaban (dabigatran/edoxaban left unknown). v1.3.2: fluconazole rated moderate (warning) for apixaban on mixed clinical bleeding evidence (Holt 2022; Cid 2022; Rohr 2022).",
   "agents": [
     {
       "agentName": "Ibrutinib",
@@ -2424,13 +2424,13 @@
       "interactions": {
         "apixaban": {
           "severity": "moderate",
-          "mechanism": "Moderate CYP3A4 inhibition increases apixaban exposure",
-          "recommendation": "Use with caution. Monitor for bleeding.",
+          "mechanism": "Systemic fluconazole: possible increased bleeding risk; clinical evidence is mixed",
+          "recommendation": "Review additional bleeding risks. Non-blocking (editorial severity, not FDA-assigned).",
           "alternativeDoac": null,
           "evidenceAnchor": {
-            "source": "OpenEvidence rules review 2026-10-31 (consistency with the rivaroxaban rating)",
-            "locator": "Moderate CYP3A4 inhibitor; not named in the apixaban label",
-            "claim": "Moderate CYP3A4 inhibition raises apixaban exposure; warning only, does not block"
+            "source": "Holt et al., Am J Med 2022; Cid et al., Pharmacotherapy 2022; Rohr et al., Clin Pharmacokinet 2022 (OpenEvidence follow-up 2026-10-31)",
+            "locator": "Observational bleeding association (Holt); no significant association after adjustment (Cid); no significant PK change in a microdose study (Rohr)",
+            "claim": "Possible increased bleeding risk with mixed evidence; a large rise in apixaban exposure is not established"
           }
         },
         "rivaroxaban": {

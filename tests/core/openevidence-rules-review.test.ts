@@ -255,7 +255,8 @@ describe("Rivaroxaban + combined P-gp / moderate CYP3A inhibitor at CrCl 15–79
     expect(r.renal!.crclMlMin).toBeLessThan(80);
     expect(r.preferredOptions.map((o) => o.name)).toEqual(["apixaban"]);
     const riva = r.avoidOptions.find((o) => o.name === "rivaroxaban")!;
-    expect(riva.ineligibleReason).toMatch(/^Avoid — Imatinib interaction \(FDA labeling\)/);
+    expect(riva.ineligibleReason).toMatch(/^Not automatically recommended — Imatinib with CrCl \d+ mL\/min/);
+    expect(riva.ineligibleReason).toMatch(/unless the potential benefit justifies the risk/);
   });
 
   it("the same drug at CrCl ≥80 → rivaroxaban stays available (moderate warning only)", () => {
@@ -264,13 +265,30 @@ describe("Rivaroxaban + combined P-gp / moderate CYP3A inhibitor at CrCl 15–79
     expect(r.preferredOptions.map((o) => o.name)).toEqual(["apixaban", "rivaroxaban"]);
   });
 
-  it("every listed agent triggers it; a moderate-only inhibitor (ribociclib) does not", () => {
-    for (const code of ["3008", "1608322", "282388", "662281", "1148495", "1535457", "358255", "1100072"]) {
+  it("each reviewed agent triggers it", () => {
+    for (const code of ["1148495", "1608322", "662281", "282388", "3008"]) {
       const r = generateRecommendation(mariaWith(code, code, 1.4));
       expect(r.preferredOptions.map((o) => o.name), code).toEqual(["apixaban"]);
     }
-    const ribo = generateRecommendation(mariaWith("1873916", "Ribociclib", 1.4));
-    expect(ribo.preferredOptions.map((o) => o.name)).toEqual(["apixaban", "rivaroxaban"]);
+  });
+
+  it("aprepitant, abiraterone, ceritinib and ribociclib do NOT trigger it (not verified combined P-gp + moderate CYP3A)", () => {
+    for (const code of ["358255", "1100072", "1535457", "1873916"]) {
+      const r = generateRecommendation(mariaWith(code, code, 1.4));
+      expect(r.preferredOptions.map((o) => o.name), code).toEqual(["apixaban", "rivaroxaban"]);
+    }
+  });
+
+  it("CrCl boundary: fires at 79.9 and at 15, not at exactly 80 or below 15", async () => {
+    const { rivaroxabanCombinedModerate } = await import("../../src/core/recommendation");
+    const imatinib = [checkDDIs({ rxnormCode: "282388", display: "Imatinib" })];
+    const renal = (crclMlMin: number) => ({ crclMlMin, crclCategory: "mild" as const, doacRecommendations: [], warnings: [] });
+    expect(rivaroxabanCombinedModerate(imatinib, renal(79.9))).not.toBeNull();
+    expect(rivaroxabanCombinedModerate(imatinib, renal(15))).not.toBeNull();
+    expect(rivaroxabanCombinedModerate(imatinib, renal(80))).toBeNull();
+    expect(rivaroxabanCombinedModerate(imatinib, renal(14.9))).toBeNull();
+    // Missing renal data: the rule doesn't fire; renal "avoid" already blocks every agent.
+    expect(rivaroxabanCombinedModerate(imatinib, { ...renal(0), warnings: ["renal_data_unavailable"] })).toBeNull();
   });
 
   it("FHIR output codes the block as a drug interaction pointing at the offending order", async () => {
