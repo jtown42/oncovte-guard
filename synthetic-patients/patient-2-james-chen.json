@@ -588,27 +588,6 @@
           "reference": "Patient/patient-2"
         }
       }
-    },
-    {
-      "resource": {
-        "resourceType": "MedicationRequest",
-        "id": "medrx-pantoprazole-2",
-        "status": "active",
-        "intent": "order",
-        "medicationCodeableConcept": {
-          "coding": [
-            {
-              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
-              "code": "40790",
-              "display": "pantoprazole"
-            }
-          ],
-          "text": "Pantoprazole"
-        },
-        "subject": {
-          "reference": "Patient/patient-2"
-        }
-      }
     }
   ]
 }

@@ -24,11 +24,11 @@ It runs entirely on synthetic data, and it has never been used on a real patient
 4: """0:32 – 1:05
 
 Patients with cancer are at high risk for blood clots.
-Clots are a leading cause of death in cancer — second only to the cancer itself.
-Pooled data from the AVERT and CASSINI trials show prophylaxis roughly halved clots in higher-risk patients.
-But even in a dedicated prevention program, only about six in ten high-risk patients got it.
+In patients on chemotherapy, blood clots are one of the leading causes of death after the cancer itself.
+Pooled data from the AVERT and CASSINI trials show prophylaxis cut clots by about 44 percent in higher-risk patients.
+But even in a dedicated prevention program, only about six in ten high-risk patients received it.
 [PAUSE]
-And you can't just give everyone a blood thinner — the wrong patient bleeds.
+And you can't just give everyone a blood thinner — in the wrong patient, it can cause serious bleeding.
 So the hard part isn't knowing prophylaxis works.
 It's picking the right patient, and the right drug.""",
 

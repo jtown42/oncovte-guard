@@ -1,10 +1,10 @@
 {
   "resourceType": "Bundle",
   "type": "collection",
-  "timestamp": "2026-10-31T14:21:42.526Z",
+  "timestamp": "2026-10-31T14:51:01.731Z",
   "entry": [
     {
-      "fullUrl": "urn:uuid:2d5f6e3b-13c1-4553-b8ef-641fc671af77",
+      "fullUrl": "urn:uuid:d36b1878-d206-4bf5-83a6-aab7c2cb093a",
       "resource": {
         "resourceType": "GuidanceResponse",
         "text": {
@@ -17,9 +17,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "occurrenceDateTime": "2026-10-31T14:21:42.526Z",
+        "occurrenceDateTime": "2026-10-31T14:51:01.731Z",
         "performer": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "note": [
@@ -28,12 +28,12 @@
           }
         ],
         "result": {
-          "reference": "urn:uuid:5f3f5813-bba6-48ca-9e2f-9a657ab6dabc"
+          "reference": "urn:uuid:a6cded75-5174-4d89-ae70-2dd199c9ad2d"
         }
       }
     },
     {
-      "fullUrl": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+      "fullUrl": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
       "resource": {
         "resourceType": "Device",
         "id": "oncovte-guard-engine",
@@ -65,7 +65,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:eda28373-1392-4884-8b46-90bbb5764b4c",
+      "fullUrl": "urn:uuid:bed4a2fd-4bcd-483f-a293-0a65178ad0a7",
       "resource": {
         "resourceType": "RiskAssessment",
         "text": {
@@ -77,9 +77,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "occurrenceDateTime": "2026-10-31T14:21:42.526Z",
+        "occurrenceDateTime": "2026-10-31T14:51:01.731Z",
         "performer": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "code": {
@@ -131,7 +131,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:0a4967b5-b6eb-4a77-b31a-455ccfb8589e",
+      "fullUrl": "urn:uuid:faefaf73-fb16-4fd3-9d0d-30545cf4c0f4",
       "resource": {
         "resourceType": "DetectedIssue",
         "text": {
@@ -153,9 +153,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "identifiedDateTime": "2026-10-31T14:21:42.526Z",
+        "identifiedDateTime": "2026-10-31T14:51:01.731Z",
         "author": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "implicated": [
@@ -173,13 +173,13 @@
             "action": {
               "text": "Use Apixaban"
             },
-            "date": "2026-10-31T14:21:42.526Z"
+            "date": "2026-10-31T14:51:01.731Z"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:3977d5d7-4506-4fb7-909f-40e5ecee5a85",
+      "fullUrl": "urn:uuid:9ee5d8ed-7666-4ee6-93ad-0b3dfb2ebd36",
       "resource": {
         "resourceType": "DetectedIssue",
         "text": {
@@ -201,9 +201,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "identifiedDateTime": "2026-10-31T14:21:42.526Z",
+        "identifiedDateTime": "2026-10-31T14:51:01.731Z",
         "author": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "implicated": [
@@ -221,13 +221,13 @@
             "action": {
               "text": "Use Apixaban"
             },
-            "date": "2026-10-31T14:21:42.526Z"
+            "date": "2026-10-31T14:51:01.731Z"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:415d819f-26e2-4d36-abfd-73d84c426f71",
+      "fullUrl": "urn:uuid:7ffdffe0-e9ba-409d-8d61-030bdb26cc76",
       "resource": {
         "resourceType": "DetectedIssue",
         "text": {
@@ -249,9 +249,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "identifiedDateTime": "2026-10-31T14:21:42.526Z",
+        "identifiedDateTime": "2026-10-31T14:51:01.731Z",
         "author": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "implicated": [
@@ -269,13 +269,13 @@
             "action": {
               "text": "Use Apixaban"
             },
-            "date": "2026-10-31T14:21:42.526Z"
+            "date": "2026-10-31T14:51:01.731Z"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:39e00b9e-ee31-421b-a45d-5b1a738ce29f",
+      "fullUrl": "urn:uuid:91a411f2-90ac-437f-ba4f-b7977b47e51a",
       "resource": {
         "resourceType": "DetectedIssue",
         "text": {
@@ -297,9 +297,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "identifiedDateTime": "2026-10-31T14:21:42.526Z",
+        "identifiedDateTime": "2026-10-31T14:51:01.731Z",
         "author": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "implicated": [
@@ -315,7 +315,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:12afb6d9-b377-4c15-b255-dd65d38d77a9",
+      "fullUrl": "urn:uuid:a07ff878-2ca4-4c8c-a150-13546d8b87a0",
       "resource": {
         "resourceType": "MedicationRequest",
         "text": {
@@ -328,9 +328,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "authoredOn": "2026-10-31T14:21:42.526Z",
+        "authoredOn": "2026-10-31T14:51:01.731Z",
         "requester": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "medicationCodeableConcept": {
@@ -356,7 +356,7 @@
         ],
         "supportingInformation": [
           {
-            "reference": "urn:uuid:eda28373-1392-4884-8b46-90bbb5764b4c"
+            "reference": "urn:uuid:bed4a2fd-4bcd-483f-a293-0a65178ad0a7"
           }
         ],
         "note": [
@@ -367,7 +367,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:5f3f5813-bba6-48ca-9e2f-9a657ab6dabc",
+      "fullUrl": "urn:uuid:a6cded75-5174-4d89-ae70-2dd199c9ad2d",
       "resource": {
         "resourceType": "RequestGroup",
         "text": {
@@ -380,9 +380,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "authoredOn": "2026-10-31T14:21:42.526Z",
+        "authoredOn": "2026-10-31T14:51:01.731Z",
         "author": {
-          "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+          "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
           "display": "OncoVTE Guard Decision Engine"
         },
         "action": [
@@ -393,7 +393,7 @@
               {
                 "title": "Apixaban 2.5 mg PO BID",
                 "resource": {
-                  "reference": "urn:uuid:12afb6d9-b377-4c15-b255-dd65d38d77a9"
+                  "reference": "urn:uuid:a07ff878-2ca4-4c8c-a150-13546d8b87a0"
                 }
               }
             ]
@@ -402,7 +402,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:ed6a8f2c-9306-4433-afe2-1dad918e96b2",
+      "fullUrl": "urn:uuid:286214ea-74be-43bb-a8c0-23d5b41cb484",
       "resource": {
         "resourceType": "Provenance",
         "text": {
@@ -411,31 +411,31 @@
         },
         "target": [
           {
-            "reference": "urn:uuid:2d5f6e3b-13c1-4553-b8ef-641fc671af77"
+            "reference": "urn:uuid:d36b1878-d206-4bf5-83a6-aab7c2cb093a"
           },
           {
-            "reference": "urn:uuid:eda28373-1392-4884-8b46-90bbb5764b4c"
+            "reference": "urn:uuid:bed4a2fd-4bcd-483f-a293-0a65178ad0a7"
           },
           {
-            "reference": "urn:uuid:0a4967b5-b6eb-4a77-b31a-455ccfb8589e"
+            "reference": "urn:uuid:faefaf73-fb16-4fd3-9d0d-30545cf4c0f4"
           },
           {
-            "reference": "urn:uuid:3977d5d7-4506-4fb7-909f-40e5ecee5a85"
+            "reference": "urn:uuid:9ee5d8ed-7666-4ee6-93ad-0b3dfb2ebd36"
           },
           {
-            "reference": "urn:uuid:415d819f-26e2-4d36-abfd-73d84c426f71"
+            "reference": "urn:uuid:7ffdffe0-e9ba-409d-8d61-030bdb26cc76"
           },
           {
-            "reference": "urn:uuid:39e00b9e-ee31-421b-a45d-5b1a738ce29f"
+            "reference": "urn:uuid:91a411f2-90ac-437f-ba4f-b7977b47e51a"
           },
           {
-            "reference": "urn:uuid:12afb6d9-b377-4c15-b255-dd65d38d77a9"
+            "reference": "urn:uuid:a07ff878-2ca4-4c8c-a150-13546d8b87a0"
           },
           {
-            "reference": "urn:uuid:5f3f5813-bba6-48ca-9e2f-9a657ab6dabc"
+            "reference": "urn:uuid:a6cded75-5174-4d89-ae70-2dd199c9ad2d"
           }
         ],
-        "recorded": "2026-10-31T14:21:42.526Z",
+        "recorded": "2026-10-31T14:51:01.731Z",
         "agent": [
           {
             "type": {
@@ -448,7 +448,7 @@
               ]
             },
             "who": {
-              "reference": "urn:uuid:eebc8de3-dd25-4276-91f8-2d92e2610207",
+              "reference": "urn:uuid:cb7888d8-0877-43f1-ba4b-c49339444fba",
               "display": "OncoVTE Guard Decision Engine"
             }
           }

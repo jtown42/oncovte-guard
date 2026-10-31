@@ -51,16 +51,16 @@ I built this as a student project in my fourth year of medical school.
 It runs entirely on synthetic data, and it has never been used on a real patient.
 
 
-SLIDE 4 — Why it matters. On screen: three tiles. ~½ fewer clots with prophylaxis in higher-risk patients (Pooled AVERT + CASSINI · ITAC 2022) · ~6 in 10 high-risk patients got it, even in a dedicated prevention program (Holmes et al., JCO Oncol Pract 2026) · Bleeding is the risk on the other side: a blood thinner in the wrong patient causes harm. Takeaway: The hard part isn't knowing prophylaxis works. It's picking the right patient — and the right drug.
+SLIDE 4 — Why it matters. On screen: three tiles. ~44% fewer VTE with prophylaxis in higher-risk patients (Pooled AVERT + CASSINI (overall VTE, RR 0.56) · ITAC 2022) · ~6 in 10 high-risk patients received prophylaxis, even in a dedicated prevention program (Holmes et al., JCO Oncol Pract 2026) · Bleeding is the risk on the other side: in the wrong patient, a blood thinner can cause serious bleeding. Takeaway: The hard part isn't knowing prophylaxis works. It's picking the right patient — and the right drug.
 NOTES:
 0:32 – 1:05
 
 Patients with cancer are at high risk for blood clots.
-Clots are a leading cause of death in cancer — second only to the cancer itself.
-Pooled data from the AVERT and CASSINI trials show prophylaxis roughly halved clots in higher-risk patients.
-But even in a dedicated prevention program, only about six in ten high-risk patients got it.
+In patients on chemotherapy, blood clots are one of the leading causes of death after the cancer itself.
+Pooled data from the AVERT and CASSINI trials show prophylaxis cut clots by about 44 percent in higher-risk patients.
+But even in a dedicated prevention program, only about six in ten high-risk patients received it.
 [PAUSE]
-And you can't just give everyone a blood thinner — the wrong patient bleeds.
+And you can't just give everyone a blood thinner — in the wrong patient, it can cause serious bleeding.
 So the hard part isn't knowing prophylaxis works.
 It's picking the right patient, and the right drug.
 

@@ -51,9 +51,9 @@ if (-not $why) {
 
   $INK = 0x38141E; $PURPLE = 0x8C2A4B; $GRAY = 0x404040; $WASH = 0xF8EDF1; $RED = 0x2E3AB0  # BGR
   $tiles = @(
-    @{ big = "~" + [char]0x00BD; bigColor = $PURPLE; label = "fewer clots with prophylaxis in higher-risk patients"; src = "Pooled AVERT + CASSINI " + [char]0x00B7 + " ITAC 2022" },
-    @{ big = "~6 in 10"; bigColor = $PURPLE; label = "high-risk patients got it, even in a dedicated prevention program"; src = "Holmes et al., JCO Oncol Pract 2026" },
-    @{ big = "Bleeding"; bigColor = $RED; label = "is the risk on the other side: a blood thinner in the wrong patient causes harm"; src = "" }
+    @{ big = "~44%"; bigColor = $PURPLE; label = "fewer VTE with prophylaxis in higher-risk patients"; src = "Pooled AVERT + CASSINI (overall VTE, RR 0.56) " + [char]0x00B7 + " ITAC 2022" },
+    @{ big = "~6 in 10"; bigColor = $PURPLE; label = "high-risk patients received prophylaxis, even in a dedicated prevention program"; src = "Holmes et al., JCO Oncol Pract 2026" },
+    @{ big = "Bleeding"; bigColor = $RED; label = "is the risk on the other side: in the wrong patient, a blood thinner can cause serious bleeding"; src = "" }
   )
   $x = 72; $w = 272; $gap = 18; $y = 140; $h = 196
   $k = 0

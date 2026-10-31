@@ -41,9 +41,10 @@ for k, v in m.NOTES.items():
 
 out += [
     "## Claims in this script and where they come from",
-    "- Prophylaxis roughly halved clots in higher-risk patients: pooled AVERT + CASSINI, overall VTE RR 0.56 (95% CI 0.35–0.89), ITAC 2022 (OpenEvidence round 5). Say \"pooled\", never \"each trial showed\".",
+    "- About 44% fewer clots in higher-risk patients: pooled AVERT + CASSINI, overall VTE RR 0.56 (95% CI 0.35–0.89), ITAC 2022 / BSH 2024 (OpenEvidence rounds 5 and 7). Say \"pooled\", never \"each trial showed\". The overall figure includes CASSINI's screened DVTs; symptomatic VTE alone was not significant.",
     "- Only about six in ten high-risk patients got prophylaxis, even in a dedicated program: Holmes et al., JCO Oncol Pract 2026 (round 5). \"High-risk\" there means Khorana or PROTECHT ≥3, so never tie it to the app's ≥2 threshold.",
-    "- Clots are a leading cause of death in cancer, second only to the cancer itself: Khorana et al., J Thromb Haemost 2007. **Pending OpenEvidence check (docs/OPENEVIDENCE-FACTCHECK-7.md); spoken only, not on a slide.**",
+    "- Blood clots are one of the leading causes of death after the cancer itself, in patients on chemotherapy: Khorana et al., J Thromb Haemost 2007 (4,466 outpatients, 141 deaths: progression 71%, infection 9%, arterial TE 5.6%, VTE 3.5%), as summarized in Khorana et al., Nat Rev Dis Primers 2022 (round 7). Never say \"second leading cause\": that holds only for venous + arterial combined, tied with infection.",
+    "- Bleeding: major bleeding roughly doubled in relative terms with the DOAC (AVERT 3.5% vs 1.8%; CASSINI 2.0% vs 1.0%), a small absolute increase (round 7). Say \"can cause serious bleeding\", not \"causes\".",
     "- Itraconazole: FDA labels say avoid with apixaban 2.5 mg BID and with rivaroxaban (round 5). The itraconazole label also says avoid for 2 weeks after stopping (round 6), so the script never says a stopped drug can't change the advice.",
     "- 350 vs 349 platelets: Khorana ≥350 ×10⁹/L (round 5). Maria: Khorana 5, high risk (round 5). Dorothy: platelets <50k contraindicated; CrCl ~18 → apixaban with caution (round 5).",
     "- FHIR claims: 7/7 demo bundles 0 validator errors; sandbox round trip; 229 tests. All verified in the repo.",
