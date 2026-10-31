@@ -1,8 +1,9 @@
 """Final speaker notes for the AMIA deck (word-for-word reading script).
 
-Used by scripts/finalize-deck.py and mirrored in submission/FINAL-TALK-SCRIPT.md.
-Keys are 1-based slide positions in OncoVTE.pptx (slide 1 is a hidden blank,
-slide 12 the hidden Dorothy backup). One sentence per line.
+Used by scripts/apply-deck-notes.py and mirrored in submission/FINAL-TALK-SCRIPT.md.
+Keys are 1-based slide positions in OncoVTE-final.pptx (slide 1 is a hidden blank,
+slide 4 "Why it matters" is added by set-clip-on-click.ps1, slide 13 is the hidden
+Dorothy backup). One sentence per line.
 """
 
 NOTES = {
@@ -20,14 +21,19 @@ Quick disclosure: I have no financial relationships.
 I built this as a student project in my fourth year of medical school.
 It runs entirely on synthetic data, and it has never been used on a real patient.""",
 
-4: """0:32 – 1:45
+4: """0:32 – 1:05
 
 Patients with cancer are at high risk for blood clots.
 Clots are a leading cause of death in cancer — second only to the cancer itself.
 Pooled data from the AVERT and CASSINI trials show prophylaxis roughly halved clots in higher-risk patients.
+But even in a dedicated prevention program, only about six in ten high-risk patients got it.
 [PAUSE]
-But a blood thinner in the wrong patient causes bleeding.
-So the real problem is picking the right patient, and the right drug.
+And you can't just give everyone a blood thinner — the wrong patient bleeds.
+So the hard part isn't knowing prophylaxis works.
+It's picking the right patient, and the right drug.""",
+
+5: """1:05 – 1:50
+
 That takes four checks in a single visit.
 Is the clot risk high enough?
 Is another drug in the way?
@@ -43,7 +49,7 @@ Software needs rules it can run — and proof that the translation is right.
 OncoVTE Guard makes that chain explicit: guideline, to rule, to code, to test.
 And when one option is ruled out, the engine evaluates the ones that remain.""",
 
-5: """1:45 – 2:40
+6: """1:50 – 2:45
 
 Here's how it uses FHIR.
 The app reads four standard resources:
@@ -59,7 +65,7 @@ And the decision comes back as FHIR, too.
 Structured FHIR in. Structured FHIR out.
 Let me show you, with two synthetic patients — real output from the app.""",
 
-6: """2:40 – 3:10
+7: """2:45 – 3:15
 
 Maria has pancreatic cancer and a risk score of five. That's high risk.
 That's the Khorana score, and the app calculates it straight from FHIR —
@@ -68,7 +74,7 @@ Nothing gets in the way.
 So the app recommends apixaban or rivaroxaban — and every card shows the guideline it came from.
 James is not that simple.""",
 
-7: """3:10 – 4:10
+8: """3:15 – 4:15
 
 James is 72, with lymphoma, and he's on itraconazole for a serious fungal infection.
 His risk score qualifies him for prophylaxis.
@@ -86,7 +92,7 @@ And the whole decision re-runs every time.
 
 [IF THE VIDEO WON'T PLAY:] "Without itraconazole, the engine re-runs and the oral options come back. Add it back, and it's the injectable again." """,
 
-8: """4:05 – 4:40
+9: """4:15 – 4:50
 
 And here's that same decision, as FHIR.
 Each blocked drug becomes a DetectedIssue — and it points at the exact order that caused it.
@@ -96,14 +102,14 @@ The recommendation becomes a draft MedicationRequest — a proposal, never a sig
 And a Provenance record ties it all to the exact engine version.
 Every demo bundle passes the official HL7 validator with zero errors, and round-trips through a public FHIR server.""",
 
-9: """4:40 – 5:05   (FIRST TO CUT: hide this slide if the timed run is over 7:15)
+10: """4:50 – 5:15   (FIRST TO CUT: hide this slide if the timed run is over 7:15)
 
 And because it's FHIR in and FHIR out, the same engine can screen a whole clinic at once, through Bulk Data export.
 On a synthetic panel I generated, it builds a worklist:
 patients who meet the guideline threshold, but have no blood thinner on file.
 That turns the underuse problem into a list a clinic can act on.""",
 
-10: """5:05 – 6:00
+11: """5:15 – 6:10
 
 So why should anyone trust it?
 Because testing is built into the design.
@@ -120,7 +126,7 @@ along with silent-mode testing on real charts, compared against expert review.
 
 [OPTIONAL — only if the run is under 6:30:] "While building it, I found 22 drug codes pointing at the wrong medication. One chemo code was actually a blood-pressure pill. My own tests missed it, because the test data shared the codes. That's exactly why terminology needs outside validation." """,
 
-11: """6:00 – 6:40   (leave this slide up through the applause)
+12: """6:10 – 6:50   (leave this slide up through the applause)
 
 So: OncoVTE Guard takes structured FHIR data and published guidelines,
 and turns them into a decision you can inspect, for one specific patient —
@@ -132,7 +138,7 @@ Move a slider, and the verdict changes right on your phone.
 If this is the kind of FHIR app you want to see move forward, I'd be grateful for your vote.
 Thank you.""",
 
-12: """HIDDEN BACKUP — only if the run is very short.
+13: """HIDDEN BACKUP — only if the run is very short.
 
 One more.
 Dorothy has lung cancer and platelets of 42,000 — too low to anticoagulate.

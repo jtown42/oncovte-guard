@@ -1,10 +1,10 @@
 # OncoVTE Guard — Talk script v3 (reading copy)
 
-> Final, 2026-10-31. These are word for word the speaker notes in `OncoVTE-final.pptx` (source: `scripts/deck-notes.py`). Earlier versions are in git history.
+> These are word for word the speaker notes in `OncoVTE-final.pptx`, generated from `scripts/deck-notes.py` by `scripts/talk-script-md.py`. Earlier versions are in git history.
 
 **How to use it:** read one line at a time. Each line is one breath. **[PAUSE]** = stop for one full second. **[CLICK]** = advance. The time at the top of each slide is where you should be when the slide comes up.
 
-**Length:** about 930 spoken words, about 7:00 at a calm pace with the 15-second video. Over 7:15 in rehearsal → hide slide 9 (panel), which saves about 25 s.
+**Length:** about 950 spoken words, about 7:00 at a calm pace with the 14-second video. Over 7:15 in rehearsal → hide slide 10 (panel), which saves about 25 s.
 
 **Lines to know cold:** the first two sentences, "Structured FHIR in. Structured FHIR out.", the James clip lines, and the whole close.
 
@@ -38,9 +38,9 @@
 
 ---
 
-## Slide 4 — The problem
+## Slide 4 — Why it matters
 
-**0:32 – 1:45**
+**0:32 – 1:05**
 
 > Patients with cancer are at high risk for blood clots.
 >
@@ -48,12 +48,22 @@
 >
 > Pooled data from the AVERT and CASSINI trials show prophylaxis roughly halved clots in higher-risk patients.
 >
+> But even in a dedicated prevention program, only about six in ten high-risk patients got it.
+>
 > **[PAUSE]**
 >
-> But a blood thinner in the wrong patient causes bleeding.
+> And you can't just give everyone a blood thinner — the wrong patient bleeds.
 >
-> So the real problem is picking the right patient, and the right drug.
+> So the hard part isn't knowing prophylaxis works.
 >
+> It's picking the right patient, and the right drug.
+
+---
+
+## Slide 5 — The problem
+
+**1:05 – 1:50**
+
 > That takes four checks in a single visit.
 >
 > Is the clot risk high enough?
@@ -84,9 +94,9 @@
 
 ---
 
-## Slide 5 — Two doors, one engine
+## Slide 6 — Two doors, one engine
 
-**1:45 – 2:40**
+**1:50 – 2:45**
 
 > Here's how it uses FHIR.
 >
@@ -116,9 +126,9 @@
 
 ---
 
-## Slide 6 — Maria — clear risk, clear recommendation
+## Slide 7 — Maria — clear risk, clear recommendation
 
-**2:40 – 3:10**
+**2:45 – 3:15**
 
 > Maria has pancreatic cancer and a risk score of five. That's high risk.
 >
@@ -134,9 +144,9 @@
 
 ---
 
-## Slide 7 — James — one medication changes the decision (VIDEO)
+## Slide 8 — James — one medication changes the decision (VIDEO)
 
-**3:10 – 4:10**
+**3:15 – 4:15**
 
 > James is 72, with lymphoma, and he's on itraconazole for a serious fungal infection.
 >
@@ -168,9 +178,9 @@
 
 ---
 
-## Slide 8 — James's decision, written back as standard FHIR
+## Slide 9 — James's decision, written back as standard FHIR
 
-**4:05 – 4:40**
+**4:15 – 4:50**
 
 > And here's that same decision, as FHIR.
 >
@@ -188,9 +198,9 @@
 
 ---
 
-## Slide 9 — Same engine, whole panel (first to cut)
+## Slide 10 — Same engine, whole panel (first to cut)
 
-**4:40 – 5:05   (FIRST TO CUT: hide this slide if the timed run is over 7:15)**
+**4:50 – 5:15   (FIRST TO CUT: hide this slide if the timed run is over 7:15)**
 
 > And because it's FHIR in and FHIR out, the same engine can screen a whole clinic at once, through Bulk Data export.
 >
@@ -202,9 +212,9 @@
 
 ---
 
-## Slide 10 — Proof and limits
+## Slide 11 — Proof and limits
 
-**5:05 – 6:00**
+**5:15 – 6:10**
 
 > So why should anyone trust it?
 >
@@ -234,9 +244,9 @@
 
 ---
 
-## Slide 11 — The close (QR code)
+## Slide 12 — The close (QR code)
 
-**6:00 – 6:40   (leave this slide up through the applause)**
+**6:10 – 6:50   (leave this slide up through the applause)**
 
 > So: OncoVTE Guard takes structured FHIR data and published guidelines,
 >
@@ -258,7 +268,7 @@
 
 ---
 
-## Slide 12 — Dorothy (HIDDEN backup)
+## Slide 13 — Dorothy (HIDDEN backup)
 
 **HIDDEN BACKUP — only if the run is very short.**
 
@@ -280,15 +290,14 @@
 
 ## Claims in this script and where they come from
 - Prophylaxis roughly halved clots in higher-risk patients: pooled AVERT + CASSINI, overall VTE RR 0.56 (95% CI 0.35–0.89), ITAC 2022 (OpenEvidence round 5). Say "pooled", never "each trial showed".
-- Clots are a leading cause of death in cancer, second only to the cancer itself: Khorana et al., *J Thromb Haemost* 2007 (ambulatory chemotherapy cohort). **Not yet checked by OpenEvidence; confirm or cut.**
-- Itraconazole: FDA labels say avoid with apixaban 2.5 mg BID and with rivaroxaban (OpenEvidence round 5). The itraconazole label also says avoid for 2 weeks after stopping (round 6), so the script no longer says a stopped drug can't change the advice.
-- 350 vs 349 platelets: Khorana ≥350 ×10⁹/L (round 5).
-- Maria: Khorana 5, high risk (round 5). Dorothy: platelets <50k contraindicated; CrCl ~18 → apixaban with caution (round 5).
-- Corner stat on the title slide (not spoken): Holmes 2026; "high-risk" there means Khorana or PROTECHT ≥3, so never tie it to the ≥2 threshold.
+- Only about six in ten high-risk patients got prophylaxis, even in a dedicated program: Holmes et al., JCO Oncol Pract 2026 (round 5). "High-risk" there means Khorana or PROTECHT ≥3, so never tie it to the app's ≥2 threshold.
+- Clots are a leading cause of death in cancer, second only to the cancer itself: Khorana et al., J Thromb Haemost 2007. **Pending OpenEvidence check (docs/OPENEVIDENCE-FACTCHECK-7.md); spoken only, not on a slide.**
+- Itraconazole: FDA labels say avoid with apixaban 2.5 mg BID and with rivaroxaban (round 5). The itraconazole label also says avoid for 2 weeks after stopping (round 6), so the script never says a stopped drug can't change the advice.
+- 350 vs 349 platelets: Khorana ≥350 ×10⁹/L (round 5). Maria: Khorana 5, high risk (round 5). Dorothy: platelets <50k contraindicated; CrCl ~18 → apixaban with caution (round 5).
 - FHIR claims: 7/7 demo bundles 0 validator errors; sandbox round trip; 229 tests. All verified in the repo.
 
 ## If something goes wrong
 - **The video won't play:** the still is already up. Read the [IF THE VIDEO WON'T PLAY] line and move on.
 - **You lose your place:** look at the slide title, find that slide here, and start at its first line. Every slide stands alone.
-- **Running long:** skip slide 9 (one click past it), then cut Maria to her first and third lines.
-- **Running short:** add the optional 22-codes line on slide 10.
+- **Running long:** skip slide 10 (one click past it), then cut Maria to her first and last lines.
+- **Running short:** add the optional 22-codes line on slide 11.

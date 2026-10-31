@@ -5,9 +5,10 @@
 - swaps in the re-captured images (01 Maria, 02 James, 08 FHIR, 09 panel)
 - embeds the James clip over the James still (plays on click), removes the placeholder
 - slide 4: "reasoning" -> "logic"; "DOAC–cancer-drug" -> "DOAC–drug"
-- replaces every speaker note with scripts/deck-notes.py
+
+Then: scripts/set-clip-on-click.ps1 (clip timing, dim overlay, "Why it matters" slide)
+and scripts/apply-deck-notes.py (speaker notes).
 """
-import importlib.util
 import sys
 from pathlib import Path
 
@@ -16,9 +17,6 @@ from pptx import Presentation
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "talk-assets"
 
-spec = importlib.util.spec_from_file_location("deck_notes", ROOT / "scripts" / "deck-notes.py")
-deck_notes = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(deck_notes)
 
 src, dst = sys.argv[1], sys.argv[2]
 prs = Presentation(src)
@@ -63,9 +61,6 @@ for sh in slides[3].shapes:
                 # James's blocker is an antifungal, not a cancer drug.
                 if "cancer-drug" in run.text:
                     run.text = run.text.replace("cancer-drug", "drug")
-
-for pos, text in deck_notes.NOTES.items():
-    slides[pos - 1].notes_slide.notes_text_frame.text = text.strip()
 
 prs.save(dst)
 print("wrote", dst)

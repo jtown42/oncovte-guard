@@ -14,16 +14,16 @@ spec = importlib.util.spec_from_file_location("deck_notes", ROOT / "scripts" / "
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
 
-TITLES = {2: "Title", 3: "Disclosures", 4: "The problem", 5: "Two doors, one engine", 6: "Maria",
-          7: "James (VIDEO)", 8: "James as FHIR", 9: "Whole panel (first to cut)", 10: "Proof and limits",
-          11: "Close (QR)", 12: "Dorothy (HIDDEN backup)"}
+TITLES = {2: "Title", 3: "Disclosures", 4: "Why it matters", 5: "The problem", 6: "Two doors, one engine",
+          7: "Maria", 8: "James (VIDEO)", 9: "James as FHIR", 10: "Whole panel (first to cut)",
+          11: "Proof and limits", 12: "Close (QR)", 13: "Dorothy (HIDDEN backup)"}
 
 d = Document()
 d.styles["Normal"].font.name = "Calibri"
 d.styles["Normal"].font.size = Pt(16)
 d.add_heading("OncoVTE Guard — reading script", 0)
 d.add_paragraph("One line = one breath. [PAUSE] = one full second. [CLICK] = advance. "
-                "Time = where you should be when the slide comes up. About 930 words, about 7:00.").runs[0].font.size = Pt(12)
+                "Time = where you should be when the slide comes up. About 950 words, about 7:00.").runs[0].font.size = Pt(12)
 for k, v in m.NOTES.items():
     lines = [l.strip() for l in v.strip().split("\n")]
     if k > 2:
