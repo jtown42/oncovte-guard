@@ -112,6 +112,11 @@ const EXTRA_AGENTS: MedOption[] = [
   { code: "2555", label: "Cisplatin", group: "Nephrotoxic chemo" },
   { code: "40048", label: "Carboplatin", group: "Nephrotoxic chemo" },
   { code: "6851", label: "Methotrexate", group: "Nephrotoxic chemo" },
+  // Common supportive-care drugs with no DOAC interaction (James's realistic list).
+  { code: "281", label: "Acyclovir", group: "Supportive care (no DOAC interaction)" },
+  { code: "519", label: "Allopurinol", group: "Supportive care (no DOAC interaction)" },
+  { code: "26225", label: "Ondansetron", group: "Supportive care (no DOAC interaction)" },
+  { code: "40790", label: "Pantoprazole", group: "Supportive care (no DOAC interaction)" },
 ];
 
 /** Full add-a-med catalog: every KB agent, plus extras not already present. */

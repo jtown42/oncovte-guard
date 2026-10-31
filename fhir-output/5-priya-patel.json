@@ -1,10 +1,10 @@
 {
   "resourceType": "Bundle",
   "type": "collection",
-  "timestamp": "2026-10-31T14:05:30.573Z",
+  "timestamp": "2026-10-31T14:21:42.526Z",
   "entry": [
     {
-      "fullUrl": "urn:uuid:5afeba57-e440-4949-9c5f-4fa2a2e19cbc",
+      "fullUrl": "urn:uuid:0aee63e8-5c07-426a-8aa8-80fb1c418179",
       "resource": {
         "resourceType": "GuidanceResponse",
         "text": {
@@ -17,9 +17,9 @@
           "reference": "Patient/patient-5",
           "display": "Priya Patel"
         },
-        "occurrenceDateTime": "2026-10-31T14:05:30.573Z",
+        "occurrenceDateTime": "2026-10-31T14:21:42.526Z",
         "performer": {
-          "reference": "urn:uuid:fe695477-593c-4308-8b33-b097ec6677e8",
+          "reference": "urn:uuid:1a4b7842-fd62-488f-acf1-b8a70bd8586a",
           "display": "OncoVTE Guard Decision Engine"
         },
         "note": [
@@ -33,7 +33,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:fe695477-593c-4308-8b33-b097ec6677e8",
+      "fullUrl": "urn:uuid:1a4b7842-fd62-488f-acf1-b8a70bd8586a",
       "resource": {
         "resourceType": "Device",
         "id": "oncovte-guard-engine",
@@ -65,7 +65,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:dff78247-6dcb-40df-a469-399a9655eb02",
+      "fullUrl": "urn:uuid:12c95ef3-25c6-48c0-a7a6-74dad0a9e2e9",
       "resource": {
         "resourceType": "Provenance",
         "text": {
@@ -74,10 +74,10 @@
         },
         "target": [
           {
-            "reference": "urn:uuid:5afeba57-e440-4949-9c5f-4fa2a2e19cbc"
+            "reference": "urn:uuid:0aee63e8-5c07-426a-8aa8-80fb1c418179"
           }
         ],
-        "recorded": "2026-10-31T14:05:30.573Z",
+        "recorded": "2026-10-31T14:21:42.526Z",
         "agent": [
           {
             "type": {
@@ -90,7 +90,7 @@
               ]
             },
             "who": {
-              "reference": "urn:uuid:fe695477-593c-4308-8b33-b097ec6677e8",
+              "reference": "urn:uuid:1a4b7842-fd62-488f-acf1-b8a70bd8586a",
               "display": "OncoVTE Guard Decision Engine"
             }
           }

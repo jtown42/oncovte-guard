@@ -1,10 +1,10 @@
 {
   "resourceType": "Bundle",
   "type": "collection",
-  "timestamp": "2026-10-31T14:05:30.573Z",
+  "timestamp": "2026-10-31T14:21:42.526Z",
   "entry": [
     {
-      "fullUrl": "urn:uuid:e3e7790a-cba6-42d0-ac7d-c165c43c9abf",
+      "fullUrl": "urn:uuid:6addea22-0f25-410b-a540-5035c0b84b1c",
       "resource": {
         "resourceType": "GuidanceResponse",
         "text": {
@@ -17,9 +17,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "occurrenceDateTime": "2026-10-31T14:05:30.573Z",
+        "occurrenceDateTime": "2026-10-31T14:21:42.526Z",
         "performer": {
-          "reference": "urn:uuid:5a0bf6c4-e127-4656-9fff-6ba964d3bb3b",
+          "reference": "urn:uuid:c96436d4-4af9-4e9c-a418-c58067852dc8",
           "display": "OncoVTE Guard Decision Engine"
         },
         "note": [
@@ -30,7 +30,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:5a0bf6c4-e127-4656-9fff-6ba964d3bb3b",
+      "fullUrl": "urn:uuid:c96436d4-4af9-4e9c-a418-c58067852dc8",
       "resource": {
         "resourceType": "Device",
         "id": "oncovte-guard-engine",
@@ -62,7 +62,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:802b268e-031b-4788-b2f1-8c50f1c1ed56",
+      "fullUrl": "urn:uuid:f3d4b637-5a01-485a-9633-401e7fe6ae73",
       "resource": {
         "resourceType": "RiskAssessment",
         "text": {
@@ -74,9 +74,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "occurrenceDateTime": "2026-10-31T14:05:30.573Z",
+        "occurrenceDateTime": "2026-10-31T14:21:42.526Z",
         "performer": {
-          "reference": "urn:uuid:5a0bf6c4-e127-4656-9fff-6ba964d3bb3b",
+          "reference": "urn:uuid:c96436d4-4af9-4e9c-a418-c58067852dc8",
           "display": "OncoVTE Guard Decision Engine"
         },
         "code": {
@@ -129,7 +129,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:cf8649d9-a9f2-41b1-b6e8-7730109c2f58",
+      "fullUrl": "urn:uuid:98784634-e9f1-46a9-a1bc-b958d03599c5",
       "resource": {
         "resourceType": "DetectedIssue",
         "text": {
@@ -151,9 +151,9 @@
           "reference": "Patient/patient-3",
           "display": "Dorothy Williams"
         },
-        "identifiedDateTime": "2026-10-31T14:05:30.573Z",
+        "identifiedDateTime": "2026-10-31T14:21:42.526Z",
         "author": {
-          "reference": "urn:uuid:5a0bf6c4-e127-4656-9fff-6ba964d3bb3b",
+          "reference": "urn:uuid:c96436d4-4af9-4e9c-a418-c58067852dc8",
           "display": "OncoVTE Guard Decision Engine"
         },
         "implicated": [
@@ -168,13 +168,13 @@
             "action": {
               "text": "Do not start pharmacologic prophylaxis; reassess"
             },
-            "date": "2026-10-31T14:05:30.573Z"
+            "date": "2026-10-31T14:21:42.526Z"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:b57eadcd-b5f1-4bde-a4ec-e1d6646357c5",
+      "fullUrl": "urn:uuid:ffc0d069-fae8-405c-badb-5cb0fff36c85",
       "resource": {
         "resourceType": "Provenance",
         "text": {
@@ -183,16 +183,16 @@
         },
         "target": [
           {
-            "reference": "urn:uuid:e3e7790a-cba6-42d0-ac7d-c165c43c9abf"
+            "reference": "urn:uuid:6addea22-0f25-410b-a540-5035c0b84b1c"
           },
           {
-            "reference": "urn:uuid:802b268e-031b-4788-b2f1-8c50f1c1ed56"
+            "reference": "urn:uuid:f3d4b637-5a01-485a-9633-401e7fe6ae73"
           },
           {
-            "reference": "urn:uuid:cf8649d9-a9f2-41b1-b6e8-7730109c2f58"
+            "reference": "urn:uuid:98784634-e9f1-46a9-a1bc-b958d03599c5"
           }
         ],
-        "recorded": "2026-10-31T14:05:30.573Z",
+        "recorded": "2026-10-31T14:21:42.526Z",
         "agent": [
           {
             "type": {
@@ -205,7 +205,7 @@
               ]
             },
             "who": {
-              "reference": "urn:uuid:5a0bf6c4-e127-4656-9fff-6ba964d3bb3b",
+              "reference": "urn:uuid:c96436d4-4af9-4e9c-a418-c58067852dc8",
               "display": "OncoVTE Guard Decision Engine"
             }
           }

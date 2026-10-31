@@ -1,10 +1,10 @@
 {
   "resourceType": "Bundle",
   "type": "collection",
-  "timestamp": "2026-10-31T14:05:30.573Z",
+  "timestamp": "2026-10-31T14:21:42.526Z",
   "entry": [
     {
-      "fullUrl": "urn:uuid:e5165509-50e0-4cd5-aa5b-1cfb9fadb527",
+      "fullUrl": "urn:uuid:a9fc40e7-0cec-4ca2-a452-13aa0142dfef",
       "resource": {
         "resourceType": "GuidanceResponse",
         "text": {
@@ -17,9 +17,9 @@
           "reference": "Patient/patient-4",
           "display": "Robert Johnson"
         },
-        "occurrenceDateTime": "2026-10-31T14:05:30.573Z",
+        "occurrenceDateTime": "2026-10-31T14:21:42.526Z",
         "performer": {
-          "reference": "urn:uuid:fe67f954-18f1-46b2-97a2-d096f134bf70",
+          "reference": "urn:uuid:dcea2cfa-0a1a-43a5-91bd-638a074d2cd5",
           "display": "OncoVTE Guard Decision Engine"
         },
         "note": [
@@ -30,7 +30,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:fe67f954-18f1-46b2-97a2-d096f134bf70",
+      "fullUrl": "urn:uuid:dcea2cfa-0a1a-43a5-91bd-638a074d2cd5",
       "resource": {
         "resourceType": "Device",
         "id": "oncovte-guard-engine",
@@ -62,7 +62,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:6aadcd48-14f1-444c-ba52-e70fc40e5e0b",
+      "fullUrl": "urn:uuid:951e5ac4-3ef2-4980-8d69-3f06e6851c42",
       "resource": {
         "resourceType": "RiskAssessment",
         "text": {
@@ -74,9 +74,9 @@
           "reference": "Patient/patient-4",
           "display": "Robert Johnson"
         },
-        "occurrenceDateTime": "2026-10-31T14:05:30.573Z",
+        "occurrenceDateTime": "2026-10-31T14:21:42.526Z",
         "performer": {
-          "reference": "urn:uuid:fe67f954-18f1-46b2-97a2-d096f134bf70",
+          "reference": "urn:uuid:dcea2cfa-0a1a-43a5-91bd-638a074d2cd5",
           "display": "OncoVTE Guard Decision Engine"
         },
         "code": {
@@ -129,7 +129,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:b0bc2b99-6f99-4b48-a429-21d6bb0c3107",
+      "fullUrl": "urn:uuid:a304b64d-160d-4acc-8d1f-c9913816b510",
       "resource": {
         "resourceType": "Provenance",
         "text": {
@@ -138,13 +138,13 @@
         },
         "target": [
           {
-            "reference": "urn:uuid:e5165509-50e0-4cd5-aa5b-1cfb9fadb527"
+            "reference": "urn:uuid:a9fc40e7-0cec-4ca2-a452-13aa0142dfef"
           },
           {
-            "reference": "urn:uuid:6aadcd48-14f1-444c-ba52-e70fc40e5e0b"
+            "reference": "urn:uuid:951e5ac4-3ef2-4980-8d69-3f06e6851c42"
           }
         ],
-        "recorded": "2026-10-31T14:05:30.573Z",
+        "recorded": "2026-10-31T14:21:42.526Z",
         "agent": [
           {
             "type": {
@@ -157,7 +157,7 @@
               ]
             },
             "who": {
-              "reference": "urn:uuid:fe67f954-18f1-46b2-97a2-d096f134bf70",
+              "reference": "urn:uuid:dcea2cfa-0a1a-43a5-91bd-638a074d2cd5",
               "display": "OncoVTE Guard Decision Engine"
             }
           }

@@ -525,6 +525,90 @@
           "reference": "Patient/patient-2"
         }
       }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-acyclovir-2",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "281",
+              "display": "acyclovir"
+            }
+          ],
+          "text": "Acyclovir"
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-allopurinol-2",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "519",
+              "display": "allopurinol"
+            }
+          ],
+          "text": "Allopurinol"
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-ondansetron-2",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "26225",
+              "display": "ondansetron"
+            }
+          ],
+          "text": "Ondansetron"
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrx-pantoprazole-2",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "40790",
+              "display": "pantoprazole"
+            }
+          ],
+          "text": "Pantoprazole"
+        },
+        "subject": {
+          "reference": "Patient/patient-2"
+        }
+      }
     }
   ]
 }

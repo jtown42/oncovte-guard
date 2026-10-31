@@ -89,31 +89,87 @@ async function determinism(browser) {
   if (seen.size !== 1) throw new Error("James toggle is not deterministic");
 }
 
+/**
+ * The James clip, made to be read from the back of a room: the app zoomed 1.5x
+ * (laid out as if 1280x720, filling a 1920x1080 frame), the medication
+ * list and the verdict both in view, a visible cursor with a click ring, and a
+ * caption bar naming each step. Only the overlay is added; the app is untouched.
+ */
 async function clip(browser) {
   const ctx = await browser.newContext({
     viewport: { width: W, height: H },
     recordVideo: { dir: OUT, size: { width: W, height: H } },
   });
+  const t0 = Date.now();
   const page = await ctx.newPage();
-  await page.goto(BASE, { waitUntil: "networkidle" });
-  await pick(page, "James");
-  await page.mouse.move(W - 10, H - 10); // park the cursor out of frame
-  await page.waitForTimeout(4500); // LMWH verdict hold (~3 s after the trimmed lead-in)
+  await page.goto(BASE + "&patient=james", { waitUntil: "networkidle" });
+  // Zoom 1.5x (layout as if 1280x720). The caption bar replaces the app's top
+  // bar, and the rail gets a height that fits the zoomed frame so it can scroll.
+  await page.addStyleTag({ content: `
+    #root { zoom: 1.5; }
+    #root > div > header:first-child { display: none; }
+    main { padding-top: 92px !important; }
+    aside { top: 92px !important; max-height: calc(720px - 100px) !important; }
+  ` });
+  await page.waitForTimeout(400);
+  // Bring "Current medications" near the top of the rail.
+  await page.evaluate(() => {
+    const rail = document.querySelector("aside");
+    const meds = [...rail.querySelectorAll("*")].find((e) => e.textContent.trim() === "Current medications");
+    rail.scrollTop += (meds.getBoundingClientRect().top - rail.getBoundingClientRect().top) / 1.5 - 260;
+  });
+  await page.addStyleTag({ content: `
+    #cap { position: fixed; z-index: 99; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center;
+           padding: 0 44px; background: #1F3D33; color: #fff; font: 600 44px/1.1 "Segoe UI", Calibri, Arial, sans-serif; letter-spacing: -0.2px; }
+    #cap b { color: #F7D58B; font-weight: 700; }
+    #cur { position: fixed; z-index: 100; width: 46px; height: 46px; left: 1650px; top: 960px; pointer-events: none;
+           transition: left 0.9s cubic-bezier(.45,0,.2,1), top 0.9s cubic-bezier(.45,0,.2,1); }
+    #ring { position: fixed; z-index: 99; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%;
+            border: 6px solid #E0A526; opacity: 0; pointer-events: none; }
+    #ring.go { animation: ring 0.7s ease-out; }
+    @keyframes ring { from { transform: scale(0.3); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+  ` });
+  await page.evaluate(() => {
+    document.body.insertAdjacentHTML("beforeend",
+      '<div id="cap"></div><div id="ring"></div>' +
+      '<svg id="cur" viewBox="0 0 24 24"><path d="M4 2l15 11-6.5 1.2L16 21l-3 1.4-3.4-6.6L4 20z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>');
+  });
+  const caption = (html) => page.evaluate((h) => { document.getElementById("cap").innerHTML = "<span>" + h + "</span>"; }, html);
+  const pointAt = async (locator) => {
+    const b = await locator.boundingBox();
+    const x = b.x + b.width / 2, y = b.y + b.height / 2;
+    await page.evaluate(([x, y]) => { const c = document.getElementById("cur"); c.style.left = x - 4 + "px"; c.style.top = y - 2 + "px"; }, [x, y]);
+    await page.waitForTimeout(1000);
+    await page.evaluate(([x, y]) => { const r = document.getElementById("ring"); r.style.left = x + "px"; r.style.top = y + "px";
+      r.classList.remove("go"); void r.offsetWidth; r.classList.add("go"); }, [x, y]);
+    await page.waitForTimeout(150);
+  };
+
+  await caption("James is on <b>itraconazole</b> &nbsp;→&nbsp; both pills ruled out &nbsp;→&nbsp; injectable heparin");
+  const lead = (Date.now() - t0) / 1000;
+  await page.waitForTimeout(3600);
+
+  await caption("Remove <b>itraconazole</b> &nbsp;→&nbsp; the engine re-runs");
+  await pointAt(page.getByRole("button", { name: /remove itraconazole/i }));
   await removeMed(page, "Itraconazole");
-  await page.mouse.move(W - 10, H - 10);
-  await page.waitForTimeout(5500); // oral agents hold
+  await page.waitForTimeout(1300);
+  await caption("The oral options are back: <b>apixaban or rivaroxaban</b>");
+  await page.waitForTimeout(3400);
+
+  await caption("Add <b>itraconazole</b> back &nbsp;→&nbsp; injectable heparin again");
+  await pointAt(page.locator("select").filter({ hasText: /Add a medication/i }).first());
   await addMed(page, "Itraconazole");
-  await page.mouse.move(W - 10, H - 10);
-  await page.waitForTimeout(4500); // back to LMWH
+  await page.waitForTimeout(3600);
+
   const video = page.video();
   await ctx.close();
   const webm = path.join(OUT, "05-james-toggle.webm");
   fs.renameSync(await video.path(), webm);
   console.log("  ▸ 05-james-toggle.webm");
   try {
-    // Trim the page-load lead-in (first ~1.5 s) and encode H.264 for PowerPoint.
-    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-ss", "1.5", "-i", webm, "-an",
-      "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "slow", "-crf", "18",
+    // Trim the page-load lead-in and encode H.264 for PowerPoint.
+    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-ss", lead.toFixed(2), "-i", webm, "-an",
+      "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "slow", "-crf", "16",
       "-movflags", "+faststart", path.join(OUT, "05-james-toggle.mp4")]);
     console.log("  ▸ 05-james-toggle.mp4 (H.264)");
     fs.unlinkSync(webm);
