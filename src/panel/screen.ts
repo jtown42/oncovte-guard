@@ -11,12 +11,9 @@ import type { Bundle, FhirResource, Patient } from "fhir/r4";
 import { assemblePatientData, type RawFHIRData } from "../fhir/fhir-parser";
 import { generateRecommendation } from "../core/recommendation";
 import { verdictText } from "../fhir-output/build";
-import { RXNORM } from "../data/rxnorm-codes";
+import { ANTICOAGULANT_RXNORM } from "../data/rxnorm-codes";
 
-export const ANTICOAGULANT_RXNORM = new Set<string>([
-  RXNORM.APIXABAN, RXNORM.RIVAROXABAN, RXNORM.DABIGATRAN, RXNORM.EDOXABAN,
-  RXNORM.ENOXAPARIN, RXNORM.DALTEPARIN, RXNORM.HEPARIN_UFH, RXNORM.WARFARIN,
-]);
+export { ANTICOAGULANT_RXNORM };
 
 export interface PanelRow {
   patient: string;

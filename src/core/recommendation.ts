@@ -9,6 +9,15 @@
  *   - ERRATA Issue 8: renal recommendations are looked up via getRenalRecommendation.
  *   - ERRATA Issue 9: only a UNIVERSAL (appliesTo === "all") absolute
  *     contraindication aborts the pipeline; targeted ones block specific agents.
+ *   - OpenEvidence rules review (2026-10-31): the order is now
+ *       1. already anticoagulated  -> prophylaxis not applicable
+ *       2. universal stop (bleeding, platelets <50, Hgb <7 hold) -> contraindicated
+ *       3. Khorana exclusion       -> disease-specific pathway
+ *       4. Khorana <2              -> not indicated, or insufficient data when
+ *                                     missing inputs could still reach 2
+ *       5. per-agent options
+ *     The stops come first so, e.g., a bleeding myeloma patient is never pointed
+ *     to a myeloma prophylaxis regimen.
  *
  * This is the master function that ties every clinical module together. The UI
  * (Session 3) and CDS Hooks server consume the returned ProphylaxisRecommendation.
@@ -38,6 +47,7 @@ import {
 } from "./renal-dosing";
 import { detectContraindications } from "./contraindications";
 import { assessBleedingRisk } from "./bleeding-risk";
+import { ANTICOAGULANT_RXNORM } from "../data/rxnorm-codes";
 
 const STANDARD_DISCLAIMERS = [
   "This tool provides clinical decision support only and does not replace clinical judgment.",
@@ -102,9 +112,14 @@ const PANCREATIC_LMWH_PRESENTATION: Record<
 type Presentation = { dose: string; route: string; frequency: string; duration: string };
 
 /**
- * Fixed-dose LMWH adjusted for weight extremes (NCCN VTE-B-1; OpenEvidence
- * review 4). The pancreatic weight-based regimen self-adjusts, so it is left as is.
+ * Fixed-dose LMWH adjusted for weight extremes. The supporting data are
+ * bariatric/inpatient/surgical, so the card says "extrapolated". Enoxaparin
+ * 20 mg (<=40 kg) and dalteparin 2,500 units had no source and were removed
+ * (OpenEvidence rules review, 2026-10-31). The pancreatic weight-based regimen
+ * self-adjusts, so it is left as is.
  */
+const EXTRAPOLATED = "extrapolated from inpatient/surgical data";
+
 function lmwhPresentation(
   agent: (typeof LMWH_AGENTS)[number],
   pancreatic: boolean,
@@ -115,16 +130,11 @@ function lmwhPresentation(
   const base = DOAC_PRESENTATION[agent];
   if (bmi != null && bmi >= 40) {
     return agent === "enoxaparin"
-      ? { ...base, dose: "40 mg", frequency: "every 12 hours", duration: "Increased for BMI ≥40 (NCCN VTE-B-1)" }
-      : { ...base, dose: "7,500 units", duration: "Increased for BMI ≥40 (NCCN VTE-B-1)" };
+      ? { ...base, dose: "40 mg", frequency: "every 12 hours", duration: `Increased for BMI ≥40 (${EXTRAPOLATED})` }
+      : { ...base, dose: "7,500 units", duration: `Increased for BMI ≥40 (${EXTRAPOLATED})` };
   }
-  if (weightKg != null && weightKg <= 50) {
-    if (agent === "dalteparin") {
-      return { ...base, dose: "2,500 units", duration: "Reduced for weight ≤50 kg (NCCN VTE-B-1)" };
-    }
-    return weightKg <= 40
-      ? { ...base, dose: "20 mg", duration: "Reduced for weight ≤40 kg (NCCN VTE-B-1)" }
-      : { ...base, dose: "30 mg", duration: "Reduced for weight 41–50 kg (NCCN VTE-B-1)" };
+  if (weightKg != null && weightKg <= 50 && agent === "enoxaparin") {
+    return { ...base, dose: "30 mg", duration: `Reduced for weight ≤50 kg (${EXTRAPOLATED})` };
   }
   return base;
 }
@@ -257,8 +267,8 @@ function buildLmwhOption(
     hasNccnProphylaxisIndication: false,
     source: pancreatic
       ? "NCCN VTE-B-2 footnote · CONKO-004 / FRAGEM"
-      : present.duration.includes("VTE-B-1")
-        ? "NCCN VTE-B-1 (weight-adjusted dose)"
+      : present.duration.includes(EXTRAPOLATED)
+        ? "Weight-adjusted dose (extrapolated from inpatient/surgical data)"
         : // NCCN's ambulatory table prints the pancreatic weight-based doses; the
           // fixed doses appear on other VTE-B pages, so cite the section, not a page
           // (OpenEvidence rounds 5 and 6 named different pages).
@@ -291,10 +301,10 @@ export function generateRecommendation(
 ): ProphylaxisRecommendation {
   const alerts: Alert[] = [];
 
-  // STEP 1: Khorana exclusion takes precedence.
+  // Resolve the governing cancer category (exclusion is applied at STEP 3).
   const resolved = getCancerCategory(patient.activeCancerConditions);
 
-  // STEP 2: Khorana score.
+  // Khorana score (always computed so every terminal state can show it).
   const khorana = calculateKhoranaScore({
     cancerCategory: resolved.category,
     exclusionReason: resolved.exclusionReason,
@@ -312,6 +322,7 @@ export function generateRecommendation(
     // — APS (D68.61), HIT (D75.82), pregnancy/breastfeeding — actually reach here.
     conditions: patient.activeConditions,
     plateletCount: patient.labs.platelets?.value ?? null,
+    hemoglobin: patient.labs.hemoglobin?.value ?? null,
     weightKg: patient.weightKg,
     onAntiplatelet: patient.onAntiplatelet,
     onIMiD: patient.onIMiD,
@@ -382,7 +393,83 @@ export function generateRecommendation(
       }
     : null;
 
-  // STEP 1 (return): excluded population.
+  // Data-quality alerts that accompany every terminal state.
+  const dataAlerts: Alert[] = [];
+  if (patient.hemoglobinDrop) {
+    const d = patient.hemoglobinDrop;
+    dataAlerts.push({
+      level: "warning",
+      title: "Hemoglobin fell ≥2 g/dL — possible active bleeding",
+      detail: `Hemoglobin fell from ${d.from} to ${d.to} g/dL over ${d.days} day${d.days === 1 ? "" : "s"}. Confirm there is no active bleeding before starting prophylaxis.`,
+      source: "NCCN VTE (≥2 g/dL fall in the major-bleeding definition)",
+    });
+  }
+  for (const issue of patient.unitIssues ?? []) {
+    dataAlerts.push({
+      level: "warning",
+      title: "Lab unit not recognized — verify manually",
+      detail: `${issue}. The value was not used; verify it manually.`,
+      source: "OncoVTE Guard",
+    });
+  }
+  const withData = (list: Alert[]): Alert[] => [...list, ...dataAlerts];
+
+  // STEP 1: already anticoagulated — primary prophylaxis does not apply.
+  const onBoard = patient.activeMedications.filter((m) =>
+    ANTICOAGULANT_RXNORM.has(m.rxnormCode),
+  );
+  if (onBoard.length > 0) {
+    return {
+      ...base,
+      overallAction: "not_indicated",
+      verdictLabel: "already_anticoagulated",
+      preferredOptions: [],
+      alternativeOptions: [],
+      avoidOptions: [],
+      alerts: withData([
+        {
+          level: "info",
+          title: "Already anticoagulated — prophylaxis not applicable",
+          detail: `Active anticoagulant order: ${onBoard.map((m) => m.display).join(", ")}. Primary prophylaxis applies only to patients not already anticoagulated; adding another agent raises bleeding risk.`,
+          source: "AVERT eligibility; rivaroxaban labeling",
+        },
+      ]),
+    };
+  }
+
+  // STEP 2: a universal stop (active bleeding, platelets <50, Hgb <7 hold)
+  // ends the pipeline before anything else (ERRATA Issue 9).
+  const universalAbsolute = contraindications.absolute.filter(
+    (c) => c.appliesTo === "all",
+  );
+  const targetedAbsolute = contraindications.absolute.filter(
+    (c) => c.appliesTo !== "all",
+  );
+
+  if (universalAbsolute.length > 0) {
+    const anemiaOnly = universalAbsolute.every((c) => c.reason === "severe_anemia_hold");
+    const contraAlerts: Alert[] = universalAbsolute.map((c) => ({
+      level: "critical" as const,
+      title:
+        c.reason === "severe_anemia_hold"
+          ? "Hold — evaluate severe anemia first"
+          : "Absolute contraindication to anticoagulation",
+      detail: c.detail,
+      source: c.source ?? "NCCN VTE-B",
+    }));
+    if (siteAlert) contraAlerts.push(siteAlert);
+    return {
+      ...base,
+      overallAction: "contraindicated",
+      verdictLabel: anemiaOnly ? "hold_severe_anemia" : "contraindicated",
+      preferredOptions: [],
+      alternativeOptions: [],
+      avoidOptions: [],
+      alerts: withData(contraAlerts),
+    };
+  }
+
+  // STEP 3: excluded population.
   if (resolved.category === CancerCategory.EXCLUDED) {
     const exclusionAlerts: Alert[] = [
       {
@@ -410,55 +497,39 @@ export function generateRecommendation(
       preferredOptions: [],
       alternativeOptions: [],
       avoidOptions: [],
-      alerts: siteAlert ? [...exclusionAlerts, siteAlert] : exclusionAlerts,
+      alerts: withData(siteAlert ? [...exclusionAlerts, siteAlert] : exclusionAlerts),
     };
   }
 
-  // STEP 3: prophylaxis indicated only at Khorana >= 2 (ERRATA Issue 2).
+  // STEP 4: prophylaxis indicated only at Khorana >= 2 (ERRATA Issue 2). If the
+  // score is below 2 only because inputs are missing, say so instead of
+  // "not indicated" (OpenEvidence rules review).
   if (khorana.totalScore < 2) {
+    const missingPoints = missingKhoranaPoints(khorana.missingFields);
+    const insufficient = khorana.totalScore + missingPoints >= 2;
     return {
       ...base,
       overallAction: "not_indicated",
-      verdictLabel: "not_indicated",
+      verdictLabel: insufficient ? "insufficient_data" : "not_indicated",
       preferredOptions: [],
       alternativeOptions: [],
       avoidOptions: [],
-      alerts: [
-        {
-          level: "info",
-          title: "Routine pharmacologic prophylaxis not indicated",
-          detail: `Khorana score ${khorana.totalScore} (${khorana.riskCategory}) is below the NCCN threshold (>=2) for routine ambulatory prophylaxis.`,
-          source: "NCCN VTE-B",
-        },
+      alerts: withData([
+        insufficient
+          ? {
+              level: "warning",
+              title: "Insufficient data to rule out prophylaxis",
+              detail: `Khorana score is ${khorana.totalScore} with ${khorana.missingFields.map(humanField).join(", ")} missing; those could add up to ${missingPoints} point${missingPoints === 1 ? "" : "s"} and reach the NCCN threshold (>=2). Obtain them before deciding.`,
+              source: "OncoVTE Guard",
+            }
+          : {
+              level: "info",
+              title: "Routine pharmacologic prophylaxis not indicated",
+              detail: `Khorana score ${khorana.totalScore} (${khorana.riskCategory}) is below the NCCN threshold (>=2) for routine ambulatory prophylaxis.`,
+              source: "NCCN VTE-B",
+            },
         ...(siteAlert ? [siteAlert] : []),
-      ],
-    };
-  }
-
-  // STEP 4: universal absolute contraindication aborts the pipeline (Issue 9).
-  const universalAbsolute = contraindications.absolute.filter(
-    (c) => c.appliesTo === "all",
-  );
-  const targetedAbsolute = contraindications.absolute.filter(
-    (c) => c.appliesTo !== "all",
-  );
-
-  if (universalAbsolute.length > 0) {
-    const contraAlerts: Alert[] = universalAbsolute.map((c) => ({
-      level: "critical" as const,
-      title: "Absolute contraindication to anticoagulation",
-      detail: c.detail,
-      source: c.source ?? "NCCN VTE-B",
-    }));
-    if (siteAlert) contraAlerts.push(siteAlert);
-    return {
-      ...base,
-      overallAction: "contraindicated",
-      verdictLabel: "contraindicated",
-      preferredOptions: [],
-      alternativeOptions: [],
-      avoidOptions: [],
-      alerts: contraAlerts,
+      ]),
     };
   }
 
@@ -532,6 +603,8 @@ export function generateRecommendation(
     });
   }
 
+  alerts.push(...dataAlerts);
+
   // Overall action.
   let overallAction: OverallAction = "recommend";
   if (preferredOptions.length === 0 && eligibleLmwh.length === 0) {
@@ -556,6 +629,21 @@ export function generateRecommendation(
     avoidOptions,
     alerts,
   };
+}
+
+/** Points each missing Khorana input could still add (one each). */
+function missingKhoranaPoints(missing: string[]): number {
+  return missing.filter((f) => ["plateletCount", "hemoglobin", "wbcCount", "bmi"].includes(f)).length;
+}
+
+function humanField(f: string): string {
+  const names: Record<string, string> = {
+    plateletCount: "platelets",
+    hemoglobin: "hemoglobin",
+    wbcCount: "WBC",
+    bmi: "BMI (weight/height)",
+  };
+  return names[f] ?? f;
 }
 
 /**

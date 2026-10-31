@@ -25,6 +25,10 @@ const BILI_ULN_DEFAULT = 1.2; // mg/dL (total bilirubin)
 /** Thresholds (kept explicit for auditability). */
 export const CONTRAINDICATION_THRESHOLDS = {
   SEVERE_THROMBOCYTOPENIA_LT: 50, // x10^9/L  (i.e. <50,000/uL)
+  // OncoVTE design rule, not an NCCN contraindication (OpenEvidence rules review,
+  // 2026-10-31): 7 g/dL is the AABB transfusion threshold for hematology/oncology
+  // patients, and NCCN's anemia workup starts by looking for hemorrhage.
+  SEVERE_ANEMIA_HOLD_HGB_LT: 7, // g/dL
   APIXABAN_LOW_WEIGHT_LT: 40, // kg — absolute, apixaban (NCCN VTE-B-2)
   // (The general DOAC caution at weight <50 kg per NCCN VTE-D is already surfaced
   // by the bleeding-risk panel's low-body-weight factor — not duplicated here.)
@@ -49,7 +53,6 @@ const APS_PREFIXES = ["D68.61"];
 // Luminal GI and GU tract tumors (NCCN VTE-D-5: DOAC caution with GI/GU lesions).
 // C18-C20 colorectal and C65-C66 upper-tract urothelial added in OpenEvidence review 4.
 const GI_TRACT_PREFIXES = ["C15", "C16", "C18", "C19", "C20", "C65", "C66", "C67"];
-const BRAIN_TUMOR_PREFIXES = ["C71", "C79.31"];
 const MYELOMA_PREFIXES = ["C90.0", "C90.1", "C90.2", "C90.3"];
 // Pregnancy (O00-O9A, Z33.1 incidental pregnant state, Z3A weeks of gestation)
 // and breastfeeding (Z39.1). DOACs cross the placenta and are excreted in milk;
@@ -69,6 +72,8 @@ export interface ContraindicationInput {
   conditions: { code: string }[];
   /** Platelet count in x10^9/L (= K/uL). Null when unavailable. */
   plateletCount: number | null;
+  /** Hemoglobin in g/dL (already unit-normalized). Null when unavailable. */
+  hemoglobin?: number | null;
   weightKg: number | null;
   onAntiplatelet: boolean;
   onIMiD: boolean;
@@ -137,6 +142,25 @@ export function detectContraindications(
         "Platelet count <50,000/uL — avoid all anticoagulation until platelet recovery. NCCN does not recommend DOAC use below a platelet count of 50,000/uL given limited published experience.",
       appliesTo: "all",
       source: "NCCN VTE-B-2 (per-agent); VTE-F",
+    });
+  }
+
+  // Severe anemia (<7 g/dL) — universal HOLD, an OncoVTE design rule. Anemia is
+  // not on NCCN's contraindication list, but a hemoglobin this low is often how
+  // bleeding presents, AVERT/CASSINI did not test such patients, and NCCN's DOAC
+  // and LMWH prophylaxis options assume no significant bleeding risk. The same
+  // anemia still adds a Khorana point (clot risk); this gate sits after the score.
+  if (
+    input.hemoglobin != null &&
+    input.hemoglobin < CONTRAINDICATION_THRESHOLDS.SEVERE_ANEMIA_HOLD_HGB_LT
+  ) {
+    absolute.push({
+      type: "absolute",
+      reason: "severe_anemia_hold",
+      detail:
+        "Severe anemia (hemoglobin <7 g/dL) — evaluate the cause, including bleeding, before starting prophylaxis. OncoVTE design rule; not an NCCN contraindication.",
+      appliesTo: "all",
+      source: "OncoVTE design rule (AABB 7 g/dL threshold; NCCN anemia workup)",
     });
   }
 
@@ -297,16 +321,8 @@ export function detectContraindications(
     });
   }
 
-  // Brain tumor — universal caution (also a Khorana exclusion).
-  if (hasConditionMatching(input.conditions, BRAIN_TUMOR_PREFIXES)) {
-    relative.push({
-      type: "relative",
-      reason: "brain_tumor",
-      detail:
-        "Primary/metastatic brain tumor: excluded from Khorana-based recommendation. Individualized risk-benefit assessment required.",
-      appliesTo: "all",
-    });
-  }
+  // (No brain-tumor caution here: brain tumors are a Khorana exclusion, so the
+  // engine stops before relative cautions are ever shown — OpenEvidence rules review.)
 
   // Multiple myeloma on IMiD — universal caution (separate pathway).
   if (

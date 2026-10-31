@@ -101,4 +101,12 @@ export interface PatientData {
   /** Frailty or ECOG performance status 3–4. */
   isFrailOrPoorPerformance?: boolean;
   hasAnorexiaOrVomiting?: boolean;
+
+  /**
+   * Hemoglobin fall of ≥2 g/dL from a prior result within 30 days of the latest
+   * (possible active bleeding). Parsed from FHIR history; absent in the editor.
+   */
+  hemoglobinDrop?: { from: number; to: number; days: number } | null;
+  /** Labs dropped because their unit was not recognized ("verify manually"). */
+  unitIssues?: string[];
 }

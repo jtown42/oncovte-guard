@@ -21,6 +21,9 @@ export type ContraindicationReason =
   | "severe_hepatic_impairment"
   | "gi_tract_cancer"
   | "brain_tumor"
+  // OncoVTE design rule (not an NCCN contraindication): Hgb <7 g/dL holds
+  // prophylaxis until the cause of severe anemia is known (OpenEvidence rules review).
+  | "severe_anemia_hold"
   | "multiple_myeloma_imid"
   | "concurrent_antiplatelet"
   | "pregnancy_or_breastfeeding"

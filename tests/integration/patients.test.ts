@@ -182,12 +182,12 @@ describe("Patient 3: Dorothy Williams — High Khorana, severe renal + thrombocy
     expect(r.renal?.warnings).toContain("nephrotoxic_chemotherapy");
   });
 
-  it("WS-2: bleeding-risk is elevated (CrCl <30) and prefers LMWH", () => {
+  it("WS-2: bleeding-risk is elevated (CrCl <30), without contradicting the renal 'avoid LMWH' rule", () => {
     expect(r.bleedingRisk.tier).toBe("elevated");
     expect(
       r.bleedingRisk.factors.some((f) => f.key === "severe_renal_impairment"),
     ).toBe(true);
-    expect(r.bleedingRisk.prefersLmwh).toBe(true);
+    expect(r.bleedingRisk.prefersLmwh).toBe(false);
   });
 
   it("live demo what-if: platelets 55 -> apixaban with renal caution; rivaroxaban and LMWH avoided", () => {

@@ -11,7 +11,7 @@ import type { OverallAction } from "../types/recommendation";
 import { useEffect, useRef, useState } from "react";
 import { Flash } from "./Flash";
 import {
-  ACTION,
+  verdictPresentation,
   TONE_BANNER,
   TONE_SOLID,
   TONE_DOT,
@@ -90,15 +90,11 @@ export function RecommendationPanel({
 }: {
   rec: ProphylaxisRecommendation;
 }) {
-  const action = ACTION[rec.overallAction];
+  const action = verdictPresentation(rec);
   const showOptions =
     rec.overallAction === "recommend" || rec.overallAction === "caution";
 
-  // F4 (WS-5): distinct LMWH-fallback label without changing overallAction/tone.
-  const isLmwhVerdict = rec.verdictLabel === "recommend_lmwh";
-  const heroLabel = isLmwhVerdict
-    ? "Prophylaxis recommended — LMWH"
-    : action.label;
+  const heroLabel = action.label;
 
   // The regimen the clinician acts on: preferred DOACs, or the LMWH fallback.
   const regimen = rec.preferredOptions.length
@@ -322,7 +318,7 @@ function StepMark({ tone }: { tone: Tone }) {
  * read — the app's visual signature and the anchor of the live demo.
  */
 function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
-  const action = ACTION[rec.overallAction];
+  const action = verdictPresentation(rec);
   const excluded = rec.khorana.exclusion.isExcluded;
   const canProceed = rec.contraindications.canProceedWithProphylaxis;
   const preferredN = rec.preferredOptions.length;
@@ -377,7 +373,13 @@ function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
       label: "Decision",
       value: excluded
         ? "Excluded"
-        : rec.overallAction === "not_indicated"
+        : rec.verdictLabel === "already_anticoagulated"
+          ? "On anticoag"
+          : rec.verdictLabel === "insufficient_data"
+            ? "Need data"
+            : rec.verdictLabel === "hold_severe_anemia"
+              ? "Hold"
+              : rec.overallAction === "not_indicated"
           ? "Not indicated"
           : rec.overallAction === "contraindicated"
             ? "No anticoag"
@@ -388,7 +390,13 @@ function PathwayStrip({ rec }: { rec: ProphylaxisRecommendation }) {
                 : "—",
       note: excluded
         ? "disease-specific"
-        : rec.overallAction === "not_indicated"
+        : rec.verdictLabel === "already_anticoagulated"
+          ? "prophylaxis not applicable"
+          : rec.verdictLabel === "insufficient_data"
+            ? "missing inputs"
+            : rec.verdictLabel === "hold_severe_anemia"
+              ? "evaluate anemia"
+              : rec.overallAction === "not_indicated"
           ? "below threshold"
           : rec.overallAction === "contraindicated"
             ? "no pharmacologic option"

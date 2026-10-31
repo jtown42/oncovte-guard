@@ -1,7 +1,7 @@
 {
-  "kbVersion": "1.2.0",
-  "lastReviewed": "2026-10-09",
-  "provenanceNote": "Curated from two secondary references — the AHA 2022 Scientific Statement (Table 3) and Hellfritzsch et al. 2024 (100 agents evaluated) — plus FDA DOAC labeling, and applied consistently across the original 52 agents; the ibrutinib entry was re-sourced in v1.1.0 to its FDA labeling and the 2025 ACC cardio-oncology guidance. v1.2.0 (OpenEvidence review 4) corrected 16 RxNorm codes, re-rated 8 agents and added 18 agents (70 total); new reference-only cells not yet reviewed are rated unknown. The per-agent `sources` array is a KB-level attestation, not per-interaction citation. All `major` cells are individually anchored via `evidenceAnchor`: the 22 recommendation-changing cells (11 agents × apixaban/rivaroxaban) plus 4 reference-only dabigatran/edoxaban cells. Each major cell states its `exposure` direction (increased = bleeding risk; decreased = loss of efficacy). Several majors rest on expert guidance rather than FDA label text (idelalisib, enzalutamide, mitotane, tucatinib), and say so. Quantitative magnitudes in `mechanism` strings are as reported in these secondary references, not independently re-derived. `lastReviewed` is the author curation date and does NOT denote clinician validation (F13). Not for clinical use without pharmacist/clinician sign-off.",
+  "kbVersion": "1.3.0",
+  "lastReviewed": "2026-10-31",
+  "provenanceNote": "Curated from two secondary references — the AHA 2022 Scientific Statement (Table 3) and Hellfritzsch et al. 2024 (100 agents evaluated) — plus FDA DOAC labeling, and applied consistently across the original 52 agents; the ibrutinib entry was re-sourced in v1.1.0 to its FDA labeling and the 2025 ACC cardio-oncology guidance. v1.2.0 (OpenEvidence review 4) corrected 16 RxNorm codes, re-rated 8 agents and added 18 agents (70 total); new reference-only cells not yet reviewed are rated unknown. The per-agent `sources` array is a KB-level attestation, not per-interaction citation. All `major` cells are individually anchored via `evidenceAnchor`: the 22 recommendation-changing cells (11 agents × apixaban/rivaroxaban) plus 4 reference-only dabigatran/edoxaban cells. Each major cell states its `exposure` direction (increased = bleeding risk; decreased = loss of efficacy). Several majors rest on expert guidance rather than FDA label text (idelalisib, enzalutamide, mitotane, tucatinib), and say so. Quantitative magnitudes in `mechanism` strings are as reported in these secondary references, not independently re-derived. `lastReviewed` is the author curation date and does NOT denote clinician validation (F13). Not for clinical use without pharmacist/clinician sign-off. v1.3.0 (OpenEvidence rules review, 2026-10-31) added acyclovir, allopurinol and ondansetron as supportive-care agents rated none for apixaban and rivaroxaban (dabigatran/edoxaban left unknown).",
   "agents": [
     {
       "agentName": "Ibrutinib",
@@ -2962,6 +2962,138 @@
       "sources": [
         "Anticoagulation Forum 2026 DOAC drug-interaction table"
       ]
+    },
+    {
+      "agentName": "Acyclovir",
+      "brandName": "Zovirax",
+      "rxnormCode": "281",
+      "drugClass": "Antiviral (supportive care)",
+      "pgpEffect": "none",
+      "cyp3a4Effect": "none",
+      "interactions": {
+        "apixaban": {
+          "severity": "none",
+          "mechanism": "No known CYP3A4 or P-gp role; no clinically relevant interaction with apixaban or rivaroxaban at prophylactic doses.",
+          "recommendation": "No interaction-based dose change.",
+          "alternativeDoac": null,
+          "evidenceAnchor": {
+            "source": "OpenEvidence rules review 2026-10-31 (not anchored to a label section)",
+            "locator": "Expert review; no label interaction statement retrieved",
+            "claim": "No known CYP3A4 or P-gp role; no clinically relevant interaction with apixaban or rivaroxaban at prophylactic doses."
+          }
+        },
+        "rivaroxaban": {
+          "severity": "none",
+          "mechanism": "No known CYP3A4 or P-gp role; no clinically relevant interaction with apixaban or rivaroxaban at prophylactic doses.",
+          "recommendation": "No interaction-based dose change.",
+          "alternativeDoac": null,
+          "evidenceAnchor": {
+            "source": "OpenEvidence rules review 2026-10-31 (not anchored to a label section)",
+            "locator": "Expert review; no label interaction statement retrieved",
+            "claim": "No known CYP3A4 or P-gp role; no clinically relevant interaction with apixaban or rivaroxaban at prophylactic doses."
+          }
+        },
+        "dabigatran": {
+          "severity": "unknown",
+          "mechanism": "Not assessed for this reference-only agent.",
+          "recommendation": "Not an NCCN prophylaxis option; verify manually if relevant.",
+          "alternativeDoac": null
+        },
+        "edoxaban": {
+          "severity": "unknown",
+          "mechanism": "Not assessed for this reference-only agent.",
+          "recommendation": "Not an NCCN prophylaxis option; verify manually if relevant.",
+          "alternativeDoac": null
+        }
+      }
+    },
+    {
+      "agentName": "Allopurinol",
+      "brandName": "Zyloprim",
+      "rxnormCode": "519",
+      "drugClass": "Xanthine oxidase inhibitor (supportive care)",
+      "pgpEffect": "none",
+      "cyp3a4Effect": "none",
+      "interactions": {
+        "apixaban": {
+          "severity": "none",
+          "mechanism": "Weak CYP1A2 inhibitor only; the label's interaction list names warfarin, not DOACs.",
+          "recommendation": "No interaction-based dose change.",
+          "alternativeDoac": null,
+          "evidenceAnchor": {
+            "source": "FDA allopurinol labeling (2026-05-21); OpenEvidence round 7",
+            "locator": "Drug Interactions section",
+            "claim": "Weak CYP1A2 inhibitor only; the label's interaction list names warfarin, not DOACs."
+          }
+        },
+        "rivaroxaban": {
+          "severity": "none",
+          "mechanism": "Weak CYP1A2 inhibitor only; the label's interaction list names warfarin, not DOACs.",
+          "recommendation": "No interaction-based dose change.",
+          "alternativeDoac": null,
+          "evidenceAnchor": {
+            "source": "FDA allopurinol labeling (2026-05-21); OpenEvidence round 7",
+            "locator": "Drug Interactions section",
+            "claim": "Weak CYP1A2 inhibitor only; the label's interaction list names warfarin, not DOACs."
+          }
+        },
+        "dabigatran": {
+          "severity": "unknown",
+          "mechanism": "Not assessed for this reference-only agent.",
+          "recommendation": "Not an NCCN prophylaxis option; verify manually if relevant.",
+          "alternativeDoac": null
+        },
+        "edoxaban": {
+          "severity": "unknown",
+          "mechanism": "Not assessed for this reference-only agent.",
+          "recommendation": "Not an NCCN prophylaxis option; verify manually if relevant.",
+          "alternativeDoac": null
+        }
+      }
+    },
+    {
+      "agentName": "Ondansetron",
+      "brandName": "Zofran",
+      "rxnormCode": "26225",
+      "drugClass": "5-HT3 antagonist (antiemetic)",
+      "pgpEffect": "none",
+      "cyp3a4Effect": "none",
+      "interactions": {
+        "apixaban": {
+          "severity": "none",
+          "mechanism": "CYP3A4 substrate only; the label states it does not induce or inhibit CYP450 enzymes.",
+          "recommendation": "No interaction-based dose change.",
+          "alternativeDoac": null,
+          "evidenceAnchor": {
+            "source": "FDA ondansetron labeling (2025-09-03); OpenEvidence round 7",
+            "locator": "Clinical Pharmacology / Drug Interactions",
+            "claim": "CYP3A4 substrate only; the label states it does not induce or inhibit CYP450 enzymes."
+          }
+        },
+        "rivaroxaban": {
+          "severity": "none",
+          "mechanism": "CYP3A4 substrate only; the label states it does not induce or inhibit CYP450 enzymes.",
+          "recommendation": "No interaction-based dose change.",
+          "alternativeDoac": null,
+          "evidenceAnchor": {
+            "source": "FDA ondansetron labeling (2025-09-03); OpenEvidence round 7",
+            "locator": "Clinical Pharmacology / Drug Interactions",
+            "claim": "CYP3A4 substrate only; the label states it does not induce or inhibit CYP450 enzymes."
+          }
+        },
+        "dabigatran": {
+          "severity": "unknown",
+          "mechanism": "Not assessed for this reference-only agent.",
+          "recommendation": "Not an NCCN prophylaxis option; verify manually if relevant.",
+          "alternativeDoac": null
+        },
+        "edoxaban": {
+          "severity": "unknown",
+          "mechanism": "Not assessed for this reference-only agent.",
+          "recommendation": "Not an NCCN prophylaxis option; verify manually if relevant.",
+          "alternativeDoac": null
+        }
+      }
     }
   ]
 }

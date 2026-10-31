@@ -201,6 +201,54 @@ Also: should any common oncology **supportive-care** drugs be added (e.g., acycl
 
 ---
 
-## Outcome
+## Outcome (2026-10-31)
 
-*(Fill in after the answers come back. Do not change any rule until the answer has been read and each change is agreed.)*
+OpenEvidence answered Parts A and B together, plus a separate severe-anemia answer. The user approved **Tier 1** with a **7 g/dL** anemia threshold; Tier 2 waits until after Nov 10. Tests: `tests/core/openevidence-rules-review.test.ts` (19 new; 248 total).
+
+**Applied (Tier 1):**
+
+| Finding | Change |
+|---|---|
+| Already-anticoagulated patients weren't detected (AVERT excluded them; the rivaroxaban label warns about adding agents) | Any active apixaban, rivaroxaban, dabigatran, edoxaban, enoxaparin, dalteparin, UFH or warfarin order → "Already anticoagulated" (overallAction `not_indicated`, verdictLabel `already_anticoagulated`); no agent offered |
+| Hgb 5 returned a confident "recommend" (anemia adds a Khorana point; RIETE RR 2.52 for major bleeding; often a sign of bleeding) | **Hgb <7 g/dL → universal hold**, labeled "OncoVTE design rule; not an NCCN contraindication" (AABB threshold; NCCN anemia workup). Khorana still counts the point. Hgb 7 to <10 unchanged |
+| No warning for a falling hemoglobin | A fall of ≥2 g/dL from any result in the prior 30 days → "possible active bleeding" warning (NCCN major-bleeding definition) |
+| No lab-unit handling | Hemoglobin g/L ÷10, mmol/L ÷0.6206; creatinine µmol/L ÷88.4 (UCUM code first). Missing or unknown unit → value not used, "verify manually" |
+| Missing labs could produce "not indicated" | Score <2, but score + possible points from missing items ≥2 → "Insufficient data" |
+| Decision order sent a bleeding myeloma patient to a myeloma regimen | Already anticoagulated → universal stops → exclusion → score → options |
+| The brain-tumor relative caution could never fire | Removed |
+| The bleeding panel said "LMWH preferred" at CrCl <30 while the renal rules avoid LMWH | Text now says patients with CrCl <30 were excluded from the prophylaxis trials; no LMWH preference |
+| The gastric note credited NCCN for ACC's "LMWH may be preferred" | "Increased hemorrhage risk with DOACs (NCCN VTE-2 footnote); LMWH may be preferred (ACC 2026)" |
+| Enoxaparin 20 mg (≤40 kg) and dalteparin 2,500 units had no source | Removed: enoxaparin 30 mg for everyone ≤50 kg; dalteparin stays 5,000 units; all weight-adjusted doses labeled "extrapolated from inpatient/surgical data" |
+| Supportive drugs showed "unknown" | KB v1.3.0 adds acyclovir, allopurinol and ondansetron as "none" for apixaban/rivaroxaban (dabigatran/edoxaban unknown) |
+
+**Confirmed correct:** Khorana points, boundaries, sites, tiers and the ≥2 threshold; exclusions (CML as an MPN is defensible; CLL is fine); platelets <50 as a universal stop (50–100 stays a bleeding-panel item); renal rules (apixaban caution at 15–29, rivaroxaban/LMWH avoid <30); DOAC duration wording; APS, pregnancy, HIT and <40 kg blocks; ketoconazole, itraconazole, carbamazepine, phenytoin and rifampin MAJOR; clarithromycin non-blocking (both labels exempt it); BTK/VEGF PD; LMWH avoid <30 kept for now (the enoxaparin 30 mg data are inpatient).
+
+**Deferred to after Nov 10 (Tier 2):**
+- One precedence rule for interactions (label > ASCO class statement > reviews); voriconazole → major under ASCO's wording.
+- Rivaroxaban conditional block with combined P-gp + moderate CYP3A inhibitors at CrCl 15 to <80 (cyclosporine, isavuconazonium, imatinib, nilotinib, crizotinib, ceritinib, aprepitant, abiraterone, erythromycin, verapamil, diltiazem).
+- Tag posaconazole, idelalisib, tucatinib and the strong inducers as "class/expert (ASCO), not label"; fluconazole moderate for both.
+- Add St John's wort and phenobarbital (major); SSRIs/SNRIs, antiplatelets and NSAIDs (PD, and set the flags automatically); amiodarone (moderate); PPIs none (with the itraconazole-absorption note).
+- Condition query: include `problem-list-item`; accept recurrence and relapse.
+- Read INR, PT and aPTT (hemorrhagic coagulopathy); add neuraxial-procedure and gastric/small-bowel-resection flags.
+- Itraconazole 14-day washout; sex other than female → female factor with a flag; gastric (C16) → LMWH and apixaban preferred, rivaroxaban less preferred; pancreatic-regimen weight caveat.
+
+**Demo impact:** no demo verdict changed. Talk images re-captured: all identical except the panel slide (three anticoagulated rows now read "Already anticoagulated"; still 19 flagged) and Dorothy's hidden backup slide (bleeding-panel text). Both were swapped into OncoVTE-final.pptx.
+
+### References (as given)
+1. NCCN. Cancer-Associated Venous Thromboembolic Disease. Updated 2026-05-05.
+2. Kumbhani DJ, Armbruster AL, Cheng RK, et al. 2026 ACC Scientific Statement on DOACs. J Am Coll Cardiol. 2026. doi:10.1016/j.jacc.2026.05.033.
+3. Rojas-Hernandez CM, Oo TH. DOACs in cancer VTE: insights from RCTs. Drugs. 2019;79(6):621-631. doi:10.1007/s40265-019-01084-2.
+4. Xarelto. FDA label, updated 2026-09-10.
+5. Rivaroxaban. FDA label, updated 2025-12-11.
+6. Enoxaparin sodium. FDA label, updated 2025-09-30.
+7. Garcia DA, Baglin TP, Weitz JI, Samama MM. Parenteral anticoagulants (ACCP 9th ed). Chest. 2012;141(2 Suppl):e24S-e43S. doi:10.1378/chest.11-2291.
+8. Sebaaly J, Covert K. Enoxaparin dosing at extremes of weight. Ann Pharmacother. 2018;52(9):898-909. doi:10.1177/1060028018768449.
+9. Vandiver JW, Ritz LI, Lalama JT. Chemical prophylaxis in morbid obesity. J Thromb Thrombolysis. 2016;41(3):475-81. doi:10.1007/s11239-015-1231-5.
+10. VTE Prophylaxis in Hospitalized Surgical Patients. Anticoagulation Forum. 2026.
+11. ELIQUIS. FDA label, updated 2025-04-17.
+12. Key NS, Khorana AA, Kuderer NM, et al. ASCO guideline update. J Clin Oncol. 2023;41(16):3063-3071. doi:10.1200/JCO.23.00294.
+13. Joglar JA, Chung MK, et al. 2023 ACC/AHA/ACCP/HRS atrial fibrillation guideline. J Am Coll Cardiol. 2024;83(1):109-279. doi:10.1016/j.jacc.2023.08.017.
+14. Wiggins BS, Dixon DL, Neyens RR, Page RL, Gluckman TJ. Select DDIs with DOACs (JACC Review). J Am Coll Cardiol. 2020;75(11):1341-1350. doi:10.1016/j.jacc.2019.12.068.
+15. Rahman AA, He N, Rej S, Platt RW, Renoux C. SSRIs and oral anticoagulants: major bleeding meta-analysis. Thromb Haemost. 2023;123(1):54-63. doi:10.1055/a-1932-8976.
+
+The severe-anemia answer also cited RIETE (anemia RR 2.52 for major and 2.73 for fatal bleeding), API-CAT (sHR 1.93), the AABB 7 g/dL threshold, and the UCUM hemoglobin conversion (1 g/dL = 0.6206 mmol/L).

@@ -136,7 +136,13 @@ function summaryCard(
 
   const summaryText = clip(
     `${patient.name}: ${
-      rec.overallAction === "recommend"
+      rec.verdictLabel === "already_anticoagulated"
+        ? "Already anticoagulated — prophylaxis not applicable"
+        : rec.verdictLabel === "hold_severe_anemia"
+          ? "Hold — evaluate severe anemia before prophylaxis"
+          : rec.verdictLabel === "insufficient_data"
+            ? "Insufficient data to rule out VTE prophylaxis"
+            : rec.overallAction === "recommend"
         ? `VTE prophylaxis recommended${preferred.length ? ` (${preferred.join("/")})` : ""}`
         : rec.overallAction === "caution"
           ? "VTE prophylaxis indicated — review cautions"

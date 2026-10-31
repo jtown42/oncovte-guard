@@ -120,10 +120,12 @@ describe("LMWH dose at weight extremes (non-pancreatic)", () => {
     expect(dose(r, "dalteparin")).toBe("7,500 units daily");
   });
 
-  it("weight 41–50 kg: enoxaparin 30 mg, dalteparin 2,500 units", () => {
+  it("weight ≤50 kg: enoxaparin 30 mg; dalteparin stays 5,000 units (2,500 had no source)", () => {
     const r = jamesWith(48, 15.7);
     expect(dose(r, "enoxaparin")).toBe("30 mg daily");
-    expect(dose(r, "dalteparin")).toBe("2,500 units daily");
+    expect(dose(r, "dalteparin")).toBe("5,000 units daily");
+    // 20 mg at ≤40 kg was removed too (OpenEvidence rules review).
+    expect(dose(jamesWith(38, 14), "enoxaparin")).toBe("30 mg daily");
   });
 });
 

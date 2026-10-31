@@ -44,7 +44,7 @@ import type { DoacName } from "../types/ddi";
 import { RiskCategory } from "../types/khorana";
 import { RXNORM } from "../data/rxnorm-codes";
 import { DDI_KB_VERSION } from "../core/ddi-checker";
-import { ACTION } from "../ui/format";
+import { verdictPresentation } from "../ui/format";
 import pkg from "../../package.json";
 
 export const ENGINE_DEVICE_ID = "oncovte-guard-engine";
@@ -128,10 +128,7 @@ export function regimenText(o: DOACOption): string {
 
 /** The verdict sentence, built from the same labels the dashboard hero uses. */
 export function verdictText(rec: ProphylaxisRecommendation): string {
-  const head =
-    rec.verdictLabel === "recommend_lmwh"
-      ? "Prophylaxis recommended — LMWH"
-      : ACTION[rec.overallAction].label;
+  const head = verdictPresentation(rec).label;
   const regimen = rec.preferredOptions.length ? rec.preferredOptions : rec.alternativeOptions;
   const showOptions = rec.overallAction === "recommend" || rec.overallAction === "caution";
   return showOptions && regimen.length
@@ -314,6 +311,10 @@ export function buildFhirOutput(
         if (c.reason === "severe_thrombocytopenia") {
           const pl = refs.lab("platelets", patient.labs.platelets?.value, "Platelets");
           if (pl) implicated.push(pl);
+        }
+        if (c.reason === "severe_anemia_hold") {
+          const hb = refs.lab("hemoglobin", patient.labs.hemoglobin?.value, "Hemoglobin");
+          if (hb) implicated.push(hb);
         }
         issue(
           `contra|${c.reason}`,

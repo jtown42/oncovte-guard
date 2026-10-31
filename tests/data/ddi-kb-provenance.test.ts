@@ -20,7 +20,7 @@ describe("DDI KB root metadata (WS-3)", () => {
     expect(KB.lastReviewed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(KB.provenanceNote.length).toBeGreaterThan(0);
     expect(Array.isArray(KB.agents)).toBe(true);
-    expect(KB.agents.length).toBe(70);
+    expect(KB.agents.length).toBe(73);
   });
 
   it("does NOT claim clinician validation or per-agent literature sourcing (honesty guard)", () => {

@@ -37,7 +37,8 @@ describe("assessBleedingRisk — factors", () => {
     const f = r.factors.find((x) => x.key === "gastric_gej_tumor");
     expect(f).toBeDefined();
     expect(f?.prefersLmwh).toBe(true);
-    expect(f?.source).toBe("NCCN VTE-2");
+    // Each statement cited to its own source (OpenEvidence rules review).
+    expect(f?.source).toBe("NCCN VTE-2 footnote; ACC 2026 Scientific Statement");
     expect(r.prefersLmwh).toBe(true);
   });
 
@@ -54,10 +55,10 @@ describe("assessBleedingRisk — factors", () => {
     expect(hasFactor(bri({ conditions: [{ code: "C43.9" }] }), "rcc_or_melanoma")).toBe(true);
   });
 
-  it("Factor 5: CrCl <30 is elevated and prefers LMWH", () => {
+  it("Factor 5: CrCl <30 is elevated but does NOT say 'LMWH preferred' (NCCN avoids LMWH <30)", () => {
     const r = assessBleedingRisk(bri({ crclMlMin: 12.9 }));
     expect(r.factors.some((f) => f.key === "severe_renal_impairment")).toBe(true);
-    expect(r.prefersLmwh).toBe(true);
+    expect(r.prefersLmwh).toBe(false);
   });
 
   it("Factor 6: low body weight <50 kg", () => {

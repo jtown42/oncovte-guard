@@ -179,7 +179,7 @@
       "id": "panel-01",
       "cancer": "Malignant neoplasm of ovary",
       "khorana": 3,
-      "verdict": "Prophylaxis recommended — LMWH: Enoxaparin 40 mg SC daily or Dalteparin 5,000 units SC daily",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -188,7 +188,7 @@
       "id": "panel-10",
       "cancer": "Malignant neoplasm of breast",
       "khorana": 3,
-      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -197,7 +197,7 @@
       "id": "panel-34",
       "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
       "khorana": 3,
-      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -206,7 +206,7 @@
       "id": "panel-39",
       "cancer": "Malignant neoplasm of upper lobe, bronchus or lung",
       "khorana": 3,
-      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -215,7 +215,7 @@
       "id": "panel-07",
       "cancer": "Malignant neoplasm of ovary",
       "khorana": 2,
-      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -224,7 +224,7 @@
       "id": "panel-09",
       "cancer": "Malignant neoplasm of ovary",
       "khorana": 2,
-      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -233,7 +233,7 @@
       "id": "panel-13",
       "cancer": "Diffuse large B-cell lymphoma",
       "khorana": 2,
-      "verdict": "Prophylaxis recommended: Apixaban 2.5 mg PO BID or Rivaroxaban 10 mg PO daily",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -251,7 +251,7 @@
       "id": "panel-23",
       "cancer": "Malignant neoplasm of breast",
       "khorana": 1,
-      "verdict": "Routine prophylaxis not indicated",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -269,7 +269,7 @@
       "id": "panel-30",
       "cancer": "Malignant neoplasm of sigmoid colon",
       "khorana": 1,
-      "verdict": "Routine prophylaxis not indicated",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -287,7 +287,7 @@
       "id": "panel-14",
       "cancer": "Malignant neoplasm of sigmoid colon",
       "khorana": 1,
-      "verdict": "Routine prophylaxis not indicated",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -323,7 +323,7 @@
       "id": "panel-24",
       "cancer": "Malignant neoplasm of sigmoid colon",
       "khorana": 0,
-      "verdict": "Routine prophylaxis not indicated",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -332,7 +332,7 @@
       "id": "panel-31",
       "cancer": "Malignant neoplasm of sigmoid colon",
       "khorana": 0,
-      "verdict": "Routine prophylaxis not indicated",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },
@@ -350,7 +350,7 @@
       "id": "panel-35",
       "cancer": "Malignant neoplasm of prostate",
       "khorana": 0,
-      "verdict": "Routine prophylaxis not indicated",
+      "verdict": "Already anticoagulated",
       "onAnticoagulant": true,
       "flagged": false
     },

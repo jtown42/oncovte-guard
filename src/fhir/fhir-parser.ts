@@ -28,6 +28,7 @@ import type {
 import { CancerCategory } from "../types/khorana";
 import { classifyIcd10, isCancerCode } from "../data/icd10-cancer-map";
 import { LOINC } from "../data/loinc-codes";
+import { normalizeLab } from "./units";
 import { isLabStale } from "../core/stale-lab";
 import {
   ANTIPLATELET_RXNORM,
@@ -162,6 +163,7 @@ export function parseLatestLab(
   bundle: Bundle,
   loincCode: string,
   now: Date = new Date(),
+  unitIssues?: string[],
 ): LabValue | null {
   const obs = resources<Observation>(bundle, "Observation").filter((o) =>
     o.code?.coding?.some(
@@ -176,9 +178,14 @@ export function parseLatestLab(
   if (q?.value == null) return null;
 
   const date = latest.effectiveDateTime ?? "";
+  const norm = normalizeLab(loincCode, q.value, q.code, q.unit);
+  if (!norm.ok) {
+    unitIssues?.push(`${LAB_NAMES[loincCode] ?? loincCode} reported as ${q.value} ${norm.reported}`);
+    return null;
+  }
   return {
-    value: q.value,
-    unit: q.unit ?? q.code ?? "",
+    value: norm.value,
+    unit: norm.unit,
     date,
     loincCode,
     isStale: isLabStale(date, now),
@@ -192,12 +199,21 @@ function effectiveTime(o: Observation): number {
   return Number.isNaN(t) ? 0 : t;
 }
 
-export function parseLabs(bundle: Bundle, now: Date = new Date()): PatientLabs {
+const LAB_NAMES: Record<string, string> = {
+  [LOINC.HEMOGLOBIN]: "Hemoglobin",
+  [LOINC.SERUM_CREATININE]: "Serum creatinine",
+};
+
+export function parseLabs(
+  bundle: Bundle,
+  now: Date = new Date(),
+  unitIssues?: string[],
+): PatientLabs {
   return {
     platelets: parseLatestLab(bundle, LOINC.PLATELETS, now),
-    hemoglobin: parseLatestLab(bundle, LOINC.HEMOGLOBIN, now),
+    hemoglobin: parseLatestLab(bundle, LOINC.HEMOGLOBIN, now, unitIssues),
     wbc: parseLatestLab(bundle, LOINC.WBC, now),
-    serumCreatinine: parseLatestLab(bundle, LOINC.SERUM_CREATININE, now),
+    serumCreatinine: parseLatestLab(bundle, LOINC.SERUM_CREATININE, now, unitIssues),
     alt: parseLatestLab(bundle, LOINC.ALT, now),
     ast: parseLatestLab(bundle, LOINC.AST, now),
     totalBilirubin: parseLatestLab(bundle, LOINC.TOTAL_BILIRUBIN, now),
@@ -221,6 +237,45 @@ export function parseMedications(bundle: Bundle): MedicationItem[] {
     });
   }
   return out;
+}
+
+/** A fall in hemoglobin this large within the window suggests bleeding (NCCN). */
+export const HGB_DROP_G_DL = 2;
+export const HGB_DROP_WINDOW_DAYS = 30;
+
+/**
+ * Hemoglobin fall of ≥2 g/dL from any result in the 30 days before the latest
+ * one (the largest such fall), or null. Values are unit-normalized; results in
+ * an unrecognized unit are skipped.
+ */
+export function parseHemoglobinDrop(
+  bundle: Bundle,
+): { from: number; to: number; days: number } | null {
+  const series = resources<Observation>(bundle, "Observation")
+    .filter((o) =>
+      o.code?.coding?.some((cd) => cd.system === LOINC_SYSTEM && cd.code === LOINC.HEMOGLOBIN),
+    )
+    .map((o) => {
+      const q = o.valueQuantity;
+      if (q?.value == null) return null;
+      const n = normalizeLab(LOINC.HEMOGLOBIN, q.value, q.code, q.unit);
+      return n.ok ? { t: effectiveTime(o), v: n.value } : null;
+    })
+    .filter((x): x is { t: number; v: number } => x !== null && x.t > 0)
+    .sort((a, b) => b.t - a.t);
+  if (series.length < 2) return null;
+  const latest = series[0];
+  const DAY = 24 * 60 * 60 * 1000;
+  let best: { from: number; to: number; days: number } | null = null;
+  for (const prior of series.slice(1)) {
+    const days = Math.round((latest.t - prior.t) / DAY);
+    if (days > HGB_DROP_WINDOW_DAYS) break;
+    const fall = prior.v - latest.v;
+    if (fall >= HGB_DROP_G_DL && (!best || fall > best.from - best.to)) {
+      best = { from: prior.v, to: latest.v, days };
+    }
+  }
+  return best;
 }
 
 export interface Vitals {
@@ -277,7 +332,8 @@ export function assemblePatientData(
   now: Date = new Date(),
 ): PatientData {
   const demo = parsePatientDemographics(raw.patient, now);
-  const labs = parseLabs(raw.labs, now);
+  const unitIssues: string[] = [];
+  const labs = parseLabs(raw.labs, now, unitIssues);
   const vitals = parseVitals(raw.vitals, now);
   const medications = parseMedications(raw.medications);
   const activeCancerConditions = parseConditions(raw.conditions);
@@ -306,6 +362,8 @@ export function assemblePatientData(
     // No reliable discrete FHIR signal for active major bleeding; it is a
     // clinician-assessed finding, so it defaults to false from parsed data.
     hasActiveMajorBleeding: false,
+    hemoglobinDrop: parseHemoglobinDrop(raw.labs),
+    unitIssues,
   };
 }
 

@@ -1,10 +1,10 @@
 {
   "resourceType": "Bundle",
   "type": "collection",
-  "timestamp": "2026-10-31T14:51:01.731Z",
+  "timestamp": "2026-10-31T15:26:25.270Z",
   "entry": [
     {
-      "fullUrl": "urn:uuid:6cb597d8-8ef4-4e8e-96b5-61fa34f4d8ac",
+      "fullUrl": "urn:uuid:2e2ce69e-e59a-40d9-aca0-62e42716f4a3",
       "resource": {
         "resourceType": "GuidanceResponse",
         "text": {
@@ -17,9 +17,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "occurrenceDateTime": "2026-10-31T14:51:01.731Z",
+        "occurrenceDateTime": "2026-10-31T15:26:25.270Z",
         "performer": {
-          "reference": "urn:uuid:00659b7c-bc57-40c8-a581-e0b119b30b05",
+          "reference": "urn:uuid:01ea5b3c-288c-48ed-b65c-14ef5f3ae73e",
           "display": "OncoVTE Guard Decision Engine"
         },
         "note": [
@@ -28,18 +28,18 @@
           }
         ],
         "result": {
-          "reference": "urn:uuid:9bf132d1-1864-4c42-afa2-2a0f6c37f49c"
+          "reference": "urn:uuid:79ef5869-6894-4dea-b040-a8ebe13b9d68"
         }
       }
     },
     {
-      "fullUrl": "urn:uuid:00659b7c-bc57-40c8-a581-e0b119b30b05",
+      "fullUrl": "urn:uuid:01ea5b3c-288c-48ed-b65c-14ef5f3ae73e",
       "resource": {
         "resourceType": "Device",
         "id": "oncovte-guard-engine",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.2.0.</p></div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.3.0.</p></div>"
         },
         "status": "active",
         "deviceName": [
@@ -59,13 +59,13 @@
             "type": {
               "text": "DOAC interaction knowledge base"
             },
-            "value": "1.2.0"
+            "value": "1.3.0"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:15ac03a3-c2eb-4f3b-894b-3fde1e0c8346",
+      "fullUrl": "urn:uuid:372c6bc6-63b1-4fa0-8f33-80e1dbae5487",
       "resource": {
         "resourceType": "RiskAssessment",
         "text": {
@@ -77,9 +77,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "occurrenceDateTime": "2026-10-31T14:51:01.731Z",
+        "occurrenceDateTime": "2026-10-31T15:26:25.270Z",
         "performer": {
-          "reference": "urn:uuid:00659b7c-bc57-40c8-a581-e0b119b30b05",
+          "reference": "urn:uuid:01ea5b3c-288c-48ed-b65c-14ef5f3ae73e",
           "display": "OncoVTE Guard Decision Engine"
         },
         "code": {
@@ -132,7 +132,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:dbe6a48b-7633-48c7-b114-2ccd1cc1e081",
+      "fullUrl": "urn:uuid:c4e90d66-d00d-4572-9066-ddc58482d5d1",
       "resource": {
         "resourceType": "MedicationRequest",
         "text": {
@@ -145,9 +145,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "authoredOn": "2026-10-31T14:51:01.731Z",
+        "authoredOn": "2026-10-31T15:26:25.270Z",
         "requester": {
-          "reference": "urn:uuid:00659b7c-bc57-40c8-a581-e0b119b30b05",
+          "reference": "urn:uuid:01ea5b3c-288c-48ed-b65c-14ef5f3ae73e",
           "display": "OncoVTE Guard Decision Engine"
         },
         "medicationCodeableConcept": {
@@ -173,7 +173,7 @@
         ],
         "supportingInformation": [
           {
-            "reference": "urn:uuid:15ac03a3-c2eb-4f3b-894b-3fde1e0c8346"
+            "reference": "urn:uuid:372c6bc6-63b1-4fa0-8f33-80e1dbae5487"
           }
         ],
         "note": [
@@ -184,7 +184,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:19b4494c-69d3-4388-94d8-5e5c64bf4498",
+      "fullUrl": "urn:uuid:aa63d924-cc74-463f-888b-10822e9c5f99",
       "resource": {
         "resourceType": "MedicationRequest",
         "text": {
@@ -197,9 +197,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "authoredOn": "2026-10-31T14:51:01.731Z",
+        "authoredOn": "2026-10-31T15:26:25.270Z",
         "requester": {
-          "reference": "urn:uuid:00659b7c-bc57-40c8-a581-e0b119b30b05",
+          "reference": "urn:uuid:01ea5b3c-288c-48ed-b65c-14ef5f3ae73e",
           "display": "OncoVTE Guard Decision Engine"
         },
         "medicationCodeableConcept": {
@@ -225,7 +225,7 @@
         ],
         "supportingInformation": [
           {
-            "reference": "urn:uuid:15ac03a3-c2eb-4f3b-894b-3fde1e0c8346"
+            "reference": "urn:uuid:372c6bc6-63b1-4fa0-8f33-80e1dbae5487"
           }
         ],
         "note": [
@@ -236,7 +236,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:9bf132d1-1864-4c42-afa2-2a0f6c37f49c",
+      "fullUrl": "urn:uuid:79ef5869-6894-4dea-b040-a8ebe13b9d68",
       "resource": {
         "resourceType": "RequestGroup",
         "text": {
@@ -249,9 +249,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "authoredOn": "2026-10-31T14:51:01.731Z",
+        "authoredOn": "2026-10-31T15:26:25.270Z",
         "author": {
-          "reference": "urn:uuid:00659b7c-bc57-40c8-a581-e0b119b30b05",
+          "reference": "urn:uuid:01ea5b3c-288c-48ed-b65c-14ef5f3ae73e",
           "display": "OncoVTE Guard Decision Engine"
         },
         "action": [
@@ -262,13 +262,13 @@
               {
                 "title": "Apixaban 2.5 mg PO BID",
                 "resource": {
-                  "reference": "urn:uuid:dbe6a48b-7633-48c7-b114-2ccd1cc1e081"
+                  "reference": "urn:uuid:c4e90d66-d00d-4572-9066-ddc58482d5d1"
                 }
               },
               {
                 "title": "Rivaroxaban 10 mg PO daily",
                 "resource": {
-                  "reference": "urn:uuid:19b4494c-69d3-4388-94d8-5e5c64bf4498"
+                  "reference": "urn:uuid:aa63d924-cc74-463f-888b-10822e9c5f99"
                 }
               }
             ]
@@ -277,31 +277,31 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:312a32be-9a18-47b2-8e97-fddca5a5e8d0",
+      "fullUrl": "urn:uuid:eca8711d-7990-4b7f-997f-2f90cc47a5f2",
       "resource": {
         "resourceType": "Provenance",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.2.0) from 4 source record(s).</p></div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.3.0) from 4 source record(s).</p></div>"
         },
         "target": [
           {
-            "reference": "urn:uuid:6cb597d8-8ef4-4e8e-96b5-61fa34f4d8ac"
+            "reference": "urn:uuid:2e2ce69e-e59a-40d9-aca0-62e42716f4a3"
           },
           {
-            "reference": "urn:uuid:15ac03a3-c2eb-4f3b-894b-3fde1e0c8346"
+            "reference": "urn:uuid:372c6bc6-63b1-4fa0-8f33-80e1dbae5487"
           },
           {
-            "reference": "urn:uuid:dbe6a48b-7633-48c7-b114-2ccd1cc1e081"
+            "reference": "urn:uuid:c4e90d66-d00d-4572-9066-ddc58482d5d1"
           },
           {
-            "reference": "urn:uuid:19b4494c-69d3-4388-94d8-5e5c64bf4498"
+            "reference": "urn:uuid:aa63d924-cc74-463f-888b-10822e9c5f99"
           },
           {
-            "reference": "urn:uuid:9bf132d1-1864-4c42-afa2-2a0f6c37f49c"
+            "reference": "urn:uuid:79ef5869-6894-4dea-b040-a8ebe13b9d68"
           }
         ],
-        "recorded": "2026-10-31T14:51:01.731Z",
+        "recorded": "2026-10-31T15:26:25.270Z",
         "agent": [
           {
             "type": {
@@ -314,7 +314,7 @@
               ]
             },
             "who": {
-              "reference": "urn:uuid:00659b7c-bc57-40c8-a581-e0b119b30b05",
+              "reference": "urn:uuid:01ea5b3c-288c-48ed-b65c-14ef5f3ae73e",
               "display": "OncoVTE Guard Decision Engine"
             }
           }

@@ -24,7 +24,14 @@ export type OverallAction =
  * recommendation, so the UI can say "Prophylaxis recommended — LMWH (DOACs
  * blocked)" without changing the machine-stable `overallAction` API consumers rely on.
  */
-export type VerdictLabel = OverallAction | "recommend_lmwh";
+export type VerdictLabel =
+  | OverallAction
+  | "recommend_lmwh"
+  // OpenEvidence rules review (2026-10-31): refinements of not_indicated /
+  // contraindicated that need their own wording on screen.
+  | "already_anticoagulated" // an active anticoagulant order: prophylaxis not applicable
+  | "hold_severe_anemia" // Hgb <7 g/dL: hold until the cause is known (design rule)
+  | "insufficient_data"; // score <2, but missing inputs could still reach 2
 
 export interface DOACOption {
   name: string;

@@ -36,6 +36,11 @@ function conditionBundle(codes: string[]): Bundle {
   };
 }
 
+const UNITS: Record<string, string> = {
+  [LOINC.HEMOGLOBIN]: "g/dL",
+  [LOINC.SERUM_CREATININE]: "mg/dL",
+};
+
 function obs(loinc: string, value: number): object {
   return {
     resource: {
@@ -43,7 +48,8 @@ function obs(loinc: string, value: number): object {
       status: "final",
       effectiveDateTime: RECENT,
       code: { coding: [{ system: LOINC_SYSTEM, code: loinc }] },
-      valueQuantity: { value },
+      // Units matter for hemoglobin and creatinine (an unrecognized unit is not used).
+      valueQuantity: { value, ...(UNITS[loinc] ? { unit: UNITS[loinc], code: UNITS[loinc] } : {}) },
       subject: { reference: "Patient/p" },
     },
   };

@@ -112,13 +112,6 @@ const EXTRA_AGENTS: MedOption[] = [
   { code: "2555", label: "Cisplatin", group: "Nephrotoxic chemo" },
   { code: "40048", label: "Carboplatin", group: "Nephrotoxic chemo" },
   { code: "6851", label: "Methotrexate", group: "Nephrotoxic chemo" },
-  // Common supportive-care drugs for a realistic list (James). They are not in the
-  // DDI knowledge base, so the engine reports them as "unknown — verify manually".
-  // Pantoprazole was dropped: PPIs reduce itraconazole capsule absorption
-  // (itraconazole label; OpenEvidence round 7).
-  { code: "281", label: "Acyclovir", group: "Supportive care" },
-  { code: "519", label: "Allopurinol", group: "Supportive care" },
-  { code: "26225", label: "Ondansetron", group: "Supportive care" },
 ];
 
 /** Full add-a-med catalog: every KB agent, plus extras not already present. */

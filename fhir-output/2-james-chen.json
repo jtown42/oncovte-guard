@@ -1,10 +1,10 @@
 {
   "resourceType": "Bundle",
   "type": "collection",
-  "timestamp": "2026-10-31T14:51:01.731Z",
+  "timestamp": "2026-10-31T15:26:25.270Z",
   "entry": [
     {
-      "fullUrl": "urn:uuid:bb2c5951-59c0-477f-ab8e-f4798962ba57",
+      "fullUrl": "urn:uuid:52be9c90-2934-49a2-b8ad-9c7e8327b94c",
       "resource": {
         "resourceType": "GuidanceResponse",
         "text": {
@@ -17,9 +17,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "occurrenceDateTime": "2026-10-31T14:51:01.731Z",
+        "occurrenceDateTime": "2026-10-31T15:26:25.270Z",
         "performer": {
-          "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+          "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
           "display": "OncoVTE Guard Decision Engine"
         },
         "note": [
@@ -28,18 +28,18 @@
           }
         ],
         "result": {
-          "reference": "urn:uuid:51c599e5-63bf-4f1d-adc6-598adfbc1f72"
+          "reference": "urn:uuid:51eafc85-a63b-4a32-9135-d725a6e45192"
         }
       }
     },
     {
-      "fullUrl": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+      "fullUrl": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
       "resource": {
         "resourceType": "Device",
         "id": "oncovte-guard-engine",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.2.0.</p></div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>OncoVTE Guard Decision Engine, version 1.0.0, knowledge base 1.3.0.</p></div>"
         },
         "status": "active",
         "deviceName": [
@@ -59,13 +59,13 @@
             "type": {
               "text": "DOAC interaction knowledge base"
             },
-            "value": "1.2.0"
+            "value": "1.3.0"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:dfe86b8f-6b7c-48b6-8d19-37b7398d548e",
+      "fullUrl": "urn:uuid:adffd8d3-09e1-4f63-852c-fd54a1320ae4",
       "resource": {
         "resourceType": "RiskAssessment",
         "text": {
@@ -77,9 +77,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "occurrenceDateTime": "2026-10-31T14:51:01.731Z",
+        "occurrenceDateTime": "2026-10-31T15:26:25.270Z",
         "performer": {
-          "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+          "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
           "display": "OncoVTE Guard Decision Engine"
         },
         "code": {
@@ -132,7 +132,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:acf8a1d4-809e-4f2e-bb5d-11c5573b1f3f",
+      "fullUrl": "urn:uuid:2165c481-ff78-4406-b4b2-e5cf2aaf8548",
       "resource": {
         "resourceType": "DetectedIssue",
         "text": {
@@ -155,9 +155,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "identifiedDateTime": "2026-10-31T14:51:01.731Z",
+        "identifiedDateTime": "2026-10-31T15:26:25.270Z",
         "author": {
-          "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+          "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
           "display": "OncoVTE Guard Decision Engine"
         },
         "implicated": [
@@ -175,13 +175,13 @@
             "action": {
               "text": "Use Enoxaparin or Dalteparin"
             },
-            "date": "2026-10-31T14:51:01.731Z"
+            "date": "2026-10-31T15:26:25.270Z"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:ea043532-88de-453c-8189-2559e353c557",
+      "fullUrl": "urn:uuid:95c69105-b806-4d03-9fed-eb48b22dc74e",
       "resource": {
         "resourceType": "DetectedIssue",
         "text": {
@@ -204,9 +204,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "identifiedDateTime": "2026-10-31T14:51:01.731Z",
+        "identifiedDateTime": "2026-10-31T15:26:25.270Z",
         "author": {
-          "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+          "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
           "display": "OncoVTE Guard Decision Engine"
         },
         "implicated": [
@@ -224,13 +224,13 @@
             "action": {
               "text": "Use Enoxaparin or Dalteparin"
             },
-            "date": "2026-10-31T14:51:01.731Z"
+            "date": "2026-10-31T15:26:25.270Z"
           }
         ]
       }
     },
     {
-      "fullUrl": "urn:uuid:68e34f48-baf8-4b0c-818e-cbfd5395bfb9",
+      "fullUrl": "urn:uuid:2940f010-4000-4011-90af-f719b9ef3718",
       "resource": {
         "resourceType": "MedicationRequest",
         "text": {
@@ -243,9 +243,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "authoredOn": "2026-10-31T14:51:01.731Z",
+        "authoredOn": "2026-10-31T15:26:25.270Z",
         "requester": {
-          "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+          "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
           "display": "OncoVTE Guard Decision Engine"
         },
         "medicationCodeableConcept": {
@@ -271,13 +271,13 @@
         ],
         "supportingInformation": [
           {
-            "reference": "urn:uuid:dfe86b8f-6b7c-48b6-8d19-37b7398d548e"
+            "reference": "urn:uuid:adffd8d3-09e1-4f63-852c-fd54a1320ae4"
           },
           {
-            "reference": "urn:uuid:acf8a1d4-809e-4f2e-bb5d-11c5573b1f3f"
+            "reference": "urn:uuid:2165c481-ff78-4406-b4b2-e5cf2aaf8548"
           },
           {
-            "reference": "urn:uuid:ea043532-88de-453c-8189-2559e353c557"
+            "reference": "urn:uuid:95c69105-b806-4d03-9fed-eb48b22dc74e"
           }
         ],
         "note": [
@@ -288,7 +288,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:0a89f1db-0b9b-45c9-b88f-aa8f399d5e9d",
+      "fullUrl": "urn:uuid:5caf1662-e27f-46a3-b086-1a014e56eac0",
       "resource": {
         "resourceType": "MedicationRequest",
         "text": {
@@ -301,9 +301,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "authoredOn": "2026-10-31T14:51:01.731Z",
+        "authoredOn": "2026-10-31T15:26:25.270Z",
         "requester": {
-          "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+          "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
           "display": "OncoVTE Guard Decision Engine"
         },
         "medicationCodeableConcept": {
@@ -329,13 +329,13 @@
         ],
         "supportingInformation": [
           {
-            "reference": "urn:uuid:dfe86b8f-6b7c-48b6-8d19-37b7398d548e"
+            "reference": "urn:uuid:adffd8d3-09e1-4f63-852c-fd54a1320ae4"
           },
           {
-            "reference": "urn:uuid:acf8a1d4-809e-4f2e-bb5d-11c5573b1f3f"
+            "reference": "urn:uuid:2165c481-ff78-4406-b4b2-e5cf2aaf8548"
           },
           {
-            "reference": "urn:uuid:ea043532-88de-453c-8189-2559e353c557"
+            "reference": "urn:uuid:95c69105-b806-4d03-9fed-eb48b22dc74e"
           }
         ],
         "note": [
@@ -346,7 +346,7 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:51c599e5-63bf-4f1d-adc6-598adfbc1f72",
+      "fullUrl": "urn:uuid:51eafc85-a63b-4a32-9135-d725a6e45192",
       "resource": {
         "resourceType": "RequestGroup",
         "text": {
@@ -359,9 +359,9 @@
           "reference": "Patient/patient-2",
           "display": "James Chen"
         },
-        "authoredOn": "2026-10-31T14:51:01.731Z",
+        "authoredOn": "2026-10-31T15:26:25.270Z",
         "author": {
-          "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+          "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
           "display": "OncoVTE Guard Decision Engine"
         },
         "action": [
@@ -372,13 +372,13 @@
               {
                 "title": "Enoxaparin 40 mg SC daily",
                 "resource": {
-                  "reference": "urn:uuid:68e34f48-baf8-4b0c-818e-cbfd5395bfb9"
+                  "reference": "urn:uuid:2940f010-4000-4011-90af-f719b9ef3718"
                 }
               },
               {
                 "title": "Dalteparin 5,000 units SC daily",
                 "resource": {
-                  "reference": "urn:uuid:0a89f1db-0b9b-45c9-b88f-aa8f399d5e9d"
+                  "reference": "urn:uuid:5caf1662-e27f-46a3-b086-1a014e56eac0"
                 }
               }
             ]
@@ -387,37 +387,37 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:8e65ba59-39de-4a25-a44c-2e7653f70e0a",
+      "fullUrl": "urn:uuid:6fd5163d-67ed-4e54-9163-6051195b4838",
       "resource": {
         "resourceType": "Provenance",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.2.0) from 5 source record(s).</p></div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Generated by OncoVTE Guard Decision Engine 1.0.0 (knowledge base 1.3.0) from 5 source record(s).</p></div>"
         },
         "target": [
           {
-            "reference": "urn:uuid:bb2c5951-59c0-477f-ab8e-f4798962ba57"
+            "reference": "urn:uuid:52be9c90-2934-49a2-b8ad-9c7e8327b94c"
           },
           {
-            "reference": "urn:uuid:dfe86b8f-6b7c-48b6-8d19-37b7398d548e"
+            "reference": "urn:uuid:adffd8d3-09e1-4f63-852c-fd54a1320ae4"
           },
           {
-            "reference": "urn:uuid:acf8a1d4-809e-4f2e-bb5d-11c5573b1f3f"
+            "reference": "urn:uuid:2165c481-ff78-4406-b4b2-e5cf2aaf8548"
           },
           {
-            "reference": "urn:uuid:ea043532-88de-453c-8189-2559e353c557"
+            "reference": "urn:uuid:95c69105-b806-4d03-9fed-eb48b22dc74e"
           },
           {
-            "reference": "urn:uuid:68e34f48-baf8-4b0c-818e-cbfd5395bfb9"
+            "reference": "urn:uuid:2940f010-4000-4011-90af-f719b9ef3718"
           },
           {
-            "reference": "urn:uuid:0a89f1db-0b9b-45c9-b88f-aa8f399d5e9d"
+            "reference": "urn:uuid:5caf1662-e27f-46a3-b086-1a014e56eac0"
           },
           {
-            "reference": "urn:uuid:51c599e5-63bf-4f1d-adc6-598adfbc1f72"
+            "reference": "urn:uuid:51eafc85-a63b-4a32-9135-d725a6e45192"
           }
         ],
-        "recorded": "2026-10-31T14:51:01.731Z",
+        "recorded": "2026-10-31T15:26:25.270Z",
         "agent": [
           {
             "type": {
@@ -430,7 +430,7 @@
               ]
             },
             "who": {
-              "reference": "urn:uuid:7b561d4a-1c80-436f-83b2-c7f4a464f9d1",
+              "reference": "urn:uuid:3e53e7af-aa85-41a1-87db-cdd7930dabd9",
               "display": "OncoVTE Guard Decision Engine"
             }
           }

@@ -6,7 +6,7 @@
  */
 
 import type { DDISeverity } from "../types/ddi";
-import type { OverallAction } from "../types/recommendation";
+import type { OverallAction, VerdictLabel } from "../types/recommendation";
 import type { RenalRecommendationStatus, CrclCategory } from "../types/renal";
 import { RiskCategory } from "../types/khorana";
 
@@ -151,6 +151,38 @@ export const ACTION: Record<OverallAction, ActionPresentation> = {
       "This malignancy follows a disease-specific VTE pathway; individualized assessment required.",
   },
 };
+
+/**
+ * What the clinician reads for a verdict: the overallAction's presentation,
+ * refined by verdictLabel where the wording must differ (LMWH fallback, already
+ * anticoagulated, severe-anemia hold, insufficient data).
+ */
+export const VERDICT_REFINEMENT: Partial<Record<VerdictLabel, Partial<ActionPresentation>>> = {
+  recommend_lmwh: { label: "Prophylaxis recommended — LMWH" },
+  already_anticoagulated: {
+    label: "Already anticoagulated",
+    summary:
+      "An active anticoagulant order is on file, so primary prophylaxis does not apply. Adding another agent raises bleeding risk.",
+  },
+  hold_severe_anemia: {
+    label: "Hold — evaluate severe anemia first",
+    summary:
+      "Hemoglobin is below 7 g/dL. Find the cause, including bleeding, before starting prophylaxis. OncoVTE design rule, not an NCCN contraindication.",
+  },
+  insufficient_data: {
+    label: "Insufficient data",
+    tone: "warning",
+    summary:
+      "The Khorana score is below 2, but missing inputs could still reach the threshold. Obtain them before deciding.",
+  },
+};
+
+export function verdictPresentation(rec: {
+  overallAction: OverallAction;
+  verdictLabel: VerdictLabel;
+}): ActionPresentation {
+  return { ...ACTION[rec.overallAction], ...VERDICT_REFINEMENT[rec.verdictLabel] };
+}
 
 /* ---------- Renal ---------- */
 

@@ -84,9 +84,11 @@ export function assessBleedingRisk(
     factors.push({
       key: "gastric_gej_tumor",
       label: "Gastric / gastroesophageal tumor",
+      // NCCN's footnote states the hemorrhage risk; the "LMWH may be preferred"
+      // wording is ACC's (OpenEvidence rules review: cite each to its source).
       detail:
-        "Increased hemorrhage risk with DOACs — LMWH preferred (NCCN VTE-2 footnote).",
-      source: "NCCN VTE-2",
+        "Increased hemorrhage risk with DOACs (NCCN VTE-2 footnote); LMWH may be preferred (ACC 2026).",
+      source: "NCCN VTE-2 footnote; ACC 2026 Scientific Statement",
       prefersLmwh: true,
     });
   } else if (hasCondition(input.conditions, LUMINAL_GI_PREFIXES)) {
@@ -128,9 +130,12 @@ export function assessBleedingRisk(
     factors.push({
       key: "severe_renal_impairment",
       label: "CrCl <30 mL/min",
-      detail: "Severe renal impairment raises bleeding risk — LMWH preferred.",
-      source: "ACC 2026 Scientific Statement; NCCN VTE-B-2",
-      prefersLmwh: true,
+      // Not "LMWH preferred": NCCN's ambulatory table avoids LMWH below CrCl 30;
+      // the ACC preference comes from treatment guidance (OpenEvidence rules review).
+      detail:
+        "Severe renal impairment raises bleeding risk; patients with CrCl <30 were excluded from the prophylaxis trials.",
+      source: "NCCN VTE-B-2 footnote; ACC 2026 Scientific Statement",
+      prefersLmwh: false,
     });
   }
 

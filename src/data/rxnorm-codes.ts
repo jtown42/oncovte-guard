@@ -64,6 +64,21 @@ export const NEPHROTOXIC_CHEMO_RXNORM = new Set<string>([
   RXNORM.METHOTREXATE,
 ]);
 
+/**
+ * Anticoagulants whose active order means the patient is already anticoagulated,
+ * so primary prophylaxis does not apply (AVERT excluded patients on any of these).
+ */
+export const ANTICOAGULANT_RXNORM = new Set<string>([
+  RXNORM.APIXABAN,
+  RXNORM.RIVAROXABAN,
+  RXNORM.DABIGATRAN,
+  RXNORM.EDOXABAN,
+  RXNORM.ENOXAPARIN,
+  RXNORM.DALTEPARIN,
+  RXNORM.HEPARIN_UFH,
+  RXNORM.WARFARIN,
+]);
+
 export const ESA_RXNORM = new Set<string>([RXNORM.EPOETIN_ALFA, RXNORM.DARBEPOETIN_ALFA]);
 
 export const IMID_RXNORM = new Set<string>([
