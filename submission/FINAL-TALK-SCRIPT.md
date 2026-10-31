@@ -4,7 +4,7 @@
 
 **How to use it:** read one line at a time. Each line is one breath. **[PAUSE]** = stop for one full second. **[CLICK]** = advance. The time at the top of each slide is where you should be when the slide comes up.
 
-**Length:** about 915 spoken words, about 7:00 at a calm pace with the 15-second video. Over 7:15 in rehearsal → hide slide 9 (panel), which saves about 25 s.
+**Length:** about 930 spoken words, about 7:00 at a calm pace with the 15-second video. Over 7:15 in rehearsal → hide slide 9 (panel), which saves about 25 s.
 
 **Lines to know cold:** the first two sentences, "Structured FHIR in. Structured FHIR out.", the James clip lines, and the whole close.
 
@@ -45,8 +45,6 @@
 > Patients with cancer are at high risk for blood clots.
 >
 > Clots are a leading cause of death in cancer — second only to the cancer itself.
->
-> Many of them are preventable.
 >
 > Pooled data from the AVERT and CASSINI trials show prophylaxis roughly halved clots in higher-risk patients.
 >
@@ -120,23 +118,25 @@
 
 ## Slide 6 — Maria — clear risk, clear recommendation
 
-**2:40 – 3:00**
+**2:40 – 3:10**
 
 > Maria has pancreatic cancer and a risk score of five. That's high risk.
+>
+> That's the Khorana score, and the app calculates it straight from FHIR —
+>
+> the cancer type from her Condition, and platelets, hemoglobin, white count and BMI from her Observations.
 >
 > Nothing gets in the way.
 >
 > So the app recommends apixaban or rivaroxaban — and every card shows the guideline it came from.
 >
-> That's the straightforward case.
->
-> James is not.
+> James is not that simple.
 
 ---
 
 ## Slide 7 — James — one medication changes the decision (VIDEO)
 
-**3:00 – 4:05**
+**3:10 – 4:10**
 
 > James is 72, with lymphoma, and he's on itraconazole for a serious fungal infection.
 >

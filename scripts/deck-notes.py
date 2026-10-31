@@ -24,7 +24,6 @@ It runs entirely on synthetic data, and it has never been used on a real patient
 
 Patients with cancer are at high risk for blood clots.
 Clots are a leading cause of death in cancer — second only to the cancer itself.
-Many of them are preventable.
 Pooled data from the AVERT and CASSINI trials show prophylaxis roughly halved clots in higher-risk patients.
 [PAUSE]
 But a blood thinner in the wrong patient causes bleeding.
@@ -60,15 +59,16 @@ And the decision comes back as FHIR, too.
 Structured FHIR in. Structured FHIR out.
 Let me show you, with two synthetic patients — real output from the app.""",
 
-6: """2:40 – 3:00
+6: """2:40 – 3:10
 
 Maria has pancreatic cancer and a risk score of five. That's high risk.
+That's the Khorana score, and the app calculates it straight from FHIR —
+the cancer type from her Condition, and platelets, hemoglobin, white count and BMI from her Observations.
 Nothing gets in the way.
 So the app recommends apixaban or rivaroxaban — and every card shows the guideline it came from.
-That's the straightforward case.
-James is not.""",
+James is not that simple.""",
 
-7: """3:00 – 4:05
+7: """3:10 – 4:10
 
 James is 72, with lymphoma, and he's on itraconazole for a serious fungal infection.
 His risk score qualifies him for prophylaxis.

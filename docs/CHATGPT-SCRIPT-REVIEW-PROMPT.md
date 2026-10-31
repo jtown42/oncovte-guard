@@ -57,7 +57,6 @@ NOTES:
 
 Patients with cancer are at high risk for blood clots.
 Clots are a leading cause of death in cancer — second only to the cancer itself.
-Many of them are preventable.
 Pooled data from the AVERT and CASSINI trials show prophylaxis roughly halved clots in higher-risk patients.
 [PAUSE]
 But a blood thinner in the wrong patient causes bleeding.
@@ -99,18 +98,19 @@ Let me show you, with two synthetic patients — real output from the app.
 
 SLIDE 6 — Maria — clear risk, clear recommendation. On screen: a screenshot of the app with three numbered callouts: Risk score 5 · Apixaban or rivaroxaban · Guideline source on every card.
 NOTES:
-2:40 – 3:00
+2:40 – 3:10
 
 Maria has pancreatic cancer and a risk score of five. That's high risk.
+That's the Khorana score, and the app calculates it straight from FHIR —
+the cancer type from her Condition, and platelets, hemoglobin, white count and BMI from her Observations.
 Nothing gets in the way.
 So the app recommends apixaban or rivaroxaban — and every card shows the guideline it came from.
-That's the straightforward case.
-James is not.
+James is not that simple.
 
 
 SLIDE 7 — James — one medication changes the decision. On screen: a screenshot (LMWH recommended; apixaban and rivaroxaban struck through, "Avoid — itraconazole interaction (FDA labeling)"). A 15-second silent video on top plays on click: itraconazole removed → apixaban or rivaroxaban; added back → LMWH.
 NOTES:
-3:00 – 4:05
+3:10 – 4:10
 
 James is 72, with lymphoma, and he's on itraconazole for a serious fungal infection.
 His risk score qualifies him for prophylaxis.
