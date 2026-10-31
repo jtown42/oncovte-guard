@@ -1,7 +1,8 @@
+"""docs/CHATGPT-SCRIPT-REVIEW-PROMPT.md from scripts/deck-notes.py.  python scripts/chatgpt-prompt.py"""
 import importlib.util
 import os
 
-os.chdir(r"C:\Users\jtown\Documents\amia-app-competition")
+os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 spec = importlib.util.spec_from_file_location("n", "scripts/deck-notes.py")
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
