@@ -95,7 +95,7 @@ const PANCREATIC_LMWH_PRESENTATION: Record<
     dose: "200 units/kg",
     route: "SC",
     frequency: "daily",
-    duration: "x1 month, then 150 units/kg SC daily (pancreatic-cancer regimen, NCCN VTE-B)",
+    duration: "x1 month, then 150 units/kg SC daily x2 months (pancreatic-cancer regimen, NCCN VTE-B)",
   },
 };
 
@@ -259,9 +259,10 @@ function buildLmwhOption(
       ? "NCCN VTE-B-2 footnote · CONKO-004 / FRAGEM"
       : present.duration.includes("VTE-B-1")
         ? "NCCN VTE-B-1 (weight-adjusted dose)"
-        : // VTE-B-2 lists the LMWH agents; its printed doses are the pancreatic
-          // weight-based ones, so the fixed dose cites VTE-B-1 (OpenEvidence round 5).
-          "NCCN VTE-B-2 (agent) · VTE-B-1 (standard dose)",
+        : // NCCN's ambulatory table prints the pancreatic weight-based doses; the
+          // fixed doses appear on other VTE-B pages, so cite the section, not a page
+          // (OpenEvidence rounds 5 and 6 named different pages).
+          "Standard prophylactic dose (NCCN VTE-B)",
   };
 }
 

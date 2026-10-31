@@ -41,7 +41,7 @@ h1 { font-size: 44px; font-weight: 700; letter-spacing: -0.5px; }
 .flow { display: flex; gap: 14px; align-items: center; margin-top: 26px; font-size: 21px; font-weight: 600; }
 .flow span.box { background: #EEF4F1; border: 1px solid #cfe0d8; border-radius: 8px; padding: 8px 14px; }
 .flow span.arr { color: #2F6B57; }
-.stats { display: flex; gap: 18px; margin-top: 24px; }
+.statline { margin-top: 22px; font-size: 21px; color: #4a5f57; }
 .stat { border: 1px solid #d5ddd9; border-radius: 10px; padding: 12px 20px; font-size: 20px; color: #4a5f57; }
 .stat b { display: block; font-size: 38px; color: #1F3D33; }
 .stat.hl { border-color: #2F6B57; background: #EEF4F1; } .stat.hl b { color: #2F6B57; }
@@ -58,10 +58,7 @@ tr.flag td { background: #F4F8F6; } tr.flag td:first-child { border-left: 5px so
 <h1>Same engine, whole panel</h1>
 <div class="sub">Who in clinic meets the guideline threshold but isn't on prophylaxis?</div>
 <div class="flow"><span class="box">FHIR Bulk Data $export</span><span class="arr">→</span><span class="box">every patient through the same, unchanged engine</span><span class="arr">→</span><span class="box">worklist for the clinic</span></div>
-<div class="stats">
-  <div class="stat"><b>${data.screened}</b>patients screened</div>
-  <div class="stat hl"><b>${flaggedCount}</b>eligible, no anticoagulant on file</div>
-</div>
+<div class="statline">${data.screened} synthetic patients screened · ${flaggedCount} flagged: meet the threshold, no anticoagulant on file</div>
 <table>
 <tr><th>Patient</th><th>Cancer</th><th>Khorana</th><th>Engine recommendation</th><th>Anticoagulant on file</th><th></th></tr>
 ${shown

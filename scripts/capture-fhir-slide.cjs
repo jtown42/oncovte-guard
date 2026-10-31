@@ -36,8 +36,9 @@ function jamesIssueJson() {
   const lines = [
     "{",
     `  "resourceType": "${di.resourceType}",`,
+    `  "status": "${di.status}",`,
     `  "severity": "${di.severity}",`,
-    `  "code": ${j({ coding: [{ code: di.code.coding[0].code, display: di.code.coding[0].display }] })},`,
+    `  "code": ${j({ coding: [{ system: di.code.coding[0].system, code: di.code.coding[0].code }] })},`,
     `  "implicated": [`,
     ...di.implicated.map((r, i, a) => `    ${j(r.reference ? { reference: r.reference } : { display: r.display })}${i < a.length - 1 ? "," : ""}`),
     `  ],`,
@@ -50,7 +51,7 @@ function jamesIssueJson() {
 
 function highlight(json) {
   return esc(json)
-    .replace(/"(severity|implicated|mitigation|code)"/g, '<b class="k">"$1"</b>')
+    .replace(/"(status|severity|implicated|mitigation|code)"/g, '<b class="k">"$1"</b>')
     .replace(/"(high|DRG)"/g, '<b class="v">"$1"</b>')
     .replace(/"(MedicationRequest\/medrx-itraconazole-2)"/g, '<b class="v hl">"$1"</b>')
     .replace(/"(Use Enoxaparin or Dalteparin)"/g, '<b class="v">"$1"</b>');
