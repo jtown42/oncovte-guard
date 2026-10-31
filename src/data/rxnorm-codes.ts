@@ -79,6 +79,37 @@ export const ANTICOAGULANT_RXNORM = new Set<string>([
   RXNORM.WARFARIN,
 ]);
 
+/**
+ * Systemic corticosteroids that set the bleeding-panel flag automatically
+ * (Vedovati HR 2.69). Hydrocortisone is left out: it is usually physiologic
+ * replacement. Codes verified on RxNav 2026-10-31.
+ */
+export const CORTICOSTEROID_RXNORM = new Set<string>([
+  "3264", // dexamethasone
+  "8640", // prednisone
+  "6902", // methylprednisolone
+]);
+
+/**
+ * Combined P-gp + moderate CYP3A4 inhibitors in the knowledge base. The
+ * rivaroxaban label (section 7.2) says not to use rivaroxaban with these at
+ * CrCl 15 to <80 mL/min unless the benefit justifies the risk; apixaban's label
+ * has no such statement (OpenEvidence rules review, 2026-10-31).
+ */
+export const RIVAROXABAN_COMBINED_MODERATE_RXNORM = new Set<string>([
+  "3008", // cyclosporine
+  "1608322", // isavuconazonium
+  "282388", // imatinib
+  "662281", // nilotinib
+  "1148495", // crizotinib
+  "1535457", // ceritinib
+  "358255", // aprepitant
+  "1100072", // abiraterone
+]);
+
+/** CrCl band (mL/min) where that rivaroxaban rule applies: 15 to <80. */
+export const RIVAROXABAN_COMBINED_MODERATE_CRCL = { GTE: 15, LT: 80 } as const;
+
 export const ESA_RXNORM = new Set<string>([RXNORM.EPOETIN_ALFA, RXNORM.DARBEPOETIN_ALFA]);
 
 export const IMID_RXNORM = new Set<string>([

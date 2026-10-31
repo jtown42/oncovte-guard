@@ -223,6 +223,12 @@ OpenEvidence answered Parts A and B together, plus a separate severe-anemia answ
 
 **Confirmed correct:** Khorana points, boundaries, sites, tiers and the ≥2 threshold; exclusions (CML as an MPN is defensible; CLL is fine); platelets <50 as a universal stop (50–100 stays a bleeding-panel item); renal rules (apixaban caution at 15–29, rivaroxaban/LMWH avoid <30); DOAC duration wording; APS, pregnancy, HIT and <40 kg blocks; ketoconazole, itraconazole, carbamazepine, phenytoin and rifampin MAJOR; clarithromycin non-blocking (both labels exempt it); BTK/VEGF PD; LMWH avoid <30 kept for now (the enoxaparin 30 mg data are inpatient).
 
+**Middle step (applied the same day; label-backed items reachable in the phone demo):**
+- **Rivaroxaban rule (label §7.2):** with cyclosporine, isavuconazonium, imatinib, nilotinib, crizotinib, ceritinib, aprepitant or abiraterone at CrCl 15 to <80, rivaroxaban is avoided ("FDA labeling"); apixaban stays available. At CrCl ≥80 it stays a moderate warning. The FHIR output codes the block as DRG pointing at the offending order. Erythromycin, verapamil and diltiazem aren't in the KB yet (Tier 2).
+- **Steroid orders** (dexamethasone, prednisone, methylprednisolone; RxNav-verified) set the bleeding-panel corticosteroid flag automatically. Priya's dexamethasone now shows it; her verdict is unchanged.
+- **Fluconazole** is a moderate warning for apixaban too (KB v1.3.1); nothing is blocked.
+- Tests: 254. All talk images re-captured and pixel-identical, so the deck didn't change.
+
 **Deferred to after Nov 10 (Tier 2):**
 - One precedence rule for interactions (label > ASCO class statement > reviews); voriconazole → major under ASCO's wording.
 - Rivaroxaban conditional block with combined P-gp + moderate CYP3A inhibitors at CrCl 15 to <80 (cyclosporine, isavuconazonium, imatinib, nilotinib, crizotinib, ceritinib, aprepitant, abiraterone, erythromycin, verapamil, diltiazem).

@@ -21,7 +21,7 @@ import {
   ANTIPLATELET_RXNORM,
   IMID_RXNORM,
   NEPHROTOXIC_CHEMO_RXNORM,
-  ESA_RXNORM,
+  ESA_RXNORM, CORTICOSTEROID_RXNORM,
 } from "../data/rxnorm-codes";
 import rawKb from "../data/ddi-knowledge-base.json";
 
@@ -215,7 +215,7 @@ export function scenarioToPatient(s: Scenario): PatientData {
     onIMiD: s.medCodes.some((c) => IMID_RXNORM.has(c)),
     hasNephrotoxicChemo: s.medCodes.some((c) => NEPHROTOXIC_CHEMO_RXNORM.has(c)),
     hasActiveMajorBleeding: s.hasActiveMajorBleeding,
-    onCorticosteroid: s.onCorticosteroid,
+    onCorticosteroid: s.onCorticosteroid || s.medCodes.some((c) => CORTICOSTEROID_RXNORM.has(c)),
     hasPriorMajorBleeding: s.hasPriorMajorBleeding,
     isFrailOrPoorPerformance: s.isFrailOrPoorPerformance,
     hasAnorexiaOrVomiting: s.hasAnorexiaOrVomiting,
@@ -240,7 +240,9 @@ export function patientToScenario(p: PatientData): Scenario {
     ast: p.labs.ast?.value ?? null,
     onESA: p.onESA,
     hasActiveMajorBleeding: p.hasActiveMajorBleeding,
-    onCorticosteroid: p.onCorticosteroid ?? false,
+    // The toggle is the clinician flag only; a steroid order sets it on its own.
+    onCorticosteroid:
+      (p.onCorticosteroid ?? false) && !p.activeMedications.some((m) => CORTICOSTEROID_RXNORM.has(m.rxnormCode)),
     hasPriorMajorBleeding: p.hasPriorMajorBleeding ?? false,
     isFrailOrPoorPerformance: p.isFrailOrPoorPerformance ?? false,
     hasAnorexiaOrVomiting: p.hasAnorexiaOrVomiting ?? false,

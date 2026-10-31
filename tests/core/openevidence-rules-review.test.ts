@@ -236,6 +236,75 @@ describe("Supportive-care drugs are rated, not 'unknown'", () => {
   });
 });
 
+/* ---------- Middle step (2026-10-31): label-backed, reachable in the phone demo ---------- */
+
+describe("Rivaroxaban + combined P-gp / moderate CYP3A inhibitor at CrCl 15–79 (label 7.2)", () => {
+  /** Maria (Khorana 5) on one extra drug, with creatinine set to move CrCl. */
+  function mariaWith(rxnormCode: string, display: string, creatinine: number): PatientData {
+    const m = maria();
+    return {
+      ...m,
+      labs: { ...m.labs, serumCreatinine: { ...m.labs.serumCreatinine!, value: creatinine } },
+      activeMedications: [...m.activeMedications, { rxnormCode, display, status: "active" }],
+    };
+  }
+
+  it("imatinib at CrCl ~49 → rivaroxaban avoided, apixaban still recommended", () => {
+    const r = generateRecommendation(mariaWith("282388", "Imatinib", 1.4));
+    expect(r.renal!.crclMlMin).toBeGreaterThanOrEqual(15);
+    expect(r.renal!.crclMlMin).toBeLessThan(80);
+    expect(r.preferredOptions.map((o) => o.name)).toEqual(["apixaban"]);
+    const riva = r.avoidOptions.find((o) => o.name === "rivaroxaban")!;
+    expect(riva.ineligibleReason).toMatch(/^Avoid — Imatinib interaction \(FDA labeling\)/);
+  });
+
+  it("the same drug at CrCl ≥80 → rivaroxaban stays available (moderate warning only)", () => {
+    const r = generateRecommendation(mariaWith("282388", "Imatinib", 0.8));
+    expect(r.renal!.crclMlMin).toBeGreaterThanOrEqual(80);
+    expect(r.preferredOptions.map((o) => o.name)).toEqual(["apixaban", "rivaroxaban"]);
+  });
+
+  it("every listed agent triggers it; a moderate-only inhibitor (ribociclib) does not", () => {
+    for (const code of ["3008", "1608322", "282388", "662281", "1148495", "1535457", "358255", "1100072"]) {
+      const r = generateRecommendation(mariaWith(code, code, 1.4));
+      expect(r.preferredOptions.map((o) => o.name), code).toEqual(["apixaban"]);
+    }
+    const ribo = generateRecommendation(mariaWith("1873916", "Ribociclib", 1.4));
+    expect(ribo.preferredOptions.map((o) => o.name)).toEqual(["apixaban", "rivaroxaban"]);
+  });
+
+  it("FHIR output codes the block as a drug interaction pointing at the offending order", async () => {
+    const { buildFhirOutput } = await import("../../src/fhir-output/build");
+    const p = mariaWith("282388", "Imatinib", 1.4);
+    const bundle = buildFhirOutput(p, generateRecommendation(p), { now: NOW });
+    const issue = bundle.entry!.map((e) => e.resource as { resourceType: string; code?: { coding?: { code?: string }[]; text?: string }; implicated?: { display?: string }[] })
+      .find((r) => r.resourceType === "DetectedIssue" && /Rivaroxaban/.test(r.code?.text ?? ""))!;
+    expect(issue.code!.coding![0].code).toBe("DRG");
+    expect(issue.implicated!.some((i) => /Imatinib/.test(i.display ?? ""))).toBe(true);
+  });
+});
+
+describe("Steroid orders set the bleeding-panel flag", () => {
+  it("Priya's dexamethasone order → 'Systemic corticosteroids' bleeding factor, verdict unchanged", () => {
+    const priya = assemblePatientData(loadSyntheticPatient(4), NOW);
+    expect(priya.onCorticosteroid).toBe(true);
+    const r = generateRecommendation(priya);
+    expect(r.bleedingRisk.factors.some((f) => f.key === "systemic_corticosteroid")).toBe(true);
+    expect(r.overallAction).toBe("excluded");
+  });
+});
+
+describe("Fluconazole is a moderate warning for both DOACs", () => {
+  it("apixaban and rivaroxaban both moderate; neither is blocked", () => {
+    const d = checkDDIs({ rxnormCode: "4450", display: "Fluconazole" });
+    expect(d.perDoac.apixaban.severity).toBe("moderate");
+    expect(d.perDoac.rivaroxaban.severity).toBe("moderate");
+    const m = maria();
+    const r = generateRecommendation({ ...m, activeMedications: [{ rxnormCode: "4450", display: "Fluconazole", status: "active" }] });
+    expect(r.preferredOptions.map((o) => o.name)).toEqual(["apixaban", "rivaroxaban"]);
+  });
+});
+
 describe("Demo patients keep their verdicts", () => {
   it("Maria, James, Dorothy (42k) unchanged", () => {
     expect(generateRecommendation(maria()).overallAction).toBe("recommend");

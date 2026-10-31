@@ -47,7 +47,11 @@ import {
 } from "./renal-dosing";
 import { detectContraindications } from "./contraindications";
 import { assessBleedingRisk } from "./bleeding-risk";
-import { ANTICOAGULANT_RXNORM } from "../data/rxnorm-codes";
+import {
+  ANTICOAGULANT_RXNORM,
+  RIVAROXABAN_COMBINED_MODERATE_CRCL,
+  RIVAROXABAN_COMBINED_MODERATE_RXNORM,
+} from "../data/rxnorm-codes";
 
 const STANDARD_DISCLAIMERS = [
   "This tool provides clinical decision support only and does not replace clinical judgment.",
@@ -160,6 +164,26 @@ function majorDdiReason(ddiResults: DDICheckResult[], doac: DoacName): string {
   return `Avoid — ${names} interaction (${basis}). ${first.mechanism}.`;
 }
 
+/**
+ * Rivaroxaban label section 7.2: combined P-gp + moderate CYP3A inhibitors at
+ * CrCl 15 to <80 — do not use unless the benefit justifies the risk. Returns
+ * the card text when the rule applies, else null. Apixaban is unaffected.
+ */
+function rivaroxabanCombinedModerate(
+  ddiResults: DDICheckResult[],
+  renal: RenalResult,
+): string | null {
+  const crcl = renal.crclMlMin;
+  const band = RIVAROXABAN_COMBINED_MODERATE_CRCL;
+  if (renal.warnings.includes("renal_data_unavailable") || crcl < band.GTE || crcl >= band.LT) {
+    return null;
+  }
+  const hits = ddiResults.filter((r) => RIVAROXABAN_COMBINED_MODERATE_RXNORM.has(r.rxnormCode));
+  if (hits.length === 0) return null;
+  const names = hits.map((r) => r.medication).join(", ");
+  return `Avoid — ${names} interaction (FDA labeling). Combined P-gp and moderate CYP3A inhibition at CrCl 15–79 mL/min (CrCl ${Math.round(crcl)}): rivaroxaban labeling advises against use unless the benefit justifies the risk.`;
+}
+
 /** F8 (WS-5): user-facing copy when CrCl could not be computed (missing weight/creatinine). */
 const RENAL_UNAVAILABLE_REASON =
   "Renal function not assessable — treated conservatively (obtain weight and serum creatinine).";
@@ -210,6 +234,12 @@ function buildDoacOption(
   } else if (worstDDI === "major") {
     ineligibleReason = majorDdiReason(ddiResults, doac);
     eligible = false;
+  } else if (doac === "rivaroxaban") {
+    const combined = rivaroxabanCombinedModerate(ddiResults, renalResult);
+    if (combined) {
+      ineligibleReason = combined;
+      eligible = false;
+    }
   }
 
   const present = DOAC_PRESENTATION[doac];

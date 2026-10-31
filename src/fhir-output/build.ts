@@ -334,8 +334,13 @@ export function buildFhirOutput(
       (c) => Array.isArray(c.appliesTo) && c.appliesTo.includes(o.name as never) && c.detail === o.ineligibleReason,
     );
     let r: Reference;
-    if (o.worstDDI === "major" && o.ineligibleReason.startsWith("Avoid —")) {
-      const offenders = rec.ddiResults.filter((d) => d.perDoac[o.name as DoacName]?.severity === "major");
+    if (o.ineligibleReason.startsWith("Avoid —") && (o.worstDDI === "major" || o.worstDDI === "moderate")) {
+      // Major interactions, plus the rivaroxaban combined-moderate label rule
+      // (its offenders are the moderate interactions named in the reason).
+      const sev = o.worstDDI;
+      const offenders = rec.ddiResults.filter(
+        (d) => d.perDoac[o.name as DoacName]?.severity === sev && o.ineligibleReason!.includes(d.medication),
+      );
       r = issue(
         `ddi|${o.name}`,
         "high",
